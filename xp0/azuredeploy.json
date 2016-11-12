@@ -1,0 +1,429 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0-r220+220.1862ac675e9e45e83a045f452b155c07b0a2a6d1",
+  "variables": {
+    "webApiVersion": "2015-08-01",
+    "dbApiVersion": "2014-04-01-preview",
+    "searchApiVersion": "2015-02-28",
+    "appInsightsApiVersion": "2014-08-01",
+    "hostingPlanNameTidy": "[toLower(trim(parameters('single.hostingplan.name')))]",
+    "webAppNameTidy": "[toLower(trim(parameters('single.webapp.name')))]",
+    "dbServerNameTidy": "[toLower(trim(parameters('sqlserver.name')))]",
+    "webDbServerNameTidy": "[toLower(trim(parameters('web.sqlserver.name')))]",
+    "coreDbNameTidy": "[toLower(trim(parameters('core.sqldatabase.name')))]",
+    "webDbNameTidy": "[toLower(trim(parameters('web.sqldatabase.name')))]",
+    "masterDbNameTidy": "[toLower(trim(parameters('master.sqldatabase.name')))]",
+    "repDbNameTidy": "[toLower(trim(parameters('reporting.sqldatabase.name')))]",
+    "analyticsMongoDbConnStrTidy": "[trim(parameters('analytics.mongodb.connectionstring'))]",
+    "trackingLiveMongoDbConnStrTidy": "[trim(parameters('tracking.live.mongodb.connectionstring'))]",
+    "trackingHistoryMongoDbConnStrTidy": "[trim(parameters('tracking.history.mongodb.connectionstring'))]",
+    "trackingContactMongoDbConnStrTidy": "[trim(parameters('tracking.contact.mongodb.connectionstring'))]",
+    "searchServiceNameTidy": "[toLower(trim(parameters('searchservice.name')))]",
+    "appInsightsNameTidy": "[toLower(trim(parameters('applicationinsights.name')))]",
+    "licenseXml": "[parameters('licenseXml')]"
+  },
+  "parameters": {
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "single.hostingplan.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-single-hp')]"
+    },
+    "single.webapp.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-single')]"
+    },
+    "single.msdeploy.packageurl": {
+      "type": "securestring"
+    },
+    "sqlserver.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-sql')]"
+    },
+    "sqlserver.login": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sqlserver.password": {
+      "type": "securestring",
+      "minLength": 8
+    },
+    "web.sqlserver.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-web-sql')]"
+    },
+    "web.sqlserver.login": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('sqlserver.login')]"
+    },
+    "web.sqlserver.password": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('sqlserver.password')]"
+    },
+    "single.core.sqldatabase.username": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat('single-core-', deployment().name, '-user')]"
+    },
+    "single.core.sqldatabase.password": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('single-core')), '@', uniqueString(parameters('sqlserver.password')))]"
+    },
+    "single.master.sqldatabase.username": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat('single-master-', deployment().name, '-user')]"
+    },
+    "single.master.sqldatabase.password": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('single-master')), '@', uniqueString(parameters('sqlserver.password')))]"
+    },
+    "single.web.sqldatabase.username": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat('single-web-', deployment().name, '-user')]"
+    },
+    "single.web.sqldatabase.password": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('single-web')), '@', uniqueString(parameters('sqlserver.password')))]"
+    },
+    "single.reporting.sqldatabase.username": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat('single-reporting-', deployment().name, '-user')]"
+    },
+    "single.reporting.sqldatabase.password": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('single-reporting')), '@', uniqueString(parameters('sqlserver.password')))]"
+    },
+    "core.sqldatabase.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-core-db')]"
+    },
+    "master.sqldatabase.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-master-db')]"
+    },
+    "web.sqldatabase.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
+    },
+    "reporting.sqldatabase.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-reporting-db')]"
+    },
+    "analytics.mongodb.connectionstring": {
+      "type": "securestring"
+    },
+    "tracking.live.mongodb.connectionstring": {
+      "type": "securestring"
+    },
+    "tracking.history.mongodb.connectionstring": {
+      "type": "securestring"
+    },
+    "tracking.contact.mongodb.connectionstring": {
+      "type": "securestring"
+    },
+    "searchservice.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
+    },
+    "applicationinsights.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-ai')]"
+    },
+    "single.hostingplan.skuname": {
+      "type": "string",
+      "defaultValue": "S1"
+    },
+    "single.hostingplan.skucapacity": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "searchservice.skuname": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "sqlserver.version": {
+      "type": "string",
+      "defaultValue": "12.0"
+    },
+    "sqldatabase.collation": {
+      "type": "string",
+      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+    },
+    "sqldatabase.edition": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "sqldatabase.maxsize": {
+      "type": "string",
+      "defaultValue": "10737418240"
+    },
+    "sqldatabase.serviceobjectivelevel": {
+      "type": "string",
+      "defaultValue": "S1"
+    },
+    "searchservice.replicacount": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "searchservice.partitioncount": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "sitecoreTags": {
+      "type": "object",
+      "defaultValue": {
+        "provider": "b51535c2-ab3e-4a68-95f8-e2e3c9a19299"
+      }
+    },
+    "licenseXml": {
+      "type": "securestring"
+    },
+    "sitecore.admin.password": {
+      "type": "securestring",
+	  "minLength": 8,
+	  "maxLength": 128
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "name": "[variables('hostingPlanNameTidy')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "sku": {
+        "name": "[parameters('single.hostingplan.skuname')]",
+        "capacity": "[parameters('single.hostingplan.skucapacity')]"
+      },
+      "properties": {
+        "name": "[variables('hostingPlanNameTidy')]"
+      },
+      "location": "[parameters('location')]",
+      "tags": {
+        "provider": "[parameters('sitecoreTags').provider]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "name": "[variables('webAppNameTidy')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanNameTidy'))]",
+        "siteConfig": {
+          "use32BitWorkerProcess": false,
+          "alwaysOn": true,
+          "phpVersion": "",
+          "defaultDocuments": [
+            "index.html"
+          ]
+        }
+      },
+      "location": "[parameters('location')]",
+      "dependsOn": [ "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanNameTidy'))]" ],
+      "tags": {
+        "provider": "[parameters('sitecoreTags').provider]"
+      },
+      "resources": [
+        {
+          "name": "MSDeploy",
+          "type": "extensions",
+          "location": "[parameters('location')]",
+          "apiVersion": "[variables('webApiVersion')]",
+          "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('webAppNameTidy'))]", "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]", "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('masterDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('repDbNameTidy'))]" ],
+          "properties": {
+            "packageUri": "[parameters('single.msdeploy.packageurl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=master;User Id=', parameters('sqlserver.login'), '@', variables('dbServerNameTidy'), ';Password=', parameters('sqlserver.password'), ';')]",
+            "setParameters": {
+              "Application Path": "[variables('webAppNameTidy')]",
+              "Sitecore Admin New Password": "[parameters('sitecore.admin.password')]",
+              "Core DB User Name": "[parameters('single.core.sqldatabase.username')]",
+              "Core DB Password": "[parameters('single.core.sqldatabase.password')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('sqlserver.login'), ';Password=', parameters('sqlserver.password'), ';')]",
+              "Core Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('single.core.sqldatabase.username'), ';Password=', parameters('single.core.sqldatabase.password'), ';')]",
+              "Master DB User Name": "[parameters('single.master.sqldatabase.username')]",
+              "Master DB Password": "[parameters('single.master.sqldatabase.password')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('sqlserver.login'), ';Password=', parameters('sqlserver.password'), ';')]",
+              "Master Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('single.master.sqldatabase.username'), ';Password=', parameters('single.master.sqldatabase.password'), ';')]",
+              "Web DB User Name": "[parameters('single.web.sqldatabase.username')]",
+              "Web DB Password": "[parameters('single.web.sqldatabase.password')]",
+              "Web Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('web.sqlserver.login'), ';Password=', parameters('web.sqlserver.password'), ';')]",
+              "Web Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('single.web.sqldatabase.username'), ';Password=', parameters('single.web.sqldatabase.password'), ';')]",
+              "Reporting DB User Name": "[parameters('single.reporting.sqldatabase.username')]",
+              "Reporting DB Password": "[parameters('single.reporting.sqldatabase.password')]",
+              "Reporting Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('repDbNameTidy'),';User Id=', parameters('sqlserver.login'), ';Password=', parameters('sqlserver.password'), ';')]",
+              "Reporting Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('repDbNameTidy'),';User Id=', parameters('single.reporting.sqldatabase.username'), ';Password=', parameters('single.reporting.sqldatabase.password'), ';')]",
+              "Analytics Connection String": "[variables('analyticsMongoDbConnStrTidy')]",
+              "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "Tracking Live Connection String": "[variables('trackingLiveMongoDbConnStrTidy')]",
+              "Tracking History Connection String": "[variables('trackingHistoryMongoDbConnStrTidy')]",
+              "Tracking Contact Connection String": "[variables('trackingContactMongoDbConnStrTidy')]",
+              "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
+              "Application Insights Role": "Single",
+              "KeepAlive Url": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('webAppNameTidy'))).hostNames[0], '/sitecore/service/keepalive.aspx')]",
+              "License Xml": "[variables('licenseXml')]"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "[variables('dbApiVersion')]",
+      "properties": {
+        "administratorLogin": "[parameters('sqlserver.login')]",
+        "administratorLoginPassword": "[parameters('sqlserver.password')]",
+        "version": "[parameters('sqlserver.version')]"
+      },
+      "name": "[variables('dbServerNameTidy')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "provider": "[parameters('sitecoreTags').provider]"
+      },
+      "resources": [
+        {
+          "type": "firewallrules",
+          "apiVersion": "[variables('dbApiVersion')]",
+          "properties": {
+            "endIpAddress": "0.0.0.0",
+            "startIpAddress": "0.0.0.0"
+          },
+          "name": "AllowAllWindowsAzureIps",
+          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('dbServerNameTidy'))]" ]
+        },
+        {
+          "type": "databases",
+          "apiVersion": "[variables('dbApiVersion')]",
+          "properties": {
+            "edition": "[parameters('sqldatabase.edition')]",
+            "collation": "[parameters('sqldatabase.collation')]",
+            "maxSizeBytes": "[parameters('sqldatabase.maxsize')]",
+            "requestedServiceObjectiveName": "[parameters('sqldatabase.serviceobjectivelevel')]"
+          },
+          "name": "[variables('coreDbNameTidy')]",
+          "location": "[parameters('location')]",
+          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('dbServerNameTidy'))]" ],
+          "tags": {
+            "provider": "[parameters('sitecoreTags').provider]"
+          }
+        },
+        {
+          "type": "databases",
+          "apiVersion": "[variables('dbApiVersion')]",
+          "properties": {
+            "edition": "[parameters('sqldatabase.edition')]",
+            "collation": "[parameters('sqldatabase.collation')]",
+            "maxSizeBytes": "[parameters('sqldatabase.maxsize')]",
+            "requestedServiceObjectiveName": "[parameters('sqldatabase.serviceobjectivelevel')]"
+          },
+          "name": "[variables('masterDbNameTidy')]",
+          "location": "[parameters('location')]",
+          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('dbServerNameTidy'))]" ],
+          "tags": {
+            "provider": "[parameters('sitecoreTags').provider]"
+          }
+        },
+        {
+          "type": "databases",
+          "apiVersion": "[variables('dbApiVersion')]",
+          "properties": {
+            "edition": "[parameters('sqldatabase.edition')]",
+            "collation": "[parameters('sqldatabase.collation')]",
+            "maxSizeBytes": "[parameters('sqldatabase.maxsize')]",
+            "requestedServiceObjectiveName": "[parameters('sqldatabase.serviceobjectivelevel')]"
+          },
+          "name": "[variables('repDbNameTidy')]",
+          "location": "[parameters('location')]",
+          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('dbServerNameTidy'))]" ],
+          "tags": {
+            "provider": "[parameters('sitecoreTags').provider]"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Sql/servers",
+      "apiVersion": "[variables('dbApiVersion')]",
+      "properties": {
+        "administratorLogin": "[parameters('web.sqlserver.login')]",
+        "administratorLoginPassword": "[parameters('web.sqlserver.password')]",
+        "version": "[parameters('sqlserver.version')]"
+      },
+      "name": "[variables('webDbServerNameTidy')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "provider": "[parameters('sitecoreTags').provider]"
+      },
+      "resources": [
+        {
+          "type": "firewallrules",
+          "apiVersion": "[variables('dbApiVersion')]",
+          "properties": {
+            "endIpAddress": "0.0.0.0",
+            "startIpAddress": "0.0.0.0"
+          },
+          "name": "AllowAllWindowsAzureIps",
+          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('webDbServerNameTidy'))]" ]
+        },
+        {
+          "type": "databases",
+          "apiVersion": "[variables('dbApiVersion')]",
+          "properties": {
+            "edition": "[parameters('sqldatabase.edition')]",
+            "collation": "[parameters('sqldatabase.collation')]",
+            "maxSizeBytes": "[parameters('sqldatabase.maxsize')]",
+            "requestedServiceObjectiveName": "[parameters('sqldatabase.serviceobjectivelevel')]"
+          },
+          "name": "[variables('webDbNameTidy')]",
+          "location": "[parameters('location')]",
+          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('webDbServerNameTidy'))]" ],
+          "tags": {
+            "provider": "[parameters('sitecoreTags').provider]"
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Search/searchServices",
+      "apiVersion": "[variables('searchApiVersion')]",
+      "name": "[variables('searchServiceNameTidy')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "sku": {
+          "name": "[toLower(parameters('searchservice.skuname'))]"
+        },
+        "replicaCount": "[parameters('searchservice.replicacount')]",
+        "partitionCount": "[parameters('searchservice.partitioncount')]"
+      },
+      "tags": {
+        "provider": "[parameters('sitecoreTags').provider]"
+      }
+    },
+    {
+      "type": "Microsoft.Insights/Components",
+      "name": "[variables('appInsightsNameTidy')]",
+      "apiVersion": "[variables('appInsightsApiVersion')]",
+      "location": "Central US",
+      "properties": {
+        "ApplicationId": "[variables('appInsightsNameTidy')]",
+        "Application_Type": "web"
+      },
+      "tags": {
+        "provider": "[parameters('sitecoreTags').provider]"
+      }
+    }
+  ]
+}

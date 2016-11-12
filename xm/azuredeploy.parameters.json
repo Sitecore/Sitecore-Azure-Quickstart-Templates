@@ -1,0 +1,23 @@
+﻿{
+  "deploymentId": {
+    "value": ""
+  },
+  "sitecore.admin.password": {
+    "value": ""
+  },
+  "sqlserver.login": {
+    "value": ""
+  },
+  "sqlserver.password": {
+    "value": ""
+  },
+  "cm.msdeploy.packageurl": {
+    "value": ""
+  },
+  "cd.msdeploy.packageurl": {
+    "value": ""
+  },
+  "licenseXml": {
+    "value": ""
+  }
+}
