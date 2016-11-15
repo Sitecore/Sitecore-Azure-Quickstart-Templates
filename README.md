@@ -1,6 +1,14 @@
 # Sitecore-Azure-Quickstart-Templates
 This repo contains all currently available Azure Resource Manager templates for Sitecore
 
+# Documentation
+You can read all about Sitecore PaaS integration and ARM Template deployment at **???????**
+
+# Pre-deployment Checklist
+1. Ensure you have the latest Azure PowerShell SDK installed
+2. Ensure you have uploaded your Sitecore Web Deploy packages to a blob storage location and added the urls to the azuredeploy.parameters.json file
+3. **Anything else ?????**
+
 # Sample PowerShell Script
 ```PowerShell
 $ArmTemplatePath = ".\xp\azuredeploy.json";
