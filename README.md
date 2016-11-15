@@ -11,6 +11,7 @@ You can read all about Sitecore PaaS integration and ARM Template deployment at 
 3. **Anything else ?????**
 
 # Sample PowerShell Script
+Below is a sample PowerShell script that can help you to get up and running quickly with the ARM Templates. There is also a Sitecore PowerShell CmdLet available for download at **?????** that makes the deployment even easier.
 ```PowerShell
 $ArmTemplatePath = ".\xp\azuredeploy.json";
 $ArmParametersPath = ".\xp\azuredeploy.parameters.json";
