@@ -21,6 +21,8 @@ Resources provisioned:
     * Preconfigured Web Applications, based on the provided WebDeploy packages
     
 ## Parameters
+The **deploymentid** and **licenseXml** are filled in by the PowerShell script.
+
 #### sqlserver.login
 The name of the Azure SQL db account to create.
 
@@ -31,8 +33,8 @@ The password for new Azure SQL db account.
 The new password for the Sitecore **admin** account.
 
 #### cm.msdeploy.packageurl
-The blob storage url to a Sitecore CM Web Deploy package.
+The blob storage url to a Sitecore XM Content Management Web Deploy package.
 
 #### cd.msdeploy.packageurl
-The blob storage url to a Sitecore CD Web Deploy package.
+The blob storage url to a Sitecore XM Content Delivery Web Deploy package.
 
