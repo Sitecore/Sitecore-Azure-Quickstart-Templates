@@ -6,7 +6,8 @@ You can read all about Sitecore PaaS integration and ARM Template deployment at 
 
 # Pre-deployment Checklist
 1. Ensure you have the latest Azure PowerShell SDK installed
-2. Ensure you have uploaded your Sitecore Web Deploy packages to a blob storage location and added the urls to the azuredeploy.parameters.json file
+2. Ensure you have uploaded your Sitecore Web Deploy packages to a blob storage location 
+3. Update the parameter values in the **azuredeploy.parameters.json** file
 3. **Anything else ?????**
 
 # Sample PowerShell Script
