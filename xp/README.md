@@ -21,6 +21,8 @@ Resources provisioned:
     * Preconfigured Web Applications, based on the provided WebDeploy packages
 
 ## Parameters
+The **deploymentid** and **licenseXml** are filled in by the PowerShell script.
+
 #### sqlserver.login
 The name of the Azure SQL db account to create.
 
