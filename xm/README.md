@@ -19,4 +19,20 @@ Resources provisioned:
 
     * Hosting plans: one per role
     * Preconfigured Web Applications, based on the provided WebDeploy packages
+    
+## Parameters
+#### sqlserver.login
+The name of the Azure SQL db account to create.
+
+#### sqlserver.password
+The password for new Azure SQL db account.
+
+#### sitecore.admin.password
+The new password for the Sitecore **admin** account.
+
+#### cm.msdeploy.packageurl
+The blob storage url to a Sitecore CM Web Deploy package.
+
+#### cd.msdeploy.packageurl
+The blob storage url to a Sitecore CD Web Deploy package.
 
