@@ -7,50 +7,24 @@
 This template creates a Sitecore XP0 Environment (single all-in-one instance) with all resources necessary to run Sitecore.
 
 Resources provisioned:
- 
+
   * Azure SQL databases : core, master, web, reporting
   * Azure Search Service for content search
   * Azure Redis Cache for session state
   * Application Insights for diagnostics and monitoring
   * Azure WebApp Hosting plan
   * Preconfigured Web Application, based on the provided WebDeploy package
-  
+
 ## Parameters
 The **deploymentId** and **licenseXml** parameters are filled in by the PowerShell script.
 
-#### sqlserver.login
-The name of the Azure SQL db account to create.
-
-#### sqlserver.password
-The password for new Azure SQL db account.
-
-#### sitecore.admin.password
-The new password for the Sitecore **admin** account.
-
-#### cm.msdeploy.packageurl
-The blob storage url to a Sitecore XP Content Management Web Deploy package.
-
-#### cd.msdeploy.packageurl
-The blob storage url to a Sitecore XP Content Deliver Web Deploy package.
-
-#### prc.msdeploy.packageurl
-The blob storage url to a Sitecore XP Processing Web Deploy package.
-
-#### rep.msdeploy.packageurl
-The blob storage url to a Sitecore XP Reporting Web Deploy package.
-
-#### rep.authentication.apikey
-A unique value (e.g. a GUID) that will be used as authentication when communicating to the Reporting Web App.
-
-#### analytics.mongodb.connectionstring
-A mongoDB connection string for the analytics database.
-
-#### tracking.live.mongodb.connectionstring
-A mongoDB connection string for the live database.
-
-#### tracking.history.mongodb.connectionstring
-A mongoDB connection string for the history database.
-
-#### tracking.contact.mongodb.connectionstring
-A mongoDB connection string for the contact database.
-
+| Parameter                                 | Description
+--------------------------------------------|------------------------------------------------
+| sqlserver.login                           | The name of the administrator account for the newly created Azure SQL server.
+| sqlserver.password                        | The password for the administrator account for Azure SQL server.
+| sitecore.admin.password                   | The new password for the Sitecore **admin** account.
+| single.msdeploy.packageurl                | The blob storage url to a Sitecore XP Single Instance Web Deploy package.
+| analytics.mongodb.connectionstring        | A MongoDB connection string for the analytics database.
+| tracking.live.mongodb.connectionstring    | A MongoDB connection string for the tracking.live database.
+| tracking.history.mongodb.connectionstring | A MongoDB connection string for the tracking.history database.
+| tracking.contact.mongodb.connectionstring | A MongoDB connection string for the tracking.contact database.

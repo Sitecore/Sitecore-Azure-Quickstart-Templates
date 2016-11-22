@@ -20,18 +20,11 @@ Resources provisioned:
 ## Parameters
 The **deploymentId** and **licenseXml** parameters are filled in by the PowerShell script.
 
-#### sqlserver.login
-The name of the Azure SQL db account to create.
-
-#### sqlserver.password
-The password for new Azure SQL db account.
-
-#### sitecore.admin.password
-The new password for the Sitecore **admin** account.
-
-#### cm.msdeploy.packageurl
-The blob storage url to a Sitecore XM Content Management Web Deploy package.
-
-#### cd.msdeploy.packageurl
-The blob storage url to a Sitecore XM Content Delivery Web Deploy package.
+| Parameter               | Description
+--------------------------|------------------------------------------------
+| sqlserver.login         | The name of the administrator account for the newly created Azure SQL server.
+| sqlserver.password      | The password for the administrator account for Azure SQL server.
+| sitecore.admin.password | The new password for the Sitecore **admin** account.
+| cm.msdeploy.packageurl  | The blob storage url to a Sitecore XM Content Management Web Deploy package.
+| cd.msdeploy.packageurl  | The blob storage url to a Sitecore XM Content Delivery Web Deploy package.
 

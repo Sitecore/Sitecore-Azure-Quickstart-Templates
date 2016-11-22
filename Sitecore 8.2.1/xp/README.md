@@ -20,40 +20,19 @@ Resources provisioned:
 ## Parameters
 The **deploymentId** and **licenseXml** parameters are filled in by the PowerShell script.
 
-#### sqlserver.login
-The name of the Azure SQL db account to create.
-
-#### sqlserver.password
-The password for new Azure SQL db account.
-
-#### sitecore.admin.password
-The new password for the Sitecore **admin** account.
-
-#### cm.msdeploy.packageurl
-The blob storage url to a Sitecore XP Content Management Web Deploy package.
-
-#### cd.msdeploy.packageurl
-The blob storage url to a Sitecore XP Content Deliver Web Deploy package.
-
-#### prc.msdeploy.packageurl
-The blob storage url to a Sitecore XP Processing Web Deploy package.
-
-#### rep.msdeploy.packageurl
-The blob storage url to a Sitecore XP Reporting Web Deploy package.
-
-#### rep.authentication.apikey
-A unique value (e.g. a GUID) that will be used as authentication when communicating to the Reporting Web App.
-
-#### analytics.mongodb.connectionstring
-A mongoDB connection string for the analytics database.
-
-#### tracking.live.mongodb.connectionstring
-A mongoDB connection string for the live database.
-
-#### tracking.history.mongodb.connectionstring
-A mongoDB connection string for the history database.
-
-#### tracking.contact.mongodb.connectionstring
-A mongoDB connection string for the contact database.
+|Parameter                                  | Description
+--------------------------------------------|----------------------------------------------------
+| sqlserver.login                           | The name of the administrator account for Azure SQL server that will be created.
+| sqlserver.password                        | The password for the administrator account for Azure SQL server.
+| sitecore.admin.password                   | The new password for the Sitecore **admin** account.
+| cm.msdeploy.packageurl                    | The blob storage url to a Sitecore XP Content Management Web Deploy package.
+| cd.msdeploy.packageurl                    | The blob storage url to a Sitecore XP Content Delivery Web Deploy package.
+| prc.msdeploy.packageurl                   | The blob storage url to a Sitecore XP Processing Web Deploy package.
+| rep.msdeploy.packageurl                   | The blob storage url to a Sitecore XP Reporting Web Deploy package.
+| rep.authentication.apikey                 | A unique value (e.g. a GUID) that will be used as authentication when communicating from Content Management to the Reporting Web App.
+| analytics.mongodb.connectionstring        | A MongoDB connection string for the analytics database.
+| tracking.live.mongodb.connectionstring    | A MongoDB connection string for the tracking.live database.
+| tracking.history.mongodb.connectionstring | A MongoDB connection string for the tracking.history database.
+| tracking.contact.mongodb.connectionstring | A MongoDB connection string for the tracking.contact database.
 
 
