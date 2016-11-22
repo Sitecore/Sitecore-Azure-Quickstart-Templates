@@ -2,16 +2,17 @@
 This repo contains all currently available Azure Resource Manager templates for Sitecore
 
 # Documentation
-You can read all about Sitecore PaaS integration and ARM Template deployment at **???????**
+You can read all about Sitecore Azure AppService integration and ARM Template deployment at [Sitecore Documentation Site](https://doc.sitecore.net/cloud)
 
 # Pre-deployment Checklist
 1. Ensure you have the latest Azure PowerShell SDK installed
 2. Ensure you have uploaded your Sitecore Web Deploy packages to a blob storage location 
-3. Update the parameter values in the **azuredeploy.parameters.json** file
-3. **Anything else ?????**
+3. Ensure you have a cloud-hosted instance of MongoDB for Experience Database in XP and XP0 configurations.
+4. Download and update the parameter values in the **azuredeploy.parameters.json** file
+
 
 # Sample PowerShell Script
-Below is a sample PowerShell script that can help you to get up and running quickly with the ARM Templates. There is also a Sitecore PowerShell CmdLet available for download at **?????** that makes the deployment even easier.
+Below is a sample PowerShell script that can help you to get up and running quickly with the ARM Templates. There is also a Sitecore PowerShell CmdLet available for download at [Sitecore Downloads Site](https://dev.sitecore.net/) that makes the deployment even easier.
 ```PowerShell
 $ArmTemplatePath = ".\xp\azuredeploy.json";
 $ArmParametersPath = ".\xp\azuredeploy.parameters.json";
