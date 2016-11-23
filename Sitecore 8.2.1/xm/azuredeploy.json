@@ -152,6 +152,11 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-ai')]"
     },
+    "applicationinsights.location": {
+      "type": "string",
+      "defaultValue": "East US",
+      "allowedValues": [ "East US", "South Central US", "North Europe", "West Europe" ]
+    },
     "cm.hostingplan.skuname": {
       "type": "string",
       "defaultValue": "S1"
@@ -528,7 +533,7 @@
       "type": "Microsoft.Insights/Components",
       "name": "[variables('appInsightsNameTidy')]",
       "apiVersion": "[variables('appInsightsApiVersion')]",
-      "location": "Central US",
+      "location": "[parameters('applicationinsights.location')]",
       "properties": {
         "ApplicationId": "[variables('appInsightsNameTidy')]",
         "Application_Type": "web"
