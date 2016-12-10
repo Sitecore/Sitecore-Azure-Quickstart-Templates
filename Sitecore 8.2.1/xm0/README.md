@@ -1,6 +1,6 @@
 # Sitecore XM Environment
 
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com/ivansharamok/Sitecore-Azure-Quickstart-Templates/master/Sitecore%208.2.1/xm/azuredeploy.json" target="_blank">
+<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com/ivansharamok/Sitecore-Azure-Quickstart-Templates/master/Sitecore%208.2.1/xm0/azuredeploy.json" target="_blank">
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
