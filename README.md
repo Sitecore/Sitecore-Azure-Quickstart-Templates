@@ -4,6 +4,13 @@ This repo contains all currently available Azure Resource Manager templates for 
 # Documentation
 You can read all about Sitecore Azure AppService integration and ARM Template deployment at [Sitecore Documentation Site](https://doc.sitecore.net/cloud)
 
+# Compatibility
+Choose the compatible templates for your Sitecore version:
+
+| Templates Folder | Compatible Sitecore versions                       |
+|------------------|----------------------------------------------------|
+| Sitecore 8.2.1   | Sitecore 8.2 Update-1 and Sitecore 8.2 Update-2    |
+
 # Pre-deployment Checklist
 1. Ensure you have the latest Azure PowerShell SDK installed
 2. Ensure you have uploaded your Sitecore Web Deploy packages to a blob storage location 
