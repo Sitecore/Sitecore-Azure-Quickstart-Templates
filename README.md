@@ -19,7 +19,7 @@ Choose the compatible templates for your Sitecore version:
 
 
 # Sample PowerShell Script
-Below is a sample PowerShell script that can help you to get up and running quickly with the ARM Templates. There is also a Sitecore PowerShell CmdLet available for download at [Sitecore Downloads Site](https://dev.sitecore.net/) that makes the deployment even easier.
+Below is a sample PowerShell script that can help you to get up and running quickly with the ARM Templates. There is also a Sitecore PowerShell CmdLet available for download at [Sitecore Downloads Site](https://dev.sitecore.net/Downloads.aspx) that makes the deployment even easier.
 ```PowerShell
 $ArmTemplatePath = ".\xp\azuredeploy.json";
 $ArmParametersPath = ".\xp\azuredeploy.parameters.json";
