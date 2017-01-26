@@ -2,13 +2,13 @@
   "deploymentId": {
     "value": ""
   },
-  "sitecore.admin.password": {
+  "sitecoreAdminPassword": {
     "value": ""
   },
-  "sqlserver.login": {
+  "sqlserverLogin": {
     "value": ""
   },
-  "sqlserver.password": {
+  "sqlserverPassword": {
     "value": ""
   },
   "cm.msdeploy.packageurl": {

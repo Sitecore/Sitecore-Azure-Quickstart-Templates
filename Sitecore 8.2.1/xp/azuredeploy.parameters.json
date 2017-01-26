@@ -2,28 +2,28 @@
   "deploymentId": {
     "value": ""
   },
-  "sitecore.admin.password": {
+  "sitecoreAdminPassword": {
     "value": ""
   },
   "rep.authentication.apikey": {
 	"value": ""
   },
-  "analytics.mongodb.connectionstring": {
+  "analyticsMongodbConnectionstring": {
     "value": ""
   },
-  "tracking.live.mongodb.connectionstring": {
+  "trackingLiveMongodbConnectionstring": {
     "value": ""
   },
-  "tracking.history.mongodb.connectionstring": {
+  "trackingHistoryMongodbConnectionstring": {
     "value": ""
   },
-  "tracking.contact.mongodb.connectionstring": {
+  "trackingContactMongodbConnectionstring": {
     "value": ""
   },
-  "sqlserver.login": {
+  "sqlserverLogin": {
     "value": ""
   },
-  "sqlserver.password": {
+  "sqlserverPassword": {
     "value": ""
   },
   "cm.msdeploy.packageurl": {
