@@ -546,6 +546,7 @@
       },
       "name": "[variables('webDbServerNameTidy')]",
       "location": "[parameters('location')]",
+      "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('dbServerNameTidy'))]" ],
       "tags": {
         "provider": "[parameters('sitecoreTags').provider]"
       },
