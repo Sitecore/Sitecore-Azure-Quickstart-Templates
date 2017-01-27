@@ -197,7 +197,7 @@
       "type": "string",
       "defaultValue": "S1"
     },
-    "searchservice.cdlicacount": {
+    "searchserviceCdlicacount": {
       "type": "int",
       "defaultValue": 1
     },
@@ -504,7 +504,7 @@
         "sku": {
           "name": "[toLower(parameters('searchserviceSkuname'))]"
         },
-        "cdlicaCount": "[parameters('searchservice.cdlicacount')]",
+        "cdlicaCount": "[parameters('searchserviceCdlicacount')]",
         "partitionCount": "[parameters('searchservicePartitioncount')]"
       },
       "tags": {

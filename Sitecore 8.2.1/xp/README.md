@@ -29,7 +29,7 @@ The **deploymentId** and **licenseXml** parameters are filled in by the PowerShe
 | cdMsdeployPackageurl                      | The blob storage url to a Sitecore XP Content Delivery Web Deploy package.
 | prcMsdeployPackageurl                     | The blob storage url to a Sitecore XP Processing Web Deploy package.
 | repMsdeployPackageurl                     | The blob storage url to a Sitecore XP Reporting Web Deploy package.
-| rep.authentication.apikey                 | A unique value (e.g. a GUID) that will be used as authentication when communicating from Content Management to the Reporting Web App.
+| repAuthenticationApikey                   | A unique value (e.g. a GUID) that will be used as authentication when communicating from Content Management to the Reporting Web App.
 | analyticsMongodbConnectionstring          | A MongoDB connection string for the analytics database.
 | trackingLiveMongodbConnectionstring       | A MongoDB connection string for the tracking.live database.
 | trackingHistoryMongodbConnectionstring    | A MongoDB connection string for the tracking.history database.
