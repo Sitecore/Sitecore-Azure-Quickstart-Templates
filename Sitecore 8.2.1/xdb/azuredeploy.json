@@ -204,7 +204,7 @@
     },
     "prc.hostingplan.skuname": {
       "type": "string",
-      "defaultValue": "S1"
+      "defaultValue": "B1"
     },
     "prc.hostingplan.skucapacity": {
       "type": "int",
@@ -212,7 +212,7 @@
     },
     "rep.hostingplan.skuname": {
       "type": "string",
-      "defaultValue": "S1"
+      "defaultValue": "B1"
     },
     "rep.hostingplan.skucapacity": {
       "type": "int",
@@ -236,7 +236,7 @@
     },
     "sqldatabase.maxsize": {
       "type": "string",
-      "defaultValue": "10737418240"
+      "defaultValue": "268435456000"
     },
     "sqldatabase.serviceobjectivelevel": {
       "type": "string",
@@ -275,6 +275,200 @@
     "rep.authentication.apikey": {
       "type": "securestring",
       "minLength": 32
+    },
+    "sitecore.sku" : {
+      "type" : "string",
+      "defaultValue": "xDB1",
+      "allowedValues": [
+        "xDB1", "xDB2", "xDB3", "xDB4", "xDB5"
+      ],
+      "metadata": {
+        "description" : "Sitecore SKU controls the sizes and service levels of the provisioned resources"
+      }
+    },
+    "sitecore.skumap" : {
+      "type" : "secureObject",
+      "defaultValue": {
+        "xDB1": {
+          "PrcHostingPlan" : {
+            "SkuName" : "[parameters('prc.hostingplan.skuname')]",
+            "SkuCapacity" : "[parameters('prc.hostingplan.skucapacity')]"
+          },
+          "RepHostingPlan" : {
+            "SkuName" : "[parameters('rep.hostingplan.skuname')]",
+            "SkuCapacity" : "[parameters('rep.hostingplan.skucapacity')]"
+          },
+          "CoreSqlDatabase" : {
+            "Edition": "[parameters('sqldatabase.edition')]",
+            "MaxSize": "[parameters('sqldatabase.maxsize')]",
+            "ServiceObjectiveLevel": "[parameters('sqldatabase.serviceobjectivelevel')]"
+          },
+          "MasterSqlDatabase" : {
+            "Edition": "[parameters('sqldatabase.edition')]",
+            "MaxSize": "[parameters('sqldatabase.maxsize')]",
+            "ServiceObjectiveLevel": "[parameters('sqldatabase.serviceobjectivelevel')]"
+          },
+          "WebSqlDatabase" : {
+            "Edition": "[parameters('sqldatabase.edition')]",
+            "MaxSize": "[parameters('sqldatabase.maxsize')]",
+            "ServiceObjectiveLevel": "[parameters('sqldatabase.serviceobjectivelevel')]"
+          },
+          "ReportingSqlDatabase" : {
+            "Edition": "[parameters('sqldatabase.edition')]",
+            "MaxSize": "[parameters('sqldatabase.maxsize')]",
+            "ServiceObjectiveLevel": "[parameters('sqldatabase.serviceobjectivelevel')]"
+          },
+          "Searchservice" : {
+            "SkuName": "[parameters('searchservice.skuname')]",
+            "Partitions" : "[parameters('searchservice.partitioncount')]",
+            "Replicas" : "[parameters('searchservice.replicacount')]"
+          },
+        },
+        "xDB2": {
+          "PrcHostingPlan" : {
+            "SkuName" : "B1",
+            "SkuCapacity" : 1
+          },
+          "RepHostingPlan" : {
+            "SkuName" : "B1",
+            "SkuCapacity" : 1
+          },
+          "CoreSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "MasterSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "WebSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "ReportingSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "Searchservice" : {
+            "SkuName": "Standard",
+            "Partitions" : 1,
+            "Replicas" : 1
+          }
+        },
+        "xDB3": {
+          "PrcHostingPlan" : {
+            "SkuName" : "B1",
+            "SkuCapacity" : 1
+          },
+          "RepHostingPlan" : {
+            "SkuName" : "B2",
+            "SkuCapacity" : 1
+          },
+          "CoreSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "MasterSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "WebSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "ReportingSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "Serviceobjectivelevel": "S2"
+          },
+          "Searchservice" : {
+            "SkuName": "Standard",
+            "Partitions" : 1,
+            "Replicas" : 1
+          }
+        },
+        "xDB4": {
+          "PrcHostingPlan" : {
+            "SkuName" : "B2",
+            "SkuCapacity" : 1
+          },
+          "RepHostingPlan" : {
+            "SkuName" : "B2",
+            "SkuCapacity" : 1
+          },
+          "CoreSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "MasterSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "WebSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "ReportingSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "Serviceobjectivelevel": "S2"
+          },
+          "Searchservice" : {
+            "SkuName": "Standard",
+            "Partitions" : 1,
+            "Replicas" : 1
+          }
+        },
+        "xDB5": {
+          "PrcHostingPlan" : {
+            "SkuName" : "B2",
+            "SkuCapacity" : 1
+          },
+          "RepHostingPlan" : {
+            "SkuName" : "B2",
+            "SkuCapacity" : 1
+          },
+          "CoreSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "MasterSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "WebSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "ReportingSqlDatabase" : {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "Serviceobjectivelevel": "S2"
+          },
+          "Searchservice" : {
+            "SkuName": "Standard",
+            "Partitions" : 1,
+            "Replicas" : 1
+          }
+        }
+      }
+    },
+    "resourceSizes" : {
+      "type" : "object",
+      "defaultValue": "[parameters('sitecore.skumap')[parameters('sitecore.sku')]]"
     }
   },
   "resources": [
@@ -283,8 +477,8 @@
       "name": "[variables('prcHostingPlanNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "sku": {
-        "name": "[parameters('prc.hostingplan.skuname')]",
-        "capacity": "[parameters('prc.hostingplan.skucapacity')]"
+        "name": "[parameters('resourceSizes').PrcHostingPlan.SkuName]",
+        "capacity": "[parameters('resourceSizes').PrcHostingPlan.SkuCapacity]"
       },
       "properties": {
         "name": "[variables('prcHostingPlanNameTidy')]"
@@ -299,8 +493,8 @@
       "name": "[variables('repHostingPlanNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "sku": {
-        "name": "[parameters('rep.hostingplan.skuname')]",
-        "capacity": "[parameters('rep.hostingplan.skucapacity')]"
+        "name": "[parameters('resourceSizes').RepHostingPlan.SkuName]",
+        "capacity": "[parameters('resourceSizes').RepHostingPlan.SkuCapacity]"
       },
       "properties": {
         "name": "[variables('repHostingPlanNameTidy')]"
@@ -490,10 +684,10 @@
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "edition": "[parameters('sqldatabase.edition')]",
+            "edition": "[parameters('resourceSizes').CoreSqlDatabase.Edition]",
             "collation": "[parameters('sqldatabase.collation')]",
-            "maxSizeBytes": "[parameters('sqldatabase.maxsize')]",
-            "requestedServiceObjectiveName": "[parameters('sqldatabase.serviceobjectivelevel')]"
+            "maxSizeBytes": "[parameters('resourceSizes').CoreSqlDatabase.MaxSize]",
+            "requestedServiceObjectiveName": "[parameters('resourceSizes').CoreSqlDatabase.ServiceObjectiveLevel]"
           },
           "name": "[variables('coreDbNameTidy')]",
           "location": "[parameters('location')]",
@@ -506,10 +700,10 @@
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "edition": "[parameters('sqldatabase.edition')]",
+            "edition": "[parameters('resourceSizes').MasterSqlDatabase.Edition]",
             "collation": "[parameters('sqldatabase.collation')]",
-            "maxSizeBytes": "[parameters('sqldatabase.maxsize')]",
-            "requestedServiceObjectiveName": "[parameters('sqldatabase.serviceobjectivelevel')]"
+            "maxSizeBytes": "[parameters('resourceSizes').MasterSqlDatabase.MaxSize]",
+            "requestedServiceObjectiveName": "[parameters('resourceSizes').MasterSqlDatabase.ServiceObjectiveLevel]"
           },
           "name": "[variables('masterDbNameTidy')]",
           "location": "[parameters('location')]",
@@ -522,10 +716,10 @@
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "edition": "[parameters('sqldatabase.edition')]",
+            "edition": "[parameters('resourceSizes').ReportingSqlDatabase.Edition]",
             "collation": "[parameters('sqldatabase.collation')]",
-            "maxSizeBytes": "[parameters('sqldatabase.maxsize')]",
-            "requestedServiceObjectiveName": "[parameters('sqldatabase.serviceobjectivelevel')]"
+            "maxSizeBytes": "[parameters('resourceSizes').ReportingSqlDatabase.MaxSize]",
+            "requestedServiceObjectiveName": "[parameters('resourceSizes').ReportingSqlDatabase.ServiceObjectiveLevel]"
           },
           "name": "[variables('repDbNameTidy')]",
           "location": "[parameters('location')]",
@@ -565,10 +759,10 @@
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "edition": "[parameters('sqldatabase.edition')]",
+            "edition": "[parameters('resourceSizes').WebSqlDatabase.Edition]",
             "collation": "[parameters('sqldatabase.collation')]",
-            "maxSizeBytes": "[parameters('sqldatabase.maxsize')]",
-            "requestedServiceObjectiveName": "[parameters('sqldatabase.serviceobjectivelevel')]"
+            "maxSizeBytes": "[parameters('resourceSizes').WebSqlDatabase.MaxSize]",
+            "requestedServiceObjectiveName": "[parameters('resourceSizes').WebSqlDatabase.ServiceObjectiveLevel]"
           },
           "name": "[variables('webDbNameTidy')]",
           "location": "[parameters('location')]",
@@ -586,10 +780,10 @@
       "location": "[parameters('location')]",
       "properties": {
         "sku": {
-          "name": "[toLower(parameters('searchservice.skuname'))]"
+          "name": "[toLower(parameters('resourceSizes').SearchService.SkuName)]"
         },
-        "replicaCount": "[parameters('searchservice.replicacount')]",
-        "partitionCount": "[parameters('searchservice.partitioncount')]"
+        "replicaCount": "[parameters('resourceSizes').SearchService.Replicas]",
+        "partitionCount": "[parameters('resourceSizes').SearchService.Partitions]"
       },
       "tags": {
         "provider": "[parameters('sitecoreTags').provider]"
