@@ -7,17 +7,17 @@
     "searchApiVersion": "2015-02-28",
     "redisApiVersion": "2016-04-01",
     "appInsightsApiVersion": "2014-08-01",
-    "cmHostingPlanNameTidy": "[toLower(trim(parameters('cm.hostingplan.name')))]",
-    "cdHostingPlanNameTidy": "[toLower(trim(parameters('cd.hostingplan.name')))]",
-    "cmWebAppNameTidy": "[toLower(trim(parameters('cm.webapp.name')))]",
-    "cdWebAppNameTidy": "[toLower(trim(parameters('cd.webapp.name')))]",
+    "cmHostingPlanNameTidy": "[toLower(trim(parameters('cmHostingplanName')))]",
+    "cdHostingPlanNameTidy": "[toLower(trim(parameters('cdHostingplanName')))]",
+    "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebappName')))]",
+    "cdWebAppNameTidy": "[toLower(trim(parameters('cdWebappName')))]",
     "dbServerNameTidy": "[toLower(trim(parameters('sqlserverName')))]",
     "coreDbNameTidy": "[toLower(trim(parameters('coreSqldatabaseName')))]",
     "webDbNameTidy": "[toLower(trim(parameters('webSqldatabaseName')))]",
     "webDbServerNameTidy": "[toLower(trim(parameters('webSqlserverName')))]",
     "masterDbNameTidy": "[toLower(trim(parameters('masterSqldatabaseName')))]",
     "searchServiceNameTidy": "[toLower(trim(parameters('searchserviceName')))]",
-    "redisCacheNameTidy": "[toLower(trim(parameters('rediscache.name')))]",
+    "redisCacheNameTidy": "[toLower(trim(parameters('rediscacheName')))]",
     "appInsightsNameTidy": "[toLower(trim(parameters('applicationinsightsName')))]",
     "licenseXml": "[parameters('licenseXml')]"
   },
@@ -30,26 +30,26 @@
       "type": "string",
       "defaultValue": "[resourceGroup().location]"
     },
-    "cm.hostingplan.name": {
+    "cmHostingplanName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-cm-hp')]"
     },
-    "cd.hostingplan.name": {
+    "cdHostingplanName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-cd-hp')]"
     },
-    "cm.webapp.name": {
+    "cmWebappName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-cm')]"
     },
-    "cd.webapp.name": {
+    "cdWebappName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-cd')]"
     },
-    "cm.msdeploy.packageurl": {
+    "cmMsdeployPackageurl": {
       "type": "securestring"
     },
-    "cd.msdeploy.packageurl": {
+    "cdMsdeployPackageurl": {
       "type": "securestring"
     },
     "sqlserverName": {
@@ -90,52 +90,52 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
     },
-    "cm.core.sqldatabase.username": {
+    "cmCoreSqldatabaseUsername": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat('cm-core-', deployment().name, '-user')]"
     },
-    "cm.core.sqldatabase.password": {
+    "cmCoreSqldatabasePassword": {
       "type": "securestring",
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('cm-core')), '@', uniqueString(parameters('sqlserverPassword')))]"
     },
-    "cm.master.sqldatabase.username": {
+    "cmMasterSqldatabaseUsername": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat('cm-master-', deployment().name, '-user')]"
     },
-    "cm.master.sqldatabase.password": {
+    "cmMasterSqldatabasePassword": {
       "type": "securestring",
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('cm-master')), '@', uniqueString(parameters('sqlserverPassword')))]"
     },
-    "cm.web.sqldatabase.username": {
+    "cmWebSqldatabaseUsername": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat('cm-web-', deployment().name, '-user')]"
     },
-    "cm.web.sqldatabase.password": {
+    "cmWebSqldatabasePassword": {
       "type": "securestring",
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('cm-web')), '@', uniqueString(parameters('sqlserverPassword')))]"
     },
-    "cd.core.sqldatabase.username": {
+    "cdCoreSqldatabaseUsername": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat('cd-core-', deployment().name, '-user')]"
     },
-    "cd.core.sqldatabase.password": {
+    "cdCoreSqldatabasePassword": {
       "type": "securestring",
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('cd-core')), '@', uniqueString(parameters('sqlserverPassword')))]"
     },
-    "cd.web.sqldatabase.username": {
+    "cdWebSqldatabaseUsername": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat('cd-web-', deployment().name, '-user')]"
     },
-    "cd.web.sqldatabase.password": {
+    "cdWebSqldatabasePassword": {
       "type": "securestring",
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('cd-web')), '@', uniqueString(parameters('sqlserverPassword')))]"
@@ -144,7 +144,7 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
     },
-    "rediscache.name": {
+    "rediscacheName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-redis')]"
     },
@@ -157,19 +157,19 @@
       "defaultValue": "East US",
       "allowedValues": [ "East US", "South Central US", "North Europe", "West Europe" ]
     },
-    "cm.hostingplan.skuname": {
+    "cmHostingplanSkuname": {
       "type": "string",
       "defaultValue": "S1"
     },
-    "cm.hostingplan.skucapacity": {
+    "cmHostingplanSkucapacity": {
       "type": "int",
       "defaultValue": 1
     },
-    "cd.hostingplan.skuname": {
+    "cdHostingplanSkuname": {
       "type": "string",
       "defaultValue": "S1"
     },
-    "cd.hostingplan.skucapacity": {
+    "cdHostingplanSkucapacity": {
       "type": "int",
       "defaultValue": 1
     },
@@ -205,15 +205,15 @@
       "type": "int",
       "defaultValue": 1
     },
-    "rediscache.skuname": {
+    "rediscacheSkuname": {
       "type": "string",
       "defaultValue": "Basic"
     },
-    "rediscache.skufamily": {
+    "rediscacheSkufamily": {
       "type": "string",
       "defaultValue": "C"
     },
-    "rediscache.skucapacity": {
+    "rediscacheSkucapacity": {
       "type": "string",
       "defaultValue": "0"
     },
@@ -226,11 +226,11 @@
     "licenseXml": {
       "type": "securestring"
     },
-    "security.clientIp": {
+    "securityClientIp": {
       "type": "string",
       "defaultValue": "0.0.0.0"
     },
-    "security.clientIpMask": {
+    "securityClientIpMask": {
       "type": "string",
       "defaultValue": "0.0.0.0"
     },
@@ -246,8 +246,8 @@
       "name": "[variables('cmHostingPlanNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "sku": {
-        "name": "[parameters('cm.hostingplan.skuname')]",
-        "capacity": "[parameters('cm.hostingplan.skucapacity')]"
+        "name": "[parameters('cmHostingplanSkuname')]",
+        "capacity": "[parameters('cmHostingplanSkucapacity')]"
       },
       "properties": {
         "name": "[variables('cmHostingPlanNameTidy')]"
@@ -262,8 +262,8 @@
       "name": "[variables('cdHostingPlanNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "sku": {
-        "name": "[parameters('cd.hostingplan.skuname')]",
-        "capacity": "[parameters('cd.hostingplan.skucapacity')]"
+        "name": "[parameters('cdHostingplanSkuname')]",
+        "capacity": "[parameters('cdHostingplanSkucapacity')]"
       },
       "properties": {
         "name": "[variables('cdHostingPlanNameTidy')]"
@@ -302,31 +302,31 @@
           "apiVersion": "[variables('webApiVersion')]",
           "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'))]", "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]", "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('masterDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]" ],
           "properties": {
-            "packageUri": "[parameters('cm.msdeploy.packageurl')]",
+            "packageUri": "[parameters('cmMsdeployPackageurl')]",
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=master;User Id=', parameters('sqlserverLogin'), '@', variables('dbServerNameTidy'), ';Password=', parameters('sqlserverPassword'), ';')]",
             "setParameters": {
               "Application Path": "[variables('cmWebAppNameTidy')]",
               "Sitecore Admin New Password": "[parameters('sitecoreAdminPassword')]",
-              "Core DB User Name": "[parameters('cm.core.sqldatabase.username')]",
-              "Core DB Password": "[parameters('cm.core.sqldatabase.password')]",
+              "Core DB User Name": "[parameters('cmCoreSqldatabaseUsername')]",
+              "Core DB Password": "[parameters('cmCoreSqldatabasePassword')]",
               "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('sqlserverLogin'), ';Password=', parameters('sqlserverPassword'), ';')]",
-              "Core Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('cm.core.sqldatabase.username'), ';Password=', parameters('cm.core.sqldatabase.password'), ';')]",
-              "Master DB User Name": "[parameters('cm.master.sqldatabase.username')]",
-              "Master DB Password": "[parameters('cm.master.sqldatabase.password')]",
+              "Core Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('cmCoreSqldatabaseUsername'), ';Password=', parameters('cmCoreSqldatabasePassword'), ';')]",
+              "Master DB User Name": "[parameters('cmMasterSqldatabaseUsername')]",
+              "Master DB Password": "[parameters('cmMasterSqldatabasePassword')]",
               "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('sqlserverLogin'), ';Password=', parameters('sqlserverPassword'), ';')]",
-              "Master Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('cm.master.sqldatabase.username'), ';Password=', parameters('cm.master.sqldatabase.password'), ';')]",
-              "Web DB User Name": "[parameters('cm.web.sqldatabase.username')]",
-              "Web DB Password": "[parameters('cm.web.sqldatabase.password')]",
+              "Master Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('cmMasterSqldatabaseUsername'), ';Password=', parameters('cmMasterSqldatabasePassword'), ';')]",
+              "Web DB User Name": "[parameters('cmWebSqldatabaseUsername')]",
+              "Web DB Password": "[parameters('cmWebSqldatabasePassword')]",
               "Web Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('webSqlserverLogin'), ';Password=', parameters('webSqlserverPassword'), ';')]",
-              "Web Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('cm.web.sqldatabase.username'), ';Password=', parameters('cm.web.sqldatabase.password'), ';')]",
+              "Web Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('cmWebSqldatabaseUsername'), ';Password=', parameters('cmWebSqldatabasePassword'), ';')]",
               "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
               "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
               "Application Insights Role": "CM",
               "KeepAlive Url": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('cmWebAppNameTidy'))).hostNames[0], '/sitecore/service/keepalive.aspx')]",
               "License Xml": "[variables('licenseXml')]",
-              "IP Security Client IP": "[parameters('security.clientIp')]",
-              "IP Security Client IP Mask": "[parameters('security.clientIpMask')]"
+              "IP Security Client IP": "[parameters('securityClientIp')]",
+              "IP Security Client IP Mask": "[parameters('securityClientIpMask')]"
             }
           }
         }
@@ -370,20 +370,20 @@
             "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]"
           ],
           "properties": {
-            "packageUri": "[parameters('cd.msdeploy.packageurl')]",
+            "packageUri": "[parameters('cdMsdeployPackageurl')]",
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=master;User Id=', parameters('sqlserverLogin'), '@', variables('dbServerNameTidy'), ';Password=', parameters('sqlserverPassword'), ';')]",
             "setParameters": {
               "Application Path": "[variables('cdWebAppNameTidy')]",
               "Sitecore Admin New Password": "[parameters('sitecoreAdminPassword')]",
-              "Core DB User Name": "[parameters('cd.core.sqldatabase.username')]",
-              "Core DB Password": "[parameters('cd.core.sqldatabase.password')]",
+              "Core DB User Name": "[parameters('cdCoreSqldatabaseUsername')]",
+              "Core DB Password": "[parameters('cdCoreSqldatabasePassword')]",
               "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('sqlserverLogin'), ';Password=', parameters('sqlserverPassword'), ';')]",
-              "Core Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('cd.core.sqldatabase.username'), ';Password=', parameters('cd.core.sqldatabase.password'), ';')]",
-              "Web DB User Name": "[parameters('cd.web.sqldatabase.username')]",
-              "Web DB Password": "[parameters('cd.web.sqldatabase.password')]",
+              "Core Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('cdCoreSqldatabaseUsername'), ';Password=', parameters('cdCoreSqldatabasePassword'), ';')]",
+              "Web DB User Name": "[parameters('cdWebSqldatabaseUsername')]",
+              "Web DB Password": "[parameters('cdWebSqldatabasePassword')]",
               "Web Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('webSqlserverLogin'), ';Password=', parameters('webSqlserverPassword'), ';')]",
-              "Web Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('cd.web.sqldatabase.username'), ';Password=', parameters('cd.web.sqldatabase.password'), ';')]",
+              "Web Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('cdWebSqldatabaseUsername'), ';Password=', parameters('cdWebSqldatabasePassword'), ';')]",
               "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
               "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
               "Application Insights Role": "CD",
@@ -518,9 +518,9 @@
       "location": "[parameters('location')]",
       "properties": {
         "sku": {
-          "name": "[parameters('rediscache.skuname')]",
-          "family": "[parameters('rediscache.skufamily')]",
-          "capacity": "[parameters('rediscache.skucapacity')]"
+          "name": "[parameters('rediscacheSkuname')]",
+          "family": "[parameters('rediscacheSkufamily')]",
+          "capacity": "[parameters('rediscacheSkucapacity')]"
         },
         "enableNonSslPort": false
       },

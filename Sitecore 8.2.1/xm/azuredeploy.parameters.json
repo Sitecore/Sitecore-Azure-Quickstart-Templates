@@ -11,10 +11,10 @@
   "sqlserverPassword": {
     "value": ""
   },
-  "cm.msdeploy.packageurl": {
+  "cmMsdeployPackageurl": {
     "value": ""
   },
-  "cd.msdeploy.packageurl": {
+  "cdMsdeployPackageurl": {
     "value": ""
   },
   "licenseXml": {

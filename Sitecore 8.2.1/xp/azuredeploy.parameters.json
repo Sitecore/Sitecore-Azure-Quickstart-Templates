@@ -26,16 +26,16 @@
   "sqlserverPassword": {
     "value": ""
   },
-  "cm.msdeploy.packageurl": {
+  "cmMsdeployPackageurl": {
     "value": ""
   },
-  "cd.msdeploy.packageurl": {
+  "cdMsdeployPackageurl": {
     "value": ""
   },
-  "prc.msdeploy.packageurl": {
+  "prcMsdeployPackageurl": {
     "value": ""
   },
-  "rep.msdeploy.packageurl": {
+  "repMsdeployPackageurl": {
     "value": ""
   },
   "licenseXml": {
