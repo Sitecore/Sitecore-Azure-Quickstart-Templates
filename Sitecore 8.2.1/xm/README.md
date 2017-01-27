@@ -22,9 +22,9 @@ The **deploymentId** and **licenseXml** parameters are filled in by the PowerShe
 
 | Parameter               | Description
 --------------------------|------------------------------------------------
-| sqlserverLogin         | The name of the administrator account for the newly created Azure SQL server.
-| sqlserverPassword      | The password for the administrator account for Azure SQL server.
-| sitecoreAdminPassword | The new password for the Sitecore **admin** account.
-| cm.msdeploy.packageurl  | The blob storage url to a Sitecore XM Content Management Web Deploy package.
-| cd.msdeploy.packageurl  | The blob storage url to a Sitecore XM Content Delivery Web Deploy package.
+| sqlserverLogin          | The name of the administrator account for the newly created Azure SQL server.
+| sqlserverPassword       | The password for the administrator account for Azure SQL server.
+| sitecoreAdminPassword   | The new password for the Sitecore **admin** account.
+| cmMsdeployPackageurl    | The blob storage url to a Sitecore XM Content Management Web Deploy package.
+| cdMsdeployPackageurl    | The blob storage url to a Sitecore XM Content Delivery Web Deploy package.
 
