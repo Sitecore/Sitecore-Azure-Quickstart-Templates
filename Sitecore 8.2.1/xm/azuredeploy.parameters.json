@@ -19,5 +19,8 @@
   },
   "licenseXml": {
     "value": ""
+  },
+  "sitecore.sku" : {
+    "value" : ""
   }
 }
