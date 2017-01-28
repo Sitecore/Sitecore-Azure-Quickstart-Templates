@@ -386,7 +386,7 @@
       "type": "securestring",
       "minLength": 32
     },
-    "sitecore.sku" : {
+    "sitecoreSKU" : {
       "type" : "string",
       "defaultValue": "xP1",
       "allowedValues": [
@@ -396,7 +396,7 @@
         "description" : "Sitecore SKU controls the sizes and service levels of the provisioned resources"
       }
     },
-    "sitecore.skumap": {
+    "skuMap": {
       "type" : "secureObject",
       "defaultValue" : {
         "xP1": {
@@ -643,7 +643,7 @@
     },
     "resourceSizes" : {
       "type" :"object",
-      "defaultValue": "[parameters('sitecore.skumap')[parameters('sitecore.sku')]]"
+      "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
     }
   },
   "resources": [

@@ -276,7 +276,7 @@
       "type": "securestring",
       "minLength": 32
     },
-    "sitecore.sku" : {
+    "sitecoreSKU" : {
       "type" : "string",
       "defaultValue": "xDB1",
       "allowedValues": [
@@ -286,7 +286,7 @@
         "description" : "Sitecore SKU controls the sizes and service levels of the provisioned resources"
       }
     },
-    "sitecore.skumap" : {
+    "skuMap" : {
       "type" : "secureObject",
       "defaultValue": {
         "xDB1": {
@@ -322,7 +322,7 @@
             "SkuName": "[parameters('searchservice.skuname')]",
             "Partitions" : "[parameters('searchservice.partitioncount')]",
             "Replicas" : "[parameters('searchservice.replicacount')]"
-          },
+          }
         },
         "xDB2": {
           "PrcHostingPlan" : {
@@ -468,7 +468,7 @@
     },
     "resourceSizes" : {
       "type" : "object",
-      "defaultValue": "[parameters('sitecore.skumap')[parameters('sitecore.sku')]]"
+      "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
     }
   },
   "resources": [

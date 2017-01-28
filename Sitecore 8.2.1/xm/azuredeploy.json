@@ -239,7 +239,7 @@
       "minLength": 8,
       "maxLength": 128
     },
-    "sitecore.sku" : {
+    "sitecoreSKU" : {
       "type" : "string",
       "defaultValue": "xM1",
       "allowedValues": [
@@ -249,7 +249,7 @@
         "description" : "Sitecore SKU controls the sizes and service levels of the provisioned resources"
       }
     },
-    "sitecore.skumap": {
+    "skuMap": {
       "type" : "secureObject",
       "defaultValue" : {
         "xM1": {
@@ -431,7 +431,7 @@
     },
     "resourceSizes" : {
       "type": "object",
-      "defaultValue": "[parameters('sitecore.skumap')[parameters('sitecore.sku')]]"
+      "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
     }
   },
   "resources": [
