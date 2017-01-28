@@ -20,11 +20,11 @@ The **deploymentId** and **licenseXml** parameters are filled in by the PowerShe
 
 | Parameter                                 | Description
 --------------------------------------------|------------------------------------------------
-| sqlserver.login                           | The name of the administrator account for the newly created Azure SQL server.
-| sqlserver.password                        | The password for the administrator account for Azure SQL server.
-| sitecore.admin.password                   | The new password for the Sitecore **admin** account.
-| single.msdeploy.packageurl                | The blob storage url to a Sitecore XP Single Instance Web Deploy package.
-| analytics.mongodb.connectionstring        | A MongoDB connection string for the analytics database.
-| tracking.live.mongodb.connectionstring    | A MongoDB connection string for the tracking.live database.
-| tracking.history.mongodb.connectionstring | A MongoDB connection string for the tracking.history database.
-| tracking.contact.mongodb.connectionstring | A MongoDB connection string for the tracking.contact database.
+| sqlserverLogin                            | The name of the administrator account for the newly created Azure SQL server.
+| sqlserverPassword                         | The password for the administrator account for Azure SQL server.
+| sitecoreAdminPassword                     | The new password for the Sitecore **admin** account.
+| singleMsdeployPackageurl                  | The blob storage url to a Sitecore XP Single Instance Web Deploy package.
+| analyticsMongodbConnectionstring          | A MongoDB connection string for the analytics database.
+| trackingLiveMongodbConnectionstring       | A MongoDB connection string for the tracking.live database.
+| trackingHistoryMongodbConnectionstring    | A MongoDB connection string for the tracking.history database.
+| trackingContactMongodbConnectionstring    | A MongoDB connection string for the tracking.contact database.
