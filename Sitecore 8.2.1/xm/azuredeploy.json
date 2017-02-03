@@ -392,6 +392,42 @@
               "License Xml": "[variables('licenseXml')]"
             }
           }
+        },
+        {
+          "apiVersion": "[variables('webApiVersion')]",
+          "name": "connectionstrings",
+          "type": "config",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('cdWebAppNameTidy'))]",
+            "[concat('Microsoft.Web/Sites/', variables('cdWebAppNameTidy'), '/Extensions/MSDeploy')]",
+            "[resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy'))]",
+            "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]",
+            "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]"
+          ],
+          "properties": {
+            "core": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('cd.core.sqldatabase.username'), ';Password=', parameters('cd.core.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "web": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('cd.web.sqldatabase.username'), ';Password=', parameters('cd.web.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "cloud.search": {
+              "value": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "type": "Custom"
+            },
+            "appinsights.instrumentationkey": {
+              "value": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
+              "type": "Custom"
+            },
+            "redis.sessions": {
+              "value": "[concat(reference(variables('redisCacheNameTidy')).hostName, ':', reference(variables('redisCacheNameTidy')).sslPort, ',password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).primaryKey, ',ssl=True,abortConnect=False')]",
+              "type": "Custom"
+            }
+          }
         }
       ]
     },
