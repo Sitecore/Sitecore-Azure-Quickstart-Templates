@@ -247,7 +247,14 @@
           "type": "extensions",
           "location": "[parameters('location')]",
           "apiVersion": "[variables('webApiVersion')]",
-          "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('webAppNameTidy'))]", "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]", "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('masterDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('repDbNameTidy'))]" ],
+          "dependsOn": [ 
+            "[concat('Microsoft.Web/sites/', variables('webAppNameTidy'))]", 
+            "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]", 
+            "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]", 
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]", 
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('masterDbNameTidy'))]", 
+            "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('repDbNameTidy'))]" ],
           "properties": {
             "packageUri": "[parameters('single.msdeploy.packageurl')]",
             "dbType": "SQL",

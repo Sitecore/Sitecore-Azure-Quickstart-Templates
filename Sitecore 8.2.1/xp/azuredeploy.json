@@ -525,6 +525,61 @@
               "IP Security Client IP Mask": "[parameters('security.clientIpMask')]"
             }
           }
+        },
+        {
+          "apiVersion": "[variables('webApiVersion')]",
+          "name": "connectionstrings",
+          "type": "config",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'))]",  
+            "[concat('Microsoft.Web/Sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]",
+            "[concat('Microsoft.Web/sites/', variables('repWebAppNameTidy'))]",
+            "[concat('Microsoft.Web/Sites/', variables('repWebAppNameTidy'), '/Extensions/MSDeploy')]",
+            "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]",
+            "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('masterDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('repDbNameTidy'))]"
+          ],
+          "properties": {
+            "core": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('cm.core.sqldatabase.username'), ';Password=', parameters('cm.core.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "master": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('cm.master.sqldatabase.username'), ';Password=', parameters('cm.master.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "web": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('cm.web.sqldatabase.username'), ';Password=', parameters('cm.web.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "tracking.live": {
+              "value": "[variables('trackingLiveMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "tracking.contact": {
+              "value": "[variables('trackingContactMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "analytics": {
+              "value": "[variables('analyticsMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "cloud.search": {
+              "value": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "type": "Custom"
+            },
+            "reporting.apikey": {
+              "value": "[parameters('rep.authentication.apikey')]",
+              "type": "Custom"
+            },
+            "appinsights.instrumentationkey": {
+              "value": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
+              "type": "Custom"
+            }
+          }
         }
       ]
     },
@@ -591,6 +646,55 @@
               "License Xml": "[variables('licenseXml')]"
             }
           }
+        },
+        {
+          "apiVersion": "[variables('webApiVersion')]",
+          "name": "connectionstrings",
+          "type": "config",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', variables('cdWebAppNameTidy'))]",
+            "[concat('Microsoft.Web/Sites/', variables('cdWebAppNameTidy'), '/Extensions/MSDeploy')]",
+            "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]",
+            "[resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy'))]",
+            "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]",
+            "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]"
+          ],
+          "properties": {
+            "core": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('cm.core.sqldatabase.username'), ';Password=', parameters('cm.core.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "web": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('cm.web.sqldatabase.username'), ';Password=', parameters('cm.web.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "tracking.live": {
+              "value": "[variables('trackingLiveMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "tracking.contact": {
+              "value": "[variables('trackingContactMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "analytics": {
+              "value": "[variables('analyticsMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "cloud.search": {
+              "value": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "type": "Custom"
+            },
+            "redis.sessions": {
+              "value": "[concat(reference(variables('redisCacheNameTidy')).hostName, ':', reference(variables('redisCacheNameTidy')).sslPort, ',password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).primaryKey, ',ssl=True,abortConnect=False')]",
+              "type": "Custom"
+            },
+            "appinsights.instrumentationkey": {
+              "value": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
+              "type": "Custom"
+            }
+          }
         }
       ]
     },
@@ -611,7 +715,7 @@
       },
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('prcHostingPlanNameTidy'))]",
+        "[resourceId('Microsoft.Web/serverfarms', variables('prcHostingPlanNameTidy'))]"
       ],
       "tags": {
         "provider": "[parameters('sitecoreTags').provider]"
@@ -668,6 +772,64 @@
               "IP Security Client IP Mask": "[parameters('security.clientIpMask')]"
             }
           }
+        },
+        {
+          "apiVersion": "[variables('webApiVersion')]",
+          "name": "connectionstrings",
+          "type": "config",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', variables('prcWebAppNameTidy'))]",
+            "[concat('Microsoft.Web/Sites/', variables('prcWebAppNameTidy'), '/Extensions/MSDeploy')]",
+            "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]",
+            "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]",
+            "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('masterDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('repDbNameTidy'))]"
+          ],
+          "properties": {
+            "core": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('prc.core.sqldatabase.username'), ';Password=', parameters('prc.core.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "master": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('prc.master.sqldatabase.username'), ';Password=', parameters('prc.master.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "web": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('prc.web.sqldatabase.username'), ';Password=', parameters('prc.web.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "reporting": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('repDbNameTidy'),';User Id=', parameters('prc.reporting.sqldatabase.username'), ';Password=', parameters('prc.reporting.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "tracking.live": {
+              "value": "[variables('trackingLiveMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "tracking.history": {
+              "value": "[variables('trackingHistoryMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "tracking.contact": {
+              "value": "[variables('trackingContactMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "analytics": {
+              "value": "[variables('analyticsMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "cloud.search": {
+              "value": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "type": "Custom"
+            },
+            "appinsights.instrumentationkey": {
+              "value": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
+              "type": "Custom"
+            }
+          }
         }
       ]
     },
@@ -688,7 +850,7 @@
       },
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('repHostingPlanNameTidy'))]",
+        "[resourceId('Microsoft.Web/serverfarms', variables('repHostingPlanNameTidy'))]"
       ],
       "tags": {
         "provider": "[parameters('sitecoreTags').provider]"
@@ -741,6 +903,64 @@
               "Application Insights Role": "Reporting",
               "KeepAlive Url": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('repWebAppNameTidy'))).hostNames[0], '/sitecore/service/keepalive.aspx')]",
               "License Xml": "[variables('licenseXml')]"
+            }
+          }
+        },
+        {
+          "apiVersion": "[variables('webApiVersion')]",
+          "name": "connectionstrings",
+          "type": "config",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', variables('repWebAppNameTidy'))]",
+            "[concat('Microsoft.Web/Sites/', variables('repWebAppNameTidy'), '/Extensions/MSDeploy')]",
+            "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]",
+            "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]",
+            "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('masterDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('repDbNameTidy'))]"
+          ],
+          "properties": {
+            "core": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('prc.core.sqldatabase.username'), ';Password=', parameters('prc.core.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "master": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('prc.master.sqldatabase.username'), ';Password=', parameters('prc.master.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "web": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('prc.web.sqldatabase.username'), ';Password=', parameters('prc.web.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "reporting": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('repDbNameTidy'),';User Id=', parameters('prc.reporting.sqldatabase.username'), ';Password=', parameters('prc.reporting.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "tracking.live": {
+              "value": "[variables('trackingLiveMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "tracking.history": {
+              "value": "[variables('trackingHistoryMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "analytics": {
+              "value": "[variables('analyticsMongoDbConnStrTidy')]",
+              "type": "Custom"
+            },
+            "reporting.apikey": {
+              "value": "[parameters('rep.authentication.apikey')]",
+              "type": "Custom"
+            },
+            "cloud.search": {
+              "value": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "type": "Custom"
+            },
+            "appinsights.instrumentationkey": {
+              "value": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
+              "type": "Custom"
             }
           }
         }
