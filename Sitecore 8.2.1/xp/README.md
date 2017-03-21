@@ -34,5 +34,5 @@ The **deploymentId** and **licenseXml** parameters are filled in by the PowerShe
 | tracking.live.mongodb.connectionstring    | A MongoDB connection string for the tracking.live database.
 | tracking.history.mongodb.connectionstring | A MongoDB connection string for the tracking.history database.
 | tracking.contact.mongodb.connectionstring | A MongoDB connection string for the tracking.contact database.
-
+| sitecoreSKU                               | Name of Sitecore configuration (one of xP1, xP2, xP3, xP4, xP5).
 
