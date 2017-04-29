@@ -1,0 +1,32 @@
+﻿{
+  "deploymentId": {
+    "value": ""
+  },
+  "sitecore.admin.password": {
+    "value": ""
+  },
+  "analytics.mongodb.connectionstring": {
+    "value": ""
+  },
+  "tracking.live.mongodb.connectionstring": {
+    "value": ""
+  },
+  "tracking.history.mongodb.connectionstring": {
+    "value": ""
+  },
+  "tracking.contact.mongodb.connectionstring": {
+    "value": ""
+  },
+  "sqlserver.login": {
+    "value": ""
+  },
+  "sqlserver.password": {
+    "value": ""
+  },
+  "single.msdeploy.packageurl": {
+    "value": ""
+  },
+  "licenseXml": {
+    "value": ""
+  }
+}

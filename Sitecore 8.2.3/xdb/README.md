@@ -1,6 +1,6 @@
 # Sitecore XDB Environment
 
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%208.2.1%2Fxdb%2Fazuredeploy.json" target="_blank">
+<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%208.2.3%2Fxdb0%2Fazuredeploy.json" target="_blank">
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
@@ -9,7 +9,7 @@ This template creates a Sitecore XDB Environment with all resources necessary to
 This environment is designed for use with on premise Sitecore XM installations and is compatible with Processing and Reporting Web Deploy packages for XP/XP1 configuration available on Sitecore Experience Platform [Download Page](https://dev.sitecore.net/Downloads/Sitecore_Experience_Platform.aspx). For hosting Sitecore Experience Platform on Azure PaaS use [Sitecore XP Environment](../xp) templates
 
 Resources provisioned:
- 
+
   * Azure SQL databases : core, master, web, reporting
   * Azure Search Service for Analytics index
   * Application Insights for diagnostics and monitoring
@@ -21,7 +21,7 @@ Resources provisioned:
 ## Parameters
 The **deploymentId** and **licenseXml** parameters are filled in by the PowerShell script.
 
-|Parameter                                  | Description
+| Parameter                                 | Description
 --------------------------------------------|----------------------------------------------------
 | sqlserver.login                           | The name of the administrator account for Azure SQL server that will be created.
 | sqlserver.password                        | The password for the administrator account for Azure SQL server.

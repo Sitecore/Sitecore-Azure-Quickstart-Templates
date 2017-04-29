@@ -1,0 +1,47 @@
+﻿{
+  "deploymentId": {
+    "value": ""
+  },
+  "sitecore.admin.password": {
+    "value": ""
+  },
+  "rep.authentication.apikey": {
+	"value": ""
+  },
+  "analytics.mongodb.connectionstring": {
+    "value": ""
+  },
+  "tracking.live.mongodb.connectionstring": {
+    "value": ""
+  },
+  "tracking.history.mongodb.connectionstring": {
+    "value": ""
+  },
+  "tracking.contact.mongodb.connectionstring": {
+    "value": ""
+  },
+  "sqlserver.login": {
+    "value": ""
+  },
+  "sqlserver.password": {
+    "value": ""
+  },
+  "cm.msdeploy.packageurl": {
+    "value": ""
+  },
+  "cd.msdeploy.packageurl": {
+    "value": ""
+  },
+  "prc.msdeploy.packageurl": {
+    "value": ""
+  },
+  "rep.msdeploy.packageurl": {
+    "value": ""
+  },
+  "licenseXml": {
+    "value": ""
+  },
+  "sitecoreSKU": {
+    "value": ""
+  }
+}
