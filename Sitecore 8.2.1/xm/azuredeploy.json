@@ -494,7 +494,13 @@
           "type": "extensions",
           "location": "[parameters('location')]",
           "apiVersion": "[variables('webApiVersion')]",
-          "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'))]", "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]", "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('masterDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]" ],
+          "dependsOn": [ 
+            "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'))]", 
+            "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]", 
+            "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]", 
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]", 
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('masterDbNameTidy'))]", 
+            "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]" ],
           "properties": {
             "packageUri": "[parameters('cm.msdeploy.packageurl')]",
             "dbType": "SQL",
@@ -521,6 +527,42 @@
               "License Xml": "[variables('licenseXml')]",
               "IP Security Client IP": "[parameters('security.clientIp')]",
               "IP Security Client IP Mask": "[parameters('security.clientIpMask')]"
+            }
+          }
+        },
+        {
+          "apiVersion": "[variables('webApiVersion')]",
+          "name": "connectionstrings",
+          "type": "config",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'))]", 
+            "[concat('Microsoft.Web/Sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]",
+            "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]", 
+            "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]", 
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]", 
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('masterDbNameTidy'))]", 
+            "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]"
+          ],
+          "properties": {
+            "core": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('cm.core.sqldatabase.username'), ';Password=', parameters('cm.core.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "master": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('cm.master.sqldatabase.username'), ';Password=', parameters('cm.master.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "web": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('cm.web.sqldatabase.username'), ';Password=', parameters('cm.web.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "cloud.search": {
+              "value": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "type": "Custom"
+            },
+            "appinsights.instrumentationkey": {
+              "value": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
+              "type": "Custom"
             }
           }
         }
@@ -584,6 +626,42 @@
               "KeepAlive Url": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('cdWebAppNameTidy'))).hostNames[0], '/sitecore/service/keepalive.aspx')]",
               "Redis Connection String": "[concat(reference(variables('redisCacheNameTidy')).hostName, ':', reference(variables('redisCacheNameTidy')).sslPort, ',password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).primaryKey, ',ssl=True,abortConnect=False')]",
               "License Xml": "[variables('licenseXml')]"
+            }
+          }
+        },
+        {
+          "apiVersion": "[variables('webApiVersion')]",
+          "name": "connectionstrings",
+          "type": "config",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', variables('cdWebAppNameTidy'))]",
+            "[concat('Microsoft.Web/Sites/', variables('cdWebAppNameTidy'), '/Extensions/MSDeploy')]",
+            "[resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy'))]",
+            "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]",
+            "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]",
+            "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]"
+          ],
+          "properties": {
+            "core": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('cd.core.sqldatabase.username'), ';Password=', parameters('cd.core.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "web": {
+              "value": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('cd.web.sqldatabase.username'), ';Password=', parameters('cd.web.sqldatabase.password'), ';')]",
+              "type": "SQLAzure"
+            },
+            "cloud.search": {
+              "value": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "type": "Custom"
+            },
+            "appinsights.instrumentationkey": {
+              "value": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
+              "type": "Custom"
+            },
+            "redis.sessions": {
+              "value": "[concat(reference(variables('redisCacheNameTidy')).hostName, ':', reference(variables('redisCacheNameTidy')).sslPort, ',password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).primaryKey, ',ssl=True,abortConnect=False')]",
+              "type": "Custom"
             }
           }
         }
