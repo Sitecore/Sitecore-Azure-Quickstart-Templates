@@ -1,0 +1,108 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-08-01",
+    "sqlServerNameTidy": "[tolower(trim(parameters('sqlServerName')))]",
+    "sqlServerFqdnTidy": "[tolower(trim(parameters('sqlServerFqdn')))]",
+    "coreSqlDatabaseNameTidy" : "[tolower(trim(parameters('coreSqlDatabaseName')))]",
+    "masterSqlDatabaseNameTidy" : "[tolower(trim(parameters('masterSqlDatabaseName')))]",
+    "reportingSqlDatabaseNameTidy": "[tolower(trim(parameters('reportingSqlDatabaseName')))]",
+    "singleWebAppNameTidy": "[tolower(trim(parameters('singleWebAppName')))]"
+  },
+  "parameters": {
+    "standard": {
+      "type": "secureObject",
+      "defaultValue": {
+        "deploymentId": "[resourceGroup().name]",
+        "location": "[resourceGroup().location]",
+        "sqlServerName": "$default",
+        "sqlServerLogin": null,
+        "sqlServerPassword": null,
+        "singleWebAppName": "$default",
+        "coreSqlDatabaseName": "$default",
+        "masterSqlDatabaseName": "$default",
+        "reportingSqlDatabaseName": "$default",
+        "infrastructure" : {
+          "sqlServerFqdn" : "$default"
+        }
+      }
+    },
+    "extension": {
+      "type": "secureObject",
+      "defaultValue": {
+        "singleMsDeployPackageUrl": null        
+      }
+    },
+
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[parameters('standard').deploymentId]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[parameters('standard').location]"
+    },
+    "singleWebAppName": {
+      "type": "string",
+      "defaultValue": "[replace(parameters('standard').singleWebAppName, '$default', concat(parameters('deploymentId'),'-single'))]"
+    },
+    "singleMsDeployPackageUrl": {
+      "type": "securestring",
+      "defaultValue": "[parameters('extension').singleMsDeployPackageUrl]"
+    },
+    "sqlServerName": {
+      "type": "string",
+      "defaultValue": "[replace(parameters('standard').sqlServerName, '$default', concat(parameters('deploymentId'), '-sql'))]"
+    },
+    "sqlServerFqdn": {
+      "type": "string",
+      "defaultValue": "[replace(parameters('standard').infrastructure.sqlServerFqdn, '$default', concat(tolower(trim(parameters('sqlServerName'))), '.database.windows.net'))]"
+    },
+    "sqlServerLogin": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').sqlServerLogin]"
+    },
+    "sqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('standard').sqlServerPassword]"
+    },
+    "coreSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[replace(parameters('standard').coreSqlDatabaseName, '$default', concat(parameters('deploymentId'), '-core-db'))]"
+    },
+    "masterSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[replace(parameters('standard').masterSqlDatabaseName, '$default', concat(parameters('deploymentId'), '-master-db'))]"
+    },
+    "reportingSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[replace(parameters('standard').reportingSqlDatabaseName, '$default', concat(parameters('deploymentId'), '-reporting-db'))]"
+    }
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('singleWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), '@', variables('sqlServerNameTidy'), ';Password=', parameters('sqlServerPassword'), ';')]",
+            "packageUri": "[parameters('singleMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('singleWebAppNameTidy')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "Reporting Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('reportingSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

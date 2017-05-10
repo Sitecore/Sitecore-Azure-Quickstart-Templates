@@ -1,8 +1,9 @@
 # Sitecore XP Environment
 
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%208.2.3%2Fxp%2Fazuredeploy.json" target="_blank">
-    <img src="http://armviz.io/visualizebutton.png"/>
-</a>
+Visualize: 
+[Infrastructure](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%208.2.3%2Fxp%2Fnested%2Finfrastructure.json),
+[Application deployment](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%208.2.3%2Fxp%2Fnested%2Fapplication.json)
+
 
 This template creates a Sitecore XP Environment with all resources necessary to run Sitecore.
 
@@ -22,17 +23,17 @@ The **deploymentId** and **licenseXml** parameters are filled in by the PowerShe
 
 |Parameter                                  | Description
 --------------------------------------------|----------------------------------------------------
-| sqlserver.login                           | The name of the administrator account for Azure SQL server that will be created.
-| sqlserver.password                        | The password for the administrator account for Azure SQL server.
-| sitecore.admin.password                   | The new password for the Sitecore **admin** account.
-| cm.msdeploy.packageurl                    | The blob storage url to a Sitecore XP Content Management Web Deploy package.
-| cd.msdeploy.packageurl                    | The blob storage url to a Sitecore XP Content Delivery Web Deploy package.
-| prc.msdeploy.packageurl                   | The blob storage url to a Sitecore XP Processing Web Deploy package.
-| rep.msdeploy.packageurl                   | The blob storage url to a Sitecore XP Reporting Web Deploy package.
-| rep.authentication.apikey                 | A unique value (e.g. a GUID) that will be used as authentication when communicating from Content Management to the Reporting Web App.
-| analytics.mongodb.connectionstring        | A MongoDB connection string for the analytics database.
-| tracking.live.mongodb.connectionstring    | A MongoDB connection string for the tracking.live database.
-| tracking.history.mongodb.connectionstring | A MongoDB connection string for the tracking.history database.
-| tracking.contact.mongodb.connectionstring | A MongoDB connection string for the tracking.contact database.
-| sitecoreSKU                               | Name of Sitecore configuration (one of xP1, xP2, xP3, xP4, xP5).
+| sqlServerLogin                            | The name of the administrator account for Azure SQL server that will be created.
+| sqlServerPassword                         | The password for the administrator account for Azure SQL server.
+| sitecoreAdminPassword                     | The new password for the Sitecore **admin** account.
+| cmMsDeployPackageUrl                      | The blob storage url to a Sitecore XP Content Management Web Deploy package.
+| cdMsDeployPackageUrl                      | The blob storage url to a Sitecore XP Content Delivery Web Deploy package.
+| prcMsDeployPackageUrl                     | The blob storage url to a Sitecore XP Processing Web Deploy package.
+| repMsDeployPackageUrl                     | The blob storage url to a Sitecore XP Reporting Web Deploy package.
+| repAuthenticationApiKey                   | A unique value (e.g. a GUID) that will be used as authentication when communicating from Content Management to the Reporting Web App.
+| analyticsMongoDbConnectionString          | A MongoDB connection string for the analytics database.
+| trackingLiveMongoDbConnectionString       | A MongoDB connection string for the tracking.live database.
+| trackingHistoryMongoDbConnectionString    | A MongoDB connection string for the tracking.history database.
+| trackingContactMongoDbConnectionString    | A MongoDB connection string for the tracking.contact database.
+
 

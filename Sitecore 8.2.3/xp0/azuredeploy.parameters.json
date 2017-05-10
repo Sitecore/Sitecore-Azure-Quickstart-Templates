@@ -1,32 +1,36 @@
 ﻿{
-  "deploymentId": {
-    "value": ""
-  },
-  "sitecore.admin.password": {
-    "value": ""
-  },
-  "analytics.mongodb.connectionstring": {
-    "value": ""
-  },
-  "tracking.live.mongodb.connectionstring": {
-    "value": ""
-  },
-  "tracking.history.mongodb.connectionstring": {
-    "value": ""
-  },
-  "tracking.contact.mongodb.connectionstring": {
-    "value": ""
-  },
-  "sqlserver.login": {
-    "value": ""
-  },
-  "sqlserver.password": {
-    "value": ""
-  },
-  "single.msdeploy.packageurl": {
-    "value": ""
-  },
-  "licenseXml": {
-    "value": ""
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentId": {
+      "value": ""
+    },
+    "sqlServerLogin": {
+      "value": ""
+    },
+    "sqlServerPassword": {
+      "value": ""
+    },
+    "singleMsDeployPackageUrl": {
+      "value": ""
+    },
+    "sitecoreAdminPassword": {
+      "value": ""
+    },
+    "analyticsMongoDbConnectionString": {
+      "value": ""
+    },
+    "trackingLiveMongoDbConnectionString": {
+      "value": ""
+    },
+    "trackingHistoryMongoDbConnectionString": {
+      "value": ""
+    },
+    "trackingContactMongoDbConnectionString": {
+      "value": ""
+    },
+    "licenseXml": {
+      "value": ""
+    }
   }
 }

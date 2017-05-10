@@ -1,0 +1,75 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-08-01",
+    "prcWebAppNameTidy": "[toLower(trim(parameters('prcWebAppName')))]",
+    "repWebAppNameTidy": "[toLower(trim(parameters('repWebAppName')))]"
+  },
+  "parameters": {
+    "standard": {
+      "type": "secureObject",
+      "defaultValue": {}
+    },
+    "extension": {
+      "type": "secureObject",
+      "defaultValue": {
+        "msDeployPackageUrl": "$default"
+      }
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[parameters('standard').deploymentId]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[parameters('standard').location]"
+    },
+    "prcWebAppName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-prc')]"
+    },
+    "repWebAppName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-rep')]"
+    },
+    "msDeployPackageUrl": {
+      "type": "securestring",
+      "defaultValue": "[parameters('extension').msDeployPackageUrl]"
+    }
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('prcWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('msDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('prcWebAppNameTidy')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('repWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('msDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('repWebAppNameTidy')]"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
