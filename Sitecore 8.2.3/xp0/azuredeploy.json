@@ -1,0 +1,503 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "resourcesApiVersion": "2016-09-01",
+    "defaultDependency": [
+      {
+        "name": "application"
+      }
+    ],
+    "dependencies": "[concat(variables('defaultDependency'), parameters('modules').items)]"
+  },
+  "parameters": {
+    "modules": {
+      "type": "secureObject",
+      "defaultValue": {
+        "items": [
+          {
+            "name": "empty",
+            "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
+            "parameters": {
+            }
+          }
+        ]
+      }
+    },
+    "templateLinkBase": {
+      "type": "string",
+      "defaultValue": "[uri(replace(deployment().properties.templateLink.uri,' ','%20'), '.')]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+
+    "sitecoreAdminPassword": {
+      "type": "securestring",
+      "minLength": 8
+    },
+    "passwordSalt": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().id]"
+    },
+    "licenseXml": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
+    "sqlServerName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-sql')]"
+    },
+    "sqlServerLogin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8
+    },
+    "webSqlServerName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-web-sql')]"
+    },
+    "webSqlServerLogin": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('sqlServerLogin')]"
+    },
+    "webSqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('sqlServerPassword')]"
+    },
+
+    "sqlServerVersion": {
+      "type": "string",
+      "defaultValue": "12.0"
+    },
+    "sqlDatabaseCollation": {
+      "type": "string",
+      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+    },
+    "sqlDatabaseEdition": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "sqlDatabaseMaxSize": {
+      "type": "string",
+      "defaultValue": "10737418240"
+    },
+    "sqlDatabaseServiceObjectiveLevel": {
+      "type": "string",
+      "defaultValue": "S1"
+    },
+
+    "coreSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-core-db')]"
+    },
+    "masterSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-master-db')]"
+    },
+    "webSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
+    },
+    "reportingSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-reporting-db')]"
+    },
+
+    "searchServiceName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
+    },
+    "searchServiceSkuName": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "searchServiceReplicaCount": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "searchServicePartitionCount": {
+      "type": "int",
+      "defaultValue": 1
+    },
+
+    "applicationInsightsName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-ai')]"
+    },
+    "applicationInsightsLocation": {
+      "type": "string",
+      "defaultValue": "East US",
+      "allowedValues": [ "East US", "South Central US", "North Europe", "West Europe" ]
+    },
+
+    "singleHostingPlanName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-single-hp')]"
+    },
+    "singleHostingPlanSkuName": {
+      "type": "string",
+      "defaultValue": "S1"
+    },
+    "singleHostingPlanSkuCapacity": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "singleWebAppName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-single')]"
+    },
+    "singleMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "singleCoreSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "singlecoreuser"
+    },
+    "singleCoreSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('singleCoreSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('singleCoreSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('singleCoreSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "singleMasterSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "singlemasteruser"
+    },
+    "singleMasterSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('singleMasterSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('singleMasterSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('singleMasterSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "singleWebSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "singlewebuser"
+    },
+    "singleWebSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('singleWebSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('singleWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('singleWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "singleReportingSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "singlereportinguser"
+    },
+    "singleReportingSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('singleReportingSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('singleReportingSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('singleReportingSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "analyticsMongoDbConnectionString": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "trackingLiveMongoDbConnectionString": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "trackingHistoryMongoDbConnectionString": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "trackingContactMongoDbConnectionString": {
+      "type": "securestring",
+      "minLength": 1
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-infrastructure')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/infrastructure.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "sqlServerName": {
+            "value": "[parameters('sqlServerName')]"
+          },
+          "sqlServerLogin": {
+            "value": "[parameters('sqlServerLogin')]"
+          },
+          "sqlServerPassword": {
+            "value": "[parameters('sqlServerPassword')]"
+          },
+          "webSqlServerName": {
+            "value": "[parameters('webSqlServerName')]"
+          },
+          "webSqlServerLogin": {
+            "value": "[parameters('webSqlServerLogin')]"
+          },
+          "webSqlServerPassword": {
+            "value": "[parameters('webSqlServerPassword')]"
+          },
+
+          "sqlServerVersion": {
+            "value": "[parameters('sqlServerVersion')]"
+          },
+          "sqlDatabaseCollation": {
+            "value": "[parameters('sqlDatabaseCollation')]"
+          },
+          "sqlDatabaseEdition": {
+            "value": "[parameters('sqlDatabaseEdition')]"
+          },
+          "sqlDatabaseMaxSize": {
+            "value": "[parameters('sqlDatabaseMaxSize')]"
+          },
+          "sqlDatabaseServiceObjectiveLevel": {
+            "value": "[parameters('sqlDatabaseServiceObjectiveLevel')]"
+          },
+
+          "coreSqlDatabaseName": {
+            "value": "[parameters('coreSqlDatabaseName')]"
+          },
+          "masterSqlDatabaseName": {
+            "value": "[parameters('masterSqlDatabaseName')]"
+          },
+          "webSqlDatabaseName": {
+            "value": "[parameters('webSqlDatabaseName')]"
+          },
+          "reportingSqlDatabaseName": {
+            "value": "[parameters('reportingSqlDatabaseName')]"
+          },
+
+          "searchServiceName": {
+            "value": "[parameters('searchServiceName')]"
+          },
+          "searchServiceSkuName": {
+            "value": "[parameters('searchServiceSkuName')]"
+          },
+          "searchServiceReplicaCount": {
+            "value": "[parameters('searchServiceReplicaCount')]"
+          },
+          "searchServicePartitionCount": {
+            "value": "[parameters('searchServicePartitionCount')]"
+          },
+
+          "applicationInsightsName": {
+            "value": "[parameters('applicationInsightsName')]"
+          },
+          "applicationInsightsLocation": {
+            "value": "[parameters('applicationInsightsLocation')]"
+          },
+
+          "singleHostingPlanName": {
+            "value": "[parameters('singleHostingPlanName')]"
+          },
+          "singleHostingPlanSkuName": {
+            "value": "[parameters('singleHostingPlanSkuName')]"
+          },
+          "singleHostingPlanSkuCapacity": {
+            "value": "[parameters('singleHostingPlanSkuCapacity')]"
+          },
+          "singleWebAppName": {
+            "value": "[parameters('singleWebAppName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-application')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "sitecoreAdminPassword": {
+            "value": "[parameters('sitecoreAdminPassword')]"
+          },
+          "passwordSalt": {
+            "value": "[parameters('passwordSalt')]"
+          },
+          "licenseXml": {
+            "value": "[parameters('licenseXml')]"
+          },
+
+          "sqlServerLogin": {
+            "value": "[parameters('sqlServerLogin')]"
+          },
+          "sqlServerPassword": {
+            "value": "[parameters('sqlServerPassword')]"
+          },
+          "webSqlServerLogin": {
+            "value": "[parameters('webSqlServerLogin')]"
+          },
+          "webSqlServerPassword": {
+            "value": "[parameters('webSqlServerPassword')]"
+          },
+
+          "coreSqlDatabaseName": {
+            "value": "[parameters('coreSqlDatabaseName')]"
+          },
+          "masterSqlDatabaseName": {
+            "value": "[parameters('masterSqlDatabaseName')]"
+          },
+          "webSqlDatabaseName": {
+            "value": "[parameters('webSqlDatabaseName')]"
+          },
+          "reportingSqlDatabaseName": {
+            "value": "[parameters('reportingSqlDatabaseName')]"
+          },
+
+          "searchServiceName": {
+            "value": "[parameters('searchServiceName')]"
+          },
+          "applicationInsightsName": {
+            "value": "[parameters('applicationInsightsName')]"
+          },
+
+          "singleWebAppName": {
+            "value": "[parameters('singleWebAppName')]"
+          },
+          "singleMsDeployPackageUrl": {
+            "value": "[parameters('singleMsDeployPackageUrl')]"
+          },
+          "singleCoreSqlDatabaseUserName": {
+            "value": "[parameters('singleCoreSqlDatabaseUserName')]"
+          },
+          "singleCoreSqlDatabasePassword": {
+            "value": "[parameters('singleCoreSqlDatabasePassword')]"
+          },
+          "singleMasterSqlDatabaseUserName": {
+            "value": "[parameters('singleMasterSqlDatabaseUserName')]"
+          },
+          "singleMasterSqlDatabasePassword": {
+            "value": "[parameters('singleMasterSqlDatabasePassword')]"
+          },
+          "singleWebSqlDatabaseUserName": {
+            "value": "[parameters('singleWebSqlDatabaseUserName')]"
+          },
+          "singleWebSqlDatabasePassword": {
+            "value": "[parameters('singleWebSqlDatabasePassword')]"
+          },
+          "singleReportingSqlDatabaseUserName": {
+            "value": "[parameters('singleReportingSqlDatabaseUserName')]"
+          },
+          "singleReportingSqlDatabasePassword": {
+            "value": "[parameters('singleReportingSqlDatabasePassword')]"
+          },
+
+          "analyticsMongoDbConnectionString": {
+            "value": "[parameters('analyticsMongoDbConnectionString')]"
+          },
+          "trackingLiveMongoDbConnectionString": {
+            "value": "[parameters('trackingLiveMongoDbConnectionString')]"
+          },
+          "trackingHistoryMongoDbConnectionString": {
+            "value": "[parameters('trackingHistoryMongoDbConnectionString')]"
+          },
+          "trackingContactMongoDbConnectionString": {
+            "value": "[parameters('trackingContactMongoDbConnectionString')]"
+          },
+
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name, '-infrastructure')).outputs.infrastructure.value]"
+          }
+        }
+      },
+      "dependsOn": [ "[resourceId('Microsoft.Resources/deployments', concat(deployment().name, '-infrastructure'))]" ]
+    },
+    {
+      "copy": {
+        "name": "modules",
+        "count": "[length(parameters('modules').items)]"
+      },
+      "name": "[concat(deployment().name, '-' , parameters('modules').items[copyIndex()].name)]",
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "[parameters('modules').items[copyIndex()].templateLink]"
+        },
+        "parameters": {
+          "standard": {
+            "value": {
+              "deploymentId": "[parameters('deploymentId')]",
+              "location": "[parameters('location')]",
+              "sitecoreAdminPassword": "[parameters('sitecoreAdminPassword')]",
+              "passwordSalt": "[parameters('passwordSalt')]",
+              "licenseXml": "[parameters('licenseXml')]",
+
+              "sqlServerName": "[parameters('sqlServerName')]",
+              "sqlServerLogin": "[parameters('sqlServerLogin')]",
+              "sqlServerPassword": "[parameters('sqlServerPassword')]",
+              "webSqlServerName": "[parameters('webSqlServerName')]",
+              "webSqlServerLogin": "[parameters('webSqlServerLogin')]",
+              "webSqlServerPassword": "[parameters('webSqlServerPassword')]",
+
+              "coreSqlDatabaseName": "[parameters('coreSqlDatabaseName')]",
+              "masterSqlDatabaseName": "[parameters('masterSqlDatabaseName')]",
+              "webSqlDatabaseName": "[parameters('webSqlDatabaseName')]",
+              "reportingSqlDatabaseName": "[parameters('reportingSqlDatabaseName')]",
+
+              "searchServiceName": "[parameters('searchServiceName')]",
+              "applicationInsightsName": "[parameters('applicationInsightsName')]",
+              "applicationInsightsLocation": "[parameters('applicationInsightsLocation')]",
+
+              "singleHostingPlanName": "[parameters('singleHostingPlanName')]",
+              "singleWebAppName": "[parameters('singleWebAppName')]",
+              "singleCoreSqlDatabaseUserName": "[parameters('singleCoreSqlDatabaseUserName')]",
+              "singleCoreSqlDatabasePassword": "[parameters('singleCoreSqlDatabasePassword')]",
+              "singleMasterSqlDatabaseUserName": "[parameters('singleMasterSqlDatabaseUserName')]",
+              "singleMasterSqlDatabasePassword": "[parameters('singleMasterSqlDatabasePassword')]",
+              "singleWebSqlDatabaseUserName": "[parameters('singleWebSqlDatabaseUserName')]",
+              "singleWebSqlDatabasePassword": "[parameters('singleWebSqlDatabasePassword')]",
+              "singleReportingSqlDatabaseUserName": "[parameters('singleReportingSqlDatabaseUserName')]",
+              "singleReportingSqlDatabasePassword": "[parameters('singleReportingSqlDatabasePassword')]",
+
+              "analyticsMongoDbConnectionString": "[parameters('analyticsMongoDbConnectionString')]",
+              "trackingLiveMongoDbConnectionString": "[parameters('trackingLiveMongoDbConnectionString')]",
+              "trackingHistoryMongoDbConnectionString": "[parameters('trackingHistoryMongoDbConnectionString')]",
+              "trackingContactMongoDbConnectionString": "[parameters('trackingContactMongoDbConnectionString')]",
+
+              "infrastructure": "[reference(concat(deployment().name, '-infrastructure')).outputs.infrastructure.value]"
+            }
+          },
+          "extension": { "value": "[parameters('modules').items[copyIndex()].parameters]" }
+        }
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-' , variables('dependencies')[copyIndex()].name)]"
+      ]
+    }
+  ]
+}

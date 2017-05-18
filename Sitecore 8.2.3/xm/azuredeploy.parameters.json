@@ -1,0 +1,27 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentId": {
+      "value": ""
+    },
+    "sqlServerLogin": {
+      "value": ""
+    },
+    "sqlServerPassword": {
+      "value": ""
+    },
+    "cmMsDeployPackageUrl": {
+      "value": ""
+    },
+    "cdMsDeployPackageUrl": {
+      "value": ""
+    },
+    "sitecoreAdminPassword": {
+      "value": ""
+    },
+    "licenseXml": {
+      "value": ""
+    }
+  }
+}

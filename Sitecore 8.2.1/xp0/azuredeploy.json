@@ -1,6 +1,6 @@
 ﻿{
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0-r220+220.1862ac675e9e45e83a045f452b155c07b0a2a6d1",
+  "contentVersion": "1.0.0",
   "variables": {
     "webApiVersion": "2015-08-01",
     "dbApiVersion": "2014-04-01-preview",

@@ -1,0 +1,343 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0",
+  "variables": {
+    "resourcesApiVersion": "2016-09-01"
+  },
+  "parameters": {
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "templateLink": {
+      "type": "securestring",
+      "defaultValue": "[uri(replace(deployment().properties.templateLink.uri, ' ', '%20'), 'azuredeploy.json')]"
+    },
+
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "sitecore.admin.password": {
+      "type": "securestring",
+      "minLength": 8
+    },
+    "password.salt": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().id]"
+    },
+    "licenseXml": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
+    "sqlserver.version": {
+      "type": "string",
+      "defaultValue": "12.0"
+    },
+    "sqldatabase.collation": {
+      "type": "string",
+      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+    },
+
+    "sqlserver.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-sql')]"
+    },
+    "sqlserver.login": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sqlserver.password": {
+      "type": "securestring",
+      "minLength": 8
+    },
+    "web.sqlserver.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-web-sql')]"
+    },
+    "web.sqlserver.login": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('sqlserver.login')]"
+    },
+    "web.sqlserver.password": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('sqlserver.password')]"
+    },
+
+    "core.sqldatabase.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-core-db')]"
+    },
+    "master.sqldatabase.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-master-db')]"
+    },
+    "web.sqldatabase.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
+    },
+
+    "searchservice.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
+    },
+
+    "applicationinsights.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-ai')]"
+    },
+    "applicationinsights.location": {
+      "type": "string",
+      "defaultValue": "East US",
+      "allowedValues": [ "East US", "South Central US", "North Europe", "West Europe" ]
+    },
+
+    "rediscache.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-redis')]"
+    },
+
+    "cm.hostingplan.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-cm-hp')]"
+    },
+    "cm.webapp.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-cm')]"
+    },
+    "cm.msdeploy.packageurl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "cm.core.sqldatabase.username": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "cmcoreuser"
+    },
+    "cm.core.sqldatabase.password": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('cm.core.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('cm.core.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('cm.core.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+    },
+    "cm.master.sqldatabase.username": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "cmmasteruser"
+    },
+    "cm.master.sqldatabase.password": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('cm.master.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('cm.master.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('cm.master.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+    },
+    "cm.web.sqldatabase.username": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "cmwebuser"
+    },
+    "cm.web.sqldatabase.password": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('cm.web.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('cm.web.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('cm.web.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+    },
+
+    "cd.hostingplan.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-cd-hp')]"
+    },
+    "cd.webapp.name": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-cd')]"
+    },
+    "cd.msdeploy.packageurl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "cd.core.sqldatabase.username": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "cdcoreuser"
+    },
+    "cd.core.sqldatabase.password": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('cd.core.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('cd.core.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('cd.core.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+    },
+    "cd.web.sqldatabase.username": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "cdwebuser"
+    },
+    "cd.web.sqldatabase.password": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('cd.web.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('cd.web.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('cd.web.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+    },
+
+    "security.clientIp": {
+      "type": "string",
+      "defaultValue": "0.0.0.0"
+    },
+    "security.clientIpMask": {
+      "type": "string",
+      "defaultValue": "0.0.0.0"
+    },
+
+    "sitecoreSKU": {
+      "type": "string",
+      "allowedValues": [ "xM1", "xM2", "xM3", "xM4", "xM5" ],
+      "defaultValue": "xM1",
+      "metadata": {
+        "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
+      }
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[deployment().name]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('templateLink'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "sitecoreAdminPassword": {
+            "value": "[parameters('sitecore.admin.password')]"
+          },
+          "passwordSalt": {
+            "value": "[parameters('password.salt')]"
+          },
+          "licenseXml": {
+            "value": "[parameters('licenseXml')]"
+          },
+
+          "sqlServerVersion": {
+            "value": "[parameters('sqlserver.version')]"
+          },
+          "sqlDatabaseCollation": {
+            "value": "[parameters('sqldatabase.collation')]"
+          },
+
+          "sqlServerName": {
+            "value": "[parameters('sqlserver.name')]"
+          },
+          "sqlServerLogin": {
+            "value": "[parameters('sqlserver.login')]"
+          },
+          "sqlServerPassword": {
+            "value": "[parameters('sqlserver.password')]"
+          },
+          "webSqlServerName": {
+            "value": "[parameters('web.sqlserver.name')]"
+          },
+          "webSqlServerLogin": {
+            "value": "[parameters('web.sqlserver.login')]"
+          },
+          "webSqlServerPassword": {
+            "value": "[parameters('web.sqlserver.password')]"
+          },
+
+          "coreSqlDatabaseName": {
+            "value": "[parameters('core.sqldatabase.name')]"
+          },
+          "masterSqlDatabaseName": {
+            "value": "[parameters('master.sqldatabase.name')]"
+          },
+          "webSqlDatabaseName": {
+            "value": "[parameters('web.sqldatabase.name')]"
+          },
+
+          "searchServiceName": {
+            "value": "[parameters('searchservice.name')]"
+          },
+
+          "applicationInsightsName": {
+            "value": "[parameters('applicationinsights.name')]"
+          },
+          "applicationInsightsLocation": {
+            "value": "[parameters('applicationinsights.location')]"
+          },
+
+          "redisCacheName": {
+            "value": "[parameters('rediscache.name')]"
+          },
+
+          "cmHostingPlanName": {
+            "value": "[parameters('cm.hostingplan.name')]"
+          },
+          "cmWebAppName": {
+            "value": "[parameters('cm.webapp.name')]"
+          },
+          "cmMsDeployPackageUrl": {
+            "value": "[parameters('cm.msdeploy.packageurl')]"
+          },
+          "cmCoreSqlDatabaseUserName": {
+            "value": "[parameters('cm.core.sqldatabase.username')]"
+          },
+          "cmCoreSqlDatabasePassword": {
+            "value": "[parameters('cm.core.sqldatabase.password')]"
+          },
+          "cmMasterSqlDatabaseUserName": {
+            "value": "[parameters('cm.master.sqldatabase.username')]"
+          },
+          "cmMasterSqlDatabasePassword": {
+            "value": "[parameters('cm.master.sqldatabase.password')]"
+          },
+          "cmWebSqlDatabaseUserName": {
+            "value": "[parameters('cm.web.sqldatabase.username')]"
+          },
+          "cmWebSqlDatabasePassword": {
+            "value": "[parameters('cm.web.sqldatabase.password')]"
+          },
+
+          "cdHostingPlanName": {
+            "value": "[parameters('cd.hostingplan.name')]"
+          },
+          "cdWebAppName": {
+            "value": "[parameters('cd.webapp.name')]"
+          },
+          "cdMsDeployPackageUrl": {
+            "value": "[parameters('cd.msdeploy.packageurl')]"
+          },
+          "cdCoreSqlDatabaseUserName": {
+            "value": "[parameters('cd.core.sqldatabase.username')]"
+          },
+          "cdCoreSqlDatabasePassword": {
+            "value": "[parameters('cd.core.sqldatabase.password')]"
+          },
+          "cdWebSqlDatabaseUserName": {
+            "value": "[parameters('cd.web.sqldatabase.username')]"
+          },
+          "cdWebSqlDatabasePassword": {
+            "value": "[parameters('cd.web.sqldatabase.password')]"
+          },
+
+          "securityClientIp": {
+            "value": "[parameters('security.clientIp')]"
+          },
+          "securityClientIpMask": {
+            "value": "[parameters('security.clientIpMask')]"
+          },
+          "sitecoreSKU": {
+            "value": "[parameters('sitecoreSKU')]"
+          }
+        }
+      }
+    }
+  ]
+}
