@@ -1,0 +1,321 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-08-01",
+    "searchApiVersion": "2015-08-19",
+    "searchPreviewApiVersion": "2015-02-28-preview",
+    "appInsightsApiVersion": "2015-05-01",
+    "prcWebAppNameTidy": "[toLower(trim(parameters('prcWebAppName')))]",
+    "repWebAppNameTidy": "[toLower(trim(parameters('repWebAppName')))]",
+    "coreDbNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
+    "webDbNameTidy": "[toLower(trim(parameters('webSqlDatabaseName')))]",
+    "masterDbNameTidy": "[toLower(trim(parameters('masterSqlDatabaseName')))]",
+    "repDbNameTidy": "[toLower(trim(parameters('reportingSqlDatabaseName')))]",
+    "searchServiceNameTidy": "[toLower(trim(parameters('searchServiceName')))]",
+    "appInsightsNameTidy": "[toLower(trim(parameters('applicationInsightsName')))]",
+    "sqlServerFqdnTidy": "[trim(toLower(parameters('sqlServerFqdn')))]",
+    "webSqlServerFqdnTidy": "[trim(toLower(parameters('webSqlServerFqdn')))]",
+    "analyticsMongoDbConnStrTidy": "[trim(parameters('analyticsMongoDbConnectionString'))]",
+    "trackingLiveMongoDbConnStrTidy": "[trim(parameters('trackingLiveMongoDbConnectionString'))]",
+    "trackingHistoryMongoDbConnStrTidy": "[trim(parameters('trackingHistoryMongoDbConnectionString'))]",
+    "trackingContactMongoDbConnStrTidy": "[trim(parameters('trackingContactMongoDbConnectionString'))]"
+  },
+  "parameters": {
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+
+    "sitecoreAdminPassword": {
+      "type": "securestring",
+      "minLength": 8
+    },
+    "passwordSalt": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().id]"
+    },
+    "licenseXml": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
+    "sqlServerFqdn": {
+      "type": "string",
+      "defaultValue": "[parameters('infrastructure').sqlServerFqdn]"
+    },
+    "sqlServerLogin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8
+    },
+    "webSqlServerFqdn": {
+      "type": "string",
+      "defaultValue": "[parameters('infrastructure').webSqlServerFqdn]"
+    },
+    "webSqlServerLogin": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('sqlServerLogin')]"
+    },
+    "webSqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('sqlServerPassword')]"
+    },
+
+    "coreSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-core-db')]"
+    },
+    "masterSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-master-db')]"
+    },
+    "webSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
+    },
+    "reportingSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-reporting-db')]"
+    },
+
+    "searchServiceName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
+    },
+
+    "applicationInsightsName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-ai')]"
+    },
+
+    "prcWebAppName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-prc')]"
+    },
+    "prcMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "prcCoreSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "prccoreuser"
+    },
+    "prcCoreSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('prcCoreSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('prcCoreSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('prcCoreSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "prcMasterSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "prcmasteruser"
+    },
+    "prcMasterSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('prcMasterSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('prcMasterSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('prcMasterSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "prcWebSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "prcwebuser"
+    },
+    "prcWebSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('prcWebSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('prcWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('prcWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "prcReportingSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "prcreportinguser"
+    },
+    "prcReportingSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('prcReportingSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('prcReportingSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('prcReportingSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+
+    "repWebAppName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-rep')]"
+    },
+    "repMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "repCoreSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "repcoreuser"
+    },
+    "repCoreSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('repCoreSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('repCoreSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('repCoreSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "repMasterSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "repmasteruser"
+    },
+    "repMasterSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('repMasterSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('repMasterSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('repMasterSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "repWebSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "repwebuser"
+    },
+    "repWebSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('repWebSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('repWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('repWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "repReportingSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "repreportinguser"
+    },
+    "repReportingSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('repReportingSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('repReportingSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('repReportingSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "repAuthenticationApiKey": {
+      "type": "securestring",
+      "minLength": 32
+    },
+
+    "analyticsMongoDbConnectionString": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "trackingLiveMongoDbConnectionString": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "trackingHistoryMongoDbConnectionString": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "trackingContactMongoDbConnectionString": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
+    "securityClientIp": {
+      "type": "string",
+      "defaultValue": "0.0.0.0"
+    },
+    "securityClientIpMask": {
+      "type": "string",
+      "defaultValue": "0.0.0.0"
+    },
+
+    "infrastructure": {
+      "type": "secureObject",
+      "defaultValue": {
+        "sqlServerFqdn": null,
+        "webSqlServerFqdn": null
+      }
+    }
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('prcWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "packageUri": "[parameters('prcMsDeployPackageUrl')]",
+        "dbType": "SQL",
+        "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+        "setParameters": {
+          "Application Path": "[variables('prcWebAppNameTidy')]",
+          "Sitecore Admin New Password": "[parameters('sitecoreAdminPassword')]",
+          "Core DB User Name": "[parameters('prcCoreSqlDatabaseUserName')]",
+          "Core DB Password": "[parameters('prcCoreSqlDatabasePassword')]",
+          "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+          "Core Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('prcCoreSqlDatabaseUserName'), ';Password=', parameters('prcCoreSqlDatabasePassword'), ';')]",
+          "Master DB User Name": "[parameters('prcMasterSqlDatabaseUserName')]",
+          "Master DB Password": "[parameters('prcMasterSqlDatabasePassword')]",
+          "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+          "Master Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('prcMasterSqlDatabaseUserName'), ';Password=', parameters('prcMasterSqlDatabasePassword'), ';')]",
+          "Web DB User Name": "[parameters('prcWebSqlDatabaseUserName')]",
+          "Web DB Password": "[parameters('prcWebSqlDatabasePassword')]",
+          "Web Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]",
+          "Web Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('prcWebSqlDatabaseUserName'), ';Password=', parameters('prcWebSqlDatabasePassword'), ';')]",
+          "Reporting DB User Name": "[parameters('prcReportingSqlDatabaseUserName')]",
+          "Reporting DB Password": "[parameters('prcReportingSqlDatabasePassword')]",
+          "Reporting Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('repDbNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+          "Reporting Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('repDbNameTidy'),';User Id=', parameters('prcReportingSqlDatabaseUserName'), ';Password=', parameters('prcReportingSqlDatabasePassword'), ';')]",
+          "Analytics Connection String": "[variables('analyticsMongoDbConnStrTidy')]",
+          "Tracking Live Connection String": "[variables('trackingLiveMongoDbConnStrTidy')]",
+          "Tracking Contact Connection String": "[variables('trackingContactMongoDbConnStrTidy')]",
+          "Tracking History Connection String": "[variables('trackingHistoryMongoDbConnStrTidy')]",
+          "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchPreviewApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+          "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey]",
+          "Application Insights Role": "Processing",
+          "IP Security Client IP": "[parameters('securityClientIp')]",
+          "IP Security Client IP Mask": "[parameters('securityClientIpMask')]",
+          "License Xml": "[parameters('licenseXml')]"
+        }
+      }
+    },
+    {
+      "name": "[concat(variables('repWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('prcWebAppNameTidy'), '/Extensions/MSDeploy')]" ],
+      "properties": {
+        "packageUri": "[parameters('repMsDeployPackageUrl')]",
+        "dbType": "SQL",
+        "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+        "setParameters": {
+          "Application Path": "[variables('repWebAppNameTidy')]",
+          "Sitecore Admin New Password": "[parameters('sitecoreAdminPassword')]",
+          "Core DB User Name": "[parameters('repCoreSqlDatabaseUserName')]",
+          "Core DB Password": "[parameters('repCoreSqlDatabasePassword')]",
+          "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+          "Core Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('repCoreSqlDatabaseUserName'), ';Password=', parameters('repCoreSqlDatabasePassword'), ';')]",
+          "Master DB User Name": "[parameters('repMasterSqlDatabaseUserName')]",
+          "Master DB Password": "[parameters('repMasterSqlDatabasePassword')]",
+          "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+          "Master Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('repMasterSqlDatabaseUserName'), ';Password=', parameters('repMasterSqlDatabasePassword'), ';')]",
+          "Web DB User Name": "[parameters('repWebSqlDatabaseUserName')]",
+          "Web DB Password": "[parameters('repWebSqlDatabasePassword')]",
+          "Web Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]",
+          "Web Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('repWebSqlDatabaseUserName'), ';Password=', parameters('repWebSqlDatabasePassword'), ';')]",
+          "Reporting DB User Name": "[parameters('repReportingSqlDatabaseUserName')]",
+          "Reporting DB Password": "[parameters('repReportingSqlDatabasePassword')]",
+          "Reporting Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('repDbNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+          "Reporting Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('repDbNameTidy'),';User Id=', parameters('repReportingSqlDatabaseUserName'), ';Password=', parameters('repReportingSqlDatabasePassword'), ';')]",
+          "Analytics Connection String": "[variables('analyticsMongoDbConnStrTidy')]",
+          "Tracking Live Connection String": "[variables('trackingLiveMongoDbConnStrTidy')]",
+          "Tracking History Connection String": "[variables('trackingHistoryMongoDbConnStrTidy')]",
+          "Reporting Service Api Key": "[parameters('repAuthenticationApiKey')]",
+          "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchPreviewApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+          "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey]",
+          "Application Insights Role": "Reporting",
+          "License Xml": "[parameters('licenseXml')]"
+        }
+      }
+    }
+  ]
+}

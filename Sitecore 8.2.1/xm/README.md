@@ -27,4 +27,5 @@ The **deploymentId** and **licenseXml** parameters are filled in by the PowerShe
 | sitecore.admin.password | The new password for the Sitecore **admin** account.
 | cm.msdeploy.packageurl  | The blob storage url to a Sitecore XM Content Management Web Deploy package.
 | cd.msdeploy.packageurl  | The blob storage url to a Sitecore XM Content Delivery Web Deploy package.
+| sitecoreSKU             | Name of Sitecore configuration (one of xM1, xM2, xM3, xM4, xM5).
 

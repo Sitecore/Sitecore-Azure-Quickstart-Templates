@@ -6,7 +6,7 @@
     "value": ""
   },
   "rep.authentication.apikey": {
-	"value": ""
+    "value": ""
   },
   "analytics.mongodb.connectionstring": {
     "value": ""
@@ -26,12 +26,6 @@
   "sqlserver.password": {
     "value": ""
   },
-  "cm.msdeploy.packageurl": {
-    "value": ""
-  },
-  "cd.msdeploy.packageurl": {
-    "value": ""
-  },
   "prc.msdeploy.packageurl": {
     "value": ""
   },
@@ -41,7 +35,7 @@
   "licenseXml": {
     "value": ""
   },
-  "sitecoreSKU": {
-    "value": ""
+  "sitecoreSKU" : {
+    "value" : ""
   }
 }
