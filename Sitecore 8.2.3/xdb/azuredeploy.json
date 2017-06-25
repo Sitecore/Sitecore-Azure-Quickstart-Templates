@@ -122,6 +122,11 @@
       "defaultValue": "East US",
       "allowedValues": [ "East US", "South Central US", "North Europe", "West Europe" ]
     },
+    "applicationInsightsPricePlan": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ai-pp')]"
+    },
 
     "prcHostingPlanName": {
       "type": "string",
@@ -353,6 +358,9 @@
           "applicationInsightsLocation": {
             "value": "[parameters('applicationInsightsLocation')]"
           },
+          "applicationInsightsPricePlan": {
+            "value": "[parameters('applicationInsightsPricePlan')]"
+          },
 
           "sitecoreSKU": {
             "value": "[parameters('sitecoreSKU')]"
@@ -535,6 +543,7 @@
               "sitecoreAdminPassword": "[parameters('sitecoreAdminPassword')]",
               "passwordSalt": "[parameters('passwordSalt')]",
               "licenseXml": "[parameters('licenseXml')]",
+              "sitecoreSKU": "[parameters('sitecoreSKU')]",
 
               "sqlServerName": "[parameters('sqlServerName')]",
               "sqlServerLogin": "[parameters('sqlServerLogin')]",

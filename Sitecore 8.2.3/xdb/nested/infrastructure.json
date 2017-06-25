@@ -19,6 +19,7 @@
     "repDbNameTidy": "[toLower(trim(parameters('reportingSqlDatabaseName')))]",
     "searchServiceNameTidy": "[toLower(trim(parameters('searchServiceName')))]",
     "appInsightsNameTidy": "[toLower(trim(parameters('applicationInsightsName')))]",
+    "appInsightsPricePlanTidy": "[toLower(trim(parameters('applicationInsightsPricePlan')))]",
     "sitecoreTags": {
       "provider": "b51535c2-ab3e-4a68-95f8-e2e3c9a19299"
     }
@@ -111,6 +112,12 @@
       "defaultValue": "East US",
       "allowedValues": [ "East US", "South Central US", "North Europe", "West Europe" ]
     },
+    "applicationInsightsPricePlan": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ai-pp')]"
+    },
+
     "sitecoreSKU": {
       "type": "string",
       "defaultValue": "xDB1",
@@ -161,6 +168,12 @@
             "SkuName": "Standard",
             "Partitions": 1,
             "Replicas": 1
+          },
+          "ApplicationInsightsPricePlan": {
+            "CurrentBillingFeatures": "Basic",
+            "DataVolumeCap": {
+              "Cap": 0.33
+            }
           }
         },
         "xDB2": {
@@ -196,6 +209,12 @@
             "SkuName": "Standard",
             "Partitions": 1,
             "Replicas": 1
+          },
+          "ApplicationInsightsPricePlan": {
+            "CurrentBillingFeatures": "Basic",
+            "DataVolumeCap": {
+              "Cap": 0.33
+            }
           }
         },
         "xDB3": {
@@ -231,6 +250,12 @@
             "SkuName": "Standard",
             "Partitions": 1,
             "Replicas": 1
+          },
+          "ApplicationInsightsPricePlan": {
+            "CurrentBillingFeatures": "Basic",
+            "DataVolumeCap": {
+              "Cap": 0.33
+            }
           }
         },
         "xDB4": {
@@ -266,6 +291,12 @@
             "SkuName": "Standard",
             "Partitions": 1,
             "Replicas": 1
+          },
+          "ApplicationInsightsPricePlan": {
+            "CurrentBillingFeatures": "Basic",
+            "DataVolumeCap": {
+              "Cap": 0.33
+            }
           }
         },
         "xDB5": {
@@ -301,6 +332,12 @@
             "SkuName": "Standard",
             "Partitions": 1,
             "Replicas": 1
+          },
+          "ApplicationInsightsPricePlan": {
+            "CurrentBillingFeatures": "Basic",
+            "DataVolumeCap": {
+              "Cap": 0.33
+            }
           }
         }
       }
@@ -533,7 +570,25 @@
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
       }
-    }
+    },
+    {
+      "type": "Microsoft.Insights/Components/CurrentBillingFeatures",
+      "name": "[concat(variables('appInsightsNameTidy'), '/', variables('appInsightsPricePlanTidy'))]",
+      "location": "[parameters('applicationInsightsLocation')]",
+      "apiVersion": "[variables('appInsightsApiVersion')]",
+      "properties": {
+       "CurrentBillingFeatures": "[parameters('resourceSizes').ApplicationInsightsPricePlan.CurrentBillingFeatures]",
+       "DataVolumeCap": {
+         "Cap": "[parameters('resourceSizes').ApplicationInsightsPricePlan.DataVolumeCap.Cap]"
+        }
+       },
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]"
+      ],
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]"
+      }      
+   }
   ],
   "outputs": {
     "infrastructure": {

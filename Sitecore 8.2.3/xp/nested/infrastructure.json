@@ -25,6 +25,7 @@
     "searchServiceNameTidy": "[toLower(trim(parameters('searchServiceName')))]",
     "redisCacheNameTidy": "[toLower(trim(parameters('redisCacheName')))]",
     "appInsightsNameTidy": "[toLower(trim(parameters('applicationInsightsName')))]",
+    "appInsightsPricePlanTidy": "[toLower(trim(parameters('applicationInsightsPricePlan')))]",
     "sitecoreTags": {
       "provider": "b51535c2-ab3e-4a68-95f8-e2e3c9a19299"
     }
@@ -137,6 +138,11 @@
       "defaultValue": "East US",
       "allowedValues": [ "East US", "South Central US", "North Europe", "West Europe" ]
     },
+    "applicationInsightsPricePlan": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ai-pp')]"
+    },
 
     "sitecoreSKU": {
       "type": "string",
@@ -195,6 +201,12 @@
             "SkuName": "Standard",
             "SkuFamily": "C",
             "SkuCapacity": 1
+          },
+          "ApplicationInsightsPricePlan": {
+            "CurrentBillingFeatures": "Basic",
+            "DataVolumeCap": {
+              "Cap": 0.33
+            }
           }
         },
         "xP2": {
@@ -243,6 +255,12 @@
             "SkuName": "Standard",
             "SkuFamily": "C",
             "SkuCapacity": 1
+          },
+          "ApplicationInsightsPricePlan": {
+            "CurrentBillingFeatures": "Basic",
+            "DataVolumeCap": {
+              "Cap": 0.33
+            }
           }
         },
         "xP3": {
@@ -291,6 +309,12 @@
             "SkuName": "Standard",
             "SkuFamily": "C",
             "SkuCapacity": 1
+          },
+          "ApplicationInsightsPricePlan": {
+            "CurrentBillingFeatures": "Basic",
+            "DataVolumeCap": {
+              "Cap": 0.33
+            }
           }
         },
         "xP4": {
@@ -339,6 +363,12 @@
             "SkuName": "Standard",
             "SkuFamily": "C",
             "SkuCapacity": 1
+          },
+          "ApplicationInsightsPricePlan": {
+            "CurrentBillingFeatures": "Application Insights Enterprise",
+            "DataVolumeCap": {
+              "Cap": 0
+            }
           }
         },
         "xP5": {
@@ -387,6 +417,12 @@
             "SkuName": "Standard",
             "SkuFamily": "C",
             "SkuCapacity": 1
+          },
+          "ApplicationInsightsPricePlan": {
+            "CurrentBillingFeatures": "Application Insights Enterprise",
+            "DataVolumeCap": {
+              "Cap": 0
+            }
           }
         }
       }
@@ -714,7 +750,25 @@
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
       }
-    }
+    },
+    {
+      "type": "Microsoft.Insights/Components/CurrentBillingFeatures",
+      "name": "[concat(variables('appInsightsNameTidy'), '/', variables('appInsightsPricePlanTidy'))]",
+      "location": "[parameters('applicationInsightsLocation')]",
+      "apiVersion": "[variables('appInsightsApiVersion')]",
+      "properties": {
+       "CurrentBillingFeatures": "[parameters('resourceSizes').ApplicationInsightsPricePlan.CurrentBillingFeatures]",
+       "DataVolumeCap": {
+         "Cap": "[parameters('resourceSizes').ApplicationInsightsPricePlan.DataVolumeCap.Cap]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]"
+      ],
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]"
+      }      
+   }
   ],
   "outputs": {
     "infrastructure": {
