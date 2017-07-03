@@ -578,6 +578,17 @@
               "IP Security Client IP Mask": "[parameters('security.clientIpMask')]"
             }
           }
+        },
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "[variables('webApiVersion')]",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', variables('prcWebAppNameTidy'))]"
+          ],
+          "properties": {
+            "WEBSITE_DYNAMIC_CACHE": 0
+          }
         }
       ]
     },
@@ -652,6 +663,17 @@
               "KeepAlive Url": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('repWebAppNameTidy'))).hostNames[0], '/sitecore/service/keepalive.aspx')]",
               "License Xml": "[variables('licenseXml')]"
             }
+          }
+        },
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "[variables('webApiVersion')]",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', variables('repWebAppNameTidy'))]"
+          ],
+          "properties": {
+            "WEBSITE_DYNAMIC_CACHE": 0
           }
         }
       ]

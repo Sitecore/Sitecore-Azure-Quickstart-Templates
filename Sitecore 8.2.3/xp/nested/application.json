@@ -353,6 +353,17 @@
       }
     },
     {
+      "name": "[concat(variables('cmWebAppNameTidy'), '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "WEBSITE_DYNAMIC_CACHE": 0
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Web/Sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]"
+      ]
+    },
+    {
       "name": "[concat(variables('cdWebAppNameTidy'), '/', 'MSDeploy')]",
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
@@ -383,6 +394,17 @@
           "License Xml": "[parameters('licenseXml')]"
         }
       }
+    },
+    {
+      "name": "[concat(variables('cdWebAppNameTidy'), '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "WEBSITE_DYNAMIC_CACHE": 0
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Web/Sites/', variables('cdWebAppNameTidy'), '/Extensions/MSDeploy')]"
+      ]
     },
     {
       "name": "[concat(variables('prcWebAppNameTidy'), '/', 'MSDeploy')]",
@@ -427,6 +449,17 @@
       }
     },
     {
+      "name": "[concat(variables('prcWebAppNameTidy'), '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "WEBSITE_DYNAMIC_CACHE": 0
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Web/Sites/', variables('prcWebAppNameTidy'), '/Extensions/MSDeploy')]"
+      ]
+    },
+    {
       "name": "[concat(variables('repWebAppNameTidy'), '/', 'MSDeploy')]",
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
@@ -465,6 +498,17 @@
           "License Xml": "[parameters('licenseXml')]"
         }
       }
+    },
+    {
+      "name": "[concat(variables('repWebAppNameTidy'), '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "WEBSITE_DYNAMIC_CACHE": 0
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Web/Sites/', variables('repWebAppNameTidy'), '/Extensions/MSDeploy')]"
+      ]
     }
   ]
 }

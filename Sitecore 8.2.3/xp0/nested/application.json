@@ -210,6 +210,17 @@
           "License Xml": "[parameters('licenseXml')]"
         }
       }
+    },
+    {
+      "name": "[concat(variables('webAppNameTidy'), '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "WEBSITE_DYNAMIC_CACHE": 0
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Web/Sites/', variables('webAppNameTidy'), '/Extensions/MSDeploy')]"
+      ]
     }
   ]
 }

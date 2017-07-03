@@ -282,6 +282,17 @@
               "License Xml": "[variables('licenseXml')]"
             }
           }
+        },
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "[variables('webApiVersion')]",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', variables('webAppNameTidy'))]"
+          ],
+          "properties": {
+            "WEBSITE_DYNAMIC_CACHE": 0
+          }
         }
       ]
     },

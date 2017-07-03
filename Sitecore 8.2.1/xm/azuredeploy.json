@@ -523,6 +523,17 @@
               "IP Security Client IP Mask": "[parameters('security.clientIpMask')]"
             }
           }
+        },
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "[variables('webApiVersion')]",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'))]"
+          ],
+          "properties": {
+            "WEBSITE_DYNAMIC_CACHE": 0
+          }
         }
       ]
     },
@@ -585,6 +596,17 @@
               "Redis Connection String": "[concat(reference(variables('redisCacheNameTidy')).hostName, ':', reference(variables('redisCacheNameTidy')).sslPort, ',password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).primaryKey, ',ssl=True,abortConnect=False')]",
               "License Xml": "[variables('licenseXml')]"
             }
+          }
+        },
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "[variables('webApiVersion')]",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', variables('cdWebAppNameTidy'))]"
+          ],
+          "properties": {
+            "WEBSITE_DYNAMIC_CACHE": 0
           }
         }
       ]
