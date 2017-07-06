@@ -13,15 +13,14 @@ Sitecore のバージョンに合わせた互換性のあるテンプレート�
 | Sitecore 8.2.1   | Sitecore 8.2 Update-1 and Update-2                 |
 | Sitecore 8.2.3   | Sitecore 8.2 Update-3                              |
 
-# Pre-deployment Checklist
-1. Ensure you have the latest Azure PowerShell SDK installed
-2. Ensure you have uploaded your Sitecore Web Deploy packages to a blob storage location 
-3. Ensure you have a cloud-hosted instance of MongoDB for Experience Database in XP and XP0 configurations.
-4. Download and update the parameter values in the **azuredeploy.parameters.json** file
+1. 最新の Azure Power Shell SDK がインストールされている
+2. Sitecore Web Deploy Package が blob ストレージにアップロードされている 
+3. XP および XP0 で利用する Experience Database のためのクラウドでホストされている MongoDB のインスタンスがある
+4. ダウンロードをしてパラメーターを設定した **azuredeploy.parameters.json** ファイルがある
 
 
-# Sample PowerShell Script
-Below is a sample PowerShell script that can help you to get up and running quickly with the ARM Templates. There is also a Sitecore PowerShell CmdLet available for download at [Sitecore Downloads Site](https://dev.sitecore.net/) that makes the deployment even easier.
+# サンプル PowerShell スクリプト
+以下のサンプルとなる PowerShell スクリプトは ARM テンプレートを利用して素早く立ち上げるための手助けとなります。Sitecore PowerShell CmdLet は [Sitecore Downloads Site](https://dev.sitecore.net/) からダウンロードをすることができ、より簡単に展開することができます。
 
 ```PowerShell
 $ArmTemplateUrl = "AZUREDEPLOY_JSON_URL";
