@@ -1,8 +1,8 @@
 # Sitecore-Azure-Quickstart-Templates
-このリポジトリは Sitecore 用の Azure Resource Manager のテンプレートを提供しています
+このリポジトリは Sitecore 用の Azure Resource Manager のテンプレートを提供しています。
 
 # 本文書について
-Sitecore Azure AppService の統合および ARM テンプレートの展開に関しては以下のサイトで参照することができます
+Sitecore Azure AppService の統合および ARM テンプレートの展開に関しては以下のサイトで参照することができます。
  [Sitecore Documentation Site](https://doc.sitecore.net/cloud)
 
 # 互換性について
@@ -13,10 +13,11 @@ Sitecore のバージョンに合わせた互換性のあるテンプレート�
 | Sitecore 8.2.1   | Sitecore 8.2 Update-1 and Update-2                 |
 | Sitecore 8.2.3   | Sitecore 8.2 Update-3                              |
 
-1. 最新の Azure Power Shell SDK がインストールされている
-2. Sitecore Web Deploy Package が blob ストレージにアップロードされている 
-3. XP および XP0 で利用する Experience Database のためのクラウドでホストされている MongoDB のインスタンスがある
-4. ダウンロードをしてパラメーターを設定した **azuredeploy.parameters.json** ファイルがある
+# 展開前のチェックリスト
+1. 最新の Azure Power Shell SDK がインストールされている。
+2. Sitecore Web Deploy Package が blob ストレージにアップロードされている。 
+3. XP および XP0 で利用する Experience Database のためのクラウドでホストされている MongoDB のインスタンスがある。
+4. ダウンロードをしてパラメーターを設定した **azuredeploy.parameters.json** ファイルがある。
 
 
 # サンプル PowerShell スクリプト
