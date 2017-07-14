@@ -11,6 +11,7 @@ Choose the compatible templates for your Sitecore version:
 |------------------|----------------------------------------------------|
 | Sitecore 8.2.1   | Sitecore 8.2 Update-1 and Update-2                 |
 | Sitecore 8.2.3   | Sitecore 8.2 Update-3                              |
+| Sitecore 8.2.4   | Sitecore 8.2 Update-4                              |
 
 # Pre-deployment Checklist
 1. Ensure you have the latest Azure PowerShell SDK installed
