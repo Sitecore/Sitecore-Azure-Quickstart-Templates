@@ -38,9 +38,9 @@ $additionalParams = New-Object -TypeName Hashtable;
 
 $params = Get-Content ((Read-Host "Enter Azure Parameters File") -replace '"') -Raw | ConvertFrom-Json;
 
-foreach($p in $params | Get-Member -MemberType *Property)
+foreach($p in $params.parameters | Get-Member -MemberType *Property)
 {
-    $additionalParams.Add($p.Name, $params.$($p.Name).value);
+    $additionalParams.Add($p.Name, $params.parameters.$($p.Name).value);
 }
 
 $additionalParams.Set_Item('licenseXml', $licenseFileContent);
