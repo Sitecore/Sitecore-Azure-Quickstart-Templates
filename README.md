@@ -25,10 +25,9 @@ Below is a sample PowerShell script that can help you to get up and running quic
 
 ```PowerShell
 $ArmTemplateUrl = "AZUREDEPLOY_JSON_URL";
-$ArmParametersPath = ".\xp\azuredeploy.parameters.json";
 
 # read the contents of your Sitecore license file
-$licenseFileContent = Get-Content -Raw -Encoding UTF8 -Path ".\license.xml" | Out-String;
+$licenseFileContent = Get-Content ((Read-Host "Enter Sitecore license path") -replace '"') -Raw -Encoding UTF8 | Out-String
 $Name = "RESOURCE_GROUP_NAME";
 $location = "AZURE_DATA_CENTER_NAME";
 $AzureSubscriptionId = "AZURE_SUBSCRIPTION_ID";
@@ -37,7 +36,7 @@ $AzureSubscriptionId = "AZURE_SUBSCRIPTION_ID";
 # license file needs to be secure string and adding the params as a hashtable is the only way to do it
 $additionalParams = New-Object -TypeName Hashtable;
 
-$params = Get-Content $ArmParametersPath -Raw | ConvertFrom-Json;
+$params = Get-Content ((Read-Host "Enter Azure Parameters File") -replace '"') -Raw | ConvertFrom-Json;
 
 foreach($p in $params | Get-Member -MemberType *Property)
 {
