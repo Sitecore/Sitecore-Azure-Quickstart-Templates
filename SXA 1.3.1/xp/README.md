@@ -20,12 +20,12 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 In order to configure Sitecore deployment parameters to include Sitecore Experience Accelerator:
 
   * Configure Bootloader module according to [Modules.md](../../MODULES.md)
-  * Add the following snippet to the `modules` parameter:
+  * Add the following snippet to the `modules` parameter (ensure the template link is pointing to the right SXA version):
 
 ```JSON
 {
     "name": "sxa",
-    "templateLink": "https://raw.githubusercontent.com/Sitecore/sitecore-azure-quickstart-templates/master/SXA/xp/azuredeploy.json",
+    "templateLink": "https://raw.githubusercontent.com/Sitecore/Sitecore-Azure-Quickstart-Templates/master/SXA%201.3.1/xp/azuredeploy.json",
     "parameters": {
         "cdSxaMsDeployPackageUrl" : "<URL of the WDP file Sitecore Experience Accelerator * CD.scwdp.zip>",
         "cmSxaMsDeployPackageUrl" : "<URL of the WDP file Sitecore Experience Accelerator *.scwdp.zip>",
