@@ -19,7 +19,7 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 
 In order to configure Sitecore deployment parameters to include Sitecore Experience Accelerator:
 
-  * Configure Bootloader module according to [Modules.md](../../Modules.md)
+  * Configure Bootloader module according to [Modules.md](../../MODULES.md)
   * Add the following snippet to the `modules` parameter:
 
 ```JSON
