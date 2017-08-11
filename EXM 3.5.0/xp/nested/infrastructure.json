@@ -1,0 +1,156 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-08-01",
+    "serverFarmApiVersion": "2016-09-01",
+    "dbApiVersion": "2014-04-01-preview",
+    "ddsHostingPlanNameTidy": "[toLower(trim(parameters('ddsHostingPlanName')))]",
+    "ddsWebAppNameTidy": "[toLower(trim(parameters('ddsWebAppName')))]",
+    "dbServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
+    "webDbServerNameTidy": "[toLower(trim(parameters('webSqlServerName')))]",
+    "webDbNameTidy": "[toLower(trim(parameters('exmWebSqlDatabaseName')))]",
+    "masterDbNameTidy": "[toLower(trim(parameters('exmMasterSqlDatabaseName')))]",
+    "sitecoreTags": {
+      "provider": "b51535c2-ab3e-4a68-95f8-e2e3c9a19299"
+    }
+  },
+  "parameters": {
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "ddsHostingPlanName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-dds-hp')]"
+    },
+    "ddsHostingPlanSkuName": {
+      "type": "string",
+      "defaultValue": "B2"
+    },
+    "ddsHostingPlanSkuCapacity": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "ddsWebAppName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-dds')]"
+    },
+    "sqlServerName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-sql')]"
+    },
+    "webSqlServerName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-web-sql')]"
+    },
+    "exmMasterSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-master-db')]"
+    },
+    "exmWebSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-web-db')]"
+    },
+    "sqlDatabaseCollation": {
+      "type": "string",
+      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+    },
+    "sqlDatabaseEdition": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "sqlDatabaseMaxSize": {
+      "type": "string",
+      "defaultValue": "10737418240"
+    },
+    "sqlDatabaseServiceObjectiveLevel": {
+      "type": "string",
+      "defaultValue": "S1"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "[variables('dbApiVersion')]",
+      "properties": {
+        "edition": "[parameters('sqlDatabaseEdition')]",
+        "collation": "[parameters('sqlDatabaseCollation')]",
+        "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]",
+        "requestedServiceObjectiveName": "[parameters('sqlDatabaseServiceObjectiveLevel')]"
+      },
+      "name": "[concat(variables('dbServerNameTidy'), '/', variables('masterDbNameTidy'))]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]"
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "[variables('dbApiVersion')]",
+      "properties": {
+        "edition": "[parameters('sqlDatabaseEdition')]",
+        "collation": "[parameters('sqlDatabaseCollation')]",
+        "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]",
+        "requestedServiceObjectiveName": "[parameters('sqlDatabaseServiceObjectiveLevel')]"
+      },
+      "name": "[concat(variables('webDbServerNameTidy'), '/', variables('webDbNameTidy'))]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "name": "[variables('ddsHostingPlanNameTidy')]",
+      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "sku": {
+        "name": "[parameters('ddsHostingPlanSkuName')]",
+        "capacity": "[parameters('ddsHostingPlanSkuCapacity')]"
+      },
+      "properties": {
+        "name": "[variables('ddsHostingPlanNameTidy')]"
+      },
+      "location": "[parameters('location')]",
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "name": "[variables('ddsWebAppNameTidy')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('ddsHostingPlanNameTidy'))]",
+        "siteConfig": {
+          "use32BitWorkerProcess": false,
+          "alwaysOn": true,
+          "phpVersion": "",
+          "defaultDocuments": [
+            "index.html"
+          ]
+        }
+      },
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('ddsHostingPlanNameTidy'))]"
+      ],
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]"
+      }
+    }
+  ],
+  "outputs": {
+    "infrastructure": {
+      "type": "object",
+      "value": {
+        "sqlServerFqdn": "[reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy')), variables('dbApiVersion')).fullyQualifiedDomainName]",
+        "webSqlServerFqdn": "[reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy')), variables('dbApiVersion')).fullyQualifiedDomainName]"
+      }
+    }
+  }
+}

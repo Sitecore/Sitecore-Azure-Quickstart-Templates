@@ -1,0 +1,269 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "resourcesApiVersion": "2016-09-01"
+  },
+  "parameters": {
+    "standard": {
+      "type": "secureObject",
+      "defaultValue": {}
+    },
+    "standardDefaults": {
+      "type": "secureObject",
+      "defaultValue": {
+        "deploymentId": null,
+        "location": null,
+        "passwordSalt": null,
+        "sqlServerName": null,
+        "sqlServerLogin": null,
+        "sqlServerPassword": null,
+        "webSqlServerName": null,
+        "webSqlServerLogin": null,
+        "webSqlServerPassword": null,
+        "sitecoreAdminPassword": null
+      }
+    },
+    "standardExpanded": {
+      "type": "secureObject",
+      "defaultValue": "[union(parameters('standardDefaults'), parameters('standard'))]"
+    },
+    "extension": {
+      "type": "secureobject",
+      "defaultValue": {}
+    },
+    "extensionDefaults": {
+      "type": "secureObject",
+      "defaultValue": {
+        "singleExmMsDeployPackageUrl": null,
+        "exmSampleNewsletterMsDeployPackageUrl": null,
+        "exmSampleNewsletterFileMsDeployPackageUrl": null,
+        "cryptographicKey": null,
+        "authenticationKey": null,
+        "templateLinkAccessToken": ""
+      }
+    },
+
+    "extensionExpanded": {
+      "type": "secureobject",
+      "defaultValue": "[union(parameters('extensionDefaults'), parameters('extension'))]"
+    },
+
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standardExpanded').deploymentId, resourceGroup().name)]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standardExpanded').location, resourceGroup().location)]"
+    },
+    "passwordSalt": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standardExpanded').passwordSalt, resourceGroup().id)]"
+    },
+    "sitecoreAdminPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('standardExpanded').sitecoreAdminPassword]"
+    },
+    "templateLinkBase": {
+      "type": "string",
+      "defaultValue": "[uri(replace(deployment().properties.templateLink.uri,' ','%20'), '.')]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": "[parameters('extensionExpanded').templateLinkAccessToken]"
+    },
+    "singleExmMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').singleExmMsDeployPackageUrl]"
+    },
+    "exmSampleNewsletterMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').exmSampleNewsletterMsDeployPackageUrl]"
+    },
+    "exmSampleNewsletterFileMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').exmSampleNewsletterFileMsDeployPackageUrl]"
+    },
+    "cryptographicKey": {
+      "type": "securestring",
+      "minLength": 34,
+      "defaultValue": "[parameters('extensionExpanded').cryptographicKey]"
+    },
+    "authenticationKey": {
+      "type": "securestring",
+      "minLength": 16,
+      "defaultValue": "[parameters('extensionExpanded').authenticationKey]"
+    },
+    "sqlServerName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standardExpanded').sqlServerName, concat(parameters('deploymentId'), '-sql'))]"
+    },
+    "sqlServerLogin": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('standardExpanded').sqlServerLogin]"
+    },
+    "sqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('standardExpanded').sqlServerPassword]"
+    },
+    "webSqlServerName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standardExpanded').webSqlServerName, concat(parameters('deploymentId'), '-web-sql'))]"
+    },
+    "webSqlServerLogin": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standardExpanded').webSqlServerLogin, parameters('sqlServerLogin'))]"
+    },
+    "webSqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[coalesce(parameters('standardExpanded').webSqlServerPassword, parameters('sqlServerPassword'))]"
+    },
+    "exmMasterSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-master-db')]"
+    },
+    "exmMasterSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "singleexmmasteruser"
+    },
+    "exmMasterSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('exmMasterSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('exmMasterSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('exmMasterSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "exmWebSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-web-db')]"
+    },
+    "exmWebSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "singleexmwebuser"
+    },
+    "exmWebSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('exmWebSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('exmWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('exmWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-infrastructure')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/infrastructure.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "sqlServerName": {
+            "value": "[parameters('sqlServerName')]"
+          },
+          "webSqlServerName": {
+            "value": "[parameters('webSqlServerName')]"
+          },
+          "exmMasterSqlDatabaseName": {
+            "value": "[parameters('exmMasterSqlDatabaseName')]"
+          },
+          "exmWebSqlDatabaseName": {
+            "value": "[parameters('exmWebSqlDatabaseName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-application')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "singleExmMsDeployPackageUrl": {
+            "value": "[parameters('singleExmMsDeployPackageUrl')]"
+          },
+          "exmSampleNewsletterMsDeployPackageUrl": {
+            "value": "[parameters('exmSampleNewsletterMsDeployPackageUrl')]"
+          },
+          "exmSampleNewsletterFileMsDeployPackageUrl": {
+            "value": "[parameters('exmSampleNewsletterFileMsDeployPackageUrl')]"
+          },
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "passwordSalt": {
+            "value": "[parameters('passwordSalt')]"
+          },
+          "sitecoreAdminPassword": {
+            "value": "[parameters('sitecoreAdminPassword')]"
+          },
+          "sqlServerLogin": {
+            "value": "[parameters('sqlServerLogin')]"
+          },
+          "sqlServerPassword": {
+            "value": "[parameters('sqlServerPassword')]"
+          },
+          "webSqlServerLogin": {
+            "value": "[parameters('webSqlServerLogin')]"
+          },
+          "webSqlServerPassword": {
+            "value": "[parameters('webSqlServerPassword')]"
+          },
+          "authenticationKey": {
+            "value": "[parameters('authenticationKey')]"
+          },
+          "cryptographicKey": {
+            "value": "[parameters('cryptographicKey')]"
+          },
+          "exmMasterSqlDatabaseName": {
+            "value": "[parameters('exmMasterSqlDatabaseName')]"
+          },
+          "exmWebSqlDatabaseName": {
+            "value": "[parameters('exmWebSqlDatabaseName')]"
+          },
+          "exmMasterSqlDatabaseUserName": {
+            "value": "[parameters('exmMasterSqlDatabaseUserName')]"
+          },
+          "exmMasterSqlDatabasePassword": {
+            "value": "[parameters('exmMasterSqlDatabasePassword')]"
+          },
+          "exmWebSqlDatabaseUserName": {
+            "value": "[parameters('exmWebSqlDatabaseUserName')]"
+          },
+          "exmWebSqlDatabasePassword": {
+            "value": "[parameters('exmWebSqlDatabasePassword')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name, '-infrastructure')).outputs.infrastructure.value]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat(deployment().name, '-infrastructure'))]"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "dbApiVersion": "2014-04-01-preview",
+    "dbServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
+    "webDbServerNameTidy": "[toLower(trim(parameters('webSqlServerName')))]",
+    "exmWebDbNameTidy": "[toLower(trim(parameters('exmWebSqlDatabaseName')))]",
+    "exmMasterDbNameTidy": "[toLower(trim(parameters('exmMasterSqlDatabaseName')))]"
+  },
+  "parameters": {
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "sqlServerName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-sql')]"
+    },
+    "webSqlServerName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-web-sql')]"
+    },
+    "exmMasterSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-master-db')]"
+    },
+    "exmWebSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-web-db')]"
+    },
+    "sqlDatabaseCollation": {
+      "type": "string",
+      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+    },
+    "sqlDatabaseEdition": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "sqlDatabaseMaxSize": {
+      "type": "string",
+      "defaultValue": "10737418240"
+    },
+    "sqlDatabaseServiceObjectiveLevel": {
+      "type": "string",
+      "defaultValue": "S1"
+    },
+    "sitecoreTags": {
+      "type": "object",
+      "defaultValue": {
+        "provider": "b51535c2-ab3e-4a68-95f8-e2e3c9a19299"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "[variables('dbApiVersion')]",
+      "properties": {
+        "edition": "[parameters('sqlDatabaseEdition')]",
+        "collation": "[parameters('sqlDatabaseCollation')]",
+        "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]",
+        "requestedServiceObjectiveName": "[parameters('sqlDatabaseServiceObjectiveLevel')]"
+      },
+      "name": "[concat(variables('dbServerNameTidy'), '/', variables('exmMasterDbNameTidy'))]",
+      "location": "[parameters('location')]",
+      "dependsOn": [],
+      "tags": {
+        "provider": "[parameters('sitecoreTags').provider]"
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "apiVersion": "[variables('dbApiVersion')]",
+      "properties": {
+        "edition": "[parameters('sqlDatabaseEdition')]",
+        "collation": "[parameters('sqlDatabaseCollation')]",
+        "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]",
+        "requestedServiceObjectiveName": "[parameters('sqlDatabaseServiceObjectiveLevel')]"
+      },
+      "name": "[concat(variables('webDbServerNameTidy'), '/', variables('exmWebDbNameTidy'))]",
+      "location": "[parameters('location')]",
+      "dependsOn": [],
+      "tags": {
+        "provider": "[parameters('sitecoreTags').provider]"
+      }
+    }
+  ],
+  "outputs": {
+    "infrastructure": {
+      "type": "object",
+      "value": {
+        "sqlServerFqdn": "[reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy')), variables('dbApiVersion')).fullyQualifiedDomainName]",
+        "webSqlServerFqdn": "[reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy')), variables('dbApiVersion')).fullyQualifiedDomainName]"
+      }
+    }
+  }
+}

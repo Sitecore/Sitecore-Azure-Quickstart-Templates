@@ -1,0 +1,171 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-08-01",
+    "webAppNameTidy": "[toLower(trim(parameters('singleWebAppName')))]",
+    "cryptographicKeyTidy": "[trim(parameters('cryptographicKey'))]",
+    "authenticationKeyTidy": "[trim(parameters('authenticationKey'))]",
+    "sqlServerFqdnTidy": "[trim(toLower(parameters('sqlServerFqdn')))]",
+    "webSqlServerFqdnTidy": "[trim(toLower(parameters('webSqlServerFqdn')))]",
+    "coreDbNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
+    "masterDbNameTidy": "[toLower(trim(parameters('masterSqlDatabaseName')))]",
+    "exmWebDbNameTidy": "[toLower(trim(parameters('exmWebSqlDatabaseName')))]",
+    "exmMasterDbNameTidy": "[toLower(trim(parameters('exmMasterSqlDatabaseName')))]"
+  },
+  "parameters": {
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "passwordSalt": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().id]"
+    },
+    "sitecoreAdminPassword": {
+      "type": "securestring",
+      "minLength": 8
+    },
+    "singleWebAppName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-single')]"
+    },
+    "singleExmMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "exmSampleNewsletterMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "exmSampleNewsletterFileMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "sqlServerFqdn": {
+      "type": "string",
+      "defaultValue": "[parameters('infrastructure').sqlServerFqdn]"
+    },
+    "sqlServerLogin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8
+    },
+    "webSqlServerFqdn": {
+      "type": "string",
+      "defaultValue": "[parameters('infrastructure').webSqlServerFqdn]"
+    },
+    "webSqlServerLogin": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('sqlServerLogin')]"
+    },
+    "webSqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('sqlServerPassword')]"
+    },
+    "coreSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-core-db')]"
+    },
+    "masterSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-master-db')]"
+    },
+    "cryptographicKey": {
+      "type": "securestring",
+      "minLength": 34
+    },
+    "authenticationKey": {
+      "type": "securestring",
+      "minLength": 16
+    },
+    "exmWebSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-web-db')]"
+    },
+    "exmMasterSqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-master-db')]"
+    },
+    "exmMasterSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "singleexmmasteruser"
+    },
+    "exmMasterSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('exmMasterSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('exmMasterSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('exmMasterSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "exmWebSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "singleexmwebuser"
+    },
+    "exmWebSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(uniquestring(parameters('exmWebSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('exmWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('exmWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+    },
+    "infrastructure": {
+      "type": "secureObject",
+      "defaultValue": {
+      }
+    }
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('webAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+            "packageUri": "[parameters('singleExmMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('webAppNameTidy')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreDbNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "EXM Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('exmMasterDbNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "EXM Web Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('exmWebDbNameTidy'),';User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]",
+              "Cryptographic Key": "[variables('cryptographicKeyTidy')]",
+              "Authentication Key": "[variables('authenticationKeyTidy')]",
+              "EXM Master DB User Name": "[parameters('exmMasterSqlDatabaseUserName')]",
+              "EXM Master DB Password": "[parameters('exmMasterSqlDatabasePassword')]",
+              "EXM Web DB User Name": "[parameters('exmWebSqlDatabaseUserName')]",
+              "EXM Web DB Password": "[parameters('exmWebSqlDatabasePassword')]",
+              "EXM Master Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('exmMasterDbNameTidy'),';User Id=', parameters('exmMasterSqlDatabaseUserName'), ';Password=', parameters('exmMasterSqlDatabasePassword'), ';')]",
+              "EXM Web Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('exmWebDbNameTidy'),';User Id=', parameters('exmWebSqlDatabaseUserName'), ';Password=', parameters('exmWebSqlDatabasePassword'), ';')]"
+            }
+          },
+          {
+            "packageUri": "[parameters('exmSampleNewsletterMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('webAppNameTidy')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterDbNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
+          },
+          {
+            "packageUri": "[parameters('exmSampleNewsletterFileMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('webAppNameTidy')]"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
