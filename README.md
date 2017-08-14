@@ -7,16 +7,16 @@ You can read all about Sitecore Azure AppService integration and ARM Template de
 # Compatibility
 Choose the compatible templates for your Sitecore version:
 
-| Templates Folder | Compatible Product versions                                                             |
-|------------------|-----------------------------------------------------------------------------------------|
-| Sitecore 8.2.1   | Sitecore 8.2 Update-1 and Update-2                                                      |
-| Sitecore 8.2.3   | Sitecore 8.2 Update-3                                                                   |
-| Sitecore 8.2.4   | Sitecore 8.2 Update-4                                                                   |
-| Sitecore 8.2.5   | Sitecore 8.2 Update-5                                                                   |
-| WFFM 8.2.3       | Web Forms For Marketers 8.2 Update-3, Update-4 and Update-5                             |
-| AD 1.3.0         | Active Directory 1.3                                                                    |
-| EXM 3.5.0        | Email Experience Manager 3.5.0                                                          |
-| SXA 1.3.1        | Sitecore Experience Accelerator 1.3 Update-1 and Sitecore PowerShell Extensions 4.5     |
+| Templates Folder | Compatible Product versions                                           |
+|------------------|-----------------------------------------------------------------------|
+| Sitecore 8.2.1   | Sitecore 8.2 Update-1 and Update-2                                    |
+| Sitecore 8.2.3   | Sitecore 8.2 Update-3                                                 |
+| Sitecore 8.2.4   | Sitecore 8.2 Update-4                                                 |
+| Sitecore 8.2.5   | Sitecore 8.2 Update-5                                                 |
+| WFFM 8.2.3       | Web Forms For Marketers 8.2 Update-3, Update-4 and Update-5           |
+| AD 1.3.0         | Active Directory 1.3                                                  |
+| EXM 3.5.0        | Email Experience Manager 3.5.0                                        |
+| SXA 1.3.1        | Sitecore Experience Accelerator 1.3 Update-1 and 1.4 for Sitecore 8.2 |
 
 # Pre-deployment Checklist
 1. Ensure you have the latest Azure PowerShell SDK installed
