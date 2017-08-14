@@ -19,6 +19,7 @@
     "trackingHistoryMongoDbConnStrTidy": "[trim(parameters('tracking.history.mongodb.connectionstring'))]",
     "trackingContactMongoDbConnStrTidy": "[trim(parameters('tracking.contact.mongodb.connectionstring'))]",
     "searchServiceNameTidy": "[toLower(trim(parameters('searchservice.name')))]",
+    "redisCacheNameTidy": "[toLower(trim(parameters('rediscache.name')))]",
     "appInsightsNameTidy": "[toLower(trim(parameters('applicationinsights.name')))]",
     "licenseXml": "[parameters('licenseXml')]"
   },
@@ -237,7 +238,7 @@
         }
       },
       "location": "[parameters('location')]",
-      "dependsOn": [ "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanNameTidy'))]" ],
+      "dependsOn": [ "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanNameTidy'))]", "[resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy'))]" ],
       "tags": {
         "provider": "[parameters('sitecoreTags').provider]"
       },
@@ -247,7 +248,7 @@
           "type": "extensions",
           "location": "[parameters('location')]",
           "apiVersion": "[variables('webApiVersion')]",
-          "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('webAppNameTidy'))]", "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]", "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('masterDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('repDbNameTidy'))]" ],
+          "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('webAppNameTidy'))]", "[resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy'))]", "[resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy'))]", "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('coreDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('masterDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'), '/databases/', variables('webDbNameTidy'))]", "[concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'), '/databases/', variables('repDbNameTidy'))]" ],
           "properties": {
             "packageUri": "[parameters('single.msdeploy.packageurl')]",
             "dbType": "SQL",
@@ -278,6 +279,7 @@
               "Tracking Contact Connection String": "[variables('trackingContactMongoDbConnStrTidy')]",
               "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
               "Application Insights Role": "Single",
+              "Redis Connection String": "[concat(reference(variables('redisCacheNameTidy')).hostName, ':', reference(variables('redisCacheNameTidy')).sslPort, ',password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).primaryKey, ',ssl=True,abortConnect=False')]",
               "KeepAlive Url": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('webAppNameTidy'))).hostNames[0], '/sitecore/service/keepalive.aspx')]",
               "License Xml": "[variables('licenseXml')]"
             }
@@ -437,6 +439,24 @@
         "ApplicationId": "[variables('appInsightsNameTidy')]",
         "Application_Type": "web"
       },
+      "tags": {
+        "provider": "[parameters('sitecoreTags').provider]"
+      }
+    },
+    {
+      "type": "Microsoft.Cache/Redis",
+      "name": "[variables('redisCacheNameTidy')]",
+      "apiVersion": "[variables('redisApiVersion')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "sku": {
+          "name": "[parameters('rediscache.skuname')]",
+          "family": "[parameters('rediscache.skufamily')]",
+          "capacity": "[parameters('rediscache.skucapacity')]"
+        },
+        "enableNonSslPort": false
+      },
+      "dependsOn": [],
       "tags": {
         "provider": "[parameters('sitecoreTags').provider]"
       }
