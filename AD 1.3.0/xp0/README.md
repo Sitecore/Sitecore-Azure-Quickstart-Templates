@@ -24,7 +24,7 @@ In order to configure Sitecore deployment parameters to include Active Directory
 ```JSON
 {
     "name": "active-directory",
-    "templateLink": "https://raw.githubusercontent.com/Sitecore/sitecore-azure-quickstart-templates/master/ad%201.3.0/xp0/azuredeploy.json",
+    "templateLink": "https://raw.githubusercontent.com/Sitecore/Sitecore-Azure-Quickstart-Templates/master/AD%201.3.0/xp0/azuredeploy.json",
     "parameters": {
         "adMsDeployPackageUrl" : "<URL of the WDP file *.scwdp.zip>"
     }
