@@ -38,7 +38,7 @@
         "singleExmMsDeployPackageUrl": null,
         "exmSampleNewsletterMsDeployPackageUrl": null,
         "exmSampleNewsletterFileMsDeployPackageUrl": null,
-        "exmSetCompatibilityLevelMsDeployPackageUrl": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/1.4/SetCompatibilityLevel.scwdp.zip",       
+        "exmSetCompatibilityLevelMsDeployPackageUrl": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip",       
         "cryptographicKey": null,
         "authenticationKey": null,
         "templateLinkAccessToken": ""

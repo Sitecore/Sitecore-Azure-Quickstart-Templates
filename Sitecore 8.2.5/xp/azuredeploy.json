@@ -143,7 +143,7 @@
     "setCompatibilityLevelMsDeployPackageUrl":{
       "type": "securestring",
       "minLength": 1,
-      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/1.4/SetCompatibilityLevel.scwdp.zip"
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
     },
     "cmMsDeployPackageUrl": {
       "type": "securestring",
