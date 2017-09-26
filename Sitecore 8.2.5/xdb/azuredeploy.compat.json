@@ -112,6 +112,11 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-prc')]"
     },
+    "setcompatibilitylevel.msdeploy.packageurl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/1.4/SetCompatibilityLevel.scwdp.zip"
+    },
     "prc.msdeploy.packageurl": {
       "type": "securestring",
       "minLength": 1
@@ -338,6 +343,9 @@
           },
           "prcWebAppName": {
             "value": "[parameters('prc.webapp.name')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setcompatibilitylevel.msdeploy.packageurl')]"
           },
           "prcMsDeployPackageUrl": {
             "value": "[parameters('prc.msdeploy.packageurl')]"

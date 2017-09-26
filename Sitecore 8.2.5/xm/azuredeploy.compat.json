@@ -113,6 +113,11 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-cm')]"
     },
+    "setcompatibilitylevel.msdeploy.packageurl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/1.4/SetCompatibilityLevel.scwdp.zip"
+    },
     "cm.msdeploy.packageurl": {
       "type": "securestring",
       "minLength": 1
@@ -282,6 +287,9 @@
           },
           "cmWebAppName": {
             "value": "[parameters('cm.webapp.name')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setcompatibilitylevel.msdeploy.packageurl')]"
           },
           "cmMsDeployPackageUrl": {
             "value": "[parameters('cm.msdeploy.packageurl')]"

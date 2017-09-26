@@ -11,6 +11,9 @@
   "sqlserver.password": {
     "value": ""
   },
+  "setcompatibilitylevel.msdeploy.packageurl": {
+    "value": ""
+  },
   "cm.msdeploy.packageurl": {
     "value": ""
   },
