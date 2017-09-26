@@ -65,6 +65,7 @@
 
         "exmSampleNewsletterMsDeployPackageUrl": null,
         "exmSampleNewsletterFileMsDeployPackageUrl": null,
+        "exmSetCompatibilityLevelMsDeployPackageUrl": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/1.4/SetCompatibilityLevel.scwdp.zip",
 
         "bootLoaderMsDeployPackageUrl": null,
 
@@ -158,6 +159,12 @@
     "exmWebSqlDatabaseName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-exm-web-db')]"
+    },
+
+    "exmSetCompatibilityLevelMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').exmSetCompatibilityLevelMsDeployPackageUrl]"
     },
 
     "cmExmMsDeployPackageUrl": {
@@ -458,6 +465,10 @@
             "value": "[parameters('applicationInsightsName')]"
           },
 
+          "exmSetCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('exmSetCompatibilityLevelMsDeployPackageUrl')]"
+          },
+          
           "cmExmMsDeployPackageUrl": {
             "value": "[parameters('cmExmMsDeployPackageUrl')]"
           },
