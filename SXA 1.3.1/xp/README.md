@@ -3,6 +3,7 @@
 
 This template deploys Sitecore Experience Accelerator and PowerShell Extensions modules into a Sitecore XP Environment.
 
+> Note. Email Experience Manager (EXM) module version 3.5 is not compatible with Sitecore Experience Accelerator (SXA). Installing EXM breaks site resolving functionality in SXA solutions.
 ## Parameters
 
 The **deploymentId** parameter is filled in by the PowerShell script.
