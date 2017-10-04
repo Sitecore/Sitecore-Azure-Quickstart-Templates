@@ -4,6 +4,7 @@
 This template deploys Sitecore Experience Accelerator and PowerShell Extensions modules into a Sitecore XP Environment.
 
 > Note. Email Experience Manager (EXM) module version 3.5 is not compatible with Sitecore Experience Accelerator (SXA). Installing EXM breaks site resolving functionality in SXA solutions.
+
 ## Parameters
 
 The **deploymentId** parameter is filled in by the PowerShell script.
@@ -12,16 +13,23 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 -----------------------------------------------|------------------------------------------------
 | sqlServerLogin                               | The name of the administrator account for the newly created Azure SQL server.
 | sqlServerPassword                            | The password for the administrator account for Azure SQL server.
-| cdSxaMsDeployPackageUrl                      | The blob storage URL of Sitecore Experience Accelerator 1.3 rev. 170519 for 8.2.scwdp.zip.
-| cmSxaMsDeployPackageUrl                      | The blob storage URL of Sitecore Experience Accelerator 1.3 rev. 170519 for 8.2 CD.scwdp.zip
-| speMsDeployPackageUrl                        | The blob storage URL of Powershell Extensions-4.5 for Sitecore 8.scwdp.zip.
+| cdSxaMsDeployPackageUrl                      | The HTTP(s) URL of a Sitecore Experience Accelerator Web Deploy package for Content Delivery instance.
+| cmSxaMsDeployPackageUrl                      | The HTTP(s) URL of a Sitecore Experience Accelerator Web Deploy package for Content Management instance.
+| speMsDeployPackageUrl                        | The HTTP(s) URL of a Sitecore Powershell Extensions Web Deploy package.
+
+> **Note**. Each SXA version requires SPE version it is compatible with according to the following table:
+
+| SXA version   | SPE version
+----------------|-------------
+| 1.3.1         | 4.5
+| 1.4.0         | 4.6
+| 1.5.0         | 4.7
 
 ## Deploying as part of Sitecore deployment
 
 In order to configure Sitecore deployment parameters to include Sitecore Experience Accelerator:
 
-  * Configure Bootloader module according to [Modules.md](../../MODULES.md)
-  * Add the following snippet to the `modules` parameter (ensure the template link is pointing to the right SXA version):
+* Add the following snippet to the `modules` parameter (ensure the template link is pointing to the right SXA version):
 
 ```JSON
 {
@@ -34,3 +42,6 @@ In order to configure Sitecore deployment parameters to include Sitecore Experie
     }
 }
 ```
+
+* Configure Bootloader module according to [Modules.md](../../MODULES.md)
+> **Note**. The Bootloader module should be placed after the SXA.
