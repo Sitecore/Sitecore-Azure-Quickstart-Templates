@@ -11,9 +11,6 @@
     "sqlServerPassword": {
       "value": ""
     },
-    "setCompatibilityLevelMsDeployPackageUrl":{
-      "value": ""
-    },
     "cmMsDeployPackageUrl": {
       "value": ""
     },
