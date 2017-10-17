@@ -58,7 +58,7 @@ Parameters that should be passed to the module depend on the actual deployment t
 
 ## Example
 
-Here is an example of `modules` parameter with Bootloader and Web Forms for Marketers module definitions for XP0 environment:
+Here is an example of `modules` parameter with Bootloader and Web Forms for Marketers module definitions for XP Single environment:
 
 ``` JSON
 {
@@ -73,7 +73,7 @@ Here is an example of `modules` parameter with Bootloader and Web Forms for Mark
 			"items": [
 				{
 					"name": "wffm",
-					"templateLink": "<URL of WFFM/xp0/azuredeploy.json>",
+					"templateLink": "<URL of WFFM/XPSingle/azuredeploy.json>",
 					"parameters": {
 						"singleMsDeployPackageUrl" : "<URL to the WDP file>"
 					}
