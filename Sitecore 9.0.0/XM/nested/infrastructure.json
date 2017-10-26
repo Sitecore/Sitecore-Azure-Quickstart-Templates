@@ -363,7 +363,7 @@
           "redisCache": {
             "SkuName": "Standard",
             "SkuFamily": "C",
-            "SkuCapacity": 1
+            "SkuCapacity": 2
           },
           "applicationInsightsPricePlan": {
             "CurrentBillingFeatures": "Application Insights Enterprise",

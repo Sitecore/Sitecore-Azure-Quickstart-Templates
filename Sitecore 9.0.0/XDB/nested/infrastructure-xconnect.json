@@ -240,7 +240,7 @@
           },
           "xcResourceIntensiveHostingPlan": {
             "SkuName": "S3",
-            "SkuCapacity": 3
+            "SkuCapacity": 4
           },
           "refDataSqlDatabase": {
             "Edition": "Standard",
