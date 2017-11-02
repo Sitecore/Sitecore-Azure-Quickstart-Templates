@@ -107,7 +107,7 @@
     },
     "applicationInsightsLocation": {
       "type": "string",
-      "allowedValues": [ "East US", "South Central US", "North Europe", "West Europe" ]
+      "defaultValue": "East US"
     },
     "applicationInsightsPricePlan": {
       "type": "string",
