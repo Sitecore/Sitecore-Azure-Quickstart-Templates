@@ -2,7 +2,7 @@
 This repo contains all currently available Azure Resource Manager templates for Sitecore
 
 # Documentation
-You can read all about Sitecore Azure AppService integration and ARM Template deployment at [Sitecore Documentation Site](https://doc.sitecore.net/cloud)
+You can read all about Sitecore Azure AppService integration and ARM Template deployment at [Sitecore Documentation Site](https://doc.sitecore.net/sitecore_azure_toolkit)
 
 # Compatibility
 Choose the compatible templates for your Sitecore version:

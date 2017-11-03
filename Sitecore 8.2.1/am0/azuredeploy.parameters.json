@@ -1,0 +1,50 @@
+﻿{
+  "deploymentId": {
+    "value": ""
+  },
+  "sqlserver.name": {
+    "value": ""
+  },
+  "app.cm.msdeploy.packageurl": {
+    "value": ""
+  },
+  "core.sqldatabase.name": {
+    "value": ""
+  },
+  "master.sqldatabase.name": {
+    "value": ""
+  },
+  "web.sqldatabase.name": {
+    "value": ""
+  },
+  "cm.core.sqldatabase.username": {
+    "value": ""
+  },
+  "cm.core.sqldatabase.password": {
+    "value": ""
+  },
+  "cm.master.sqldatabase.username": {
+    "value": ""
+  },
+  "cm.master.sqldatabase.password": {
+    "value": ""
+  },
+  "cm.web.sqldatabase.username": {
+    "value": ""
+  },
+  "cm.web.sqldatabase.password": {
+    "value": ""
+  },
+  "searchservice.name": {
+    "value": ""
+  },
+  "searchservice.apiKey": {
+    "value": ""
+  },
+  "applicationinsights.instrumentationKey": {
+    "value": ""
+  },
+  "licenseXml": {
+    "value": ""
+  }
+}
