@@ -67,8 +67,8 @@ foreach($p in $params | Get-Member -MemberType *Property)
     $additionalParams.Add($p.Name, $params.$($p.Name).value)
 }
 
-$additionalParams.licenseXml = $licenseFileContent
-$additionalParams.deploymentId = $Name
+$additionalParams.Set_Item('licenseXml', $licenseFileContent)
+$additionalParams.Set_Item('deploymentId', $Name);
 
 # Inject Certificate Blob and Password into the parameters
 if ($certificateBlob) {
