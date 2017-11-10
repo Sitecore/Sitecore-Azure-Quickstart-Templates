@@ -57,13 +57,18 @@ $additionalParams = New-Object -TypeName Hashtable
 
 $params = Get-Content $ArmParametersPath -Raw | ConvertFrom-Json
 
+if ($params.parameters -ne $null)
+{
+     $params = $params.parameters
+}
+
 foreach($p in $params | Get-Member -MemberType *Property)
 {
     $additionalParams.Add($p.Name, $params.$($p.Name).value)
 }
 
-$additionalParams.licenseXml = $licenseFileContent
-$additionalParams.deploymentId = $Name
+$additionalParams.Set_Item('licenseXml', $licenseFileContent)
+$additionalParams.Set_Item('deploymentId', $Name);
 
 # Inject Certificate Blob and Password into the parameters
 if ($certificateBlob) {
