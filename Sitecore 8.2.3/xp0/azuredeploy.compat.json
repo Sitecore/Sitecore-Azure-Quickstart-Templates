@@ -11,7 +11,7 @@
     },
     "templateLink": {
       "type": "securestring",
-      "defaultValue": "[uri(replace(deployment().properties.templateLink.uri, ' ', '%20'), 'azuredeploy.json')]"
+      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri, ' ', '%20'), 'azuredeploy.json')]"
     },
 
     "deploymentId": {
