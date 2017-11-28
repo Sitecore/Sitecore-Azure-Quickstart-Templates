@@ -1,0 +1,127 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "variables": {
+        "vNetNameTidy": "[toLower(trim(parameters('vNetName')))]",
+        "vNetSubnetNameTidy": "[toLower(trim(parameters('vNetSubnetName')))]",
+        "aseNameTidy": "[toLower(trim(parameters('aseName')))]",
+        "aseSizeConfig": "[variables('aseSizeConfigs')[parameters('aseSize')]]",
+        "aseSizeConfigs": {
+          "small": {
+            "frontEndScaleFactor": 15,
+            "multiRoleCount": 2,
+            "multiSize": "Medium",
+            "workerPools": 1,
+            "defaultFrontEndScaleFactor": 15
+          },
+          "medium": {
+            "frontEndScaleFactor": 15,
+            "multiRoleCount": 2,
+            "multiSize": "Large",
+            "workerPools": 2,
+            "defaultFrontEndScaleFactor": 15
+          },
+          "large": {
+            "frontEndScaleFactor": 15,
+            "multiRoleCount": 2,
+            "multiSize": "ExtraLarge",
+            "workerPools": 3,
+            "defaultFrontEndScaleFactor": 15
+          }
+        }
+    },
+    "parameters": {
+        "deploymentId": {
+          "type": "string",
+          "defaultValue": "[resourceGroup().name]"
+        },
+        "vNetName": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "[concat(parameters('deploymentId'), '-vnet')]"
+        },
+        "vNetSubnetName": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "[concat(parameters('deploymentId'), '-subnet')]"
+        },
+        "vNetAddressPrefix": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "10.0.0.0/24"
+        },
+        "aseName": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "[concat(parameters('deploymentId'), '-ase')]"
+        },
+        "aseIpSslCount": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "Number of IP addresses for the IP-SSL address pool.  This value *must* be zero when internalLoadBalancing mode is set to either 1 or 3."
+            }
+        },
+        "aseSize": {
+            "type": "string",
+            "allowedValues": [ "small", "medium", "large" ]
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1,
+          "defaultValue": "[resourceGroup().location]"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2016-09-01",
+            "name": "[variables('aseNameTidy')]",
+            "type": "Microsoft.Web/hostingEnvironments",
+            "location": "[parameters('location')]",
+            "dependsOn": [ "[resourceId('Microsoft.Network/virtualNetworks', variables('vNetNameTidy'))]" ],
+            "sku": "",
+            "kind": "ASEV2",
+            "tags": {
+                "displayName": "[variables('aseNameTidy')]"
+            },
+            "properties": {
+                "name": "[variables('aseNameTidy')]",
+                "ipSslAddressCount": "[parameters('aseIpSslCount')]",
+                "location": "[parameters('location')]",
+                "frontEndScaleFactor": "[variables('aseSizeConfig').frontEndScaleFactor]",
+                "multiSize": "[variables('aseSizeConfig').multiSize]",
+                "multiRoleCount": "[variables('aseSizeConfig').multiRoleCount]",
+                "defaultFrontEndScaleFactor": "[variables('aseSizeConfig').defaultFrontEndScaleFactor]",
+                "workerPools": "[variables('aseSizeConfig').workerPools]",
+                "virtualNetwork": {
+                    "Id": "[resourceId('Microsoft.Network/virtualNetworks/', variables('vNetNameTidy'))]",
+                    "type": "Microsoft.Network/virtualNetworks",
+                    "Subnet": "[variables('vNetSubnetNameTidy')]"
+                }
+            }
+        },
+        {
+            "name": "[variables('vNetNameTidy')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[parameters('location')]",
+            "apiVersion": "2015-06-15",
+            "tags": {
+                "displayName": "[variables('vNetNameTidy')]"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [ "[parameters('vNetAddressPrefix')]" ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('vNetSubnetNameTidy')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('vNetAddressPrefix')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+  }
+  
