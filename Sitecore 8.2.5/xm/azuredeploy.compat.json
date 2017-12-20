@@ -124,7 +124,7 @@
     "cm.core.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('cm.core.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('cm.core.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('cm.core.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('cmcore', parameters('password.salt'))), uniqueString('cmcore', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('cmcore', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "cm.master.sqldatabase.username": {
       "type": "string",
@@ -134,7 +134,7 @@
     "cm.master.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('cm.master.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('cm.master.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('cm.master.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('cmmaster', parameters('password.salt'))), uniqueString('cmmaster', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('cmmaster', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "cm.web.sqldatabase.username": {
       "type": "string",
@@ -144,7 +144,7 @@
     "cm.web.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('cm.web.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('cm.web.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('cm.web.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('cmweb', parameters('password.salt'))), uniqueString('cmweb', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('cmweb', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
 
     "cd.hostingplan.name": {
@@ -167,7 +167,7 @@
     "cd.core.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('cd.core.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('cd.core.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('cd.core.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('cdcore', parameters('password.salt'))), uniqueString('cdcore', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('cdcore', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "cd.web.sqldatabase.username": {
       "type": "string",
@@ -177,7 +177,7 @@
     "cd.web.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('cd.web.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('cd.web.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('cd.web.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('cdweb', parameters('password.salt'))), uniqueString('cdweb', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('cdweb', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
 
     "security.clientIp": {

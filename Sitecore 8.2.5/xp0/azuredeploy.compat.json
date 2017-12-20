@@ -155,7 +155,7 @@
     "single.core.sqldatabase.password": {
       "minLength": 8,
       "type": "securestring",
-      "defaultValue": "[concat(uniquestring(parameters('single.core.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('single.core.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('single.core.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('singlecore', parameters('password.salt'))), uniqueString('singlecore', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('singlecore', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "single.master.sqldatabase.username": {
       "type": "string",
@@ -165,7 +165,7 @@
     "single.master.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('single.master.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('single.master.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('single.master.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('singlemaster', parameters('password.salt'))), uniqueString('singlemaster', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('singlemaster', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "single.web.sqldatabase.username": {
       "type": "string",
@@ -175,7 +175,7 @@
     "single.web.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('single.web.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('single.web.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('single.web.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('singleweb', parameters('password.salt'))), uniqueString('singleweb', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('singleweb', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "single.reporting.sqldatabase.username": {
       "defaultValue": "singlereportinguser",
@@ -185,7 +185,7 @@
     "single.reporting.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('single.reporting.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('single.reporting.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('single.reporting.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('singlereporting', parameters('password.salt'))), uniqueString('singlereporting', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('singlereporting', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
 
     "analytics.mongodb.connectionstring": {

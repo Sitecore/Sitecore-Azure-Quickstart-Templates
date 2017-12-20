@@ -117,7 +117,7 @@
     "singleCoreSqlDatabasePassword": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('singleCoreSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('singleCoreSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('singleCoreSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('singlecore', parameters('passwordSalt'))), uniqueString('singlecore', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('singlecore', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
     "singleMasterSqlDatabaseUserName": {
       "type": "string",
@@ -127,7 +127,7 @@
     "singleMasterSqlDatabasePassword": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('singleMasterSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('singleMasterSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('singleMasterSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('singlemaster', parameters('passwordSalt'))), uniqueString('singlemaster', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('singlemaster', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
     "singleWebSqlDatabaseUserName": {
       "type": "string",
@@ -137,7 +137,7 @@
     "singleWebSqlDatabasePassword": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('singleWebSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('singleWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('singleWebSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('singleweb', parameters('passwordSalt'))), uniqueString('singleweb', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('singleweb', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
     "singleReportingSqlDatabaseUserName": {
       "type": "string",
@@ -147,7 +147,7 @@
     "singleReportingSqlDatabasePassword": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('singleReportingSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('singleReportingSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('singleReportingSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('singlereporting', parameters('passwordSalt'))), uniqueString('singlereporting', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('singlereporting', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
 
     "analyticsMongoDbConnectionString": {
@@ -170,7 +170,7 @@
     "telerikEncryptionKey": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(toUpper(uniqueString('telerik', parameters('passwordSalt'))), '@', uniqueString('telerik', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('telerik', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))))]"
+      "defaultValue": "[concat(toUpper(uniqueString('telerik', parameters('passwordSalt'))), uniqueString('telerik', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('telerik', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
     
     "infrastructure": {
