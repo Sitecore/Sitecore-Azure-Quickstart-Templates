@@ -123,7 +123,7 @@
     "prc.core.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('prc.core.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('prc.core.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('prc.core.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('prccore', parameters('password.salt'))), uniqueString('prccore', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('prccore', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "prc.master.sqldatabase.username": {
       "type": "string",
@@ -133,7 +133,7 @@
     "prc.master.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('prc.master.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('prc.master.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('prc.master.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('prcmaster', parameters('password.salt'))), uniqueString('prcmaster', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('prcmaster', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "prc.web.sqldatabase.username": {
       "type": "string",
@@ -143,7 +143,7 @@
     "prc.web.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('prc.web.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('prc.web.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('prc.web.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('prcweb', parameters('password.salt'))), uniqueString('prcweb', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('prcweb', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "prc.reporting.sqldatabase.username": {
       "type": "string",
@@ -153,7 +153,7 @@
     "prc.reporting.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('prc.reporting.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('prc.reporting.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('prc.reporting.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('prcreporting', parameters('password.salt'))), uniqueString('prcreporting', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('prcreporting', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
 
     "rep.hostingplan.name": {
@@ -176,7 +176,7 @@
     "rep.core.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('rep.core.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('rep.core.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('rep.core.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('repcore', parameters('password.salt'))), uniqueString('repcore', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('repcore', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "rep.master.sqldatabase.username": {
       "type": "string",
@@ -186,7 +186,7 @@
     "rep.master.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('rep.master.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('rep.master.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('rep.master.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('repmaster', parameters('password.salt'))), uniqueString('repmaster', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('repmaster', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "rep.web.sqldatabase.username": {
       "type": "string",
@@ -196,7 +196,7 @@
     "rep.web.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('rep.web.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('rep.web.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('rep.web.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('repweb', parameters('password.salt'))), uniqueString('repweb', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('repweb', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "rep.reporting.sqldatabase.username": {
       "type": "string",
@@ -207,7 +207,7 @@
     "rep.reporting.sqldatabase.password": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(uniquestring(parameters('rep.reporting.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('rep.reporting.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('rep.reporting.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
+      "defaultValue": "[concat(toUpper(uniqueString('repreporting', parameters('password.salt'))), uniqueString('repreporting', parameters('sqlserver.password'), parameters('password.salt')), toUpper(uniqueString('repreporting', parameters('sitecore.admin.password'), parameters('password.salt'))), '4@')]"
     },
     "rep.authentication.apikey": {
       "type": "securestring",

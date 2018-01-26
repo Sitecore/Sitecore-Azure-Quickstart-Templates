@@ -1,0 +1,291 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-08-01",
+    "appInsightsApiVersion": "2015-05-01",
+    "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
+    "poolsSqlDatabaseNameTidy": "[toLower(trim(parameters('poolsSqlDatabaseName')))]",
+    "maSqlDatabaseNameTidy": "[toLower(trim(parameters('maSqlDatabaseName')))]",
+    "refDataSqlDatabaseNameTidy": "[toLower(trim(parameters('refDataSqlDatabaseName')))]",
+    "shardMapManagerSqlDatabaseNameTidy": "[toLower(trim(parameters('shardMapManagerSqlDatabaseName')))]",
+    "messagingSqlDatabaseNameTidy": "[toLower(trim(parameters('messagingSqlDatabaseName')))]",
+    "xcRefDataWebAppNameTidy": "[toLower(trim(parameters('xcRefDataWebAppName')))]",
+    "xcCollectWebAppNameTidy": "[toLower(trim(parameters('xcCollectWebAppName')))]",
+    "maOpsWebAppNameTidy": "[toLower(trim(parameters('maOpsWebAppName')))]",
+    "maRepWebAppNameTidy": "[toLower(trim(parameters('maRepWebAppName')))]",
+    "appInsightsNameTidy": "[toLower(trim(parameters('applicationInsightsName')))]"
+  },
+  "parameters": {
+    "infrastructure": {
+      "type": "secureObject",
+      "defaultValue": {
+        "sqlServerFqdn": null,
+        "authCertificateThumbprint": null
+      }
+    },
+
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().location]"
+    },
+
+    "sitecoreAdminPassword": {
+      "type": "securestring",
+      "minLength": 8
+    },
+    "licenseXml": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
+    "sqlServerFqdn": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('infrastructure').sqlServerFqdn]"
+    },
+    "sqlServerLogin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8
+    },
+
+    "poolsSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-pools-db')]"
+    },
+    "maSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ma-db')]"
+    },
+    "refDataSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-refdata-db')]"
+    },
+    "shardMapManagerSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-smm-db')]"
+    },
+    "messagingSqlDatabaseName" : {
+      "type": "string",
+      "minLength" : 1,
+      "defaultValue" : "[concat(parameters('deploymentId'), '-messaging-db')]"
+    },
+
+    "poolsSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "poolsuser"
+    },
+    "poolsSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('pools', parameters('passwordSalt'))), uniqueString('pools', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('pools', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
+    },
+    "xcRefDataSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "xcrefdatauser"
+    },
+    "xcRefDataSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('xcrefdata', parameters('passwordSalt'))), uniqueString('xcrefdata', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('xcrefdata', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
+    },
+    "xcMaSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "xcmauser"
+    },
+    "xcMaSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('xcma', parameters('passwordSalt'))), uniqueString('xcma', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('xcma', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
+    },
+    "xcShardMapManagerSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "xcsmmuser"
+    },
+    "xcShardMapManagerSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('xcsmm', parameters('passwordSalt'))), uniqueString('xcsmm', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('xcsmm', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
+    },
+    "messagingSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "messaginguser"
+    },
+    "messagingSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('messaging', parameters('passwordSalt'))), uniqueString('messaging', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('messaging', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
+    },
+
+    "applicationInsightsName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ai')]"
+    },
+
+    "xcRefDataWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-xc-refdata')]"
+    },
+    "xcCollectWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-xc-collect')]"
+    },
+    "maOpsWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ma-ops')]"
+    },
+    "maRepWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ma-rep')]"
+    },
+
+    "authCertificateThumbprint": {
+      "type": "string",
+      "minLength": 8,
+      "defaultValue": "[parameters('infrastructure').authCertificateThumbprint]"
+    },
+
+    "maOpsMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "maRepMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
+    "allowInvalidClientCertificates": {
+      "type": "bool",
+      "defaultValue":false
+    },
+
+    "passwordSalt": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().id]"
+    },
+
+    "xcServerConfigurationEnvironment": {
+      "type": "string",
+      "defaultValue": "Production",
+      "allowedValues": [ "Development", "Production" ]
+    }
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('maOpsWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "packageUri": "[parameters('maOpsMsDeployPackageUrl')]",
+        "dbType": "SQL",
+        "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+        "setParameters": {
+          "IIS Web Application Name": "[variables('maOpsWebAppNameTidy')]",
+          "Database Server Name": "[variables('sqlServerFqdnTidy')]",
+          "Database Admin User Name": "[parameters('sqlServerLogin')]",
+          "Database Admin User Password": "[parameters('sqlServerPassword')]",
+          "Collection Database Server Name": "[variables('sqlServerFqdnTidy')]",
+          "Processing Pools Database Name": "[variables('poolsSqlDatabaseNameTidy')]",
+          "Processing Pool Database Application User Name": "[parameters('poolsSqlDatabaseUserName')]",
+          "Processing Pool Database Application User Password": "[parameters('poolsSqlDatabasePassword')]",
+          "Collection Shard Map Manager Database Name": "[variables('shardMapManagerSqlDatabaseNameTidy')]",
+          "Collection Database Application User Name": "[parameters('xcShardMapManagerSqlDatabaseUserName')]",
+          "Collection Database Application User Password": "[parameters('xcShardMapManagerSqlDatabasePassword')]",
+          "Marketing Automation Database Name": "[variables('maSqlDatabaseNameTidy')]",
+          "Messaging Database Name": "[variables('messagingSqlDatabaseNameTidy')]",
+          "Reference Data Database Name": "[variables('refDataSqlDatabaseNameTidy')]",
+          "Reference Data Database Application User Name": "[parameters('xcRefDataSqlDatabaseUserName')]",
+          "Reference Data Database Application User Password": "[parameters('xcRefDataSqlDatabasePassword')]",
+          "Marketing Automation Database Application User Name": "[parameters('xcMaSqlDatabaseUserName')]",
+          "Marketing Automation Database Application User Password": "[parameters('xcMaSqlDatabasePassword')]",
+          "Messaging Database Application User Name": "[parameters('messagingSqlDatabaseUserName')]",
+          "Messaging Database Application User Password": "[parameters('messagingSqlDatabasePassword')]",
+          "XConnect Server Configuration Environment": "[parameters('xcServerConfigurationEnvironment')]",
+          "XConnect Server Certificate Validation Thumbprint": "[parameters('authCertificateThumbprint')]",
+          "Marketing Automation Engine Xconnect Collection Client Endpoint": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('xcCollectWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
+          "Marketing Automation Engine Xconnect Collection Client Certificate Thumbprint": "[parameters('authCertificateThumbprint')]",
+          "Marketing Automation Engine Xdb Reference Data Endpoint": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('xcRefDataWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
+          "Marketing Automation Engine Xdb Reference Data Client Certificate Thumbprint": "[parameters('authCertificateThumbprint')]",
+          "Allow Invalid Client Certificates": "[parameters('allowInvalidClientCertificates')]",
+          "XConnect Server Application Insights Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey]",
+          "XConnect Server Instance Name": "MarketingAutomation",
+          "License Xml": "[parameters('licenseXml')]"
+        }
+      }
+    },
+    {
+      "name": "[concat(variables('maRepWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "packageUri": "[parameters('maRepMsDeployPackageUrl')]",
+        "setParameters": {
+          "IIS Web Application Name": "[variables('maRepWebAppNameTidy')]",
+          "Database Server Name": "[variables('sqlServerFqdnTidy')]",
+          "Marketing Automation Database Name": "[variables('maSqlDatabaseNameTidy')]",
+          "Reference Data Database Name": "[variables('refDataSqlDatabaseNameTidy')]",
+          "Reference Data Database Application User Name": "[parameters('xcRefDataSqlDatabaseUserName')]",
+          "Reference Data Database Application User Password": "[parameters('xcRefDataSqlDatabasePassword')]",
+          "Marketing Automation Database Application User Name": "[parameters('xcMaSqlDatabaseUserName')]",
+          "Marketing Automation Database Application User Password": "[parameters('xcMaSqlDatabasePassword')]",
+          "XConnect Server Configuration Environment": "[parameters('xcServerConfigurationEnvironment')]",
+          "XConnect Server Certificate Validation Thumbprint": "[parameters('authCertificateThumbprint')]",
+          "Allow Invalid Client Certificates": "[parameters('allowInvalidClientCertificates')]",
+          "XConnect Server Application Insights Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey]",
+          "XConnect Server Instance Name": "MarketingAutomationReporting",
+          "License Xml": "[parameters('licenseXml')]"
+        }
+      }
+    },
+    {
+      "name": "[concat(variables('maOpsWebAppNameTidy'), '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
+        "WEBSITE_DYNAMIC_CACHE": 0
+      },
+        "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/extensions', variables('maOpsWebAppNameTidy'),'MSDeploy')]"
+      ]
+    },
+    {
+      "name": "[concat(variables('maRepWebAppNameTidy'), '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
+        "WEBSITE_DYNAMIC_CACHE": 0
+      },
+       "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/extensions', variables('maRepWebAppNameTidy'),'MSDeploy')]"
+      ]
+    }
+  ]
+}

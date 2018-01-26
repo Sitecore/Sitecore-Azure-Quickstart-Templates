@@ -1,0 +1,60 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentId": {
+      "value": ""
+    },
+    "location": {
+      "value": ""
+    },
+    "sitecoreAdminPassword": {
+      "value": ""
+    },
+    "licenseXml": {
+      "value": ""
+    },
+    "repAuthenticationApiKey": {
+      "value": ""
+    },
+    "sqlServerLogin": {
+      "value": ""
+    },
+    "sqlServerPassword": {
+      "value": ""
+    },
+    "cmMsDeployPackageUrl": {
+      "value": ""
+    },
+    "cdMsDeployPackageUrl": {
+      "value": ""
+    },
+    "prcMsDeployPackageUrl": {
+      "value": ""
+    },
+    "repMsDeployPackageUrl": {
+      "value": ""
+    },
+    "xcRefDataMsDeployPackageUrl": {
+      "value": ""
+    },
+    "xcCollectMsDeployPackageUrl": {
+      "value": ""
+    },
+    "xcSearchMsDeployPackageUrl": {
+      "value": ""
+    },
+    "maOpsMsDeployPackageUrl": {
+      "value": ""
+    },
+    "maRepMsDeployPackageUrl": {
+      "value": ""
+    }, 
+    "authCertificateBlob":{
+      "value": ""
+    },
+    "authCertificatePassword":{
+      "value": ""
+    }
+  }
+}

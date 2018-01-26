@@ -12,10 +12,11 @@ Choose the compatible templates for your Sitecore version:
 | Sitecore 8.2.1   | Sitecore 8.2 Update-1 and Update-2                                    |
 | Sitecore 8.2.3   | Sitecore 8.2 Update-3                                                 |
 | Sitecore 8.2.4   | Sitecore 8.2 Update-4                                                 |
-| Sitecore 8.2.5   | Sitecore 8.2 Update-5                                                 |
-| Sitecore 9.0.0   | Sitecore 9.0 		                                                   |
+| Sitecore 8.2.5   | Sitecore 8.2 Update-5 and Update-6                                    |
+| Sitecore 9.0.0   | Sitecore 9.0	                                                   |
+| Sitecore 9.0.1   | Sitecore 9.0 Update-1 <br />Please note that these ARM templates link to an additional WDP in order to resolve a potential performance issue on start-up (see KB [article](https://kb.sitecore.net/articles/290593) for more info).                                               	|
 | WFFM 8.2.3       | Web Forms For Marketers 8.2 Update-3, Update-4 and Update-5           |
-| WFFM 9.0.0       | Web Forms For Marketers 9.0								           |
+| WFFM 9.0.0       | Web Forms For Marketers 9.0				           |
 | AD 1.3.0         | Active Directory 1.3                                                  |
 | EXM 3.5.0        | Email Experience Manager 3.5.0                                        |
 | SXA         | Sitecore Experience Accelerator 1.3 - 1.5 for Sitecore 8.2 and Sitecore Experience Accelerator 1.5 for Sitecore 9.0	 |
