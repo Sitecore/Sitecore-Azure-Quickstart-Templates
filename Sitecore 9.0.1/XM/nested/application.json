@@ -179,7 +179,7 @@
               "Application Path": "[variables('cmWebAppNameTidy')]",
               "Sitecore Admin New Password": "[parameters('sitecoreAdminPassword')]",
               "Core DB User Name": "[parameters('coreSqlDatabaseUserName')]",
-              "Core DB Password": "[parameters('coreSqlDatabasePassword')]",
+              "Core DB User Password": "[parameters('coreSqlDatabasePassword')]",
               "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
               "Core Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('coreSqlDatabaseUserName'), ';Password=', parameters('coreSqlDatabasePassword'), ';')]",
               "Master DB User Name": "[parameters('masterSqlDatabaseUserName')]",
