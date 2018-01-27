@@ -19,7 +19,7 @@ Choose the compatible templates for your Sitecore version:
 | WFFM 9.0.0       | Web Forms For Marketers 9.0				           |
 | AD 1.3.0         | Active Directory 1.3                                                  |
 | EXM 3.5.0        | Email Experience Manager 3.5.0                                        |
-| SXA         | Sitecore Experience Accelerator 1.3 - 1.5 for Sitecore 8.2 and Sitecore Experience Accelerator 1.5 for Sitecore 9.0	 |
+| SXA         | Sitecore Experience Accelerator 1.3 - 1.5 for Sitecore 8.2 and Sitecore Experience Accelerator 1.5 - 1.6 for Sitecore 9.0	 |
 | Sitecore XC 9.0.0 | Sitecore Experience Commerce 9.0 Initial                             |
 | SXA Storefront 1.0 | SXA Storefront 1.0 for Sitecore XC 9.0 Initial                      |
 
