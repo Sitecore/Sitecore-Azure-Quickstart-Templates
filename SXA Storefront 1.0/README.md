@@ -29,24 +29,16 @@ In order to configure Sitecore deployment parameters to include the SXA Storefro
 
 ```JSON
 {
-
     "name": "sxa-sf",
-
     "templateLink": "https://raw.githubusercontent.com/Sitecore/Sitecore-Azure-Quickstart-Templates/master/SXA%20Storefront%201.0/azuredeploy.json",
-
     "parameters": {
-
         "sxaMsDeployPackageUrl": "",
-
         "sxaStorefrontMsDeployPackageUrl": "",
-
         "sxaHabitatCatalogMsDeployPackageUrl": "",
-
         "sxaStorefrontThemesMsDeployPackageUrl": ""
-
     }
 }
 ```
 
-* Configure Bootloader module according to [Modules.md](../../MODULES.md)
+* Configure Bootloader module according to [Modules.md](../MODULES.md)
 > **Note**. The Bootloader module should be placed after the Commerce, SXA, and SXA-SF entries.
