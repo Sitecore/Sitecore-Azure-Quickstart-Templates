@@ -70,7 +70,7 @@ In order to configure Sitecore deployment parameters to include the Sitecore XC 
         "defaultShopCurrency": "<default shop currency>",
         "defaultShopLanguage": "<default shop language>"
     }
-}
+},
 ```
 
 * Configure Bootloader module according to [Modules.md](../MODULES.md)
