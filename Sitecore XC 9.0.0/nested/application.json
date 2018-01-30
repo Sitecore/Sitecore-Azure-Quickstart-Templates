@@ -623,6 +623,7 @@
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
+      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('opsWebAppNameTidy'), '/Extensions/MSDeploy')]" ],
       "properties": {
         "addOnPackages": [
           {
@@ -679,6 +680,7 @@
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
+      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('authoringWebAppNameTidy'), '/Extensions/MSDeploy')]" ],      
       "properties": {
         "addOnPackages": [
           {
@@ -736,6 +738,7 @@
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
+      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('minionsWebAppNameTidy'), '/Extensions/MSDeploy')]" ],            
       "properties": {
         "addOnPackages": [
           {
