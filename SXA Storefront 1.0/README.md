@@ -33,7 +33,7 @@ In order to configure Sitecore deployment parameters to include the SXA Storefro
     "templateLink": "https://raw.githubusercontent.com/Sitecore/Sitecore-Azure-Quickstart-Templates/master/SXA%20Storefront%201.0/azuredeploy.json",
     "parameters": {
         "siteName": "<site name>",
-        "environmentName"": "<environment name>",        
+        "environmentName": "<environment name>",        
         "sxaMsDeployPackageUrl": "<URL for WDP>",
         "sxaStorefrontMsDeployPackageUrl": "<URL for WDP>",
         "sxaHabitatCatalogMsDeployPackageUrl": "<URL for WDP>",
