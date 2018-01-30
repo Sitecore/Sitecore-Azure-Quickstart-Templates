@@ -34,8 +34,8 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 | braintreeEnvironment                         | Specifies where requests via the API are directed – sandbox or production. 
 | environmentName                              | The Commerce Engine environment serving the Storefront site.
 | defaultShopName                              | The name of the Storefront site.
-| defaultShopCurrency                          | The default currency currency, e.g. USD.
-| defaultShopLanguage                          | The default language configured language.
+| defaultShopCurrency                          | The default currency currency, e.g. "USD".
+| defaultShopLanguage                          | The default language configured language, e.g. "en".
 
 
 
@@ -50,28 +50,28 @@ In order to configure Sitecore deployment parameters to include the Sitecore XC 
     "name": "Commerce",
     "templateLink": "https://raw.githubusercontent.com/Sitecore/Sitecore-Azure-Quickstart-Templates/master/Sitecore%20XC%209.0.0/azuredeploy.json",
     "parameters": {
-        "templateLinkAccessToken": "",
-        "commerceConnectMsDeployPackageUrl": "",
-        "commerceEngineCloudMsDeployPackageUrl": "",
-        "commerceEngineConnectCdMsDeployPackageUrl": "",
-        "commerceEngineConnectCmMsDeployPackageUrl": "",
-        "idServerCloudMsDeployPackageUrl": "",
-        "bizfxCloudMsDeployPackageUrl": "",
-        "adventureWorksImagesDeployPackageUrl": "",
-        "habitatImagesDeployPackageUrl": "",
-        "indexWorkerDefinitionsDeployPackageUrl": "",
-        "xConnectDefinitionsDeployPackageUrl": "",
-        "braintreeMerchantId": "",
-        "braintreePublicKey": "",
-        "braintreePrivateKey": "",
-        "braintreeEnvironment": "",
-        "environmentName": "",
-        "defaultShopName": "",
-        "defaultShopCurrency": "",
-        "defaultShopLanguage": ""
+        "templateLinkAccessToken": "<SAS-token>",
+        "commerceConnectMsDeployPackageUrl": "<URL for WDP>",
+        "commerceEngineCloudMsDeployPackageUrl": "<URL for WDP>",
+        "commerceEngineConnectCdMsDeployPackageUrl": "<URL for WDP>",
+        "commerceEngineConnectCmMsDeployPackageUrl": "<URL for WDP>",
+        "idServerCloudMsDeployPackageUrl": "<URL for WDP>",
+        "bizfxCloudMsDeployPackageUrl": "<URL for WDP>",
+        "adventureWorksImagesDeployPackageUrl": "<URL for WDP>",
+        "habitatImagesDeployPackageUrl": "<URL for WDP>",
+        "indexWorkerDefinitionsDeployPackageUrl": "<URL for WDP>",
+        "xConnectDefinitionsDeployPackageUrl": "<URL for WDP>",
+        "braintreeMerchantId": "<merchant ID for Braintree account>",
+        "braintreePublicKey": "<public key for Braintree account>",
+        "braintreePrivateKey": "<private key for Braintree account>",
+        "braintreeEnvironment": "<Braintree environment>",
+        "environmentName": "<environment name>",
+        "defaultShopName": "<default shop name>",
+        "defaultShopCurrency": "<default shop currency>",
+        "defaultShopLanguage": "<default shop language>"
     }
 }
 ```
 
 * Configure Bootloader module according to [Modules.md](../MODULES.md)
-> **Note**. The Bootloader module should be placed after the Commerce entry, and (if applicable) after the SXA and SXA-SF entries.
+> **Note**. The Bootloader module should be placed after the Commerce module, and (if applicable) after the SXA and SXA-SF modules.

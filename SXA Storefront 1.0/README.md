@@ -32,13 +32,15 @@ In order to configure Sitecore deployment parameters to include the SXA Storefro
     "name": "sxa-sf",
     "templateLink": "https://raw.githubusercontent.com/Sitecore/Sitecore-Azure-Quickstart-Templates/master/SXA%20Storefront%201.0/azuredeploy.json",
     "parameters": {
-        "sxaMsDeployPackageUrl": "",
-        "sxaStorefrontMsDeployPackageUrl": "",
-        "sxaHabitatCatalogMsDeployPackageUrl": "",
-        "sxaStorefrontThemesMsDeployPackageUrl": ""
+        "siteName": "<site name>",
+        "environmentName"": "<environment name>",        
+        "sxaMsDeployPackageUrl": "<URL for WDP>",
+        "sxaStorefrontMsDeployPackageUrl": "<URL for WDP>",
+        "sxaHabitatCatalogMsDeployPackageUrl": "<URL for WDP>",
+        "sxaStorefrontThemesMsDeployPackageUrl": "<URL for WDP>"
     }
-}
+},
 ```
 
 * Configure Bootloader module according to [Modules.md](../MODULES.md)
-> **Note**. The Bootloader module should be placed after the Commerce, SXA, and SXA-SF entries.
+> **Note**. The Bootloader module should be placed after the Commerce, SXA, and SXA-SF modules.
