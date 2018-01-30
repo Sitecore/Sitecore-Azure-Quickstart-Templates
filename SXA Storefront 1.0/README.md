@@ -43,4 +43,4 @@ In order to configure Sitecore deployment parameters to include the SXA Storefro
 ```
 
 * Configure Bootloader module according to [Modules.md](../MODULES.md)
-> **Note**. The Bootloader module should be placed after the Commerce, SXA, and SXA-SF modules.
+> **Note**. The Bootloader module should be placed after the commerce, sxa, and sxa-sf modules.
