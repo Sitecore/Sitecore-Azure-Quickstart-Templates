@@ -341,6 +341,11 @@
       "type": "securestring",
       "minLength": 1
     },
+    "disablePrefetchCachingMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.0.1/DisablePrefetchCache.scwdp.zip"
+    },
 
     "authCertificateName": {
       "type": "string",
@@ -682,7 +687,11 @@
           "singleMsDeployPackageUrl": {
             "value": "[parameters('singleMsDeployPackageUrl')]"
           },
-
+          
+          "disablePrefetchCachingMsDeployPackageUrl": {
+            "value": "[parameters('disablePrefetchCachingMsDeployPackageUrl')]"
+          },
+          
           "allowInvalidClientCertificates": {
             "value": "[parameters('allowInvalidClientCertificates')]"
           },

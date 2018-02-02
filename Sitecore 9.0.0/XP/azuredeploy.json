@@ -387,6 +387,11 @@
     "maRepMsDeployPackageUrl": {
       "type": "securestring"
     },
+    "disablePrefetchCachingMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.0.1/DisablePrefetchCache.scwdp.zip"
+    },
 
     "securityClientIp": {
       "type": "string",
@@ -832,6 +837,9 @@
           },
           "repMsDeployPackageUrl": {
             "value": "[parameters('repMsDeployPackageUrl')]"
+          },
+          "disablePrefetchCachingMsDeployPackageUrl": {
+            "value": "[parameters('disablePrefetchCachingMsDeployPackageUrl')]"
           },
 
           "securityClientIp": {
