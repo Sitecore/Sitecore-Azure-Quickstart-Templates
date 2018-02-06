@@ -54,6 +54,18 @@
       "type": "string",
       "defaultValue": "[coalesce(parameters('standardExpanded').deploymentId, resourceGroup().name)]"
     },
+    "singleWebAppName": {
+      "type": "string",
+      "defaultValue": "[parameters('standardExpanded').singleWebAppName]"
+    },
+    "coreSqlDatabaseName": {
+      "type": "string",
+      "defaultValue" : "[parameters('standardExpanded').coreSqlDatabaseName]"
+    },
+    "masterSqlDatabaseName": {
+      "type": "string",
+      "defaultValue" : "[parameters('standardExpanded').masterSqlDatabaseName]"
+    },
     "location": {
       "type": "string",
       "defaultValue": "[coalesce(parameters('standardExpanded').location, resourceGroup().location)]"
@@ -222,6 +234,15 @@
           },
           "location": {
             "value": "[parameters('location')]"
+          },
+          "singleWebAppName": {
+            "value": "[parameters('singleWebAppName')]"
+          },
+          "coreSqlDatabaseName": {
+            "value": "[parameters('coreSqlDatabaseName')]"
+          },
+          "masterSqlDatabaseName": {
+            "value": "[parameters('masterSqlDatabaseName')]"
           },
           "passwordSalt": {
             "value": "[parameters('passwordSalt')]"
