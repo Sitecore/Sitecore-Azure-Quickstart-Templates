@@ -10,11 +10,9 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 | Parameter                                    | Description
 -----------------------------------------------|------------------------------------------------
 | location                                     | The geographical region of the current deployment.
-| siteName                                     | The name of the Storefront site.
 | siteTitle                                    | Long title of the Storefront site.
 | sqlServerLogin                               | The name of the administrator account for Azure SQL server that will be created.
 | sqlServerPassword                            | The password for the administrator account for Azure SQL server.
-| environmentName                              | The Commerce Engine environment serving the Storefront site.
 | sxaMsDeployPackageUrl                        | The HTTP(s) URL of the Sitecore Commerce Experience Accelerator Web Deploy package (not an SXA Web Deploy package).
 | sxaStorefrontMsDeployPackageUrl              | The HTTP(s) URL of the Sitecore Commerce Experience Accelerator Storefront Web Deploy package.
 | sxaHabitatCatalogMsDeployPackageUrl          | The HTTP(s) URL of the Sitecore Commerce Experience Accelerator Habitat Catalog Web Deploy package.
