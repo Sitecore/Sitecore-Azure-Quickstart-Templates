@@ -150,6 +150,7 @@
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
+      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]" ],
       "properties": {
         "addOnPackages": [
           {
