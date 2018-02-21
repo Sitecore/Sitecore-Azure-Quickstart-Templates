@@ -13,13 +13,10 @@
     "globalSqlDatabaseNameTidy": "[toLower(trim(parameters('globalSqlDatabaseName')))]",
     "sharedSqlDatabaseNameTidy": "[toLower(trim(parameters('sharedSqlDatabaseName')))]",
     
-    "shopsHostingPlanNameTidy": "[toLower(trim(parameters('shopsHostingPlanName')))]",
-    "opsHostingPlanNameTidy": "[toLower(trim(parameters('opsHostingPlanName')))]",
-    "authoringHostingPlanNameTidy": "[toLower(trim(parameters('authoringHostingPlanName')))]",
+    "engineHostingPlanNameTidy": "[toLower(trim(parameters('engineHostingPlanName')))]",
     "minionsHostingPlanNameTidy": "[toLower(trim(parameters('minionsHostingPlanName')))]",
-    "idserverHostingPlanNameTidy": "[toLower(trim(parameters('idserverHostingPlanName')))]",
-    "bizfxHostingPlanNameTidy": "[toLower(trim(parameters('bizfxHostingPlanName')))]",
-    
+    "cmHostingPlanNameTidy": "[toLower(trim(parameters('cmHostingPlanName')))]",
+
     "cdWebAppNameTidy": "[toLower(trim(parameters('cdWebAppName')))]",
     "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebAppName')))]",
     "xcRefDataWebAppNameTidy": "[toLower(trim(parameters('xcRefDataWebAppName')))]",
@@ -53,7 +50,7 @@
     "sitecoreSKU": {
       "type": "string",
       "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large" ],
-      "defaultValue": "Small",
+      "defaultValue": "Extra Small",
       "metadata": {
         "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
       }
@@ -82,35 +79,20 @@
       "defaultValue": "[concat(parameters('deploymentId'), '-engine-shared-db')]"
     },
     
-    "shopsHostingPlanName": {
+    "engineHostingPlanName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-shops-hp')]"
-    },
-    "opsHostingPlanName": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-ops-hp')]"
-    },
-    "authoringHostingPlanName": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-authoring-hp')]"
+      "defaultValue": "[concat(parameters('deploymentId'), '-engine-hp')]"
     },
     "minionsHostingPlanName": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-minions-hp')]"
     },
-    "idserverHostingPlanName": {
+    "cmHostingPlanName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-idserver-hp')]"
-    },
-    "bizfxHostingPlanName": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-bizfx-hp')]"
+      "defaultValue": "[concat(parameters('deploymentId'), '-cm-hp')]"
     },
 
     "shopsWebAppName": {
@@ -199,27 +181,11 @@
       "type": "secureObject",
       "defaultValue": {
         "Extra Small": {
-          "shopsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "opsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "authoringHostingPlan": {
+          "engineHostingPlan": {
             "SkuName": "B1",
             "SkuCapacity": 1
           },
           "minionsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "idserverHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "bizfxHostingPlan": {
             "SkuName": "B1",
             "SkuCapacity": 1
           },
@@ -231,31 +197,15 @@
           "sharedSqlDatabase": {
             "Edition": "Standard",
             "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S3"
+            "ServiceObjectiveLevel": "S1"
           }
         },
         "Small": {
-          "shopsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "opsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "authoringHostingPlan": {
+          "engineHostingPlan": {
             "SkuName": "B1",
             "SkuCapacity": 1
           },
           "minionsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "idserverHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "bizfxHostingPlan": {
             "SkuName": "B1",
             "SkuCapacity": 1
           },
@@ -271,27 +221,11 @@
           }
         },
         "Medium": {
-          "shopsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "opsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "authoringHostingPlan": {
+          "engineHostingPlan": {
             "SkuName": "B1",
             "SkuCapacity": 1
           },
           "minionsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "idserverHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "bizfxHostingPlan": {
             "SkuName": "B1",
             "SkuCapacity": 1
           },
@@ -307,27 +241,11 @@
           }
         },
         "Large": {
-          "shopsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "opsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "authoringHostingPlan": {
+          "engineHostingPlan": {
             "SkuName": "B1",
             "SkuCapacity": 1
           },
           "minionsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "idserverHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "bizfxHostingPlan": {
             "SkuName": "B1",
             "SkuCapacity": 1
           },
@@ -343,27 +261,11 @@
           }
         },
         "Extra Large": {
-          "shopsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "opsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "authoringHostingPlan": {
+          "engineHostingPlan": {
             "SkuName": "B1",
             "SkuCapacity": 1
           },
           "minionsHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "idserverHostingPlan": {
-            "SkuName": "B1",
-            "SkuCapacity": 1
-          },
-          "bizfxHostingPlan": {
             "SkuName": "B1",
             "SkuCapacity": 1
           },
@@ -422,12 +324,9 @@
       "type": "Microsoft.Web/certificates",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('shopsHostingPlanNameTidy'))]",
-        "[resourceId('Microsoft.Web/serverfarms', variables('opsHostingPlanNameTidy'))]",
-        "[resourceId('Microsoft.Web/serverfarms', variables('authoringHostingPlanNameTidy'))]",
+        "[resourceId('Microsoft.Web/serverfarms', variables('engineHostingPlanNameTidy'))]",
         "[resourceId('Microsoft.Web/serverfarms', variables('minionsHostingPlanNameTidy'))]",
-        "[resourceId('Microsoft.Web/serverfarms', variables('idserverHostingPlanNameTidy'))]",
-        "[resourceId('Microsoft.Web/serverfarms', variables('bizfxHostingPlanNameTidy'))]"
+        "[resourceId('Microsoft.Web/serverfarms', variables('cmHostingPlanNameTidy'))]"
       ],
       "properties": {
         "password": "[parameters('authCertificatePassword')]",
@@ -435,19 +334,25 @@
       }
     },
     {
-      "name": "[variables('shopsHostingPlanNameTidy')]",
+      "type": "Microsoft.Web/serverfarms",
+      "name": "[variables('cmHostingPlanNameTidy')]",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('serverFarmApiVersion')]"
+    },
+    {
+      "name": "[variables('engineHostingPlanNameTidy')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('serverFarmApiVersion')]",
       "sku": {
-        "name": "[parameters('resourceSizes').shopsHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').shopsHostingPlan.SkuCapacity]"
+        "name": "[parameters('resourceSizes').engineHostingPlan.SkuName]",
+        "capacity": "[parameters('resourceSizes').engineHostingPlan.SkuCapacity]"
       },
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
       },
       "properties": {
-        "name": "[variables('shopsHostingPlanNameTidy')]",
+        "name": "[variables('engineHostingPlanNameTidy')]",
         "numberOfWorkers": 1
       }
     },
@@ -457,34 +362,17 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('shopsHostingPlanNameTidy'))]"
+        "[resourceId('Microsoft.Web/serverfarms', variables('engineHostingPlanNameTidy'))]"
       ],
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
       },
       "properties": {
         "name": "[variables('shopsWebAppNameTidy')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('shopsHostingPlanNameTidy'))]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('engineHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false
         }
-      }
-    },
-    {
-      "name": "[variables('opsHostingPlanNameTidy')]",
-      "type": "Microsoft.Web/serverfarms",
-      "location": "[parameters('location')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]",
-      "sku": {
-        "name": "[parameters('resourceSizes').opsHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').opsHostingPlan.SkuCapacity]"
-      },
-      "tags": {
-        "provider": "[variables('sitecoreTags').provider]"
-      },
-      "properties": {
-        "name": "[variables('opsHostingPlanNameTidy')]",
-        "numberOfWorkers": 1
       }
     },
     {
@@ -493,34 +381,17 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('opsHostingPlanNameTidy'))]"
+        "[resourceId('Microsoft.Web/serverfarms', variables('engineHostingPlanNameTidy'))]"
       ],
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
       },
       "properties": {
         "name": "[variables('opsWebAppNameTidy')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('opsHostingPlanNameTidy'))]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('engineHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false
         }
-      }
-    },
-    {
-      "name": "[variables('authoringHostingPlanNameTidy')]",
-      "type": "Microsoft.Web/serverfarms",
-      "location": "[parameters('location')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]",
-      "sku": {
-        "name": "[parameters('resourceSizes').authoringHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').authoringHostingPlan.SkuCapacity]"
-      },
-      "tags": {
-        "provider": "[variables('sitecoreTags').provider]"
-      },
-      "properties": {
-        "name": "[variables('authoringHostingPlanNameTidy')]",
-        "numberOfWorkers": 1
       }
     },
     {
@@ -529,14 +400,14 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('authoringHostingPlanNameTidy'))]"
+        "[resourceId('Microsoft.Web/serverfarms', variables('engineHostingPlanNameTidy'))]"
       ],
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
       },
       "properties": {
         "name": "[variables('authoringWebAppNameTidy')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('authoringHostingPlanNameTidy'))]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('engineHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false
         }
@@ -579,56 +450,22 @@
       }
     },
     {
-      "name": "[variables('idserverHostingPlanNameTidy')]",
-      "type": "Microsoft.Web/serverfarms",
-      "location": "[parameters('location')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]",
-      "sku": {
-        "name": "[parameters('resourceSizes').idserverHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').idserverHostingPlan.SkuCapacity]"
-      },
-      "tags": {
-        "provider": "[variables('sitecoreTags').provider]"
-      },
-      "properties": {
-        "name": "[variables('idserverHostingPlanNameTidy')]",
-        "numberOfWorkers": 1
-      }
-    },
-    {
       "name": "[variables('idserverAppNameTidy')]",
       "type": "Microsoft.Web/sites",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('idserverHostingPlanNameTidy'))]"
+        "[resourceId('Microsoft.Web/serverfarms', variables('cmHostingPlanNameTidy'))]"
       ],
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
       },
       "properties": {
         "name": "[variables('idserverAppNameTidy')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('idserverHostingPlanNameTidy'))]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('cmHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false
         }
-      }
-    },
-    {
-      "name": "[variables('bizfxHostingPlanNameTidy')]",
-      "type": "Microsoft.Web/serverfarms",
-      "location": "[parameters('location')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]",
-      "sku": {
-        "name": "[parameters('resourceSizes').bizfxHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').bizfxHostingPlan.SkuCapacity]"
-      },
-      "tags": {
-        "provider": "[variables('sitecoreTags').provider]"
-      },
-      "properties": {
-        "name": "[variables('bizfxHostingPlanNameTidy')]",
-        "numberOfWorkers": 1
       }
     },
     {
@@ -637,14 +474,14 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('bizfxHostingPlanNameTidy'))]"
+        "[resourceId('Microsoft.Web/serverfarms', variables('cmHostingPlanNameTidy'))]"
       ],
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
       },
       "properties": {
         "name": "[variables('bizfxAppNameTidy')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('bizfxHostingPlanNameTidy'))]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('cmHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false
         }
