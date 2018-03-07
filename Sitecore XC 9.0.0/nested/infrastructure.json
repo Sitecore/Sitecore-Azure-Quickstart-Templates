@@ -289,7 +289,7 @@
   },
   "resources": [
     {
-      "name": "[concat(parameters('sqlServerName'), '/', variables('globalSqlDatabaseNameTidy'))]",
+      "name": "[concat(variables('sqlServerNameTidy'), '/', variables('globalSqlDatabaseNameTidy'))]",
       "type": "Microsoft.Sql/servers/databases",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
@@ -304,7 +304,7 @@
       }
     },
     {
-      "name": "[concat(parameters('sqlServerName'), '/', variables('sharedSqlDatabaseNameTidy'))]",
+      "name": "[concat(variables('sqlServerNameTidy'), '/', variables('sharedSqlDatabaseNameTidy'))]",
       "type": "Microsoft.Sql/servers/databases",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
@@ -492,7 +492,7 @@
     "infrastructure": {
       "type": "object",
       "value": {
-        "sqlServerFqdn": "[reference(concat('Microsoft.Sql/servers/', parameters('sqlServerName')), variables('dbApiVersion')).fullyQualifiedDomainName]",
+        "sqlServerFqdn": "[reference(concat('Microsoft.Sql/servers/', variables('sqlServerNameTidy')), variables('dbApiVersion')).fullyQualifiedDomainName]",
 
         "cdWebAppFqdn": "[reference(concat('Microsoft.Web/sites/', variables('cdWebAppNameTidy')),variables('webApiVersion')).defaultHostName]",
         "cmWebAppFqdn": "[reference(concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy')),variables('webApiVersion')).defaultHostName]",
