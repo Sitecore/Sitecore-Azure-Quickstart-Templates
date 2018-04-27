@@ -1,0 +1,54 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-08-01",
+    "webAppNameTidy": "[toLower(trim(parameters('singleWebAppName')))]"
+  },
+  "parameters": {
+    "standard": {
+      "type": "secureObject",
+      "defaultValue": {}
+    },
+    "extension": {
+      "type": "secureObject",
+      "defaultValue": {
+        "msDeployPackageUrl": "$default"
+      }
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[parameters('standard').deploymentId]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[parameters('standard').location]"
+    },
+    "singleWebAppName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-single')]"
+    },
+    "msDeployPackageUrl": {
+      "type": "securestring",
+      "defaultValue": "[parameters('extension').msDeployPackageUrl]"
+    }
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('webAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('msDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('webAppNameTidy')]"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
