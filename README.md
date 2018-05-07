@@ -13,6 +13,7 @@ Choose the compatible templates for your Sitecore version:
 | Sitecore 8.2.3   | Sitecore 8.2 Update-3                                                 |
 | Sitecore 8.2.4   | Sitecore 8.2 Update-4                                                 |
 | Sitecore 8.2.5   | Sitecore 8.2 Update-5 and Update-6                                    |
+| Sitecore 8.2.7   | Sitecore 8.2 Update-7                                                 |
 | Sitecore 9.0.0   | Sitecore 9.0	                                                   |
 | Sitecore 9.0.1   | Sitecore 9.0 Update-1 <br />Please note that these ARM templates link to an additional WDP in order to resolve a potential performance issue on start-up (see KB [article](https://kb.sitecore.net/articles/290593) for more info).                                               	|
 | WFFM 8.2.3       | Web Forms For Marketers 8.2 Update-3, Update-4 and Update-5           |
@@ -65,15 +66,15 @@ foreach($p in $params | Get-Member -MemberType *Property)
     $additionalParams.Add($p.Name, $params.$($p.Name).value)
 }
 
-$additionalParams.licenseXml = $licenseFileContent
-$additionalParams.deploymentId = $Name
+$additionalParams.Set_Item('licenseXml',$licenseFileContent)
+$additionalParams.Set_Item('deploymentId',$Name)
 
 # Inject Certificate Blob and Password into the parameters
 if ($certificateBlob) {
-  $additionalParams.authCertificateBlob = $certificateBlob
+  $additionalParams.Set_Item('authCertificateBlob',$certificateBlob)
 }
 if ($certificatePassword) {
-  $additionalParams.authCertificatePassword = $certificatePassword
+  $additionalParams.Set_Item('authCertificatePassword',$certificatePassword)
 }
 
 #endregion
@@ -90,8 +91,23 @@ $ApplicationPassword = "SERVICE_PRINCIPAL_APPLICATION_PASSWORD"
 
 #endregion
 
-try {
-   	Write-Host "Setting Azure RM Context..."
+try 
+{
+	
+	#region Validate Resouce Group Name	
+
+	Write-Host "Validating Resource Group Name..."
+	if(!($Name -cmatch '^(?!.*--)[a-z0-9]{2}(|([a-z0-9\-]{0,37})[a-z0-9])$'))
+	{
+		Write-Error "Name should only contain lowercase letters, digits or dashes,
+					 dash cannot be used in the first two or final character,
+					 it cannot contain consecutive dashes and is limited between 2 and 40 characters in length!"
+		Break;		
+	}
+		
+	#endregion
+	
+	Write-Host "Setting Azure RM Context..."
 
  	if($UseServicePrincipal -eq $true)
 	{
@@ -128,7 +144,7 @@ try {
 		New-AzureRmResourceGroup -Name $Name -Location $location
 	}
 	
-	Write-Verbose "Starting ARM deployment..."
+	Write-Host "Starting ARM deployment..."
 	New-AzureRmResourceGroupDeployment `
 			-Name $Name `
 			-ResourceGroupName $Name `
