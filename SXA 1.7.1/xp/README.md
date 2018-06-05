@@ -1,7 +1,7 @@
-# Sitecore Experience Accelerator module for Sitecore XM Environment
+# Sitecore Experience Accelerator module for Sitecore XP Environment
 
 
-This template deploys Sitecore Experience Accelerator and PowerShell Extensions modules into a Sitecore XM Environment.
+This template deploys Sitecore Experience Accelerator and PowerShell Extensions modules into a Sitecore XP Environment.
 
 > Note. Email Experience Manager (EXM) module version 3.5 is not compatible with Sitecore Experience Accelerator (SXA). Installing EXM breaks site resolving functionality in SXA solutions.
 
@@ -16,34 +16,33 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 | cdSxaMsDeployPackageUrl                      | The HTTP(s) URL of a Sitecore Experience Accelerator Web Deploy package for Content Delivery instance.
 | cmSxaMsDeployPackageUrl                      | The HTTP(s) URL of a Sitecore Experience Accelerator Web Deploy package for Content Management instance.
 | speMsDeployPackageUrl                        | The HTTP(s) URL of a Sitecore Powershell Extensions Web Deploy package.
+| solrSupportSxaMsDeployPackageUrl              | The HTTP(s) URL of a SXA Solr Support Web Deploy package
+
 
 > **Note**. Each SXA version requires SPE version it is compatible with according to the following table:
 
 | SXA version   | SPE version
 ----------------|-------------
-| 1.3.1         | 4.5
-| 1.4.0         | 4.6
-| 1.5.0         | 4.7
-| 1.6.0         | 4.7 or 4.7.2
-| 1.7.0         | 4.7.2
+| 1.7.1         | 4.7.2
 
 ## Deploying as part of Sitecore deployment
 
 In order to configure Sitecore deployment parameters to include Sitecore Experience Accelerator:
 
-  * Add the following snippet to the `modules` parameter:
+* Add the following snippet to the `modules` parameter (ensure the template link is pointing to the right SXA version):
 
 ```JSON
 {
     "name": "sxa",
-    "templateLink": "https://raw.githubusercontent.com/Sitecore/sitecore-azure-quickstart-templates/master/SXA/xm/azuredeploy.json",
+    "templateLink": "https://raw.githubusercontent.com/Sitecore/Sitecore-Azure-Quickstart-Templates/master/SXA%201.3.1/xp/azuredeploy.json",
     "parameters": {
         "cdSxaMsDeployPackageUrl" : "<URL of the WDP file Sitecore Experience Accelerator * CD.scwdp.zip>",
         "cmSxaMsDeployPackageUrl" : "<URL of the WDP file Sitecore Experience Accelerator *.scwdp.zip>",
-        "speMsDeployPackageUrl" : "<URL of the WDP file Sitecore PowerShell Extensions *.scwdp.zip>"
+        "speMsDeployPackageUrl" : "<URL of the WDP file Sitecore PowerShell Extensions *.scwdp.zip>",
+        "solrSupportSxaMsDeployPackageUrl" : "<URL of the WDP file SXA Solr Support *.scwdp.zip>"
     }
 }
 ```
 
-  * Configure Bootloader module according to [Modules.md](../../Modules.md)
-  > **Note**. The Bootloader module should be placed after the SXA.
+* Configure Bootloader module according to [Modules.md](../../MODULES.md)
+> **Note**. The Bootloader module should be placed after the SXA.

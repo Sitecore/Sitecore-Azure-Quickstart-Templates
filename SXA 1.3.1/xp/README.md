@@ -25,6 +25,7 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 | 1.4.0         | 4.6
 | 1.5.0         | 4.7
 | 1.6.0         | 4.7 or 4.7.2
+| 1.7.0         | 4.7.2
 
 ## Deploying as part of Sitecore deployment
 
