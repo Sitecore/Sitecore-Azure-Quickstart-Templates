@@ -216,7 +216,7 @@
       "defaultValue": {
         "Extra Small": {
           "cmHostingPlan": {
-            "SkuName": "B2",
+            "SkuName": "B3",
             "SkuCapacity": 1
           },
           "cdHostingPlan": {
@@ -285,7 +285,7 @@
         },
         "Small": {
           "cmHostingPlan": {
-            "SkuName": "B2",
+            "SkuName": "B3",
             "SkuCapacity": 1
           },
           "cdHostingPlan": {
@@ -354,7 +354,7 @@
         },
         "Medium": {
           "cmHostingPlan": {
-            "SkuName": "B2",
+            "SkuName": "B3",
             "SkuCapacity": 1
           },
           "cdHostingPlan": {
@@ -423,7 +423,7 @@
         },
         "Large": {
           "cmHostingPlan": {
-            "SkuName": "B2",
+            "SkuName": "B3",
             "SkuCapacity": 1
           },
           "cdHostingPlan": {
@@ -492,7 +492,7 @@
         },
         "Extra Large": {
           "cmHostingPlan": {
-            "SkuName": "B2",
+            "SkuName": "B3",
             "SkuCapacity": 1
           },
           "cdHostingPlan": {
