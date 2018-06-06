@@ -16,16 +16,13 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 | cdSxaMsDeployPackageUrl                      | The HTTP(s) URL of a Sitecore Experience Accelerator Web Deploy package for Content Delivery instance.
 | cmSxaMsDeployPackageUrl                      | The HTTP(s) URL of a Sitecore Experience Accelerator Web Deploy package for Content Management instance.
 | speMsDeployPackageUrl                        | The HTTP(s) URL of a Sitecore Powershell Extensions Web Deploy package.
+| solrSupportSxaMsDeployPackageUrl              | The HTTP(s) URL of a SXA Solr Support Web Deploy package
 
 > **Note**. Each SXA version requires SPE version it is compatible with according to the following table:
 
 | SXA version   | SPE version
 ----------------|-------------
-| 1.3.1         | 4.5
-| 1.4.0         | 4.6
-| 1.5.0         | 4.7
-| 1.6.0         | 4.7 or 4.7.2
-| 1.7.0         | 4.7.2
+| 1.7.1         | 4.7.2
 
 ## Deploying as part of Sitecore deployment
 
@@ -40,7 +37,8 @@ In order to configure Sitecore deployment parameters to include Sitecore Experie
     "parameters": {
         "cdSxaMsDeployPackageUrl" : "<URL of the WDP file Sitecore Experience Accelerator * CD.scwdp.zip>",
         "cmSxaMsDeployPackageUrl" : "<URL of the WDP file Sitecore Experience Accelerator *.scwdp.zip>",
-        "speMsDeployPackageUrl" : "<URL of the WDP file Sitecore PowerShell Extensions *.scwdp.zip>"
+        "speMsDeployPackageUrl" : "<URL of the WDP file Sitecore PowerShell Extensions *.scwdp.zip>",
+        "solrSupportSxaMsDeployPackageUrl" : "<URL of the WDP file SXA Solr Support *.scwdp.zip>"
     }
 }
 ```
