@@ -49,6 +49,18 @@
     },
     "maRepMsDeployPackageUrl": {
       "value": ""
+    },
+    "exmDdsMsDeployPackageUrl":{
+      "value": ""
+    },
+    "exmCmMsDeployPackageUrl":{
+      "value": ""
+    },
+    "templateLinkBase":{
+      "value": ""
+    },
+    "templateLinkAccessToken":{
+      "value": ""
     }, 
     "authCertificateBlob":{
       "value": ""
