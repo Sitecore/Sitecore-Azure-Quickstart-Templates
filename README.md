@@ -61,6 +61,10 @@ $additionalParams = New-Object -TypeName Hashtable
 
 $params = Get-Content $ArmParametersPath -Raw | ConvertFrom-Json
 
+if ($params.parameters -ne $null) {
+    $params = $params.parameters
+}
+
 foreach($p in $params | Get-Member -MemberType *Property)
 {
     $additionalParams.Add($p.Name, $params.$($p.Name).value)
