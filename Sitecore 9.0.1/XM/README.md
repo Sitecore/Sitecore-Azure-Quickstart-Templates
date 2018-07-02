@@ -33,3 +33,5 @@ The **deploymentId** and **licenseXml** parameters are to be filled in by the Po
 > * The **searchServiceLocation** parameter can be added to the `azuredeploy.parameters.json`
 > to specify geographical region to deploy Azure Search Service. Default value is the resource
 > group location.
+> * The **applicationInsightsLocation** parameter can be added to the`azuredeploy.parameters.json`
+> to specify geographical region to deploy Application Insights. Default value is **East US**.
