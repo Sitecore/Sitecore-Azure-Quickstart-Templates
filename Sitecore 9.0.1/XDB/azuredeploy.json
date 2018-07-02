@@ -258,6 +258,11 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
     },
+    "searchServiceLocation": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('location')]"
+    },
     "xcSearchIndexName": {
       "type": "string",
       "minLength": 1,
@@ -466,6 +471,9 @@
 
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
+          },
+          "searchServiceLocation": {
+            "value": "[parameters('searchServiceLocation')]"
           },
           "applicationInsightsName": {
             "value": "[parameters('applicationInsightsName')]"
@@ -1089,6 +1097,7 @@
               "messagingSqlDatabasePassword": "[parameters('messagingSqlDatabasePassword')]",
 
               "searchServiceName": "[parameters('searchServiceName')]",
+              "searchServiceLocation": "[parameters('searchServiceLocation')]",
               "xcSearchIndexName": "[parameters('xcSearchIndexName')]",
               "applicationInsightsName": "[parameters('applicationInsightsName')]",
               "applicationInsightsLocation": "[parameters('applicationInsightsLocation')]",

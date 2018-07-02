@@ -266,6 +266,11 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
     },
+    "searchServiceLocation": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('location')]"
+    },
     "searchServiceSkuName": {
       "type": "string",
       "minLength": 1,
@@ -462,6 +467,9 @@
 
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
+          },
+          "searchServiceLocation": {
+            "value": "[parameters('searchServiceLocation')]"
           },
           "searchServiceSkuName": {
             "value": "[parameters('searchServiceSkuName')]"
@@ -912,6 +920,7 @@
               "messagingSqlDatabasePassword": "[parameters('messagingSqlDatabasePassword')]",
 
               "searchServiceName": "[parameters('searchServiceName')]",
+              "searchServiceLocation": "[parameters('searchServiceLocation')]",
               "searchServiceSkuName": "[parameters('searchServiceSkuName')]",
               "searchServiceReplicaCount": "[parameters('searchServiceReplicaCount')]",
               "searchServicePartitionCount": "[parameters('searchServicePartitionCount')]",

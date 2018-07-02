@@ -41,3 +41,8 @@ The **deploymentId** and **licenseXml** parameters in azuredeploy.parameters.jso
 | maRepMsDeployPackageUrl                   | The HTTP(s) URL to a Marketing Automation Reporting service Web Deploy package.
 | authCertificateBlob                       | A Base64-encoded blob of the authentication certificate in PKCS #12 format.
 | authCertificatePassword                   | A password to the authentication certificate.
+
+> **Note:**
+> * The **searchServiceLocation** parameter can be added to the `azuredeploy.parameters.json`
+> to specify geographical region to deploy Azure Search Service. Default value is the resource
+> group location.

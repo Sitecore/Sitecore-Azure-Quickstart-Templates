@@ -28,3 +28,8 @@ The **deploymentId** and **licenseXml** parameters are to be filled in by the Po
 | sitecoreAdminPassword   | The new password for the Sitecore **admin** account.
 | cmMsDeployPackageUrl    | The HTTP(s) URL to a Sitecore XM Content Management Web Deploy package.
 | cdMsDeployPackageUrl    | The HTTP(s) URL to a Sitecore XM Content Delivery Web Deploy package.
+
+> **Note:**
+> * The **searchServiceLocation** parameter can be added to the `azuredeploy.parameters.json`
+> to specify geographical region to deploy Azure Search Service. Default value is the resource
+> group location.

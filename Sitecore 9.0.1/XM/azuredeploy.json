@@ -146,8 +146,13 @@
     },
     "searchServiceName": {
       "type": "string",
-      "minLength": 1,      
+      "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
+    },
+    "searchServiceLocation": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('location')]"
     },
 
     "applicationInsightsName": {
@@ -270,6 +275,9 @@
 
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
+          },
+          "searchServiceLocation": {
+            "value": "[parameters('searchServiceLocation')]"
           },
           "redisCacheName": {
             "value": "[parameters('redisCacheName')]"
@@ -470,6 +478,7 @@
               "formsSqlDatabasePassword": "[parameters('formsSqlDatabasePassword')]",
 
               "searchServiceName": "[parameters('searchServiceName')]",
+              "searchServiceLocation": "[parameters('searchServiceLocation')]",
               "redisCacheName": "[parameters('redisCacheName')]",
 
               "applicationInsightsName": "[parameters('applicationInsightsName')]",

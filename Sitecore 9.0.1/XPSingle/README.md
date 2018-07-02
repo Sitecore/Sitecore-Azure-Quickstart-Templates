@@ -32,3 +32,8 @@ The **deploymentId** and **licenseXml** parameters in azuredeploy.parameters.jso
 | xcSingleMsDeployPackageUrl                | The HTTP(s) URL to a XConnect Single Web Deploy package.
 | authCertificateBlob                       | A Base64-encoded blob of the authentication certificate in PKCS #12 format.
 | authCertificatePassword                   | A password to the authentication certificate.
+
+> **Note:**
+> * The **searchServiceLocation** parameter can be added to the `azuredeploy.parameters.json`
+> to specify geographical region to deploy Azure Search Service. Default value is the resource
+> group location.

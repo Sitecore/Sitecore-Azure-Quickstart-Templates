@@ -124,6 +124,11 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
     },
+    "searchServiceLocation": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('location')]"
+    },
     "searchServiceSkuName": {
       "type": "string",
       "minLength": 1,
@@ -303,6 +308,9 @@
 
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
+          },
+          "searchServiceLocation": {
+            "value": "[parameters('searchServiceLocation')]"
           },
           "searchServiceSkuName": {
             "value": "[parameters('searchServiceSkuName')]"
@@ -495,6 +503,7 @@
               "formsSqlDatabasePassword": "[parameters('formsSqlDatabasePassword')]",
 
               "searchServiceName": "[parameters('searchServiceName')]",
+              "searchServiceLocation": "[parameters('searchServiceLocation')]",
               "searchServiceReplicaCount": "[parameters('searchServiceReplicaCount')]",
               "searchServicePartitionCount": "[parameters('searchServicePartitionCount')]",
 

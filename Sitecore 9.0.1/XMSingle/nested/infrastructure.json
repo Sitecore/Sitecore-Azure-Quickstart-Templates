@@ -114,6 +114,11 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
     },
+    "searchServiceLocation": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('location')]"
+    },
     "searchServiceSkuName": {
       "type": "string",
       "minLength": 1,
@@ -364,7 +369,7 @@
       "type": "Microsoft.Search/searchServices",
       "apiVersion": "[variables('searchApiVersion')]",
       "name": "[variables('searchServiceNameTidy')]",
-      "location": "[parameters('location')]",
+      "location": "[parameters('searchServiceLocation')]",
       "sku": {
         "name": "[toLower(parameters('searchServiceSkuName'))]"
       },

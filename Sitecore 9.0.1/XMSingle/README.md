@@ -25,3 +25,8 @@ The **deploymentId** and **licenseXml** parameters are filled in by the PowerShe
 | sqlServerPassword                         | The password for the administrator account for Azure SQL server.
 | sitecoreAdminPassword                     | The new password for the Sitecore **admin** account.
 | singleMsDeployPackageUrl                  | The HTTP(s) URL to a Sitecore XM Single Instance Web Deploy package.
+
+> **Note:**
+> * The **searchServiceLocation** parameter can be added to the `azuredeploy.parameters.json`
+> to specify geographical region to deploy Azure Search Service. Default value is the resource
+> group location.
