@@ -44,5 +44,5 @@ In order to configure Sitecore deployment parameters to include Sitecore Experie
 }
 ```
 
-* Configure Bootloader module according to [Modules.md](../../MODULES.md)
+* Configure Bootloader module according to [MODULES.md](../../MODULES.md)
 > **Note**. The Bootloader module should be placed after the SXA.
