@@ -7,8 +7,7 @@
     "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
     "coreSqlDatabaseNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
     "masterSqlDatabaseNameTidy": "[toLower(trim(parameters('masterSqlDatabaseName')))]",
-    "cdWebAppNameTidy": "[toLower(trim(parameters('cdWebAppName')))]",
-    "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebAppName')))]",
+    "singleWebAppNameTidy": "[toLower(trim(parameters('singleWebAppName')))]",
     "searchProvider": "[if(empty(parameters('solrConnectionString')), 'Azure', 'Solr')]"
   },
   "parameters": {
@@ -25,20 +24,16 @@
         "sqlServerPassword": null,
         "coreSqlDatabaseName": null,
         "masterSqlDatabaseName": null,
-
-        "cdWebAppName": null,
-        "cmWebAppName": null,
+        "singleWebAppName": null,
         "solrConnectionString": null
       }
     },
     "extension": {
       "type": "secureObject",
       "defaultValue": {
-        "cdSxaMsDeployPackageUrl": null,
         "cmSxaMsDeployPackageUrl": null,
         "speMsDeployPackageUrl": null,
-        "solrSupportSxaMsDeployPackageUrl": null,
-		"templateLinkAccessToken": null 
+        "solrSupportSxaMsDeployPackageUrl": null 
       }
     },
 
@@ -50,7 +45,7 @@
 
     "templateLinkAccessToken": {
       "type": "securestring",
-      "defaultValue": "[parameters('extension').templateLinkAccessToken]"
+      "defaultValue": ""
     },
 
     "deploymentId": {
@@ -89,26 +84,15 @@
       "minLength": 1,
       "defaultValue": "[coalesce(parameters('standard').masterSqlDatabaseName, concat(parameters('deploymentId'), '-master-db'))]"
     },
-
-    "cdWebAppName": {
+    "singleWebAppName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "[coalesce(parameters('standard').cdWebAppName, concat(parameters('deploymentId'), '-cd'))]"
-    },
-    "cmWebAppName": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "[coalesce(parameters('standard').cmWebAppName, concat(parameters('deploymentId'), '-cm'))]"
+      "defaultValue": "[concat(parameters('deploymentId'), '-single')]"
     },
     "speMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "[parameters('extension').speMsDeployPackageUrl]"
-    },
-    "cdSxaMsDeployPackageUrl": {
-      "type": "securestring",
-      "minLength": 1,
-      "defaultValue": "[parameters('extension').cdSxaMsDeployPackageUrl]"
     },
     "cmSxaMsDeployPackageUrl": {
       "type": "securestring",
@@ -130,7 +114,7 @@
 
   "resources": [
     {
-      "name": "[concat(variables('cmWebAppNameTidy'), '/', 'MSDeploy')]",
+      "name": "[concat(variables('singleWebAppNameTidy'), '/', 'MSDeploy')]",
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
@@ -141,7 +125,7 @@
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
             "setParameters": {
-              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Application Path": "[variables('singleWebAppNameTidy')]",
               "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
               "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
             }
@@ -151,25 +135,9 @@
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
             "setParameters": {
-              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Application Path": "[variables('singleWebAppNameTidy')]",
               "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
               "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(variables('cdWebAppNameTidy'), '/', 'MSDeploy')]",
-      "type": "Microsoft.Web/sites/extensions",
-      "location": "[parameters('location')]",
-      "apiVersion": "[variables('webApiVersion')]",
-      "properties": {
-        "addOnPackages": [
-          {
-            "packageUri": "[parameters('cdSxaMsDeployPackageUrl')]",
-            "setParameters": {
-              "Application Path": "[variables('cdWebAppNameTidy')]"
             }
           }
         ]
@@ -205,11 +173,8 @@
           "masterSqlDatabaseName": {
             "value": "[parameters('sqlServerFqdn')]"
           },
-          "cdWebAppName": {
-            "value": "[parameters('cdWebAppName')]"
-          },
-          "cmWebAppName": {
-            "value": "[parameters('cmWebAppName')]"
+          "singleWebAppName": {
+            "value": "[parameters('singleWebAppName')]"
           },
           "solrSupportSxaMsDeployPackageUrl": {
             "value": "[parameters('solrSupportSxaMsDeployPackageUrl')]"
@@ -217,7 +182,7 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('cmWebAppNameTidy'),'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/extensions', variables('singleWebAppNameTidy'),'MSDeploy')]"
       ]
     }
   ]

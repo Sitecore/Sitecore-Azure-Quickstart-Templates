@@ -37,8 +37,7 @@
         "cdSxaMsDeployPackageUrl": null,
         "cmSxaMsDeployPackageUrl": null,
         "speMsDeployPackageUrl": null,
-        "solrSupportSxaMsDeployPackageUrl": null,
-		"templateLinkAccessToken": null 
+        "solrSupportSxaMsDeployPackageUrl": null
       }
     },
 
@@ -50,7 +49,7 @@
 
     "templateLinkAccessToken": {
       "type": "securestring",
-      "defaultValue": "[parameters('extension').templateLinkAccessToken]"
+      "defaultValue": ""
     },
 
     "deploymentId": {
