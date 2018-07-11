@@ -74,7 +74,7 @@
     "singleWebAppName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "[coalesce(parameters('standard').singleWebAppName, concat(parameters('deploymentId'), '-cm'))]"
+      "defaultValue": "[parameters('standard').singleWebAppName]"
     },
     "solrSupportSxaMsDeployPackageUrl": {
       "type": "securestring",
