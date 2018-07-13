@@ -10,15 +10,22 @@
 
     "sqlServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
 
+    "webSqlDatabaseNameTidy": "[toLower(trim(parameters('webSqlDatabaseName')))]",
+    "shard0SqlDatabaseNameTidy": "[toLower(trim(parameters('shard0SqlDatabaseName')))]",
+    "shard1SqlDatabaseNameTidy": "[toLower(trim(parameters('shard1SqlDatabaseName')))]",    
     "globalSqlDatabaseNameTidy": "[toLower(trim(parameters('globalSqlDatabaseName')))]",
     "sharedSqlDatabaseNameTidy": "[toLower(trim(parameters('sharedSqlDatabaseName')))]",
     
     "engineHostingPlanNameTidy": "[toLower(trim(parameters('engineHostingPlanName')))]",
     "minionsHostingPlanNameTidy": "[toLower(trim(parameters('minionsHostingPlanName')))]",
     "cmHostingPlanNameTidy": "[toLower(trim(parameters('cmHostingPlanName')))]",
-
+    "cdHostingPlanNameTidy": "[toLower(trim(parameters('cdHostingPlanName')))]",
+    "xcResourceIntensiveHostingPlanNameTidy": "[toLower(trim(parameters('xcResourceIntensiveHostingPlanName')))]",
+    
     "cdWebAppNameTidy": "[toLower(trim(parameters('cdWebAppName')))]",
     "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebAppName')))]",
+    "prcWebAppNameTidy": "[toLower(trim(parameters('prcWebAppName')))]",
+    "repWebAppNameTidy": "[toLower(trim(parameters('repWebAppName')))]",    
     "xcRefDataWebAppNameTidy": "[toLower(trim(parameters('xcRefDataWebAppName')))]",
     "xcCollectWebAppNameTidy": "[toLower(trim(parameters('xcCollectWebAppName')))]",
     "xcSearchWebAppNameTidy": "[toLower(trim(parameters('xcSearchWebAppName')))]",
@@ -67,6 +74,21 @@
       "minLength": 1,
       "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
     },
+    "webSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
+    },
+    "shard0SqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-shard0-db')]"
+    },
+    "shard1SqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-shard1-db')]"
+    },
 
     "globalSqlDatabaseName": {
       "type": "string",
@@ -93,6 +115,16 @@
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-cm-hp')]"
+    },
+    "cdHostingPlanName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-cd-hp')]"
+    },
+    "xcResourceIntensiveHostingPlanName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-xc-resourceintensive-hp')]"
     },
 
     "shopsWebAppName": {
@@ -125,6 +157,16 @@
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-cm')]"
+    },
+    "prcWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-prc')]"
+    },
+    "repWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-rep')]"
     },
     "xcRefDataWebAppName": {
       "type": "string",
@@ -181,6 +223,18 @@
       "type": "secureObject",
       "defaultValue": {
         "Extra Small": {
+          "cmHostingPlan": {
+            "SkuName": "B2",
+            "SkuCapacity": 1
+          },
+          "cdHostingPlan": {
+            "SkuName": "B2",
+            "SkuCapacity": 1
+          },
+          "xcResourceIntensiveHostingPlan": {
+            "SkuName": "B1",
+            "SkuCapacity": 1
+          },
           "engineHostingPlan": {
             "SkuName": "B1",
             "SkuCapacity": 1
@@ -188,6 +242,21 @@
           "minionsHostingPlan": {
             "SkuName": "B1",
             "SkuCapacity": 1
+          },
+          "webSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          },
+          "xcShard0SqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S0"
+          },
+          "xcShard1SqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S0"
           },
           "globalSqlDatabase": {
             "Edition": "Standard",
@@ -201,83 +270,191 @@
           }
         },
         "Small": {
+          "cmHostingPlan": {
+            "SkuName": "S3",
+            "SkuCapacity": 1
+          },
+          "cdHostingPlan": {
+            "SkuName": "S3",
+            "SkuCapacity": 1
+          },
+          "xcResourceIntensiveHostingPlan": {
+            "SkuName": "P3v2",
+            "SkuCapacity": 1
+          },
           "engineHostingPlan": {
-            "SkuName": "B1",
+            "SkuName": "S3",
             "SkuCapacity": 1
           },
           "minionsHostingPlan": {
-            "SkuName": "B1",
+            "SkuName": "S1",
             "SkuCapacity": 1
+          },
+          "webSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S3"
+          },
+          "xcShard0SqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S3"
+          },
+          "xcShard1SqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S3"
           },
           "globalSqlDatabase": {
             "Edition": "Standard",
             "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S1"
+            "ServiceObjectiveLevel": "S0"
           },
           "sharedSqlDatabase": {
             "Edition": "Standard",
             "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S1"
+            "ServiceObjectiveLevel": "S3"
           }
         },
         "Medium": {
+          "cmHostingPlan": {
+            "SkuName": "P3v2",
+            "SkuCapacity": 1
+          },
+          "cdHostingPlan": {
+            "SkuName": "P3v2",
+            "SkuCapacity": 1
+          },
+          "xcResourceIntensiveHostingPlan": {
+            "SkuName": "P3v2",
+            "SkuCapacity": 1
+          },
           "engineHostingPlan": {
-            "SkuName": "B1",
+            "SkuName": "P3v2",
             "SkuCapacity": 1
           },
           "minionsHostingPlan": {
-            "SkuName": "B1",
+            "SkuName": "S1",
             "SkuCapacity": 1
+          },
+          "webSqlDatabase": {
+            "Edition": "Premium",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "P1"
+          },
+          "xcShard0SqlDatabase": {
+            "Edition": "Premium",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "P1"
+          },
+          "xcShard1SqlDatabase": {
+            "Edition": "Premium",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "P1"
           },
           "globalSqlDatabase": {
             "Edition": "Standard",
             "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S1"
+            "ServiceObjectiveLevel": "S0"
           },
           "sharedSqlDatabase": {
-            "Edition": "Standard",
+            "Edition": "Premium",
             "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S1"
+            "ServiceObjectiveLevel": "P1"
           }
         },
         "Large": {
-          "engineHostingPlan": {
-            "SkuName": "B1",
+          "cmHostingPlan": {
+            "SkuName": "P3v2",
             "SkuCapacity": 1
           },
-          "minionsHostingPlan": {
-            "SkuName": "B1",
+          "cdHostingPlan": {
+            "SkuName": "P3v2",
+            "SkuCapacity": 4
+          },
+          "xcResourceIntensiveHostingPlan": {
+            "SkuName": "P3v2",
             "SkuCapacity": 1
+          },
+          "engineHostingPlan": {
+            "SkuName": "P3v2",
+            "SkuCapacity": 2
+          },
+          "minionsHostingPlan": {
+            "SkuName": "S1",
+            "SkuCapacity": 1
+          },
+          "webSqlDatabase": {
+            "Edition": "Premium",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "P1"
+          },
+          "xcShard0SqlDatabase": {
+            "Edition": "Premium",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "P1"
+          },
+          "xcShard1SqlDatabase": {
+            "Edition": "Premium",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "P1"
           },
           "globalSqlDatabase": {
             "Edition": "Standard",
             "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S1"
+            "ServiceObjectiveLevel": "S0"
           },
           "sharedSqlDatabase": {
-            "Edition": "Standard",
+            "Edition": "Premium",
             "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S1"
+            "ServiceObjectiveLevel": "P1"
           }
         },
         "Extra Large": {
-          "engineHostingPlan": {
-            "SkuName": "B1",
+          "cmHostingPlan": {
+            "SkuName": "P3v2",
             "SkuCapacity": 1
           },
-          "minionsHostingPlan": {
-            "SkuName": "B1",
+          "cdHostingPlan": {
+            "SkuName": "P3v2",
+            "SkuCapacity": 4
+          },
+          "xcResourceIntensiveHostingPlan": {
+            "SkuName": "P3v2",
             "SkuCapacity": 1
+          },
+          "engineHostingPlan": {
+            "SkuName": "P3v2",
+            "SkuCapacity": 2
+          },
+          "minionsHostingPlan": {
+            "SkuName": "S1",
+            "SkuCapacity": 1
+          },
+          "webSqlDatabase": {
+            "Edition": "Premium",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "P1"
+          },
+          "xcShard0SqlDatabase": {
+            "Edition": "Premium",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "P1"
+          },
+          "xcShard1SqlDatabase": {
+            "Edition": "Premium",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "P1"
           },
           "globalSqlDatabase": {
             "Edition": "Standard",
             "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S1"
+            "ServiceObjectiveLevel": "S0"
           },
           "sharedSqlDatabase": {
-            "Edition": "Standard",
+            "Edition": "Premium",
             "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S1"
+            "ServiceObjectiveLevel": "P1"
           }
         }
       }
@@ -289,7 +466,43 @@
   },
   "resources": [
     {
-      "name": "[concat(parameters('sqlServerName'), '/', variables('globalSqlDatabaseNameTidy'))]",
+      "name": "[concat(variables('sqlServerNameTidy'), '/', variables('webSqlDatabaseNameTidy'))]",
+      "type": "Microsoft.Sql/servers/databases",
+      "location": "[parameters('location')]",      
+      "apiVersion": "[variables('dbApiVersion')]",
+      "properties": {
+        "edition": "[parameters('resourceSizes').webSqlDatabase.Edition]",
+        "collation": "[parameters('sqlDatabaseCollation')]",
+        "maxSizeBytes": "[parameters('resourceSizes').webSqlDatabase.MaxSize]",
+        "requestedServiceObjectiveName": "[parameters('resourceSizes').webSqlDatabase.ServiceObjectiveLevel]"
+      }
+    },
+    {
+      "name": "[concat(variables('sqlServerNameTidy'), '/', variables('shard0SqlDatabaseNameTidy'))]",
+      "type": "Microsoft.Sql/servers/databases",
+      "location": "[parameters('location')]",      
+      "apiVersion": "[variables('dbApiVersion')]",
+      "properties": {
+        "edition": "[parameters('resourceSizes').xcShard0SqlDatabase.Edition]",
+        "collation": "[parameters('sqlDatabaseCollation')]",
+        "maxSizeBytes": "[parameters('resourceSizes').xcShard0SqlDatabase.MaxSize]",
+        "requestedServiceObjectiveName": "[parameters('resourceSizes').xcShard0SqlDatabase.ServiceObjectiveLevel]"
+      }
+    },
+    {
+      "name": "[concat(variables('sqlServerNameTidy'), '/', variables('shard1SqlDatabaseNameTidy'))]",
+      "type": "Microsoft.Sql/servers/databases",
+      "location": "[parameters('location')]",      
+      "apiVersion": "[variables('dbApiVersion')]",
+      "properties": {
+        "edition": "[parameters('resourceSizes').xcShard1SqlDatabase.Edition]",
+        "collation": "[parameters('sqlDatabaseCollation')]",
+        "maxSizeBytes": "[parameters('resourceSizes').xcShard1SqlDatabase.MaxSize]",
+        "requestedServiceObjectiveName": "[parameters('resourceSizes').xcShard1SqlDatabase.ServiceObjectiveLevel]"
+      }
+    },
+    {
+      "name": "[concat(variables('sqlServerNameTidy'), '/', variables('globalSqlDatabaseNameTidy'))]",
       "type": "Microsoft.Sql/servers/databases",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
@@ -304,7 +517,7 @@
       }
     },
     {
-      "name": "[concat(parameters('sqlServerName'), '/', variables('sharedSqlDatabaseNameTidy'))]",
+      "name": "[concat(variables('sqlServerNameTidy'), '/', variables('sharedSqlDatabaseNameTidy'))]",
       "type": "Microsoft.Sql/servers/databases",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
@@ -337,7 +550,31 @@
       "type": "Microsoft.Web/serverfarms",
       "name": "[variables('cmHostingPlanNameTidy')]",
       "location": "[parameters('location')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]"
+      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').cmHostingPlan.SkuName]",
+        "capacity": "[parameters('resourceSizes').cmHostingPlan.SkuCapacity]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "name": "[variables('cdHostingPlanNameTidy')]",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').cdHostingPlan.SkuName]",
+        "capacity": "[parameters('resourceSizes').cdHostingPlan.SkuCapacity]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "name": "[variables('xcResourceIntensiveHostingPlanNameTidy')]",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').xcResourceIntensiveHostingPlan.SkuName]",
+        "capacity": "[parameters('resourceSizes').xcResourceIntensiveHostingPlan.SkuCapacity]"
+      }
     },
     {
       "name": "[variables('engineHostingPlanNameTidy')]",
@@ -445,7 +682,8 @@
         "name": "[variables('minionsWebAppNameTidy')]",
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('minionsHostingPlanNameTidy'))]",
         "siteConfig": {
-          "use32BitWorkerProcess": false
+          "use32BitWorkerProcess": false,
+          "alwaysOn": true
         }
       }
     },
@@ -492,10 +730,12 @@
     "infrastructure": {
       "type": "object",
       "value": {
-        "sqlServerFqdn": "[reference(concat('Microsoft.Sql/servers/', parameters('sqlServerName')), variables('dbApiVersion')).fullyQualifiedDomainName]",
+        "sqlServerFqdn": "[reference(concat('Microsoft.Sql/servers/', variables('sqlServerNameTidy')), variables('dbApiVersion')).fullyQualifiedDomainName]",
 
         "cdWebAppFqdn": "[reference(concat('Microsoft.Web/sites/', variables('cdWebAppNameTidy')),variables('webApiVersion')).defaultHostName]",
         "cmWebAppFqdn": "[reference(concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy')),variables('webApiVersion')).defaultHostName]",
+        "prcWebAppFqdn": "[reference(concat('Microsoft.Web/sites/', variables('prcWebAppNameTidy')),variables('webApiVersion')).defaultHostName]",
+        "repWebAppFqdn": "[reference(concat('Microsoft.Web/sites/', variables('repWebAppNameTidy')),variables('webApiVersion')).defaultHostName]",                
         "xcRefDataWebAppFqdn": "[reference(concat('Microsoft.Web/sites/', variables('xcRefDataWebAppNameTidy')),variables('webApiVersion')).defaultHostName]",
         "xcCollectWebAppFqdn": "[reference(concat('Microsoft.Web/sites/', variables('xcCollectWebAppNameTidy')),variables('webApiVersion')).defaultHostName]",
         "xcSearchWebAppFqdn": "[reference(concat('Microsoft.Web/sites/', variables('xcSearchWebAppNameTidy')),variables('webApiVersion')).defaultHostName]",
