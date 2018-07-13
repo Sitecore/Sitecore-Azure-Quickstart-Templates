@@ -16,6 +16,10 @@
     "cdWebAppFqdnTidy": "[toLower(trim(parameters('cdWebAppFqdn')))]",
     "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebAppName')))]",
     "cmWebAppFqdnTidy": "[toLower(trim(parameters('cmWebAppFqdn')))]",
+    "prcWebAppNameTidy": "[toLower(trim(parameters('prcWebAppName')))]",
+    "prcWebAppFqdnTidy": "[toLower(trim(parameters('prcWebAppFqdn')))]",
+    "repWebAppNameTidy": "[toLower(trim(parameters('repWebAppName')))]",
+    "repWebAppFqdnTidy": "[toLower(trim(parameters('repWebAppFqdn')))]",
     "xcCollectWebAppNameTidy": "[toLower(trim(parameters('xcCollectWebAppName')))]",
     "xcCollectWebAppFqdnTidy": "[toLower(trim(parameters('xcCollectWebAppFqdn')))]",    
     "xcSearchWebAppNameTidy": "[toLower(trim(parameters('xcSearchWebAppName')))]",
@@ -55,12 +59,13 @@
 
         "cdWebAppFqdn": "[concat(parameters('deploymentId'), '-cd.windowsazure.net')]",
         "cmWebAppFqdn": "[concat(parameters('deploymentId'), '-cm.windowsazure.net')]",
+        "prcWebAppFqdn": "[concat(parameters('deploymentId'), '-prc.windowsazure.net')]",
+        "repWebAppFqdn": "[concat(parameters('deploymentId'), '-rep.windowsazure.net')]",                
         "xcCollectWebAppFqdn": "[concat(parameters('deploymentId'), '-xc-collect.windowsazure.net')]",
         "xcSearchWebAppFqdn": "[concat(parameters('deploymentId'), '-xc-search.windowsazure.net')]",
         "xcRefDataWebAppFqdn": "[concat(parameters('deploymentId'), '-xc-refdata.windowsazure.net')]",
         "maOpsWebAppFqdn": "[concat(parameters('deploymentId'), '-ma-ops.windowsazure.net')]",
         "maRepWebAppFqdn": "[concat(parameters('deploymentId'), '-ma-rep.windowsazure.net')]",
-
 
         "shopsWebAppFqdn": "[concat(parameters('deploymentId'), '-shop.windowsazure.net')]",
         "opsWebAppFqdn": "[concat(parameters('deploymentId'), '-ops.windowsazure.net')]",
@@ -187,6 +192,26 @@
       "minLength": 1,
       "defaultValue": "[parameters('infrastructure').cmWebAppFqdn]"
     },
+    "prcWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-prc')]"
+    },
+    "prcWebAppFqdn": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('infrastructure').prcWebAppFqdn]"
+    },
+    "repWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-rep')]"
+    },
+    "repWebAppFqdn": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('infrastructure').repWebAppFqdn]"
+    },
     "xcRefDataWebAppName": {
       "type": "string",
       "minLength": 1,
@@ -237,7 +262,7 @@
       "minLength": 1,
       "defaultValue": "[parameters('infrastructure').maRepWebAppFqdn]"
     },
-
+    
     "shopsWebAppName": {
       "type": "string",
       "minLength": 1,
@@ -350,6 +375,22 @@
       "type": "securestring",
       "minLength": 1
     },
+    "xProfileCoreDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "xAnalyticsCoreDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "maCoreDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "maAzureDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
     "braintreeMerchantId": {
       "type": "securestring"
     },
@@ -416,6 +457,13 @@
             }
           },
           {
+            "packageUri": "[parameters('maCoreDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cdWebAppNameTidy')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"              
+            }
+          },
+          {
             "packageUri": "[parameters('commerceEngineConnectCdMsDeployPackageUrl')]",
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
@@ -450,6 +498,28 @@
             }
           },
           {
+            "packageUri": "[parameters('xProfileCoreDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
+          },
+          {
+            "packageUri": "[parameters('xAnalyticsCoreDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"              
+            }
+          },
+          {
+            "packageUri": "[parameters('maCoreDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"              
+            }
+          },
+          {
             "packageUri": "[parameters('commerceEngineConnectCmMsDeployPackageUrl')]",
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
@@ -459,8 +529,8 @@
               "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
               "Business Tools Link": "[concat('https://', variables('bizfxAppFqdnTidy'))]",
               "Ops Service URL": "[concat('https://', variables('opsWebAppFqdnTidy'), '/commerceops/')]",
-              "Shops Service URL": "[concat('https://', variables('shopsWebAppFqdnTidy'), '/api/')]",
-              "Default Environment": "[parameters('environmentName')]",
+              "Shops Service URL": "[concat('https://', variables('authoringWebAppFqdnTidy'), '/api/')]",
+              "Default Environment": "HabitatAuthoring",
               "Default Shop Name": "[variables('defaultShopNameTidy')]",
               "Default Shop Currency": "[parameters('defaultShopCurrency')]",
               "Certificate Thumbprint": "[parameters('authCertificateThumbprint')]"
@@ -478,6 +548,44 @@
             "setParameters": {
               "Application Path": "[variables('cmWebAppNameTidy')]",
               "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('prcWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]" ],      
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('xAnalyticsCoreDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('prcWebAppNameTidy')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"              
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('repWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]" ],      
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('xAnalyticsCoreDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('repWebAppNameTidy')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"              
             }
           }
         ]
@@ -523,6 +631,12 @@
       "properties": {
         "addOnPackages": [
           {
+            "packageUri": "[parameters('indexWorkerDefinitionsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('maOpsWebAppNameTidy')]"
+            }
+          },
+          {
             "packageUri": "[parameters('xConnectDefinitionsDeployPackageUrl')]",
             "setParameters": {
               "Application Path": "[variables('xcSearchWebAppNameTidy')]"
@@ -540,6 +654,18 @@
         "addOnPackages": [
           {
             "packageUri": "[parameters('indexWorkerDefinitionsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('maOpsWebAppNameTidy')]"
+            }
+          },
+          {
+            "packageUri": "[parameters('xConnectDefinitionsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('xcRefDataWebAppNameTidy')]"
+            }
+          },
+          {
+            "packageUri": "[parameters('maAzureDeployPackageUrl')]",
             "setParameters": {
               "Application Path": "[variables('maOpsWebAppNameTidy')]"
             }
@@ -582,7 +708,7 @@
 
               "SiteTitle": "[variables('siteTitle')]",
               "DeploymentId": "[parameters('deploymentId')]",
-              "EnvironmentName": "[parameters('environmentName')]",
+              "EnvironmentName": "HabitatAuthoring",              
               "ApplicationInsightsKey": "[parameters('applicationInsightsKey')]",
               "CertificateThumbprint": "[parameters('authCertificateThumbprint')]",
               "AntiForgeryEnabled": false,
@@ -639,7 +765,7 @@
 
               "SiteTitle": "[variables('siteTitle')]",
               "DeploymentId": "[parameters('deploymentId')]",
-              "EnvironmentName": "[parameters('environmentName')]",
+              "EnvironmentName": "HabitatAuthoring",
               "ApplicationInsightsKey": "[parameters('applicationInsightsKey')]",
               "CertificateThumbprint": "[parameters('authCertificateThumbprint')]",
               "AntiForgeryEnabled": false,
@@ -696,7 +822,7 @@
 
               "SiteTitle": "[variables('siteTitle')]",
               "DeploymentId": "[parameters('deploymentId')]",
-              "EnvironmentName": "[parameters('environmentName')]",
+              "EnvironmentName": "HabitatMinions",
               "ApplicationInsightsKey": "[parameters('applicationInsightsKey')]",
               "CertificateThumbprint": "[parameters('authCertificateThumbprint')]",
               "AntiForgeryEnabled": false,
@@ -754,7 +880,7 @@
 
               "SiteTitle": "[variables('siteTitle')]",
               "DeploymentId": "[parameters('deploymentId')]",
-              "EnvironmentName": "[parameters('environmentName')]",
+              "EnvironmentName": "HabitatShops",
               "ApplicationInsightsKey": "[parameters('applicationInsightsKey')]",
               "CertificateThumbprint": "[parameters('authCertificateThumbprint')]",
               "AntiForgeryEnabled": false,
