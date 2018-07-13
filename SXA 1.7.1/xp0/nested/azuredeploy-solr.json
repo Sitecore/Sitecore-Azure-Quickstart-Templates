@@ -85,7 +85,7 @@
 
   "resources": [
     {
-      "name": "[concat(variables('singleWebAppName'), '/', 'MSDeploy')]",
+      "name": "[concat(variables('singleWebAppNameTidy'), '/', 'MSDeploy')]",
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
@@ -96,7 +96,7 @@
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
             "setParameters": {
-              "Application Path": "[variables('cmWebAppNameTidy')]"
+              "Application Path": "[variables('singleWebAppNameTidy')]"
             }
           }
         ]
