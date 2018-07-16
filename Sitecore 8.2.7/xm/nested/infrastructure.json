@@ -94,6 +94,11 @@
       "defaultValue": "[concat(parameters('deploymentId'), '-web-db')]"
     },    
     
+    "deployAzureSearch": {
+      "type": "bool",
+      "defaultValue": true
+    },
+
     "searchServiceName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
@@ -530,6 +535,7 @@
     },
     {
       "type": "Microsoft.Search/searchServices",
+      "condition": "[parameters('deployAzureSearch')]",
       "apiVersion": "[variables('searchApiVersion')]",
       "name": "[variables('searchServiceNameTidy')]",
       "location": "[parameters('searchServiceLocation')]",

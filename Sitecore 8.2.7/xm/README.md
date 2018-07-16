@@ -28,6 +28,18 @@ The **deploymentId** and **licenseXml** parameters are filled in by the PowerShe
 | cmMsDeployPackageUrl    | The blob storage url to a Sitecore XM Content Management Web Deploy package.
 | cdMsDeployPackageUrl    | The blob storage url to a Sitecore XM Content Delivery Web Deploy package.
 
+## Deploying with Solr Search
+> **solrConnectionString** is a link to the Solr search service. The parameter specifies whether Solr
+> search will be used for the deployment or not. The default value is empty which means that Azure Search
+> will be used. In the case where solrConnectionString is populated with the Solr search connection string,
+> the following parameters should be additionally specified in `azuredeploy.parameters.json`:
+
+| Parameter                                 | Description
+--------------------------------------------|------------------------------------------------
+| bootloaderMsDeployPackageUrl              | Specifies a blob storage url to a bootloader Web Deploy package.
+| cmSolrConfigurationMsDeployPackageUrl     | Specifies a blob storage url to Solr **CM** configuration Web Deploy package.
+| cdSolrConfigurationMsDeployPackageUrl     | Specifies a blob storage url to Solr **CD** configuration Web Deploy package.
+
 > **Note:**
 > * The **searchServiceLocation** parameter can be added to the `azuredeploy.parameters.json`
 > to specify geographical region to deploy Azure Search Service. Default value is the resource

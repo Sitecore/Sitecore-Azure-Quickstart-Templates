@@ -5,20 +5,30 @@
     "resourcesApiVersion": "2016-09-01",
     "defaultDependency": [
       {
-        "name": "application"
+        "name": "[if(empty(parameters('solrConnectionString')), 'application-as', 'application-solr')]"
       }
     ],
-    "dependencies": "[concat(variables('defaultDependency'), parameters('modules').items)]"
+    "moduleFullList": "[union(parameters('systemModules').items, parameters('modules').items)]",
+    "dependencies": "[concat(variables('defaultDependency'), variables('moduleFullList'))]"
   },
   "parameters": {
     "modules": {
       "type": "secureObject",
       "defaultValue": {
+        "items": [          
+        ]
+      }
+    },
+    "systemModules": {
+      "type": "secureObject",
+      "defaultValue": {
         "items": [
           {
-            "name": "empty",
-            "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
+            "name": "bootloader",
+            "deployModule": "[not(empty(parameters('bootloaderMsDeployPackageUrl')))]",
+            "templateLink": "[concat(uri(parameters('templateLinkBase'), 'addons/bootloader.json'), parameters('templateLinkAccessToken'))]",
             "parameters": {
+              "msDeployPackageUrl": "[parameters('bootloaderMsDeployPackageUrl')]"
             }
           }
         ]
@@ -343,6 +353,32 @@
       "minLength": 1
     },
 
+    "bootloaderMsDeployPackageUrl": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+
+    "solrConnectionString": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "cmSolrConfigurationMsDeployPackageUrl": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "cdSolrConfigurationMsDeployPackageUrl": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "prcSolrConfigurationMsDeployPackageUrl": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "repSolrConfigurationMsDeployPackageUrl": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+
     "securityClientIp": {
       "type": "string",
       "defaultValue": "0.0.0.0"
@@ -370,7 +406,7 @@
   "resources": [
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(deployment().name, '-infrastructure')]",
+      "name": "[concat(parameters('deploymentId'), '-infrastructure')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "incremental",
@@ -453,6 +489,11 @@
           "redisCacheName": {
             "value": "[parameters('redisCacheName')]"
           },
+
+          "deployAzureSearch": {
+            "value": "[empty(parameters('solrConnectionString'))]"
+          },
+
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
           },
@@ -481,14 +522,19 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(deployment().name, '-application')]",
+      "name": "[concat(parameters('deploymentId'), '-application-as')]",
       "type": "Microsoft.Resources/deployments",
+      "condition": "[empty(parameters('solrConnectionString'))]",
       "properties": {
         "mode": "incremental",
         "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application.json'), parameters('templateLinkAccessToken'))]"
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application-as.json'), parameters('templateLinkAccessToken'))]"
         },
         "parameters": {
+          "templateLinkAccessToken": {
+            "value": "[parameters('templateLinkAccessToken')]"
+          },
+
           "deploymentId": {
             "value": "[parameters('deploymentId')]"
           },
@@ -676,26 +722,250 @@
           },
 
           "infrastructure": {
-            "value": "[reference(concat(deployment().name, '-infrastructure')).outputs.infrastructure.value]"
+            "value": "[reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value]"
           }
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', concat(deployment().name, '-infrastructure'))]"
+        "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-infrastructure'))]"
+      ]
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-application-solr')]",
+      "type": "Microsoft.Resources/deployments",
+      "condition": "[not(empty(parameters('solrConnectionString')))]",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application-solr.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "templateLinkAccessToken": {
+            "value": "[parameters('templateLinkAccessToken')]"
+          },
+          
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "sitecoreAdminPassword": {
+            "value": "[parameters('sitecoreAdminPassword')]"
+          },
+          "passwordSalt": {
+            "value": "[parameters('passwordSalt')]"
+          },
+          "licenseXml": {
+            "value": "[parameters('licenseXml')]"
+          },
+
+          "coreSqlDatabaseName": {
+            "value": "[parameters('coreSqlDatabaseName')]"
+          },
+          "masterSqlDatabaseName": {
+            "value": "[parameters('masterSqlDatabaseName')]"
+          },
+          "webSqlDatabaseName": {
+            "value": "[parameters('webSqlDatabaseName')]"
+          },
+          "reportingSqlDatabaseName": {
+            "value": "[parameters('reportingSqlDatabaseName')]"
+          },
+
+          "solrConnectionString": {
+            "value": "[parameters('solrConnectionString')]"
+          },
+          "cmSolrConfigurationMsDeployPackageUrl": {
+            "value": "[parameters('cmSolrConfigurationMsDeployPackageUrl')]"
+          },
+          "cdSolrConfigurationMsDeployPackageUrl": {
+            "value": "[parameters('cdSolrConfigurationMsDeployPackageUrl')]"
+          },      
+          "prcSolrConfigurationMsDeployPackageUrl": {
+            "value": "[parameters('prcSolrConfigurationMsDeployPackageUrl')]"
+          },
+          "repSolrConfigurationMsDeployPackageUrl": {
+            "value": "[parameters('repSolrConfigurationMsDeployPackageUrl')]"
+          }, 
+
+          "redisCacheName": {
+            "value": "[parameters('redisCacheName')]"
+          },
+
+          "applicationInsightsName": {
+            "value": "[parameters('applicationInsightsName')]"
+          },
+
+          "cmWebAppName": {
+            "value": "[parameters('cmWebAppName')]"
+          },
+           "cmMsDeployPackageUrl": {
+            "value": "[parameters('cmMsDeployPackageUrl')]"
+          },
+          "cmCoreSqlDatabaseUserName": {
+            "value": "[parameters('cmCoreSqlDatabaseUserName')]"
+          },
+          "cmCoreSqlDatabasePassword": {
+            "value": "[parameters('cmCoreSqlDatabasePassword')]"
+          },
+          "cmMasterSqlDatabaseUserName": {
+            "value": "[parameters('cmMasterSqlDatabaseUserName')]"
+          },
+          "cmMasterSqlDatabasePassword": {
+            "value": "[parameters('cmMasterSqlDatabasePassword')]"
+          },
+          "cmWebSqlDatabaseUserName": {
+            "value": "[parameters('cmWebSqlDatabaseUserName')]"
+          },
+          "cmWebSqlDatabasePassword": {
+            "value": "[parameters('cmWebSqlDatabasePassword')]"
+          },
+
+          "cdWebAppName": {
+            "value": "[parameters('cdWebAppName')]"
+          },
+          "cdMsDeployPackageUrl": {
+            "value": "[parameters('cdMsDeployPackageUrl')]"
+          },
+          "cdCoreSqlDatabaseUserName": {
+            "value": "[parameters('cdCoreSqlDatabaseUserName')]"
+          },
+          "cdCoreSqlDatabasePassword": {
+            "value": "[parameters('cdCoreSqlDatabasePassword')]"
+          },
+          "cdWebSqlDatabaseUserName": {
+            "value": "[parameters('cdWebSqlDatabaseUserName')]"
+          },
+          "cdWebSqlDatabasePassword": {
+            "value": "[parameters('cdWebSqlDatabasePassword')]"
+          },
+
+          "prcWebAppName": {
+            "value": "[parameters('prcWebAppName')]"
+          },
+          "prcMsDeployPackageUrl": {
+            "value": "[parameters('prcMsDeployPackageUrl')]"
+          },
+          "prcCoreSqlDatabaseUserName": {
+            "value": "[parameters('prcCoreSqlDatabaseUserName')]"
+          },
+          "prcCoreSqlDatabasePassword": {
+            "value": "[parameters('prcCoreSqlDatabasePassword')]"
+          },
+          "prcMasterSqlDatabaseUserName": {
+            "value": "[parameters('prcMasterSqlDatabaseUserName')]"
+          },
+          "prcMasterSqlDatabasePassword": {
+            "value": "[parameters('prcMasterSqlDatabasePassword')]"
+          },
+          "prcWebSqlDatabaseUserName": {
+            "value": "[parameters('prcWebSqlDatabaseUserName')]"
+          },
+          "prcWebSqlDatabasePassword": {
+            "value": "[parameters('prcWebSqlDatabasePassword')]"
+          },
+          "prcReportingSqlDatabaseUserName": {
+            "value": "[parameters('prcReportingSqlDatabaseUserName')]"
+          },
+          "prcReportingSqlDatabasePassword": {
+            "value": "[parameters('prcReportingSqlDatabasePassword')]"
+          },
+
+          "repWebAppName": {
+            "value": "[parameters('repWebAppName')]"
+          },
+          "repMsDeployPackageUrl": {
+            "value": "[parameters('repMsDeployPackageUrl')]"
+          },
+          "repCoreSqlDatabaseUserName": {
+            "value": "[parameters('repCoreSqlDatabaseUserName')]"
+          },
+          "repCoreSqlDatabasePassword": {
+            "value": "[parameters('repCoreSqlDatabasePassword')]"
+          },
+          "repMasterSqlDatabaseUserName": {
+            "value": "[parameters('repMasterSqlDatabaseUserName')]"
+          },
+          "repMasterSqlDatabasePassword": {
+            "value": "[parameters('repMasterSqlDatabasePassword')]"
+          },
+          "repWebSqlDatabaseUserName": {
+            "value": "[parameters('repWebSqlDatabaseUserName')]"
+          },
+          "repWebSqlDatabasePassword": {
+            "value": "[parameters('repWebSqlDatabasePassword')]"
+          },
+          "repReportingSqlDatabaseUserName": {
+            "value": "[parameters('repReportingSqlDatabaseUserName')]"
+          },
+          "repReportingSqlDatabasePassword": {
+            "value": "[parameters('repReportingSqlDatabasePassword')]"
+          },
+          "repAuthenticationApiKey": {
+            "value": "[parameters('repAuthenticationApiKey')]"
+          },
+
+          "sqlServerLogin": {
+            "value": "[parameters('sqlServerLogin')]"
+          },
+          "sqlServerPassword": {
+            "value": "[parameters('sqlServerPassword')]"
+          },
+          "webSqlServerLogin": {
+            "value": "[parameters('webSqlServerLogin')]"
+          },
+          "webSqlServerPassword": {
+            "value": "[parameters('webSqlServerPassword')]"
+          },
+
+          "analyticsMongoDbConnectionString": {
+            "value": "[parameters('analyticsMongoDbConnectionString')]"
+          },
+          "trackingLiveMongoDbConnectionString": {
+            "value": "[parameters('trackingLiveMongoDbConnectionString')]"
+          },
+          "trackingHistoryMongoDbConnectionString": {
+            "value": "[parameters('trackingHistoryMongoDbConnectionString')]"
+          },
+          "trackingContactMongoDbConnectionString": {
+            "value": "[parameters('trackingContactMongoDbConnectionString')]"
+          },
+
+          "securityClientIp": {
+            "value": "[parameters('securityClientIp')]"
+          },
+          "securityClientIpMask": {
+            "value": "[parameters('securityClientIpMask')]"
+          },
+
+          "telerikEncryptionKey": {
+            "value": "[parameters('telerikEncryptionKey')]"
+          },
+
+          "infrastructure": {
+            "value": "[reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-infrastructure'))]"
       ]
     },
     {
       "copy": {
         "name": "modules",
-        "count": "[length(parameters('modules').items)]"
+        "count": "[length(variables('moduleFullList'))]"
       },
-      "name": "[concat(deployment().name, '-' , parameters('modules').items[copyIndex()].name)]",
+      "name": "[concat(parameters('deploymentId'), '-' , variables('moduleFullList')[copyIndex()].name)]",
+      "condition": "[if(contains(variables('moduleFullList')[copyIndex()], 'deployModule'), variables('moduleFullList')[copyIndex()].deployModule, bool('true'))]",
       "apiVersion": "[variables('resourcesApiVersion')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "incremental",
         "templateLink": {
-          "uri": "[parameters('modules').items[copyIndex()].templateLink]"
+          "uri": "[variables('moduleFullList')[copyIndex()].templateLink]"
         },
         "parameters": {
           "standard": {
@@ -769,17 +1039,19 @@
               "trackingHistoryMongoDbConnectionString": "[parameters('trackingHistoryMongoDbConnectionString')]",
               "trackingContactMongoDbConnectionString": "[parameters('trackingContactMongoDbConnectionString')]",
 
+              "solrConnectionString": "[parameters('solrConnectionString')]",
+
               "securityClientIp": "[parameters('securityClientIp')]",
               "securityClientIpMask": "[parameters('securityClientIpMask')]",
 
-              "infrastructure": "[reference(concat(deployment().name, '-infrastructure')).outputs.infrastructure.value]"
+              "infrastructure": "[reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value]"
             }
           },
-          "extension": { "value": "[parameters('modules').items[copyIndex()].parameters]" }
+          "extension": { "value": "[variables('moduleFullList')[copyIndex()].parameters]" }
         }
       },
       "dependsOn": [
-        "[concat(deployment().name, '-' , variables('dependencies')[copyIndex()].name)]"
+        "[concat(parameters('deploymentId'), '-' , variables('dependencies')[copyIndex()].name)]"
       ]
     }
   ]
