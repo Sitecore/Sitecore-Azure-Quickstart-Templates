@@ -130,7 +130,11 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-ai-pp')]"
     },
-
+    "applicationInsightsDataVolumeCap": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    
     "sitecoreSKU": {
       "type": "string",
       "allowedValues": [ "xM1", "xM2", "xM3", "xM4", "xM5" ],
@@ -588,7 +592,7 @@
       "properties": {
        "CurrentBillingFeatures": "[parameters('resourceSizes').ApplicationInsightsPricePlan.CurrentBillingFeatures]",
        "DataVolumeCap": {
-         "Cap": "[parameters('resourceSizes').ApplicationInsightsPricePlan.DataVolumeCap.Cap]"
+        "Cap": "[if(empty(parameters('applicationInsightsDataVolumeCap')), parameters('resourceSizes').ApplicationInsightsPricePlan.DataVolumeCap.Cap, float(parameters('applicationInsightsDataVolumeCap')))]"
         }
        },
       "dependsOn": [

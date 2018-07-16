@@ -145,6 +145,10 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-ai-pp')]"
     },
+    "applicationInsightsDataVolumeCap": {
+      "type": "string",
+      "defaultValue": ""
+    },
 
     "prcHostingPlanName": {
       "type": "string",
@@ -406,6 +410,9 @@
           },
           "applicationInsightsPricePlan": {
             "value": "[parameters('applicationInsightsPricePlan')]"
+          },
+          "applicationInsightsDataVolumeCap": {
+            "value": "[parameters('applicationInsightsDataVolumeCap')]"
           },
 
           "sitecoreSKU": {

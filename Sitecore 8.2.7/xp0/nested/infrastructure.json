@@ -17,6 +17,7 @@
     "repDbNameTidy": "[toLower(trim(parameters('reportingSqlDatabaseName')))]",
     "searchServiceNameTidy": "[toLower(trim(parameters('searchServiceName')))]",
     "appInsightsNameTidy": "[toLower(trim(parameters('applicationInsightsName')))]",
+    "appInsightsPricePlanTidy": "[toLower(trim(parameters('applicationInsightsPricePlan')))]",
     "sitecoreTags": {
       "provider": "b51535c2-ab3e-4a68-95f8-e2e3c9a19299"
     }
@@ -132,6 +133,22 @@
       "defaultValue": "East US"
     },
 
+    "applicationInsightsPricePlan": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ai-pp')]"
+    },
+    "applicationInsightsCurrentBillingFeatures": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "Basic",
+      "allowedValues": [ "Basic", "Application Insights Enterprise" ]
+    },
+    "applicationInsightsDataVolumeCap": {
+      "type": "string",
+      "defaultValue": "0.33"
+    },
+      
     "singleHostingPlanName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-single-hp')]"
@@ -334,6 +351,24 @@
         "ApplicationId": "[variables('appInsightsNameTidy')]",
         "Application_Type": "web"
       },
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]"
+      }
+    },
+    {
+      "type": "Microsoft.Insights/Components/CurrentBillingFeatures",
+      "name": "[concat(variables('appInsightsNameTidy'), '/', variables('appInsightsPricePlanTidy'))]",
+      "apiVersion": "[variables('appInsightsApiVersion')]",
+      "location": "[parameters('applicationInsightsLocation')]",      
+      "properties": {
+        "CurrentBillingFeatures": "[parameters('applicationInsightsCurrentBillingFeatures')]",
+        "DataVolumeCap": {
+          "Cap": "[float(parameters('applicationInsightsDataVolumeCap'))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]"
+      ],
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
       }

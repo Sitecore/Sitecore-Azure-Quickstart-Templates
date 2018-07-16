@@ -36,7 +36,7 @@
     },
     "templateLinkBase": {
       "type": "string",
-      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri,' ','%20'), '.')]"
+      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri, ' ', '%20'), '.')]"
     },
     "templateLinkAccessToken": {
       "type": "securestring",
@@ -146,7 +146,11 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-ai-pp')]"
     },
-
+    "applicationInsightsDataVolumeCap": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    
     "cmHostingPlanName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-cm-hp')]"
@@ -358,6 +362,9 @@
           "applicationInsightsPricePlan": {
             "value": "[parameters('applicationInsightsPricePlan')]"
           },
+          "applicationInsightsDataVolumeCap": {
+            "value": "[parameters('applicationInsightsDataVolumeCap')]"
+          },          
 
           "sitecoreSKU": {
             "value": "[parameters('sitecoreSKU')]"

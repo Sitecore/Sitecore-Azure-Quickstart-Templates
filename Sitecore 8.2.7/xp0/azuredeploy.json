@@ -161,6 +161,22 @@
       "defaultValue": "East US"
     },
 
+    "applicationInsightsPricePlan": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ai-pp')]"
+    },
+    "applicationInsightsCurrentBillingFeatures": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "Basic",
+      "allowedValues": [ "Basic", "Application Insights Enterprise" ]
+    },
+    "applicationInsightsDataVolumeCap": {
+      "type": "string",
+      "defaultValue": "0.33"
+    },
+    
     "singleHostingPlanName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-single-hp')]"
@@ -351,6 +367,16 @@
             "value": "[parameters('applicationInsightsLocation')]"
           },
 
+          "applicationInsightsPricePlan": {
+            "value": "[parameters('applicationInsightsPricePlan')]"
+          },
+          "applicationInsightsCurrentBillingFeatures": {
+            "value": "[parameters('applicationInsightsCurrentBillingFeatures')]"
+          },
+          "applicationInsightsDataVolumeCap": {
+            "value": "[parameters('applicationInsightsDataVolumeCap')]"
+          },
+          
           "singleHostingPlanName": {
             "value": "[parameters('singleHostingPlanName')]"
           },
