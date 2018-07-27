@@ -2,10 +2,8 @@
 
 
 This template deploys the Sitecore Experience Commerce (Sitecore XC) module into a Sitecore XP Environment.  
-Sitecore XC 9.0.2 is compatible with:
-  Sitecore XP 9.0.2
-  SXA 1.7.1
-  SXA Storefront 1.2
+
+Sitecore XC 9.0.2 is compatible with: Sitecore XP 9.0.2, SXA 1.7.1, SXA Storefront 1.2
 
 ## Parameters
 
