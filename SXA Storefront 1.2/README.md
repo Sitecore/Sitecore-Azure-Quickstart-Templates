@@ -3,7 +3,7 @@
 
 This template deploys the SXA Storefront module into a Sitecore XP Environment. SXA Storefront requires Sitecore XC and SXA modules.
 
-SXA Storefront 1.2 is compatible with Sitecore XP 9.0.2 and Sitecore XC 9.0.2.
+SXA Storefront 1.2 is compatible with: Sitecore XP 9.0.2, Sitecore XC 9.0.2, SXA 1.7.1.
 
 ## Parameters
 
