@@ -62,18 +62,6 @@
     "xConnectDefinitionsDeployPackageUrl": {
       "value": ""
     },
-    "xProfileCoreDeployPackageUrl": {
-      "value": ""
-    },
-    "xAnalyticsCoreDeployPackageUrl": {
-      "value": ""
-    },
-    "maCoreDeployPackageUrl": {
-      "value": ""
-    },
-    "maAzureDeployPackageUrl": {
-      "value": ""
-    },
     "braintreeMerchantId": {
       "value": ""
     },
