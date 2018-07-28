@@ -22,8 +22,11 @@ Choose the compatible templates for your Sitecore version:
 | AD 1.3.0         | Active Directory 1.3                                                  |
 | EXM 3.5.0        | Email Experience Manager 3.5.0                                        |
 | SXA         | Sitecore Experience Accelerator 1.3 - 1.6 for Sitecore 8.2 and Sitecore 9.0	 |
-| Sitecore XC 9.0.0 | Sitecore Experience Commerce 9.0 Initial                             |
-| SXA Storefront 1.0 | SXA Storefront 1.0 for Sitecore XC 9.0 Initial                      |
+| Sitecore XC 9.0.0 | Commerce 9.0 Initial, Commerce 9.0 Update-1. Use with templates: Sitecore 9.0.1, SXA 1.6, SXA Storefront 1.0 |
+| Sitecore XC 9.0.2 | Commerce 9.0 Update-2. Use with templates: Sitecore 9.0.2, SXA 1.7.1, SXA Storefront 1.2 |
+| SXA Storefront 1.0 | SXA Storefront 1.0. Use with templates: Sitecore 9.0.1, Sitecore XC 9.0.0, SXA 1.6 |
+| SXA Storefront 1.2 | SXA Storefront 1.2. Use with templates: Sitecore 9.0.2, Sitecore XC 9.0.2, SXA 1.7.1 |
+
 
 # Pre-deployment Checklist
 1. Ensure you have the latest Azure PowerShell SDK installed
