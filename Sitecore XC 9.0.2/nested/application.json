@@ -558,7 +558,7 @@
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
-      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]" ],      
+      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('cdWebAppNameTidy'), '/Extensions/MSDeploy')]" ],      
       "properties": {
         "addOnPackages": [
           {
@@ -577,7 +577,7 @@
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
-      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]" ],      
+      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('prcWebAppNameTidy'), '/Extensions/MSDeploy')]" ],      
       "properties": {
         "addOnPackages": [
           {
