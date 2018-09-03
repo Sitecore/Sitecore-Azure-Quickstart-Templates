@@ -38,7 +38,7 @@ In order to configure Sitecore deployment parameters to include Sitecore Experie
         "cdSxaMsDeployPackageUrl" : "<URL of the WDP file Sitecore Experience Accelerator * CD.scwdp.zip>",
         "cmSxaMsDeployPackageUrl" : "<URL of the WDP file Sitecore Experience Accelerator *.scwdp.zip>",
         "speMsDeployPackageUrl" : "<URL of the WDP file Sitecore PowerShell Extensions *.scwdp.zip>",
-        "solrSupportSxaMsDeployPackageUrl" : "<URL of the WDP file SXA Solr Support *.scwdp.zip>",
+        "solrSupportSxaMsDeployPackageUrl" : "<URL of the WDP file SXA Solr Support *.scwdp.zip> Can be empty",
         "templateLinkAccessToken" : "Access token for the template if stored under the Azure storage. Otherwise should be empty string"
     }
 }

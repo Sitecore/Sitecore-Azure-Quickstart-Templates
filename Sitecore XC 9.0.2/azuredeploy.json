@@ -19,9 +19,13 @@
 
         "coreSqlDatabaseName": null,
         "masterSqlDatabaseName": null,
+        "webSqlDatabaseName": null,
+        "shard0SqlDatabaseName": null,
+        "shard1SqlDatabaseName": null,
 
         "cdWebAppName": null,
         "cmWebAppName": null,
+        "prcWebAppName": null,
         "xcRefDataWebAppName": null,
         "xcCollectWebAppName": null,
         "xcSearchWebAppName": null,
@@ -44,7 +48,11 @@
         "adventureWorksImagesDeployPackageUrl": null,
         "habitatImagesDeployPackageUrl": null,
         "indexWorkerDefinitionsDeployPackageUrl": null,
-        "xConnectDefinitionsDeployPackageUrl": null        
+        "xConnectDefinitionsDeployPackageUrl": null,
+        "xProfileCoreDeployPackageUrl": null,
+        "xAnalyticsCoreDeployPackageUrl": null,
+        "maCoreDeployPackageUrl": null,
+        "maAzureDeployPackageUrl": null
       }
     },
     "extensionDefaults":{
@@ -156,6 +164,22 @@
       "minLength": 1,
       "defaultValue": "[coalesce(parameters('standard').masterSqlDatabaseName, concat(parameters('deploymentId'), '-master-db'))]"
     },
+    "webSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').webSqlDatabaseName, concat(parameters('deploymentId'), '-web-db'))]"
+    },
+    "shard0SqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').shard0SqlDatabaseName, concat(parameters('deploymentId'), '-shard0-db'))]"
+    },
+    "shard1SqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').shard1SqlDatabaseName, concat(parameters('deploymentId'), '-shard1-db'))]"
+    },
+
     "globalSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -211,6 +235,17 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-cm-hp')]"
     },
+    "cdHostingPlanName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-cd-hp')]"
+    },
+    "xcResourceIntensiveHostingPlanName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-xc-resourceintensive-hp')]"
+    },
+
     "cdWebAppName": {
       "type": "string",
       "minLength": 1,
@@ -220,6 +255,11 @@
       "type": "string",
       "minLength": 1,
       "defaultValue": "[coalesce(parameters('standard').cmWebAppName, concat(parameters('deploymentId'), '-cm'))]"
+    },
+    "prcWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').prcWebAppName, concat(parameters('deploymentId'), '-prc'))]"
     },
     "xcRefDataWebAppName": {
       "type": "string",
@@ -331,6 +371,26 @@
       "minLength": 1,
       "defaultValue": "[parameters('extensionExpanded').xConnectDefinitionsDeployPackageUrl]"
     },
+    "xProfileCoreDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').xProfileCoreDeployPackageUrl]"
+    },
+    "xAnalyticsCoreDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').xAnalyticsCoreDeployPackageUrl]"
+    },
+    "maCoreDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').maCoreDeployPackageUrl]"
+    },
+    "maAzureDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').maAzureDeployPackageUrl]"
+    },
     "braintreeMerchantId": {
       "type": "securestring",
       "defaultValue": "[parameters('extensionExpanded').braintreeMerchantId]"
@@ -402,11 +462,18 @@
           "sqlServerName": {
             "value": "[parameters('sqlServerName')]"
           },
-
           "sqlDatabaseCollation": {
             "value": "[parameters('sqlDatabaseCollation')]"
           },
-
+          "webSqlDatabaseName": {
+            "value": "[parameters('webSqlDatabaseName')]"
+          },
+          "shard0SqlDatabaseName": {
+            "value": "[parameters('shard0SqlDatabaseName')]"
+          },
+          "shard1SqlDatabaseName": {
+            "value": "[parameters('shard1SqlDatabaseName')]"
+          },
           "globalSqlDatabaseName": {
             "value": "[parameters('globalSqlDatabaseName')]"
           },
@@ -421,6 +488,12 @@
           },
           "cmHostingPlanName": {
             "value": "[parameters('cmHostingPlanName')]"
+          },
+          "cdHostingPlanName": {
+            "value": "[parameters('cdHostingPlanName')]"
+          },
+          "xcResourceIntensiveHostingPlanName": {
+            "value": "[parameters('xcResourceIntensiveHostingPlanName')]"
           },
           "shopsWebAppName": {
             "value": "[parameters('shopsWebAppName')]"
@@ -439,6 +512,9 @@
           },
           "cmWebAppName": {
             "value": "[parameters('cmWebAppName')]"
+          },
+          "prcWebAppName": {
+            "value": "[parameters('prcWebAppName')]"
           },
           "xcRefDataWebAppName": {
             "value": "[parameters('xcRefDataWebAppName')]"
@@ -543,6 +619,9 @@
           "cmWebAppName": {
             "value": "[parameters('cmWebAppName')]"
           },
+          "prcWebAppName": {
+            "value": "[parameters('prcWebAppName')]"
+          },
           "xcRefDataWebAppName": {
             "value": "[parameters('xcRefDataWebAppName')]"
           },
@@ -599,6 +678,18 @@
           },
           "xConnectDefinitionsDeployPackageUrl": {
             "value": "[parameters('xConnectDefinitionsDeployPackageUrl')]"
+          },
+          "xProfileCoreDeployPackageUrl": {
+            "value": "[parameters('xProfileCoreDeployPackageUrl')]"
+          },
+          "xAnalyticsCoreDeployPackageUrl": {
+            "value": "[parameters('xAnalyticsCoreDeployPackageUrl')]"
+          },
+          "maCoreDeployPackageUrl": {
+            "value": "[parameters('maCoreDeployPackageUrl')]"
+          },
+          "maAzureDeployPackageUrl": {
+            "value": "[parameters('maAzureDeployPackageUrl')]"
           },
           "braintreeMerchantId": {
             "value": "[parameters('braintreeMerchantId')]"

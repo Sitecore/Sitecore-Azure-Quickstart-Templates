@@ -123,7 +123,6 @@
 
     "solrSupportSxaMsDeployPackageUrl": {
       "type": "securestring",
-      "minLength": 1,
       "defaultValue": "[parameters('extension').solrSupportSxaMsDeployPackageUrl]"
     }
   },
