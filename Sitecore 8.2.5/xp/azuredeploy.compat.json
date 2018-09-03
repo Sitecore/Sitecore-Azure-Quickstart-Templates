@@ -295,6 +295,11 @@
       "minLength": 32
     },
 
+    "settlsversion.msdeploy.packageurl": {
+      "type": "securestring",
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
+    },
+    
     "analytics.mongodb.connectionstring": {
       "type": "securestring",
       "minLength": 1
@@ -530,6 +535,10 @@
           },
           "repAuthenticationApiKey": {
             "value": "[parameters('rep.authentication.apikey')]"
+          },
+
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('settlsversion.msdeploy.packageurl')]"
           },
 
           "analyticsMongoDbConnectionString": {

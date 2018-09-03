@@ -107,6 +107,10 @@
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('cdweb', parameters('passwordSalt'))), uniqueString('cdweb', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('cdweb', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
 
     "sqlServerLogin": {
       "type": "string",
@@ -239,6 +243,9 @@
           },
           "cdWebSqlDatabasePassword": {
             "value": "[parameters('cdWebSqlDatabasePassword')]"
+          },
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
           },
 
           "sqlServerLogin": {

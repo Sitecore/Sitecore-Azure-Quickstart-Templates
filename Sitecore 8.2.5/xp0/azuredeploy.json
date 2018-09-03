@@ -206,6 +206,13 @@
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('singlereporting', parameters('passwordSalt'))), uniqueString('singlereporting', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('singlereporting', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
+
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
+    },
+
     "analyticsMongoDbConnectionString": {
       "type": "securestring",
       "minLength": 1
@@ -419,6 +426,10 @@
             "value": "[parameters('singleReportingSqlDatabasePassword')]"
           },
 
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },
+          
           "analyticsMongoDbConnectionString": {
             "value": "[parameters('analyticsMongoDbConnectionString')]"
           },
@@ -436,6 +447,7 @@
             "value": "[parameters('telerikEncryptionKey')]"
           },
           
+
           "infrastructure": {
             "value": "[reference(concat(deployment().name, '-infrastructure')).outputs.infrastructure.value]"
           }
@@ -491,6 +503,8 @@
               "singleWebSqlDatabasePassword": "[parameters('singleWebSqlDatabasePassword')]",
               "singleReportingSqlDatabaseUserName": "[parameters('singleReportingSqlDatabaseUserName')]",
               "singleReportingSqlDatabasePassword": "[parameters('singleReportingSqlDatabasePassword')]",
+              
+              "setTlsVersionMsDeployPackageUrl": "[parameters('setTlsVersionMsDeployPackageUrl')]",
 
               "analyticsMongoDbConnectionString": "[parameters('analyticsMongoDbConnectionString')]",
               "trackingLiveMongoDbConnectionString": "[parameters('trackingLiveMongoDbConnectionString')]",

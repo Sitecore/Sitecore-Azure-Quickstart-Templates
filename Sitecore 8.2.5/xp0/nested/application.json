@@ -146,6 +146,11 @@
       "defaultValue": "[concat(toUpper(uniqueString('singlereporting', parameters('passwordSalt'))), uniqueString('singlereporting', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('singlereporting', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
 
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
     "analyticsMongoDbConnectionString": {
       "type": "securestring",
       "minLength": 1
@@ -182,6 +187,14 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('setTlsVersionMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('webAppNameTidy')]"
+            }
+          },
+          {
             "packageUri": "[parameters('singleMsDeployPackageUrl')]",
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
@@ -214,7 +227,9 @@
               "Telerik Encryption Key": "[parameters('telerikEncryptionKey')]",
               "License Xml": "[parameters('licenseXml')]"
             }
-    }
+          }
+        ]
+      }  
     },
     {
       "name": "[concat(variables('webAppNameTidy'), '/', 'appsettings')]",

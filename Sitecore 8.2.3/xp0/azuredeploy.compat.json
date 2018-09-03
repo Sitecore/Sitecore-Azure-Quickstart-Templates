@@ -188,6 +188,11 @@
       "defaultValue": "[concat(uniquestring(parameters('single.reporting.sqldatabase.username'), parameters('password.salt')), toUpper(uniquestring(parameters('single.reporting.sqldatabase.username'), parameters('password.salt'), parameters('sqlserver.password'))), uniquestring(parameters('single.reporting.sqldatabase.username'), parameters('password.salt'), parameters('sitecore.admin.password')))]"
     },
 
+    "settlsversion.msdeploy.packageurl": {
+      "type": "securestring",
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
+    },
+
     "analytics.mongodb.connectionstring": {
       "type": "securestring",
       "minLength": 1
@@ -344,6 +349,11 @@
           "singleReportingSqlDatabasePassword": {
             "value": "[parameters('single.reporting.sqldatabase.password')]"
           },
+
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('settlsversion.msdeploy.packageurl')]"
+          },
+
           "analyticsMongoDbConnectionString": {
             "value": "[parameters('analytics.mongodb.connectionstring')]"
           },

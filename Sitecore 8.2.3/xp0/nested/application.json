@@ -146,6 +146,11 @@
       "defaultValue": "[concat(uniquestring(parameters('singleReportingSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('singleReportingSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('singleReportingSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
     },
 
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
     "analyticsMongoDbConnectionString": {
       "type": "securestring",
       "minLength": 1
@@ -178,6 +183,14 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('setTlsVersionMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('webAppNameTidy')]"
+            }
+          },
+          {
             "packageUri": "[parameters('singleMsDeployPackageUrl')]",
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
@@ -209,6 +222,8 @@
               "Application Insights Role": "Single",
               "License Xml": "[parameters('licenseXml')]"
             }
+          }
+        ]
       }
     },
     {

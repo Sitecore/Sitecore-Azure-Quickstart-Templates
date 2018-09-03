@@ -317,6 +317,12 @@
       "minLength": 32
     },
 
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
+    },
+
     "analyticsMongoDbConnectionString": {
       "type": "securestring",
       "minLength": 1
@@ -622,6 +628,10 @@
           "repAuthenticationApiKey": {
             "value": "[parameters('repAuthenticationApiKey')]"
           },
+          
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },
 
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
@@ -660,6 +670,7 @@
             "value": "[parameters('telerikEncryptionKey')]"
           },
           
+
           "infrastructure": {
             "value": "[reference(concat(deployment().name, '-infrastructure')).outputs.infrastructure.value]"
           }
@@ -752,6 +763,8 @@
               "trackingLiveMongoDbConnectionString": "[parameters('trackingLiveMongoDbConnectionString')]",
               "trackingHistoryMongoDbConnectionString": "[parameters('trackingHistoryMongoDbConnectionString')]",
               "trackingContactMongoDbConnectionString": "[parameters('trackingContactMongoDbConnectionString')]",
+
+              "setTlsVersionMsDeployPackageUrl": "[parameters('setTlsVersionMsDeployPackageUrl')]",
 
               "securityClientIp": "[parameters('securityClientIp')]",
               "securityClientIpMask": "[parameters('securityClientIpMask')]",

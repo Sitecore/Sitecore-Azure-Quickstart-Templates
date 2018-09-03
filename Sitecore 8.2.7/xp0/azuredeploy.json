@@ -251,6 +251,11 @@
       "type": "securestring",
       "defaultValue": ""
     },
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
+    },
 
     "analyticsMongoDbConnectionString": {
       "type": "securestring",
@@ -486,6 +491,9 @@
           "singleReportingSqlDatabasePassword": {
             "value": "[parameters('singleReportingSqlDatabasePassword')]"
           },
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },
 
           "analyticsMongoDbConnectionString": {
             "value": "[parameters('analyticsMongoDbConnectionString')]"
@@ -609,6 +617,9 @@
           "singleSolrConfigurationMsDeployPackageUrl": {
             "value": "[parameters('singleSolrConfigurationMsDeployPackageUrl')]"
           },
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },
 
           "analyticsMongoDbConnectionString": {
             "value": "[parameters('analyticsMongoDbConnectionString')]"
@@ -687,6 +698,7 @@
 
               "solrConnectionString": "[parameters('solrConnectionString')]",
 
+              "setTlsVersionMsDeployPackageUrl": "[parameters('setTlsVersionMsDeployPackageUrl')]",
               "analyticsMongoDbConnectionString": "[parameters('analyticsMongoDbConnectionString')]",
               "trackingLiveMongoDbConnectionString": "[parameters('trackingLiveMongoDbConnectionString')]",
               "trackingHistoryMongoDbConnectionString": "[parameters('trackingHistoryMongoDbConnectionString')]",

@@ -157,6 +157,10 @@
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('cdweb', parameters('passwordSalt'))), uniqueString('cdweb', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('cdweb', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
 
     "cloudSearchConnectionString": {
       "type": "securestring",
@@ -187,6 +191,14 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('setTlsVersionMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]"
+            }
+          },
+          {
             "packageUri": "[parameters('cmMsDeployPackageUrl')]",
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
@@ -214,6 +226,8 @@
               "Telerik Encryption Key": "[parameters('telerikEncryptionKey')]",
               "License Xml": "[parameters('licenseXml')]"
             }
+          }
+        ]
       }
     },
     {
@@ -234,6 +248,14 @@
       "apiVersion": "[variables('webApiVersion')]",
       "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]" ],
       "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('setTlsVersionMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cdWebAppNameTidy')]"
+            }
+          },
+          {
             "packageUri": "[parameters('cdMsDeployPackageUrl')]",
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
@@ -254,6 +276,8 @@
               "Application Insights Role": "CD",
               "License Xml": "[parameters('licenseXml')]"
             }
+          }
+        ]
       }
     },
     {

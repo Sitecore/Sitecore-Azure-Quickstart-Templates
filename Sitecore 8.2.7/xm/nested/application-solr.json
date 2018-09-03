@@ -150,6 +150,10 @@
       "type": "securestring",
       "defaultValue": ""
     },
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
 
     "redisCacheName": {
       "type": "string",
@@ -247,7 +251,10 @@
           "cdWebSqlDatabasePassword": {
             "value": "[parameters('cdWebSqlDatabasePassword')]"
           },
-
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },
+          
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
           },

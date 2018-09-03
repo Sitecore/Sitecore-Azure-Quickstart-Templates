@@ -212,6 +212,12 @@
       "defaultValue": "0.0.0.0"
     },
 
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
+    },
+
     "sitecoreSKU": {
       "type": "string",
       "allowedValues": [ "xM1", "xM2", "xM3", "xM4", "xM5" ],
@@ -421,6 +427,10 @@
             "value": "[parameters('securityClientIpMask')]"
           },
 
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },
+
           "infrastructure": {
             "value": "[reference(concat(deployment().name, '-infrastructure')).outputs.infrastructure.value]"
           }
@@ -485,6 +495,8 @@
               "cdWebSqlDatabaseUserName": "[parameters('cdWebSqlDatabaseUserName')]",
               "cdWebSqlDatabasePassword": "[parameters('cdWebSqlDatabasePassword')]",
 
+              "setTlsVersionMsDeployPackageUrl": "[parameters('setTlsVersionMsDeployPackageUrl')]",
+              
               "securityClientIp": "[parameters('securityClientIp')]",
               "securityClientIpMask": "[parameters('securityClientIpMask')]",
 

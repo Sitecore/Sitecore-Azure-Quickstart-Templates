@@ -339,6 +339,11 @@
       "type": "securestring",
       "minLength": 32
     },
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
+    },
 
     "analyticsMongoDbConnectionString": {
       "type": "securestring",
@@ -574,6 +579,7 @@
           "redisCacheName": {
             "value": "[parameters('redisCacheName')]"
           },
+
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
           },
@@ -689,6 +695,9 @@
           },
           "repAuthenticationApiKey": {
             "value": "[parameters('repAuthenticationApiKey')]"
+          },
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
           },
 
           "sqlServerLogin": {
@@ -913,6 +922,9 @@
           "repAuthenticationApiKey": {
             "value": "[parameters('repAuthenticationApiKey')]"
           },
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },
 
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
@@ -997,6 +1009,7 @@
               "reportingSqlDatabaseName": "[parameters('reportingSqlDatabaseName')]",
 
               "redisCacheName": "[parameters('redisCacheName')]",
+
               "searchServiceName": "[parameters('searchServiceName')]",
               "searchServiceLocation": "[parameters('searchServiceLocation')]",
               "applicationInsightsName": "[parameters('applicationInsightsName')]",
@@ -1039,6 +1052,7 @@
               "repWebSqlDatabasePassword": "[parameters('repWebSqlDatabasePassword')]",
               "repReportingSqlDatabaseUserName": "[parameters('repReportingSqlDatabaseUserName')]",
               "repReportingSqlDatabasePassword": "[parameters('repReportingSqlDatabasePassword')]",
+              "setTlsVersionMsDeployPackageUrl": "[parameters('setTlsVersionMsDeployPackageUrl')]",
 
               "repAuthenticationApiKey": "[parameters('repAuthenticationApiKey')]",
               "analyticsMongoDbConnectionString": "[parameters('analyticsMongoDbConnectionString')]",

@@ -210,6 +210,11 @@
       "minLength": 32
     },
 
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
     "analyticsMongoDbConnectionString": {
       "type": "securestring",
       "minLength": 1
@@ -464,7 +469,9 @@
           "repAuthenticationApiKey": {
             "value": "[parameters('repAuthenticationApiKey')]"
           },
-
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
           },

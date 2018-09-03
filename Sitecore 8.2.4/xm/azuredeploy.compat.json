@@ -188,6 +188,11 @@
       "type": "string",
       "defaultValue": "0.0.0.0"
     },
+    
+    "settlsversion.msdeploy.packageurl": {
+      "type": "securestring",
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
+    },
 
     "sitecoreSKU": {
       "type": "string",
@@ -326,6 +331,10 @@
             "value": "[parameters('cd.web.sqldatabase.password')]"
           },
 
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('settlsversion.msdeploy.packageurl')]"
+          },
+          
           "securityClientIp": {
             "value": "[parameters('security.clientIp')]"
           },

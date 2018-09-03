@@ -244,6 +244,11 @@
       "type": "securestring",
       "defaultValue": ""
     },
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
+    },
 
     "securityClientIp": {
       "type": "string",
@@ -446,6 +451,9 @@
           "cdWebSqlDatabasePassword": {
             "value": "[parameters('cdWebSqlDatabasePassword')]"
           },
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },
 
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
@@ -575,6 +583,9 @@
           "cdWebSqlDatabasePassword": {
             "value": "[parameters('cdWebSqlDatabasePassword')]"
           },
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },
 
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
@@ -693,6 +704,7 @@
               "cdCoreSqlDatabasePassword": "[parameters('cdCoreSqlDatabasePassword')]",
               "cdWebSqlDatabaseUserName": "[parameters('cdWebSqlDatabaseUserName')]",
               "cdWebSqlDatabasePassword": "[parameters('cdWebSqlDatabasePassword')]",
+              "setTlsVersionMsDeployPackageUrl": "[parameters('setTlsVersionMsDeployPackageUrl')]",
 
               "solrConnectionString": "[parameters('solrConnectionString')]",
               "securityClientIp": "[parameters('securityClientIp')]",

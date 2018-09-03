@@ -207,6 +207,13 @@
       "minLength": 8,
       "defaultValue": "[concat(uniquestring(parameters('singleReportingSqlDatabaseUserName'), parameters('passwordSalt')), toUpper(uniquestring(parameters('singleReportingSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sqlServerPassword'))), uniquestring(parameters('singleReportingSqlDatabaseUserName'), parameters('passwordSalt'), parameters('sitecoreAdminPassword')))]"
     },
+
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
+    },
+
     "analyticsMongoDbConnectionString": {
       "type": "securestring",
       "minLength": 1
@@ -350,6 +357,10 @@
             "value": "[parameters('licenseXml')]"
           },
 
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },
+
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
           },
@@ -414,6 +425,10 @@
             "value": "[parameters('singleReportingSqlDatabasePassword')]"
           },
 
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },
+          
           "analyticsMongoDbConnectionString": {
             "value": "[parameters('analyticsMongoDbConnectionString')]"
           },
@@ -483,6 +498,8 @@
               "singleReportingSqlDatabaseUserName": "[parameters('singleReportingSqlDatabaseUserName')]",
               "singleReportingSqlDatabasePassword": "[parameters('singleReportingSqlDatabasePassword')]",
 
+              "setTlsVersionMsDeployPackageUrl": "[parameters('setTlsVersionMsDeployPackageUrl')]",
+              
               "analyticsMongoDbConnectionString": "[parameters('analyticsMongoDbConnectionString')]",
               "trackingLiveMongoDbConnectionString": "[parameters('trackingLiveMongoDbConnectionString')]",
               "trackingHistoryMongoDbConnectionString": "[parameters('trackingHistoryMongoDbConnectionString')]",
