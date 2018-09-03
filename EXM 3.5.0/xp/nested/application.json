@@ -98,6 +98,10 @@
       "defaultValue": "[concat(parameters('deploymentId'), '-exm-master-db')]"
     },
 
+    "deployAzureSearch": {
+      "type": "bool",
+      "defaultValue": true
+    },
     "searchServiceName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
@@ -233,12 +237,13 @@
       "type": "securestring",
       "minLength": 1
     },
-    "exmSetCompatibilityLevelMsDeployPackageUrl": {
+
+    "bootLoaderMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
     },
 
-    "bootLoaderMsDeployPackageUrl": {
+    "setTlsVersionMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
     },
@@ -300,24 +305,6 @@
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
         "addOnPackages": [
-          {
-            "packageUri": "[parameters('exmSetCompatibilityLevelMsDeployPackageUrl')]",
-            "dbType": "SQL",
-            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
-            "setParameters": {
-              "Application Path": "[variables('cmWebAppNameTidy')]",
-              "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
-            }
-          },
-          {
-            "packageUri": "[parameters('exmSetCompatibilityLevelMsDeployPackageUrl')]",
-            "dbType": "SQL",
-            "connectionString": "[concat('Data Source=tcp:', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]",
-            "setParameters": {
-              "Application Path": "[variables('cmWebAppNameTidy')]",
-              "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]"
-            }
-          },
           {
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
@@ -430,6 +417,12 @@
       "properties": {
         "addOnPackages": [
           {
+            "packageUri": "[parameters('setTlsVersionMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('ddsWebAppNameTidy')]"
+            }
+          },
+          {
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
             "packageUri": "[parameters('ddsExmMsDeployPackageUrl')]",
@@ -450,7 +443,7 @@
               "Reporting Service Url": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('repWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
               "Reporting Service Api Key": "[parameters('repAuthenticationApiKey')]",
               "Analytics Connection String": "[variables('analyticsMongoDbConnStrTidy')]",
-              "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchPreviewApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "Cloud Search Connection String": "[if(parameters('deployAzureSearch'), concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchPreviewApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey), 'NOT USED')]",
               "Tracking Live Connection String": "[variables('trackingLiveMongoDbConnStrTidy')]",
               "Tracking Contact Connection String": "[variables('trackingContactMongoDbConnStrTidy')]",
               "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey]",
@@ -460,14 +453,6 @@
               "IP Security Client IP Mask": "[parameters('securityClientIpMask')]",
               "Telerik Encryption Key": "[parameters('telerikEncryptionKey')]",
               "License Xml": "[parameters('licenseXml')]"
-            }
-          },
-          {
-            "dbType": "None",
-            "connectionString": "",
-            "packageUri": "[parameters('bootLoaderMsDeployPackageUrl')]",
-            "setParameters": {
-              "Application Path": "[variables('ddsWebAppNameTidy')]"
             }
           },
           {
@@ -482,13 +467,21 @@
               "EXM Master Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('exmMasterDbNameTidy'),';User Id=', parameters('ddsExmMasterSqlDatabaseUserName'), ';Password=', parameters('ddsExmMasterSqlDatabasePassword'), ';')]",
               "Cryptographic Key": "[variables('cryptographicKeyTidy')]",
               "Authentication Key": "[variables('authenticationKeyTidy')]",
-              "Internal Api Key": "[variables('internalApiKeyTidy')]",
+              "Internal Api Key": "[variables('internalApiKeyTidy')]"
             }
           },
           {
             "dbType": "None",
             "connectionString": "",
             "packageUri": "[parameters('exmSampleNewsletterFileMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('ddsWebAppNameTidy')]"
+            }
+          },
+          {
+            "dbType": "None",
+            "connectionString": "",
+            "packageUri": "[parameters('bootLoaderMsDeployPackageUrl')]",
             "setParameters": {
               "Application Path": "[variables('ddsWebAppNameTidy')]"
             }

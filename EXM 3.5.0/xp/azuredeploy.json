@@ -2,7 +2,13 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "resourcesApiVersion": "2016-09-01"
+    "resourcesApiVersion": "2016-09-01",
+    "defaultDependency": [
+      {
+        "name": "application"
+      }
+    ],
+    "dependencies": "[concat(variables('defaultDependency'), parameters('exmPatches'))]"
   },
   "parameters": {
     "standard": {
@@ -29,11 +35,13 @@
         "securityClientIpMask": null,
         "searchServiceName": null,
         "applicationInsightsName": null,
+        "setTlsVersionMsDeployPackageUrl": null,
         "repWebAppName": null,
         "repAuthenticationApiKey": null,
         "analyticsMongoDbConnectionString": null,
         "trackingLiveMongoDbConnectionString": null,
         "trackingContactMongoDbConnectionString": null,
+        "solrConnectionString": null,
         "prcWebAppName": null,
         "cdWebAppName": null,
         "cmWebAppName": null,
@@ -62,16 +70,18 @@
         "repExmReportingMsDeployPackageUrl": null,
         "ddsExmMsDeployPackageUrl": null,
         "ddsExmEmailProcessingMsDeployPackageUrl": null,
+        "ddsSolrPatchMsdeployPackageUrl": "",
 
         "exmSampleNewsletterMsDeployPackageUrl": null,
         "exmSampleNewsletterFileMsDeployPackageUrl": null,
-        "exmSetCompatibilityLevelMsDeployPackageUrl": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip",
 
         "bootLoaderMsDeployPackageUrl": null,
 
         "cryptographicKey": null,
         "authenticationKey": null,
-        "internalApiKey": null 
+        "internalApiKey": null,
+
+        "exmPatches": null
       }
     },
     "extensionExpanded": {
@@ -161,12 +171,6 @@
       "defaultValue": "[concat(parameters('deploymentId'), '-exm-web-db')]"
     },
 
-    "exmSetCompatibilityLevelMsDeployPackageUrl": {
-      "type": "securestring",
-      "minLength": 1,
-      "defaultValue": "[parameters('extensionExpanded').exmSetCompatibilityLevelMsDeployPackageUrl]"
-    },
-
     "cmExmMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1,
@@ -245,11 +249,23 @@
       "minLength": 1,
       "defaultValue": "[parameters('extensionExpanded').ddsExmEmailProcessingMsDeployPackageUrl]"
     },
+    "ddsSolrPatchMsdeployPackageUrl": {
+      "type": "securestring",
+      "defaultValue": "[parameters('extensionExpanded').ddsSolrPatchMsdeployPackageUrl]"
+    },
+
     "bootLoaderMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "[parameters('extensionExpanded').bootLoaderMsDeployPackageUrl]"
     },
+
+    "setTlsVersionMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('standardExpanded').setTlsVersionMsDeployPackageUrl]"
+    },
+
     "ddsHostingPlanName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-exm-dds-hp')]"
@@ -360,9 +376,36 @@
       "type": "string",
       "defaultValue": "[coalesce(parameters('standardExpanded').searchServiceName, concat(parameters('deploymentId'), '-as'))]"
     },
+    "solrConnectionString": {
+      "type": "securestring",
+      "defaultValue": "[parameters('standardExpanded').solrConnectionString]"
+    },
+
     "applicationInsightsName": {
       "type": "string",
       "defaultValue": "[coalesce(parameters('standardExpanded').applicationInsightsName, concat(parameters('deploymentId'), '-ai'))]"
+    },
+
+    "exmPatches": {
+      "type": "array",
+      "defaultValue": [
+        {
+          "name": "solr-patch",
+          "condition": "[not(empty(parameters('solrConnectionString')))]",
+          "templateLink": "[concat(uri(parameters('templateLinkBase'), 'patches/solr.json'), parameters('templateLinkAccessToken'))]",
+          "parameters": {
+            "msDeployPackageUrl": {
+              "value": "[parameters('ddsSolrPatchMsdeployPackageUrl')]"
+            },
+            "solrConnectionString": {
+              "value": "[parameters('solrConnectionString')]"
+            },
+            "ddsWebAppName": {
+              "value": "[parameters('ddsWebAppName')]"
+            }
+          }
+        }
+      ]
     }
   },
 
@@ -458,17 +501,17 @@
             "value": "[parameters('exmMasterSqlDatabaseName')]"
           },
 
+          "deployAzureSearch": {
+            "value": "[empty(parameters('solrConnectionString'))]"
+          },
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
           },
+
           "applicationInsightsName": {
             "value": "[parameters('applicationInsightsName')]"
           },
 
-          "exmSetCompatibilityLevelMsDeployPackageUrl": {
-            "value": "[parameters('exmSetCompatibilityLevelMsDeployPackageUrl')]"
-          },
-          
           "cmExmMsDeployPackageUrl": {
             "value": "[parameters('cmExmMsDeployPackageUrl')]"
           },
@@ -560,6 +603,10 @@
             "value": "[parameters('bootLoaderMsDeployPackageUrl')]"
           },
 
+          "setTlsVersionMsDeployPackageUrl": {
+            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
+          },          
+
           "cryptographicKey": {
             "value": "[parameters('cryptographicKey')]"
           },
@@ -597,6 +644,26 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments', concat(deployment().name, '-infrastructure'))]"
+      ]
+    },
+    {
+      "copy": {
+        "name": "[concat(deployment().name, '-exm-pacthes')]",
+        "count": "[length(parameters('exmPatches'))]"
+      },
+      "name": "[concat(deployment().name, '-' , parameters('exmPatches')[copyIndex()].name)]",
+      "condition": "[coalesce(parameters('exmPatches')[copyIndex()].condition, bool('true'))]",
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "[parameters('exmPatches')[copyIndex()].templateLink]"
+        },
+        "parameters": "[parameters('exmPatches')[copyIndex()].parameters]"
+      },
+      "dependsOn": [
+        "[concat(deployment().name, '-' , variables('dependencies')[copyIndex()].name)]"
       ]
     }
   ]

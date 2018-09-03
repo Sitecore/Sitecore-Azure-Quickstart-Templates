@@ -38,7 +38,6 @@
         "singleExmMsDeployPackageUrl": null,
         "exmSampleNewsletterMsDeployPackageUrl": null,
         "exmSampleNewsletterFileMsDeployPackageUrl": null,
-        "exmSetCompatibilityLevelMsDeployPackageUrl": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip",       
         "cryptographicKey": null,
         "authenticationKey": null,
         "templateLinkAccessToken": ""
@@ -90,11 +89,6 @@
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "[parameters('extensionExpanded').exmSampleNewsletterFileMsDeployPackageUrl]"
-    },
-    "exmSetCompatibilityLevelMsDeployPackageUrl": {
-      "type": "securestring",
-      "minLength": 1,
-      "defaultValue": "[parameters('extensionExpanded').exmSetCompatibilityLevelMsDeployPackageUrl]"
     },
     "cryptographicKey": {
       "type": "securestring",
@@ -213,9 +207,6 @@
           },
           "exmSampleNewsletterFileMsDeployPackageUrl": {
             "value": "[parameters('exmSampleNewsletterFileMsDeployPackageUrl')]"
-          },
-          "exmSetCompatibilityLevelMsDeployPackageUrl": {
-            "value": "[parameters('exmSetCompatibilityLevelMsDeployPackageUrl')]"
           },
           "deploymentId": {
             "value": "[parameters('deploymentId')]"

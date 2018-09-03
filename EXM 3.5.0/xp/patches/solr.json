@@ -1,0 +1,56 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-08-01",
+    "ddsWebAppNameTidy": "[toLower(trim(parameters('ddsWebAppName')))]"
+  },
+  "parameters": {
+
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+
+    "solrConnectionString": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
+    "msDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
+    "ddsWebAppName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-dds')]"
+    }
+
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('ddsWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "dbType": "None",
+            "connectionString": "",
+            "packageUri": "[parameters('msDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('ddsWebAppNameTidy')]",
+              "Solr Connection String": "[parameters('solrConnectionString')]"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
