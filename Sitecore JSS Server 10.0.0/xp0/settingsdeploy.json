@@ -1,0 +1,93 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-08-01",
+
+    "singleWebAppNameTidy": "[toLower(trim(parameters('singleWebAppName')))]",
+    "defaultAppSettings": {
+      "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
+      "WEBSITE_DYNAMIC_CACHE": 0
+    },
+    "mergedAppSettings": "[union(variables('defaultAppSettings'), parameters('appSettings'))]"
+  },
+  "parameters": {
+    "standard": {
+      "type": "secureObject",
+      "defaultValue": {
+        "infrastructure": {
+          "authCertificateThumbprint": null
+        },
+
+        "deploymentId": null,
+        "location": null,
+        "singleWebAppName": null
+      }
+    },
+    "extension": {
+      "type": "secureObject",
+      "defaultValue": {
+        "authCertificateThumbprint": null,
+        "appSettings": {},
+        "connectionStrings": {}
+      }
+    },
+
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').deploymentId, resourceGroup().name)]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').location, resourceGroup().location)]"
+    },
+    "singleWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').singleWebAppName, concat(parameters('deploymentId'), '-single'))]"
+    },
+    "authCertificateThumbprint": {
+      "type": "string",
+      "minLength": 8,
+      "defaultValue": "[parameters('standard').infrastructure.authCertificateThumbprint]"
+    },
+    "appSettings": {
+      "type": "secureObject",
+      "defaultValue": "[parameters('extension').appSettings]"
+    },
+    "connectionStrings": {
+      "type": "secureObject",
+      "defaultValue": "[parameters('extension').connectionStrings]"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/sites",
+      "name": "[variables('singleWebAppNameTidy')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "location": "[parameters('location')]",
+      "properties": {},
+      "resources": [
+        {
+          "type": "config",
+          "name": "appsettings",
+          "apiVersion": "[variables('webApiVersion')]",
+          "properties": "[variables('mergedAppSettings')]",
+          "dependsOn": [
+            "[variables('singleWebAppNameTidy')]"
+          ]
+        },
+        {
+          "type": "config",
+          "name": "connectionstrings",
+          "apiVersion": "[variables('webApiVersion')]",
+          "properties": "[parameters('connectionStrings')]",
+          "dependsOn": [
+            "[variables('singleWebAppNameTidy')]"
+          ]
+        }
+      ]
+    }
+  ]
+}

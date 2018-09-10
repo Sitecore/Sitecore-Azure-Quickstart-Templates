@@ -7,8 +7,7 @@
     "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
     "coreSqlDatabaseNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
     "masterSqlDatabaseNameTidy": "[toLower(trim(parameters('masterSqlDatabaseName')))]",
-    "singleWebAppNameTidy": "[toLower(trim(parameters('singleWebAppName')))]",
-    "searchProvider": "[if(empty(parameters('solrConnectionString')), 'Azure', 'Solr')]"
+    "singleWebAppNameTidy": "[toLower(trim(parameters('singleWebAppName')))]"
   },
   "parameters": {
     "standard": {
@@ -24,8 +23,7 @@
         "sqlServerPassword": null,
         "coreSqlDatabaseName": null,
         "masterSqlDatabaseName": null,
-        "singleWebAppName": null,
-        "solrConnectionString": null
+        "singleWebAppName": null
       }
     },
     "extension": {
@@ -90,8 +88,7 @@
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "[parameters('extension').jssMsDeployPackageUrl]"
-    },
-
+    }
   },
 
   "resources": [
@@ -114,10 +111,6 @@
           }
         ]
       }
-    },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('singleWebAppNameTidy'),'MSDeploy')]"
-      ]
     }
   ]
 }

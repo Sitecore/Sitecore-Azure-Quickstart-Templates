@@ -1,6 +1,6 @@
-# Sitecore JavaScript Services Server module for Sitecore XP0 Environment
+# Sitecore JavaScript Services Server module for Sitecore XP Environment
 
-This template deploys Sitecore JavaScript Services Server modules into a Sitecore XP0 (XPSingle) Environment (single all-in-one instance).
+This template deploys Sitecore JavaScript Services Server modules into a Sitecore XP Environment.
 
 ## Parameters for Sitecore JavaScript Services Server
 
@@ -19,12 +19,23 @@ In order to configure Sitecore deployment parameters to include Sitecore JavaScr
 * Add the following snippet to the `modules` parameter:
 ```JSON
   {
-    "name": "sxa",
-    "templateLink": "https://raw.githubusercontent.com/Sitecore/Sitecore-Azure-Quickstart-Templates/master/SXA/xp0/azuredeploy.json",
+    "name": "jss",
+    "templateLink": "https://raw.githubusercontent.com/Sitecore/Sitecore-Azure-Quickstart-Templates/master/JSS/xp/azuredeploy.json",
     "parameters":
     {
-      "jssMsDeployPackageUrl": "<URL of the WDP file *_sxa.scwdp.zip>",
+      "jssMsDeployPackageUrl": "<URL of the WDP file for Sitecore JavaScript Services Server *.scwdp>",
       "templateLinkAccessToken" : "Access token for the template if stored under the Azure storage. Otherwise should be empty string"
+    }
+  }, 
+  {
+    "name": "settings",
+    "templateLink": "https://raw.githubusercontent.com/Sitecore/Sitecore-Azure-Quickstart-Templates/master/JSS/xp/settingsdeploy.json",
+    "parameters":
+    {
+	  "appSettings": {
+	    "WEBSITE_NODE_DEFAULT_VERSION": "8.11.1"
+	  },
+	  "connectionStrings": {}
     }
   }
 ```
