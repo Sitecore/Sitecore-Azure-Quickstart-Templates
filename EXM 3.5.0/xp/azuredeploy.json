@@ -41,7 +41,7 @@
         "analyticsMongoDbConnectionString": null,
         "trackingLiveMongoDbConnectionString": null,
         "trackingContactMongoDbConnectionString": null,
-        "solrConnectionString": null,
+        "solrConnectionString": "",
         "prcWebAppName": null,
         "cdWebAppName": null,
         "cmWebAppName": null,
