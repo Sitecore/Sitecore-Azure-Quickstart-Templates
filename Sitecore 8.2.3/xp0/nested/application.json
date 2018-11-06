@@ -41,7 +41,7 @@
     },
     "licenseXml": {
       "type": "securestring",
-      "minLength" : 1
+      "minLength": 1
     },
 
     "sqlServerFqdn": {

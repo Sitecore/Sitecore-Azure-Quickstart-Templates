@@ -1,6 +1,6 @@
 # Sitecore XDB Environment
 
-Visualize: 
+Visualize:
 [Infrastructure](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxdb%2Fnested%2Finfrastructure.json),
 [Application deployment](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxdb%2Fnested%2Fapplication.json)
 
@@ -12,9 +12,9 @@ Resources provisioned:
   * Sitecore roles: Processing, Reporting
 	* Hosting plans: one per role
 	* Preconfigured Web Applications, based on the provided WebDeploy packages
-  * XConnect services: Search, Collection, Reference data, Marketing Automation, Marketing Automation Reporting 
+  * XConnect services: Search, Collection, Reference data, Marketing Automation, Marketing Automation Reporting
 	* Hosting plans: XConnect Basic, XConnect Resource Intensive
-	* Preconfigured Web Applications, based on the provided WebDeploy packages 
+	* Preconfigured Web Applications, based on the provided WebDeploy packages
   * Azure Search Service
   * Application Insights for diagnostics and monitoring
 

@@ -192,6 +192,7 @@
     
     "settlsversion.msdeploy.packageurl": {
       "type": "securestring",
+      "minLength": 1,
       "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
     },
 

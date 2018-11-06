@@ -202,7 +202,7 @@
     "coreSqlDatabasePassword": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(toUpper(uniqueString('core', parameters('passwordSalt'))), uniqueString('core', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('core', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"    
+      "defaultValue": "[concat(toUpper(uniqueString('core', parameters('passwordSalt'))), uniqueString('core', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('core', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
     "masterSqlDatabaseUserName": {
       "type": "string",
@@ -285,7 +285,7 @@
           },
           "sqlDatabaseMaxSize": {
             "value": "[parameters('sqlDatabaseMaxSize')]"
-          },          
+          },
           "sqlBasicDatabaseServiceObjectiveLevel": {
             "value": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]"
           },
@@ -399,7 +399,7 @@
           "formsSqlDatabaseName": {
             "value": "[parameters('formsSqlDatabaseName')]"
           },
-         
+
           "coreSqlDatabaseUserName": {
             "value": "[parameters('coreSqlDatabaseUserName')]"
           },
@@ -442,7 +442,7 @@
           "disablePrefetchCachingMsDeployPackageUrl": {
             "value": "[parameters('disablePrefetchCachingMsDeployPackageUrl')]"
           },
-          
+
           "telerikEncryptionKey": {
             "value": "[parameters('telerikEncryptionKey')]"
           },
@@ -471,7 +471,7 @@
           "standard": {
             "value": {
               "infrastructure": "[reference(concat(deployment().name, '-infrastructure')).outputs.infrastructure.value]",
-              
+
               "deploymentId": "[parameters('deploymentId')]",
               "location": "[parameters('location')]",
               "sitecoreAdminPassword": "[parameters('sitecoreAdminPassword')]",
@@ -512,7 +512,7 @@
 
               "singleHostingPlanName": "[parameters('singleHostingPlanName')]",
               "singleWebAppName": "[parameters('singleWebAppName')]",
-              
+
               "passwordSalt": "[parameters('passwordSalt')]"
             }
           },

@@ -107,7 +107,7 @@
     "coreSqlDatabasePassword": {
       "type": "securestring",
       "minLength": 8,
-      "defaultValue": "[concat(toUpper(uniqueString('core', parameters('passwordSalt'))), uniqueString('core', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('core', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"    
+      "defaultValue": "[concat(toUpper(uniqueString('core', parameters('passwordSalt'))), uniqueString('core', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('core', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
     "masterSqlDatabaseUserName": {
       "type": "string",
@@ -381,7 +381,7 @@
           },
           "formsSqlDatabasePassword": {
             "value": "[parameters('formsSqlDatabasePassword')]"
-          },         
+          },
 
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"

@@ -713,7 +713,7 @@
           "disablePrefetchCachingMsDeployPackageUrl": {
             "value": "[parameters('disablePrefetchCachingMsDeployPackageUrl')]"
           },
-          
+
           "allowInvalidClientCertificates": {
             "value": "[parameters('allowInvalidClientCertificates')]"
           },

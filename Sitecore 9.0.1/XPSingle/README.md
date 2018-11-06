@@ -1,6 +1,6 @@
 # Sitecore XP Single Environment
 
-Visualize: 
+Visualize:
 [Infrastructure](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxpsingle%2Fnested%2Finfrastructure.json),
 [Application deployment](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxpsingle%2Fnested%2Fapplication.json)
 
@@ -8,13 +8,13 @@ This template creates a Sitecore XP Single Environment using a minimal set of Az
 
 Resources provisioned:
 
-  * Azure SQL databases : core, master, web, reporting, pools, tasks, forms, refdata, smm, shard0, shard1, ma 
+  * Azure SQL databases : core, master, web, reporting, pools, tasks, forms, refdata, smm, shard0, shard1, ma
   * Sitecore roles: Content Delivery, Content Management, Processing, Reporting as a single WebApp instance
 	  * Hosting plans: single hosting plan
 	  * Preconfigured Web Application, based on the provided WebDeploy package
   * XConnect services: Search, Collection, Reference data, Marketing Automation, Marketing Automation Reporting as a single WebApp instance
 	  * Hosting plans: single hosting plan
-	  * Preconfigured Web Application, based on the provided WebDeploy package  
+	  * Preconfigured Web Application, based on the provided WebDeploy package
   * Azure Search Service
   * Application Insights for diagnostics and monitoring
 

@@ -1,6 +1,6 @@
 # Sitecore XM Single Environment
 
-Visualize: 
+Visualize:
 [Infrastructure](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxmsingle%2Fnested%2Finfrastructure.json),
 [Application deployment](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxmsingle%2Fnested%2Fapplication.json)
 
@@ -14,7 +14,7 @@ Resources provisioned:
 	  * Hosting plans: single hosting plan
 	  * Preconfigured Web Application, based on the provided WebDeploy package
   * Azure Search Service
-  * Application Insights for diagnostics and monitoring  
+  * Application Insights for diagnostics and monitoring
 
 ## Parameters
 The **deploymentId** and **licenseXml** parameters are filled in by the PowerShell script.

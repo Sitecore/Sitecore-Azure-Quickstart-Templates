@@ -1,10 +1,10 @@
 # Sitecore XDB Single Environment
 
-Visualize: 
+Visualize:
 [Infrastructure](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxdbsingle%2Fnested%2Finfrastructure.json),
 [Application deployment](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxdbsingle%2Fnested%2Fapplication.json)
 
-This template creates a Sitecore XDB Single Environment using a minimal set of Azure resources while still ensuring Sitecore Experience Database will run. 
+This template creates a Sitecore XDB Single Environment using a minimal set of Azure resources while still ensuring Sitecore Experience Database will run.
 It is best practice to use this configuration for development and testing rather than production environments.
 
 Resources provisioned:
@@ -14,7 +14,7 @@ Resources provisioned:
   	* Hosting plans: single hosting plan
 	  * Preconfigured Web Application, based on the provided WebDeploy package
   * XConnect services: Search, Collection, Reference data, Marketing Automation, Marketing Automation Reporting as a single WebApp instance
-	  * Hosting plans: single hosting plan	
+	  * Hosting plans: single hosting plan
 	  * Preconfigured Web Application, based on the provided WebDeploy package
   * Azure Search Service
   * Application Insights for diagnostics and monitoring

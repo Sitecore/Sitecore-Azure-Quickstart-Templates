@@ -146,7 +146,7 @@
       "type": "string",
       "defaultValue": "East US"
     },
-    
+
     "singleHostingPlanName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-single-hp')]"

@@ -424,7 +424,7 @@
       "allowedValues": [ "CustomSMTP", "EmailCloud" ],
       "defaultValue": "CustomSMTP"
     },
-    
+
     "exmCryptographicKey": {
       "type": "securestring",
       "minLength": 64,
@@ -434,7 +434,7 @@
       "type": "securestring",
       "minLength": 64,
       "defaultValue": "[toUpper(replace(concat(guid(uniqueString('exmAuthenticationKey', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), guid(uniqueString('exmAuthenticationKey', parameters('sqlServerPassword'), parameters('passwordSalt')))), '-',''))]"
-    }, 
+    },
 
     "xcServerConfigurationEnvironment": {
       "type": "string",
@@ -810,7 +810,7 @@
           },
           "exmAuthenticationKey": {
             "value": "[parameters('exmAuthenticationKey')]"
-          },          
+          },
 
           "telerikEncryptionKey": {
             "value": "[parameters('telerikEncryptionKey')]"

@@ -118,7 +118,7 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-redis')]"
     },
-    
+
     "searchServiceName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
@@ -357,7 +357,7 @@
           "searchServiceReplicaCount": {
             "value": "[parameters('searchServiceReplicaCount')]"
           },
-          
+
           "applicationInsightsName": {
             "value": "[parameters('applicationInsightsName')]"
           },
@@ -481,6 +481,7 @@
           "redisCacheName": {
             "value": "[parameters('redisCacheName')]"
           },
+
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
           },
@@ -684,6 +685,7 @@
               "webSqlDatabaseName": "[parameters('webSqlDatabaseName')]",
 
               "redisCacheName": "[parameters('redisCacheName')]",
+
               "searchServiceName": "[parameters('searchServiceName')]",
               "searchServiceLocation": "[parameters('searchServiceLocation')]",
               "applicationInsightsName": "[parameters('applicationInsightsName')]",
@@ -707,6 +709,7 @@
               "setTlsVersionMsDeployPackageUrl": "[parameters('setTlsVersionMsDeployPackageUrl')]",
 
               "solrConnectionString": "[parameters('solrConnectionString')]",
+              
               "securityClientIp": "[parameters('securityClientIp')]",
               "securityClientIpMask": "[parameters('securityClientIpMask')]",
 

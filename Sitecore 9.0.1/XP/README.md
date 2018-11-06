@@ -1,6 +1,6 @@
 # Sitecore XP Environment
 
-Visualize: 
+Visualize:
 [Infrastructure](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxp%2Fnested%2Finfrastructure.json),
 [Application deployment](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxp%2Fnested%2Fapplication.json)
 

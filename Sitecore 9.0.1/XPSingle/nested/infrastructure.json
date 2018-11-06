@@ -532,7 +532,7 @@
       "type": "Microsoft.Search/searchServices",
       "apiVersion": "[variables('searchApiVersion')]",
       "name": "[variables('searchServiceNameTidy')]",
-      "location": "[parameters('location')]",
+      "location": "[parameters('searchServiceLocation')]",
       "sku": {
         "name": "[toLower(parameters('searchServiceSkuName'))]"
       },
