@@ -1,0 +1,160 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "variables": {
+        "webApiVersion": "2016-08-01",
+        "resourcesApiVersion": "2016-09-01",
+        "cdWebAppNameTidy": "[trim(toLower(parameters('cdWebAppName')))]"
+    },
+    "parameters": {
+        "standard": {
+            "type": "secureObject",
+            "defaultValue": {
+                "deploymentId": null,
+                "location": null,
+                "cdWebAppName": null
+            }
+        },
+        "extension": {
+            "type": "secureObject",
+            "defaultValue": {
+                "cdnMsDeployPackageUrl": null
+            }
+        },
+        "extensionDefaults": {
+            "type": "secureObject",
+            "defaultValue": {
+                "cdnSKU": "Standard_Akamai",
+                "templateLinkAccessToken": "",
+                "hasCdnProvider": false,
+                "mediaLinkServerUrl": "",
+                "mediaMaxAge": "7.00:00:00"
+            }
+        },
+        "extensionExpanded": {
+            "type": "secureObject",
+            "defaultValue": "[union(parameters('extensionDefaults'), parameters('extension'))]"
+        },
+        "deploymentId": {
+            "type": "string",
+            "defaultValue": "[coalesce(parameters('standard').deploymentId, resourceGroup().name)]"
+        },
+        "location": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "[coalesce(parameters('standard').location, resourceGroup().location)]"
+        },
+        "cdnSKU": {
+            "type": "string",
+            "minLength": 1,
+            "allowedValues": ["Premium_Verizon", "Standard_Verizon", "Standard_Akamai", "Standard_Microsoft"],
+            "defaultValue": "[parameters('extensionExpanded').cdnSKU]",
+            "metadata": {
+                "description": "Name of the pricing tier of CDN Profiles. - Premium_Verizon, Standard_Verizon, Standard_Akamai, Standard_Microsoft"
+            }
+        },
+        "cdWebAppName": {
+            "type": "string",
+            "defaultValue": "[coalesce(parameters('standard').cdWebAppName, concat(parameters('deploymentId'), '-cd'))]"
+        },
+        "templateLinkBase": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "[uri(replace(deployment().properties.templateLink.uri,' ','%20'), '.')]"
+        },
+        "templateLinkAccessToken": {
+            "type": "securestring",
+            "defaultValue": "[parameters('extensionExpanded').templateLinkAccessToken]"
+        },
+        "hasCdnProvider": {
+            "type": "bool",
+            "defaultValue": "[parameters('extensionExpanded').hasCdnProvider]",
+            "metadata": {
+                "description": "Providing a CDN Service if CDN is not exist"
+            }
+        },
+        "mediaLinkServerUrl": {
+            "type": "string",
+            "defaultValue": "[parameters('extensionExpanded').mediaLinkServerUrl]",
+            "metadata": {
+                "description": "The CDN Endpoint URL, should not empty if hasCdnProvider property is true"
+            }
+        },
+        "mediaMaxAge": {
+            "type": "string",
+            "defaultValue": "[parameters('extensionExpanded').mediaMaxAge]",
+            "metadata": {
+                "description": "Media Max Age for each item to expire"
+            }
+        },
+        "cdnMsDeployPackageUrl": {
+            "type": "securestring",
+            "minLength": 1,
+            "defaultValue": "[parameters('extensionExpanded').cdnMsDeployPackageUrl]",
+            "metadata": {
+                "description": "Sitecore CDN Module WDP Url"
+            }
+        }
+    },
+    "resources": [{
+            "apiVersion": "[variables('resourcesApiVersion')]",
+            "name": "[concat(parameters('deploymentId'), '-infrastructure')]",
+            "type": "Microsoft.Resources/deployments",
+            "condition": "[not(parameters('hasCdnProvider'))]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/infrastructure.json'), parameters('templateLinkAccessToken'))]"
+                },
+                "parameters": {
+                    "deploymentId": {
+                        "value": "[parameters('deploymentId')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "cdWebAppHostname": {
+                        "value": "[reference(concat('Microsoft.web/sites/', variables('cdWebAppNameTidy')), variables('webApiVersion')).defaultHostName]"
+                    },
+                    "cdnSKU": {
+                        "value": "[parameters('cdnSKU')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "[variables('resourcesApiVersion')]",
+            "name": "[concat(parameters('deploymentId'), '-application')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application.json'), parameters('templateLinkAccessToken'))]"
+                },
+                "parameters": {
+                    "deploymentId": {
+                        "value": "[parameters('deploymentId')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "cdWebAppName": {
+                        "value": "[variables('cdWebAppNameTidy')]"
+                    },
+                    "mediaLinkServerUrl": {
+                        "value": "[if(parameters('hasCdnProvider'), parameters('mediaLinkServerUrl'), concat('https://', reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value.cdnEndpointHostname))]"
+                    },
+                    "mediaMaxAge": {
+                        "value": "[parameters('mediaMaxAge')]"
+                    },
+                    "cdnMsDeployPackageUrl": {
+                        "value": "[parameters('cdnMsDeployPackageUrl')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-infrastructure'))]"
+            ]
+        }
+    ]
+}
