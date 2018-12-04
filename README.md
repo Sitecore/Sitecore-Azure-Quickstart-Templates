@@ -25,8 +25,10 @@ Choose the compatible templates for your Sitecore version:
 | SXA         | Sitecore Experience Accelerator 1.3 - 1.6 for Sitecore 8.2 and Sitecore 9.0	 |
 | Sitecore XC 9.0.0 | Commerce 9.0 Initial, Commerce 9.0 Update-1. Use with templates: Sitecore 9.0.1, SXA 1.6, SXA Storefront 1.0 |
 | Sitecore XC 9.0.2 | Commerce 9.0 Update-2. Use with templates: Sitecore 9.0.2, SXA 1.7.1, SXA Storefront 1.2 |
+| Sitecore XC 9.0.3 | Commerce 9.0 Update-3. Use with templates: Sitecore 9.0.2, SXA 1.8, SXA Storefront 1.4 |
 | SXA Storefront 1.0 | SXA Storefront 1.0. Use with templates: Sitecore 9.0.1, Sitecore XC 9.0.0, SXA 1.6 |
 | SXA Storefront 1.2 | SXA Storefront 1.2. Use with templates: Sitecore 9.0.2, Sitecore XC 9.0.2, SXA 1.7.1 |
+| SXA Storefront 1.4 | SXA Storefront 1.4. Use with templates: Sitecore 9.0.2, Sitecore XC 9.0.3, SXA 1.8 |
 
 
 # Pre-deployment Checklist
