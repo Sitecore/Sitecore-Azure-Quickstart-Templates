@@ -70,7 +70,7 @@ $params = Get-Content $ArmParametersPath -Raw | ConvertFrom-Json
 
 foreach($p in $params.parameters | Get-Member -MemberType *Property) 
 {
-	$additionalParams.Add($p.Name, $params.parameters.$($p.Name).value)
+  $additionalParams.Add($p.Name, $params.parameters.$($p.Name).value)
 }
 
 $additionalParams.Set_Item('licenseXml',$licenseFileContent)
