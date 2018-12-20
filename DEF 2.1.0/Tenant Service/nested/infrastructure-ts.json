@@ -1,0 +1,133 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-08-01",
+    "serverFarmApiVersion": "2016-09-01",
+	"certificateApiVersion": "2014-11-01",
+    "tsHostingPlanNameTidy": "[toLower(trim(parameters('tsHostingPlanName')))]",
+    "tsWebAppNameTidy": "[toLower(trim(parameters('tsWebAppName')))]",
+	"authCertificateNameTidy": "[toLower(trim(parameters('authCertificateName')))]",
+		
+	"logicalName": "logicalName",
+	"provider": "provider"
+  },
+  "parameters": {
+    "sitecoreSKU": {
+      "type": "string",
+      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large" ],
+      "defaultValue": "Extra Small",
+      "metadata": {
+        "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
+      }
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "tsHostingPlanName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ts-hp')]"
+    },
+    "tsHostingPlanSkuName": {
+      "type": "string",
+      "defaultValue": "S1"
+    },
+    "tsHostingPlanSkuCapacity": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "tsWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ts')]"
+    },
+	"authCertificateName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-auth')]"
+    },
+    "authCertificateBlob": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "authCertificatePassword": {
+      "type": "securestring",
+      "minLength": 1
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "name": "[variables('tsHostingPlanNameTidy')]",
+      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "sku": {
+        "name": "[parameters('tsHostingPlanSkuName')]",
+        "capacity": "[parameters('tsHostingPlanSkuCapacity')]"
+      },
+      "properties": {
+        "name": "[variables('tsHostingPlanNameTidy')]"
+      },
+      "location": "[parameters('location')]",
+      "tags": {
+	    "provider": "[variables('provider')]",
+        "logicalName": "[variables('logicalName')]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "name": "[variables('tsWebAppNameTidy')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "clientCertEnabled": true,
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('tsHostingPlanNameTidy'))]",
+        "siteConfig": {
+          "use32BitWorkerProcess": false,
+          "alwaysOn": true,
+          "phpVersion": "",
+          "defaultDocuments": [
+            "index.html"
+          ]
+        }
+      },
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('tsHostingPlanNameTidy'))]"
+      ],
+      "tags": {
+	    "provider": "[variables('provider')]",
+        "logicalName": "[variables('logicalName')]"
+      }
+    },
+	{
+      "type": "Microsoft.Web/certificates",
+      "name": "[variables('authCertificateNameTidy')]",
+      "apiVersion": "[variables('certificateApiVersion')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('tsHostingPlanNameTidy'))]"
+      ],
+      "properties": {
+        "password": "[parameters('authCertificatePassword')]",
+        "pfxBlob": "[parameters('authCertificateBlob')]"
+      },
+      "tags": {
+        "provider": "[variables('provider')]"
+      }
+    }
+  ],
+  "outputs": {
+    "infrastructure": {
+      "type": "object",
+      "value": {
+        "authCertificateThumbprint": "[reference(resourceId('Microsoft.Web/certificates', variables('authCertificateNameTidy'))).thumbprint]"
+      }
+    }
+  }
+}

@@ -1,0 +1,246 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "resourcesApiVersion": "2016-09-01",
+    "defaultDependency": [
+      {
+        "name": "application"
+      }
+    ],
+	"appInsights": "[if(parameters('useApplicationInsights'), parameters('applicationInsightsName'), '')]"
+  },
+  "parameters": {
+		   "standard": {
+			  "type": "secureObject",
+			  "defaultValue": {
+				"deploymentId": null,
+				"location": null,
+				"sitecoreAdminPassword": null,
+				"cmWebAppName": null,
+				"applicationInsightsName": "",
+				"useApplicationInsights":false,
+				"authCertificateBlob": "",
+				"authCertificatePassword": ""
+			  }
+			},
+			"extension": {
+			  "type": "secureObject",
+			  "defaultValue": {
+				"tsMsDeployPackageUrl": null,
+				"templateLinkBase": "[uri(replace(json(string(deployment().properties.templateLink)).uri,' ','%20'), '.')]",
+				"templateLinkAccessToken": "",
+				"tsPluginPackages": [],
+				"tsWebAppName": "[concat(parameters('deploymentId'), '-ts')]"
+			  }
+			},
+    "templateLinkBase": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('extension').templateLinkBase]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": "[parameters('extension').templateLinkAccessToken]"
+    },
+	"deploymentId": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').deploymentId, resourceGroup().name)]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').location, resourceGroup().location)]"
+    },
+    "sitecoreAdminPassword": {
+      "type": "securestring",
+      "minLength": 8,
+	  "defaultValue": "[parameters('standard').sitecoreAdminPassword]"
+    },
+	"useApplicationInsights": {
+      "type": "bool",
+      "defaultValue": "[parameters('standard').useApplicationInsights]"
+    },
+    "applicationInsightsName": {
+      "type": "string",
+      "defaultValue": "[parameters('standard').applicationInsightsName]"
+    },
+    "tsHostingPlanName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ts-hp')]"
+    },
+    "tsHostingPlanSkuName": {
+      "type": "string",
+      "defaultValue": "S1"
+    },
+    "tsHostingPlanSkuCapacity": {
+      "type": "int",
+      "defaultValue": 1
+    },
+	"cmWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').cmWebAppName, concat(parameters('deploymentId'), '-cm'))]"
+    },
+    "tsWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ts')]"
+    },
+    "tsMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+	  "defaultValue": "[parameters('extension').tsMsDeployPackageUrl]"
+    },
+    "authCertificateName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-auth')]"
+    },
+    "authCertificateBlob": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').authCertificateBlob]"
+    },
+    "authCertificatePassword": {
+      "type": "securestring",
+      "minLength": 1,
+	  "defaultValue": "[parameters('standard').authCertificatePassword]"
+    },
+    "allowInvalidClientCertificates": {
+      "type": "bool",
+      "defaultValue":false
+    },
+    "passwordSalt": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().id]"
+    }
+	,"tsPluginPackages": {
+	  "type": "array",
+	  "defaultValue": "[parameters('extension').tsPluginPackages]"
+	}
+  },
+  "resources": [
+        {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-infrastructure-ts')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/infrastructure-ts.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "tsHostingPlanName": {
+            "value": "[parameters('tsHostingPlanName')]"
+          },
+          "tsHostingPlanSkuName": {
+            "value": "[parameters('tsHostingPlanSkuName')]"
+          },
+          "tsHostingPlanSkuCapacity": {
+            "value": "[parameters('tsHostingPlanSkuCapacity')]"
+          },
+          "tsWebAppName": {
+            "value": "[parameters('tsWebAppName')]"
+          },
+		  "authCertificateName": {
+            "value": "[parameters('authCertificateName')]"
+          },
+          "authCertificateBlob": {
+            "value": "[parameters('authCertificateBlob')]"
+          },
+          "authCertificatePassword": {
+            "value": "[parameters('authCertificatePassword')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-application-ts')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application-ts.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name, '-infrastructure-ts')).outputs.infrastructure.value]"
+          },
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "applicationInsightsName": {
+            "value": "[variables('appInsights')]"
+          },
+		  "cmWebAppName": {
+            "value": "[parameters('cmWebAppName')]"
+          },
+          "tsWebAppName": {
+            "value": "[parameters('tsWebAppName')]"
+          },
+          "tsMsDeployPackageUrl": {
+            "value": "[parameters('tsMsDeployPackageUrl')]"
+          },
+          "allowInvalidClientCertificates": {
+            "value": "[parameters('allowInvalidClientCertificates')]"
+          },
+		  "sitecoreAdminPassword": {
+		  "value": "[parameters('sitecoreAdminPassword')]"
+		  },
+          "passwordSalt": {
+            "value": "[parameters('passwordSalt')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat(deployment().name, '-infrastructure-ts'))]"
+      ]
+    },
+	{
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-application-plugins')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application-ts-plugins.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name, '-infrastructure-ts')).outputs.infrastructure.value]"
+          },
+
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "tsWebAppName": {
+            "value": "[parameters('tsWebAppName')]"
+          },
+		  "tsPluginPackages": {
+		  "value": "[parameters('tsPluginPackages')]"
+		  }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat(deployment().name, '-infrastructure-ts'))]",
+		"[resourceId('Microsoft.Resources/deployments', concat(deployment().name, '-application-ts'))]"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+  "deploymentId": {
+      "value": ""
+    },
+    "location": {
+      "value": ""
+    },
+    "sitecoreAdminPassword": {
+      "value": ""
+    },
+		"tsMsDeployPackageUrl":{
+			"value": ""
+		},
+		"authCertificateBlob":{
+			"value":""
+		},
+		"authCertificatePassword":{
+			  "value": ""
+		},
+		"templateLinkAccessToken":{
+			"value":""
+		},
+		"applicationInsightsName":{
+			"value": ""
+		},
+		"useApplicationInsights":{
+			"value":true
+		},
+		"templateLinkBase":{
+			  "value": ""
+		},
+		"tsWebAppName":{
+			"value":""
+		},
+	"tsPluginPackages": {
+	  "value": []
+	}
+  }
+}

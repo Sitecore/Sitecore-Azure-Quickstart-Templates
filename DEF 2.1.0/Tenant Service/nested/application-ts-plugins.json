@@ -1,0 +1,56 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-03-01",
+    "tsWebAppNameTidy": "[toLower(trim(parameters('tsWebAppName')))]",
+  },
+  "parameters": {
+    "infrastructure": {
+      "type": "secureObject",
+      "defaultValue": {
+        "authCertificateThumbprint": null
+      }
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "tsWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ts')]"
+    },
+	"tsPluginPackages": {
+	  "type": "array",
+	  "defaultValue": []
+	}
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('tsWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+		  "copy": [
+			  {
+				"name": "addOnPackages",
+				"count": "[length(parameters('tsPluginPackages'))]",
+				"input": {
+					"packageUri": "[parameters('tsPluginPackages')[copyIndex('addOnPackages')].packageUri]",
+					"setParameters": {
+					  "Application Path": "[variables('tsWebAppNameTidy')]"
+					}
+				  }
+			  }
+		  ]
+      }
+    }
+  ]
+}

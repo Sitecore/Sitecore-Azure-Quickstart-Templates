@@ -1,0 +1,106 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-03-01",
+    "appInsightsApiVersion": "2015-05-01",
+    
+    "appInsightsNameTidy": "[toLower(trim(parameters('applicationInsightsName')))]",
+
+    "tsWebAppNameTidy": "[toLower(trim(parameters('tsWebAppName')))]",
+	
+	"tenantServiceLogLevel": "Information",
+
+    "connectionStringParameters": {
+	  "hostName": "sitecore",
+      "tenantId": "00000000-0000-0000-0000-000000000000",
+      "sitecoreUser": "sitecore\\admin",
+      "sitecoreUserPassword": "[parameters('sitecoreAdminPassword')]"
+    }
+  },
+  "parameters": {
+    "infrastructure": {
+      "type": "secureObject",
+      "defaultValue": {
+        "authCertificateThumbprint": null
+      }
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "applicationInsightsName": {
+      "type": "string",
+      "defaultValue": ""
+    },
+	"cmWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-cm')]"
+    },
+    "tsWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ts')]"
+    },
+    "tsMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "allowInvalidClientCertificates": {
+      "type": "bool",
+      "defaultValue":false
+    },
+	"sitecoreAdminPassword": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "b"
+    },
+    "passwordSalt": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().id]"
+    },
+	"authCertificateThumbprint": {
+      "type": "string",
+      "minLength": 8,
+      "defaultValue": "[parameters('infrastructure').authCertificateThumbprint]"
+    }
+  },
+  "resources": [
+    { 
+      "name": "[concat(variables('tsWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "packageUri": "[parameters('tsMsDeployPackageUrl')]",
+        "setParameters": {
+          "Application Path": "[variables('tsWebAppNameTidy')]",
+          "Initial Tenant Service Tenant Id": "[variables('connectionStringParameters').tenantId]",
+          "Sitecore Web API Host Name": "[variables('connectionStringParameters').hostName]",
+          "Sitecore Web API User Name": "[variables('connectionStringParameters').sitecoreUser]",
+          "Sitecore Web API User Password": "[variables('connectionStringParameters').sitecoreUserPassword]",
+		  "Tenant Service Application Insights Key": "[if(greater(length(variables('appInsightsNameTidy')), 1), reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey, '00000000-0000-0000-0000-000000000000')]"
+        }
+      }
+    },
+    {
+      "name": "[concat(variables('tsWebAppNameTidy'), '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
+        "WEBSITE_DYNAMIC_CACHE": 0
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Web/Sites/', variables('tsWebAppNameTidy'), '/Extensions/MSDeploy')]"
+      ]
+    }
+  ]
+}

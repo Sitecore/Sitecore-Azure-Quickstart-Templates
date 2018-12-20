@@ -1,0 +1,187 @@
+﻿{
+    "exmDdsMsDeployPackageUrl":  {
+                                     "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/XP/Sitecore 9.1.0 rev. 001382 (Cloud)_dds.scwdp.zip?sv=2015-04-05&sr=b&sig=IwHoEwMhLqdeALO%2B%2BRRnYnNfItAH4XRjawlKQLjOH0s%3D&se=2028-09-18T03%3A48%3A29Z&sp=r"
+                                 },
+    "sitecoreAdminPassword":  {
+                                  "value":  "Password12345"
+                              },
+    "allowInvalidClientCertificates":  {
+                                           "value":  true
+                                       },
+    "sqlServerLogin":  {
+                           "value":  "sql"
+                       },
+    "xcProcessingMsDeployPackageUrl":  {
+                                           "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/xp1/Sitecore 9.1.0 rev. 001382 (Cloud)_xp1processing.scwdp.zip?sv=2015-04-05&sr=b&sig=RxkMG0HYk%2BNZ7sIb%2B4C%2ByZCPwwt4YlxuVsCKchPh7SU%3D&se=2028-09-18T03%3A52%3A56Z&sp=r"
+                                       },
+    "exmCmMsDeployPackageUrl":  {
+                                    "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/EXM/Sitecore.Patch.EXM (Cloud)_CM.zip?sv=2015-04-05&sr=b&sig=btX%2BZFVs6KHMhQvHwzw31Cy6p2Vxnbzu19NA3lzSa6o%3D&se=2028-09-18T03%3A48%3A29Z&sp=r"
+                                },
+    "cdMsDeployPackageUrl":  {
+                                 "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/XP/Sitecore 9.1.0 rev. 001382 (Cloud)_cd.scwdp.zip?sv=2015-04-05&sr=b&sig=i52Bvcz13BGKyTTnmtl4hRQHvksX5pmi7bO%2FcjZQ5PY%3D&se=2028-09-18T03%3A48%3A29Z&sp=r"
+                             },
+    "xcSearchMsDeployPackageUrl":  {
+                                       "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/xp1/Sitecore 9.1.0 rev. 001382 (Cloud)_xp1collectionsearch.scwdp.zip?sv=2015-04-05&sr=b&sig=FxcHvIBduxaUYADlplEmxkL2dZvgdqDjipTq5v3ZL3w%3D&se=2028-09-18T03%3A52%3A56Z&sp=r"
+                                   },
+    "xcCollectMsDeployPackageUrl":  {
+                                        "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/xp1/Sitecore 9.1.0 rev. 001382 (Cloud)_xp1collection.scwdp.zip?sv=2015-04-05&sr=b&sig=nTm2qrJMGQ9kdLlE%2Ff5qcavff3dck%2BZob8PCCN1rKeQ%3D&se=2028-09-18T03%3A52%3A56Z&sp=r"
+                                    },
+    "prcMsDeployPackageUrl":  {
+                                  "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/XP/Sitecore 9.1.0 rev. 001382 (Cloud)_prc.scwdp.zip?sv=2015-04-05&sr=b&sig=Q8WG16BUXXY9sTbZFSZ5lE%2BgTMUlgxf%2BxDawQZflV7o%3D&se=2028-09-18T03%3A48%3A29Z&sp=r"
+                              },
+    "xcRefDataMsDeployPackageUrl":  {
+                                        "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/xp1/Sitecore 9.1.0 rev. 001382 (Cloud)_xp1referencedata.scwdp.zip?sv=2015-04-05&sr=b&sig=F5tekgv31%2BsuTyHCDBRu2RbfnlVGqBJUPCCnW%2FwP3gQ%3D&se=2028-09-18T03%3A52%3A56Z&sp=r"
+                                    },
+    "templateLinkAccessToken":  {
+                                    "value":  "?sv=2015-04-05&sr=c&sig=88or6d3FgQbzin9LhFjh0shNV6MaQzEZQC0lVMDTWCs%3D&se=2028-09-18T03%3A48%3A29Z&sp=r"
+                                },
+    "modules":  {
+                    "value":  {
+                                  "items":  [
+                                                {
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/01DEF.json?st=2017-09-20T14%3A54%3A00Z&se=2025-09-24T14%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=Hg5O5%2BmJUDBdkC4bgawOVd%2BhtV4YX4TBATHHgEHGYi0%3D",
+                                                    "name":  "def",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/Data%20Exchange%20Framework%202.1%20rev.%20180919.scwdp.zip?st=2017-09-18T17%3A54%3A00Z&se=2020-09-22T17%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=CdGuEqymjmakBrbtFvsS3KyWHZJ50yLUL6rDowGPhfE%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/02DEFSDK.json?st=2017-09-20T17%3A54%3A00Z&se=2025-09-24T17%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=1spnlHxw3EmDJZfpz5SwoP7YGQoUMH17PQAYZdYBk8Y%3D",
+                                                    "name":  "defsdk",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/Data%20Exchange%20Framework%20SDK%202.1%20rev.%20180919.scwdp.zip?st=2017-09-22T11%3A54%3A00Z&se=2025-09-26T11%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=guSvzHFMoJLlRhb2CcB3X%2Bpzt7nXahVfE0sxANT1JLc%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/03SitecoreProv.json?st=2017-09-20T20%3A54%3A00Z&se=2025-09-24T20%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=8fszCkgCiYU7HJLCVj1slzUIBfO8GmGdgnvJ3Qpy4MI%3D",
+                                                    "name":  "scproviderdef",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/Sitecore%20Provider%20for%20Data%20Exchange%20Framework%202.1%20rev.%20180919.scwdp.zip?st=2017-09-18T20%3A54%3A00Z&se=2020-09-22T20%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=k103dKM5vtvbSYhkz5eg3XgPlXreu%2F6vX0C0TmnQQiU%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/04SQLProv.json?st=2017-09-20T23%3A54%3A00Z&se=2025-09-24T23%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=wcaqJQPX7AUC0R%2Fsgtz6%2BX0tnb7RX8nSHwZh46kiLg8%3D",
+                                                    "name":  "sqlproviderdef",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/SQL%20Provider%20for%20Data%20Exchange%20Framework%202.1%20rev.%20180919.scwdp.zip?st=2017-09-18T23%3A54%3A00Z&se=2020-09-22T23%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=DIVU6L06x%2BZTdQQ8m9oyJCXUDiY7pq6VDj43Pc7d6I4%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/05MongoProv.json?st=2017-09-21T02%3A54%3A00Z&se=2025-09-25T02%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=fkX4N1zRlDL2N9Qr1%2Fpp0UWkTfmZ5ckH3RQSJO2eAoQ%3D",
+                                                    "name":  "mongoproviderdef",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/MongoDB%20Provider%20for%20Data%20Exchange%20Framework%202.1%20rev.%20180919.scwdp.zip?st=2017-09-19T02%3A54%3A00Z&se=2020-09-23T02%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=QiAQ3mMjrqQI1OaRlb47gExMkwzWCtV2D92Qtfz2%2B54%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/06xConnectProv.json?st=2017-09-21T05%3A54%3A00Z&se=2025-09-25T05%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=WwuHl5daFx%2FOwBuWAIgY2zXUotdbqMxbvtqtaNyBhF0%3D",
+                                                    "name":  "xconnectdef",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/XConnect%20Provider%20for%20Data%20Exchange%20Framework%202.1%20rev.%20180919.scwdp.zip?st=2017-09-19T05%3A54%3A00Z&se=2020-09-23T05%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=O1l%2FMmDKbkGalM1F6AZUSSBf1Hh8l9g0DPN1dXa9jY0%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/07DEFTS.json?st=2017-09-21T08%3A54%3A00Z&se=2025-09-25T08%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=mp9B4CFMTjI7RTbzkVWcqAEPZxS2DuIA8wZarCxSVhk%3D",
+                                                    "name":  "defts",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/Sitecore%20DataExchange%20TenantService%202.1%20rev.%20180919.scwdp.zip?st=2017-09-22T14%3A54%3A00Z&se=2025-09-26T14%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=bnxdY48kRctVD1kZh6ndqYmpVvjzhv0%2Fv9QIrtBqN%2BY%3D"
+                                                                   }
+                                                },												
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/08SFProvider.json?st=2017-09-21T11%3A54%3A00Z&se=2025-09-25T11%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=BK5AJWD47Jc0qSVO1OKMbwWCxT5Ik2CFaC5CBXbx7aY%3D",
+                                                    "name":  "sfproviderdef",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/Salesforce%20Provider%20for%20Data%20Exchange%20Framework%202.1%20rev.%20180919.scwdp.zip?st=2017-09-19T23%3A54%3A00Z&se=2020-09-23T23%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=ayQ97xh6tsdR0YnK8wzapH1djmw2O0VdWpmyEV2I7BQ%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/09CRMProv.json?st=2017-09-21T14%3A54%3A00Z&se=2025-09-25T14%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=uX7ArxMh%2FY0MAmRSnQjjRT5ywsb1mdi3SrqWstkiOhk%3D",
+                                                    "name":  "dynamproviderdef",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/Dynamics%20Provider%20for%20Data%20Exchange%20Framework%202.1%20rev.%20180919.scwdp.zip?st=2017-09-20T02%3A54%3A00Z&se=2020-09-24T02%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=rAWkevkMsNU1zXwHFoo1Sd91o%2FPou4FHQ2ZISnR2UZc%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/10FormsProv.json?st=2017-09-21T17%3A54%3A00Z&se=2025-09-25T17%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=d2hPM2eBucpO7lWNqc7ePt3RVbND5vleZgo7crqUFgk%3D",
+                                                    "name":  "formsdef",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/Experience%20Forms%20Provider%20for%20Data%20Exchange%20Framework%202.1%20rev.%20180919.scwdp.zip?st=2017-09-22T17%3A54%3A00Z&se=2025-09-26T17%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=dCNCw8fe%2F%2BEjjcjQS%2BsdS7WnJBS4lraZD%2Bs8sA558js%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/11FormsSA.json?st=2017-09-21T20%3A54%3A00Z&se=2025-09-25T20%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=xysQciw0IRhh%2BcVrmnUOPYIwMawDJR6EPU%2F1A%2F1pbbE%3D",
+                                                    "name":  "formsadef",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/Data%20Exchange%20Framework%20Save%20Action%20for%20Experience%20Forms%202.1%20rev.%20180919.scwdp.zip?st=2017-09-22T20%3A54%3A00Z&se=2025-09-26T20%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=YUrmINfjY2KF7Kcwphbq1Km4skRHhvixsRxf2yDm7HY%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/12ActivityMA.json?st=2017-09-21T23%3A54%3A00Z&se=2025-09-25T23%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=6Zq%2F5okEzCIqO%2F4Xq1HgttSgc2kx%2Ft%2BNHu0NQZTFw%2B0%3D",
+                                                    "name":  "maactivdef",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/Data%20Exchange%20Framework%20Activity%20for%20Marketing%20Automation%202.1%20rev.%20180919.scwdp.zip?st=2017-09-22T23%3A54%3A00Z&se=2025-09-26T23%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=%2FQYfdzoR9e%2BWT9Rzt0Y9B9PmRgbplMo6%2B%2FmX0nHLcck%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/13DMTool.json?st=2017-09-22T02%3A54%3A00Z&se=2025-09-26T02%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=UfQBg8%2BVDPNwd6hFa2sn1i94ulXfkqJSxkZXoaCE3FU%3D",
+                                                    "name":  "dmtooldef",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/xDB%20Data%20Migration%20Tool%20for%20Data%20Exchange%20Framework%202.1%20rev.%20180919.scwdp.zip?st=2017-09-23T02%3A54%3A00Z&se=2025-09-27T02%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=j7rK3EhR66ITXmEQN2PNhs4kFMn6ekfU73gfCy4RVbI%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/14SFConn.json?st=2017-09-22T05%3A54%3A00Z&se=2025-09-26T05%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=6XoAUEA6ZLU2LDIfqvaLTeGD5itVwzSOMXxcH0jDa%2Bk%3D",
+                                                    "name":  "sftooldef",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/Connect%20for%20Salesforce%202.1%20rev.%20180919.scwdp.zip?st=2017-09-20T05%3A54%3A00Z&se=2020-09-24T05%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=xmtotMOmErNve%2BH8x4DyYC1Tg59acThLRDuv3FAP%2B5w%3D"
+                                                                   }
+                                                },
+												{
+                                                    "templateLink":  "https://scdef.blob.core.windows.net/scdef/DEFPacARMs/15CRMConn.json?st=2017-09-22T08%3A54%3A00Z&se=2025-09-26T08%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=Ab%2BDDdy0fKJRbz1fBAAm6EpdadOprKIbvBtER4W2TQQ%3D",
+                                                    "name":  "dynamtooldef",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://scdef.blob.core.windows.net/scdef/DEFPackages/Connect%20for%20Microsoft%20Dynamics%202.1%20rev.%20180919.scwdp.zip?st=2017-09-20T08%3A54%3A00Z&se=2020-09-24T08%3A54%3A00Z&sp=r&sv=2017-04-17&sr=b&sig=U7nLbFmG2JK%2BE%2BHtn22%2FqTyktwSJgZF4j60mJnAPgh4%3D"
+                                                                   }
+                                                },
+												
+												{
+                                                    "templateLink":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/XP/addons/bootloader.json?sv=2015-04-05&sr=b&sig=6psbVKFVXQpKyGmaQimVqua3Glbk6BYdqI51zyt67wY%3D&se=2028-09-18T03%3A48%3A29Z&sp=r",
+                                                    "name":  "bootloader",
+                                                    "parameters":  {
+                                                                       "msDeployPackageUrl":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/Addons/Sitecore.Cloud.Integration.Bootload.wdp.zip?sv=2015-04-05&sr=b&sig=ZxY8R5cPjHeGTTP2%2FUyBfGoJf%2BlQ3OGEftNXWlu6q5k%3D&se=2028-09-18T03%3A48%3A29Z&sp=r"
+                                                                   }
+                                                }
+                                            ]
+                              }
+                },
+    "xcReportingMsDeployPackageUrl":  {
+                                          "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/xp1/Sitecore 9.1.0 rev. 001382 (Cloud)_xp1reporting.scwdp.zip?sv=2015-04-05&sr=b&sig=nsaV%2FxQASsgp58hjN07ipAW4BV2f7rpwIJPLYFxUQnw%3D&se=2028-09-18T03%3A52%3A56Z&sp=r"
+                                      },
+    "authCertificateBlob":  {
+                                "value":  "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"
+                            },
+    "authCertificatePassword":  {
+                                    "value":  "12345"
+                                },
+    "repAuthenticationApiKey":  {
+                                    "value":  "00000000000000000000000000000000"
+                                },
+    "sqlServerPassword":  {
+                              "value":  "Password12345"
+                          },
+    "cmMsDeployPackageUrl":  {
+                                 "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/XP/Sitecore 9.1.0 rev. 001382 (Cloud)_cm.scwdp.zip?sv=2015-04-05&sr=b&sig=qBOyNyYwb4JKz2WtECAmaGYtmCcvtJg%2FFa52wf6eRM4%3D&se=2028-09-18T03%3A48%3A29Z&sp=r"
+                             },
+    "repMsDeployPackageUrl":  {
+                                  "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/XP/Sitecore 9.1.0 rev. 001382 (Cloud)_rep.scwdp.zip?sv=2015-04-05&sr=b&sig=eA%2BQR4oNxRpu5BBQUpZ7iaZXiH3IBoxdTxQ9tLSujbU%3D&se=2028-09-18T03%3A48%3A29Z&sp=r"
+                              },
+    "siMsDeployPackageUrl":  {
+                                 "value":  "https://screleasemanagement.blob.core.windows.net/servers/Sitecore.IdentityServer/Sitecore.IdentityServer 2.0.0 rev. 00146_001382/Cloud/SI/Sitecore.IdentityServer 2.0.0 rev. 00146 (Cloud)_identityserver.scwdp.zip?sv=2015-04-05&sr=b&sig=LslmXqDz7Vv9m23kuf28g9rLeVRRO%2B%2B2P%2Bq44c4gR9I%3D&se=2028-09-18T03%3A48%3A29Z&sp=r"
+                             },
+    "maRepMsDeployPackageUrl":  {
+                                    "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/xp1/Sitecore 9.1.0 rev. 001382 (Cloud)_xp1marketingautomationreporting.scwdp.zip?sv=2015-04-05&sr=b&sig=nq6lIV36jVHwSvmoOfVE%2BMji6GGrO%2F5c2TbQock7W6w%3D&se=2028-09-18T03%3A52%3A56Z&sp=r"
+                                },
+    "maOpsMsDeployPackageUrl":  {
+                                    "value":  "https://screleasemanagement.blob.core.windows.net/sxp/SXP9.1.0/Sitecore 9.1.0 rev. 001382/Cloud/xp1/Sitecore 9.1.0 rev. 001382 (Cloud)_xp1marketingautomation.scwdp.zip?sv=2015-04-05&sr=b&sig=00r43KB1IYOoQL6GR%2F0sG%2BZI%2F1d5LntsLOXTLXuoFAE%3D&se=2028-09-18T03%3A52%3A56Z&sp=r"
+                                }
+}
