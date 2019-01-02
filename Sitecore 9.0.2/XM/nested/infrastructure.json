@@ -629,7 +629,7 @@
       "condition": "[parameters('deployAzureSearch')]",
       "apiVersion": "[variables('searchApiVersion')]",
       "name": "[variables('searchServiceNameTidy')]",
-      "location": "[parameters('searchServiceLocation')]",
+      "location": "[if(parameters('deployAzureSearch'), parameters('searchServiceLocation'), 'westus')]",
       "sku": {
         "name": "[toLower(parameters('resourceSizes').searchService.SkuName)]"
       },
