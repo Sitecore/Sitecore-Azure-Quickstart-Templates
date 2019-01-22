@@ -208,7 +208,7 @@
           },
           "searchService": {
             "SkuName": "Standard",
-            "Partitions": 2,
+            "Partitions": 1,
             "Replicas": "[parameters('searchServiceReplicaCount')]"
           },
           "applicationInsightsPricePlan": {
@@ -249,7 +249,7 @@
           },
           "searchService": {
             "SkuName": "Standard",
-            "Partitions": 2,
+            "Partitions": 1,
             "Replicas": "[parameters('searchServiceReplicaCount')]"
           },
           "applicationInsightsPricePlan": {
@@ -290,7 +290,7 @@
           },
           "searchService": {
             "SkuName": "Standard",
-            "Partitions": 4,
+            "Partitions": 2,
             "Replicas": "[parameters('searchServiceReplicaCount')]"
           },
           "applicationInsightsPricePlan": {
@@ -331,7 +331,7 @@
           },
           "searchService": {
             "SkuName": "Standard",
-            "Partitions": 6,
+            "Partitions": 3,
             "Replicas": "[parameters('searchServiceReplicaCount')]"
           },
           "applicationInsightsPricePlan": {
@@ -372,7 +372,7 @@
           },
           "searchService": {
             "SkuName": "Standard",
-            "Partitions": 6,
+            "Partitions": 3,
             "Replicas": "[parameters('searchServiceReplicaCount')]"
           },
           "applicationInsightsPricePlan": {
