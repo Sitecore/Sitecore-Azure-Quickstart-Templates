@@ -436,6 +436,7 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('cmHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,
@@ -460,6 +461,7 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('cdHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,

@@ -517,6 +517,7 @@
       "name": "[variables('cmWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('cmHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,
@@ -540,6 +541,7 @@
       "name": "[variables('cdWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('cdHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,
@@ -563,6 +565,7 @@
       "name": "[variables('prcWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('prcHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,
@@ -586,6 +589,7 @@
       "name": "[variables('repWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('repHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,

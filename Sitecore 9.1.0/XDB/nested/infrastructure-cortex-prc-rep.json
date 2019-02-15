@@ -283,6 +283,7 @@
       "name": "[variables('cortexProcessingWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "clientCertEnabled": true,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('xcResourceIntensiveHostingPlanNameTidy'))]",
         "siteConfig": {
@@ -305,6 +306,7 @@
       "name": "[variables('cortexReportingWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "clientCertEnabled": true,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('xcBasicHostingPlanNameTidy'))]",
         "siteConfig": {

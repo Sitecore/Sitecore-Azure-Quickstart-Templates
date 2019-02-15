@@ -164,6 +164,7 @@
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
         "clientCertEnabled": true,
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('xcSingleHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,

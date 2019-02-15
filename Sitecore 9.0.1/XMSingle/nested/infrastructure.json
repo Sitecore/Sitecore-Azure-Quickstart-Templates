@@ -200,6 +200,7 @@
       "name": "[variables('singleWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('singleHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,

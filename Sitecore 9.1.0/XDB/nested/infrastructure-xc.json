@@ -342,6 +342,7 @@
       "name": "[variables('xcRefDataWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "clientCertEnabled": true,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('xcResourceIntensiveHostingPlanNameTidy'))]",
         "siteConfig": {

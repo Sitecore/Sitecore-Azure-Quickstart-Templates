@@ -369,6 +369,7 @@
       },
       "properties": {
         "name": "[variables('shopsWebAppNameTidy')]",
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('engineHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false
@@ -388,6 +389,7 @@
       },
       "properties": {
         "name": "[variables('opsWebAppNameTidy')]",
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('engineHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false
@@ -407,6 +409,7 @@
       },
       "properties": {
         "name": "[variables('authoringWebAppNameTidy')]",
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('engineHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false
@@ -443,6 +446,7 @@
       },
       "properties": {
         "name": "[variables('minionsWebAppNameTidy')]",
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('minionsHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false
@@ -462,6 +466,7 @@
       },
       "properties": {
         "name": "[variables('idserverAppNameTidy')]",
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('cmHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false
@@ -481,6 +486,7 @@
       },
       "properties": {
         "name": "[variables('bizfxAppNameTidy')]",
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('cmHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false

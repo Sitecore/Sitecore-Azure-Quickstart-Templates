@@ -125,6 +125,7 @@
       "name": "[variables('ddsWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('ddsHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,
