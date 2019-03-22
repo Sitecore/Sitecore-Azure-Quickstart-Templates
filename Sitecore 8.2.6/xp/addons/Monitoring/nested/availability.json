@@ -1,0 +1,347 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"applicationInsightsLocation": {
+			"metadata": {
+				"Description": "Location of the Application insights Resource"
+			},
+			"type": "string"
+		},
+		"deploymentId": {
+			"type": "string"
+		},
+		"infrastructure": {
+			"defaultValue": {
+
+			},
+			"type": "secureObject"
+		},
+		"omsWorkspaceAlertRecipients": {
+			"metadata": {
+				"Description": "List of recipients for the email alert separated by semicolon"
+			},
+			"type": "string"
+		}
+	},
+	"resources": [{
+			"type": "Microsoft.Insights/webtests",
+			"apiVersion": "[variables('webTestApiVersion')]",
+			"location": "[parameters('applicationInsightsLocation')]",
+			"tags": {
+				"[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource"
+			},
+			"name": "[concat(parameters('deploymentId'),'-cd','-pingWebTest')]",
+			"kind": "ping",
+			"properties": {
+				"SyntheticMonitorId": "[concat(parameters('deploymentId'),'-cd','-pingWebTest')]",
+				"Name": "[concat(parameters('deploymentId'),'-cd','-Availability Test')]",
+				"Description": "a web test for performing a ping to test availability of the targeted web app",
+				"Enabled": true,
+				"Frequency": 300,
+				"Timeout": 120,
+				"Kind": "ping",
+				"RetryEnabled": true,
+				"Locations": [{
+						"Id": "us-il-ch1-azr"
+					},
+					{
+						"Id": "us-ca-sjc-azr"
+					},
+					{
+						"Id": "apac-sg-sin-azr"
+					},
+					{
+						"Id": "emea-gb-db3-azr"
+					},
+					{
+						"Id": "emea-au-syd-edge"
+					}
+				],
+				"Configuration": {
+					"WebTest": "[concat('<WebTest         Name=\"',parameters('deploymentId'),'-cd','-PingTest\"            Enabled=\"True\"                Timeout=\"120\"                  xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\"                         PreAuthenticate=\"True\"         Proxy=\"default\"         StopOnError=\"False\"       >        <Items>        <Request         Method=\"GET\"                Version=\"1.1\"         Url=\"https://',parameters('deploymentId'),'-cd','.azurewebsites.net/sitecore/service/keepalive.aspx\"         ThinkTime=\"0\"         Timeout=\"120\"         ParseDependentRequests=\"False\"         FollowRedirects=\"True\"         RecordResult=\"True\"         Cache=\"False\"         ResponseTimeGoal=\"0\"         Encoding=\"utf-8\"         ExpectedHttpStatusCode=\"200\"                IgnoreHttpStatusCode=\"False\" />        </Items>        </WebTest>') ]"
+				}
+			},
+			"resources": [{
+				"name": "[concat(parameters('deploymentId'),'-cd','-pingWebTest-alert')]",
+				"type": "microsoft.insights/alertrules",
+				"apiVersion": "[variables('alertRuleApiVersion')]",
+				"location": "[parameters('applicationInsightsLocation')]",
+				"dependsOn": [
+					"[resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cd','-pingWebTest'))]"
+				],
+				"tags": {
+					"[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource",
+					"[concat('hidden-link:', resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cd','-pingWebTest')))]": "Resource"
+				},
+				"properties": {
+					"name": "[concat(parameters('deploymentId'),'-cd','-pingWebTest-alert')]",
+					"description": "Alert to be triggered when the Web Test fails",
+					"isEnabled": true,
+					"condition": {
+						"$type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.LocationThresholdRuleCondition, Microsoft.WindowsAzure.Management.Mon.Client",
+						"odata.type": "Microsoft.Azure.Management.Insights.Models.LocationThresholdRuleCondition",
+						"datasource": {
+							"$type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource, Microsoft.WindowsAzure.Management.Mon.Client",
+							"odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+							"resourceUri": "[resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cd','-pingWebTest'))]",
+							"metricName": "GSMT_AvRaW",
+							"resourceLocation": null,
+							"metricNamespace": null,
+							"legacyResourceId": null
+						},
+						"windowSize": "PT5M",
+						"failedLocationCount": 2
+					},
+					"actions": [{
+						"$type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction, Microsoft.WindowsAzure.Management.Mon.Client",
+						"odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+						"sendToServiceOwners": false,
+						"customEmails": "[split(parameters('omsWorkspaceAlertRecipients'),';')]"
+					}]
+				}
+			}]
+		},
+		{
+			"type": "Microsoft.Insights/webtests",
+			"apiVersion": "[variables('webTestApiVersion')]",
+			"location": "[parameters('applicationInsightsLocation')]",
+			"tags": {
+				"[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource"
+			},
+			"name": "[concat(parameters('deploymentId'),'-cm','-pingWebTest')]",
+			"kind": "ping",
+			"properties": {
+				"SyntheticMonitorId": "[concat(parameters('deploymentId'),'-cm','-pingWebTest')]",
+				"Name": "[concat(parameters('deploymentId'),'-cm','-Availability Test')]",
+				"Description": "a web test for performing a ping to test availability of the targeted web app",
+				"Enabled": true,
+				"Frequency": 300,
+				"Timeout": 120,
+				"Kind": "ping",
+				"RetryEnabled": true,
+				"Locations": [{
+						"Id": "us-il-ch1-azr"
+					},
+					{
+						"Id": "us-ca-sjc-azr"
+					},
+					{
+						"Id": "apac-sg-sin-azr"
+					},
+					{
+						"Id": "emea-gb-db3-azr"
+					},
+					{
+						"Id": "emea-au-syd-edge"
+					}
+				],
+				"Configuration": {
+					"WebTest": "[concat('<WebTest         Name=\"',parameters('deploymentId'),'-cm','-PingTest\"            Enabled=\"True\"                Timeout=\"120\"                  xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\"                         PreAuthenticate=\"True\"         Proxy=\"default\"         StopOnError=\"False\"       >        <Items>        <Request         Method=\"GET\"                Version=\"1.1\"         Url=\"https://',parameters('deploymentId'),'-cm','.azurewebsites.net/sitecore/service/keepalive.aspx\"         ThinkTime=\"0\"         Timeout=\"120\"         ParseDependentRequests=\"False\"         FollowRedirects=\"True\"         RecordResult=\"True\"         Cache=\"False\"         ResponseTimeGoal=\"0\"         Encoding=\"utf-8\"         ExpectedHttpStatusCode=\"200\"                IgnoreHttpStatusCode=\"False\" />        </Items>        </WebTest>') ]"
+				}
+			},
+			"resources": [{
+				"name": "[concat(parameters('deploymentId'),'-cm','-pingWebTest-alert')]",
+				"type": "microsoft.insights/alertrules",
+				"apiVersion": "[variables('alertRuleApiVersion')]",
+				"location": "[parameters('applicationInsightsLocation')]",
+				"dependsOn": [
+					"[resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cm','-pingWebTest'))]"
+				],
+				"tags": {
+					"[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource",
+					"[concat('hidden-link:', resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cm','-pingWebTest')))]": "Resource"
+				},
+				"properties": {
+					"name": "[concat(parameters('deploymentId'),'-cm','-pingWebTest-alert')]",
+					"description": "Alert to be triggered when the Web Test fails",
+					"isEnabled": true,
+					"condition": {
+						"$type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.LocationThresholdRuleCondition, Microsoft.WindowsAzure.Management.Mon.Client",
+						"odata.type": "Microsoft.Azure.Management.Insights.Models.LocationThresholdRuleCondition",
+						"datasource": {
+							"$type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource, Microsoft.WindowsAzure.Management.Mon.Client",
+							"odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+							"resourceUri": "[resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cm','-pingWebTest'))]",
+							"metricName": "GSMT_AvRaW",
+							"resourceLocation": null,
+							"metricNamespace": null,
+							"legacyResourceId": null
+						},
+						"windowSize": "PT5M",
+						"failedLocationCount": 2
+					},
+					"actions": [{
+						"$type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction, Microsoft.WindowsAzure.Management.Mon.Client",
+						"odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+						"sendToServiceOwners": false,
+						"customEmails": "[split(parameters('omsWorkspaceAlertRecipients'),';')]"
+					}]
+				}
+			}]
+		},
+		{
+			"type": "Microsoft.Insights/webtests",
+			"apiVersion": "[variables('webTestApiVersion')]",
+			"location": "[parameters('applicationInsightsLocation')]",
+			"tags": {
+				"[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource"
+			},
+			"name": "[concat(parameters('deploymentId'),'-prc','-pingWebTest')]",
+			"kind": "ping",
+			"properties": {
+				"SyntheticMonitorId": "[concat(parameters('deploymentId'),'-prc','-pingWebTest')]",
+				"Name": "[concat(parameters('deploymentId'),'-prc','-Availability Test')]",
+				"Description": "a web test for performing a ping to test availability of the targeted web app",
+				"Enabled": true,
+				"Frequency": 300,
+				"Timeout": 120,
+				"Kind": "ping",
+				"RetryEnabled": true,
+				"Locations": [{
+						"Id": "us-il-ch1-azr"
+					},
+					{
+						"Id": "us-ca-sjc-azr"
+					},
+					{
+						"Id": "apac-sg-sin-azr"
+					},
+					{
+						"Id": "emea-gb-db3-azr"
+					},
+					{
+						"Id": "emea-au-syd-edge"
+					}
+				],
+				"Configuration": {
+					"WebTest": "[concat('<WebTest         Name=\"',parameters('deploymentId'),'-prc','-PingTest\"            Enabled=\"True\"                Timeout=\"120\"                  xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\"                         PreAuthenticate=\"True\"         Proxy=\"default\"         StopOnError=\"False\"       >        <Items>        <Request         Method=\"GET\"                Version=\"1.1\"         Url=\"https://',parameters('deploymentId'),'-prc','.azurewebsites.net/sitecore/service/keepalive.aspx\"         ThinkTime=\"0\"         Timeout=\"120\"         ParseDependentRequests=\"False\"         FollowRedirects=\"True\"         RecordResult=\"True\"         Cache=\"False\"         ResponseTimeGoal=\"0\"         Encoding=\"utf-8\"         ExpectedHttpStatusCode=\"200\"                IgnoreHttpStatusCode=\"False\" />        </Items>        </WebTest>') ]"
+				}
+			},
+			"resources": [{
+				"name": "[concat(parameters('deploymentId'),'-prc','-pingWebTest-alert')]",
+				"type": "microsoft.insights/alertrules",
+				"apiVersion": "[variables('alertRuleApiVersion')]",
+				"location": "[parameters('applicationInsightsLocation')]",
+				"dependsOn": [
+					"[resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-prc','-pingWebTest'))]"
+				],
+				"tags": {
+					"[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource",
+					"[concat('hidden-link:', resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-prc','-pingWebTest')))]": "Resource"
+				},
+				"properties": {
+					"name": "[concat(parameters('deploymentId'),'-prc','-pingWebTest-alert')]",
+					"description": "Alert to be triggered when the Web Test fails",
+					"isEnabled": true,
+					"condition": {
+						"$type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.LocationThresholdRuleCondition, Microsoft.WindowsAzure.Management.Mon.Client",
+						"odata.type": "Microsoft.Azure.Management.Insights.Models.LocationThresholdRuleCondition",
+						"datasource": {
+							"$type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource, Microsoft.WindowsAzure.Management.Mon.Client",
+							"odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+							"resourceUri": "[resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-prc','-pingWebTest'))]",
+							"metricName": "GSMT_AvRaW",
+							"resourceLocation": null,
+							"metricNamespace": null,
+							"legacyResourceId": null
+						},
+						"windowSize": "PT5M",
+						"failedLocationCount": 2
+					},
+					"actions": [{
+						"$type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction, Microsoft.WindowsAzure.Management.Mon.Client",
+						"odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+						"sendToServiceOwners": false,
+						"customEmails": "[split(parameters('omsWorkspaceAlertRecipients'),';')]"
+					}]
+				}
+			}]
+		},
+		{
+			"type": "Microsoft.Insights/webtests",
+			"apiVersion": "[variables('webTestApiVersion')]",
+			"location": "[parameters('applicationInsightsLocation')]",
+			"tags": {
+				"[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource"
+			},
+			"name": "[concat(parameters('deploymentId'),'-rep','-pingWebTest')]",
+			"kind": "ping",
+			"properties": {
+				"SyntheticMonitorId": "[concat(parameters('deploymentId'),'-rep','-pingWebTest')]",
+				"Name": "[concat(parameters('deploymentId'),'-rep','-Availability Test')]",
+				"Description": "a web test for performing a ping to test availability of the targeted web app",
+				"Enabled": true,
+				"Frequency": 300,
+				"Timeout": 120,
+				"Kind": "ping",
+				"RetryEnabled": true,
+				"Locations": [{
+						"Id": "us-il-ch1-azr"
+					},
+					{
+						"Id": "us-ca-sjc-azr"
+					},
+					{
+						"Id": "apac-sg-sin-azr"
+					},
+					{
+						"Id": "emea-gb-db3-azr"
+					},
+					{
+						"Id": "emea-au-syd-edge"
+					}
+				],
+				"Configuration": {
+					"WebTest": "[concat('<WebTest         Name=\"',parameters('deploymentId'),'-rep','-PingTest\"            Enabled=\"True\"                Timeout=\"120\"                  xmlns=\"http://microsoft.com/schemas/VisualStudio/TeamTest/2010\"                         PreAuthenticate=\"True\"         Proxy=\"default\"         StopOnError=\"False\"       >        <Items>        <Request         Method=\"GET\"                Version=\"1.1\"         Url=\"https://',parameters('deploymentId'),'-rep','.azurewebsites.net/sitecore/service/keepalive.aspx\"         ThinkTime=\"0\"         Timeout=\"120\"         ParseDependentRequests=\"False\"         FollowRedirects=\"True\"         RecordResult=\"True\"         Cache=\"False\"         ResponseTimeGoal=\"0\"         Encoding=\"utf-8\"         ExpectedHttpStatusCode=\"200\"                IgnoreHttpStatusCode=\"False\" />        </Items>        </WebTest>') ]"
+				}
+			},
+			"resources": [{
+				"name": "[concat(parameters('deploymentId'),'-rep','-pingWebTest-alert')]",
+				"type": "microsoft.insights/alertrules",
+				"apiVersion": "[variables('alertRuleApiVersion')]",
+				"location": "[parameters('applicationInsightsLocation')]",
+				"dependsOn": [
+					"[resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-rep','-pingWebTest'))]"
+				],
+				"tags": {
+					"[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource",
+					"[concat('hidden-link:', resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-rep','-pingWebTest')))]": "Resource"
+				},
+				"properties": {
+					"name": "[concat(parameters('deploymentId'),'-rep','-pingWebTest-alert')]",
+					"description": "Alert to be triggered when the Web Test fails",
+					"isEnabled": true,
+					"condition": {
+						"$type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.LocationThresholdRuleCondition, Microsoft.WindowsAzure.Management.Mon.Client",
+						"odata.type": "Microsoft.Azure.Management.Insights.Models.LocationThresholdRuleCondition",
+						"datasource": {
+							"$type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleMetricDataSource, Microsoft.WindowsAzure.Management.Mon.Client",
+							"odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+							"resourceUri": "[resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-rep','-pingWebTest'))]",
+							"metricName": "GSMT_AvRaW",
+							"resourceLocation": null,
+							"metricNamespace": null,
+							"legacyResourceId": null
+						},
+						"windowSize": "PT5M",
+						"failedLocationCount": 2
+					},
+					"actions": [{
+						"$type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.RuleEmailAction, Microsoft.WindowsAzure.Management.Mon.Client",
+						"odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+						"sendToServiceOwners": false,
+						"customEmails": "[split(parameters('omsWorkspaceAlertRecipients'),';')]"
+					}]
+				}
+			}]
+		}
+	],
+	"variables": {
+		"alertRuleApiVersion": "2016-03-01",
+		"applicationInsightsResourceName": "[concat(parameters('deploymentId'),'-ai')]",
+		"sitecoreResourceGroup": "[resourceGroup().name]",
+		"subscription": "[subscription().subscriptionId]",
+		"webTestApiVersion": "2015-05-01"
+	}
+}

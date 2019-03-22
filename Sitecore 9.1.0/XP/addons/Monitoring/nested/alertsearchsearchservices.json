@@ -1,0 +1,113 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"actionGroupName": {
+			"defaultValue": "[parameters('infrastructure').actionGroupName]",
+			"metadata": {
+				"description": "The name of the action group to be associated with the alerts actions"
+			},
+			"type": "string"
+		},
+		"deploymentId": {
+			"type": "string"
+		},
+		"infrastructure": {
+			"defaultValue": {
+
+			},
+			"type": "secureObject"
+		},
+		"omsWorkspaceAlertRecipients": {
+			"metadata": {
+				"Description": "List of recipients for the email alert separated by semicolon"
+			},
+			"type": "string"
+		},
+		"omsWorkspaceName": {
+			"defaultValue": "[parameters('infrastructure').omsWorkspaceName]",
+			"metadata": {
+				"description": "OMS Workspace name."
+			},
+			"type": "string"
+		}
+	},
+	"resources": [{
+		"name": "[concat(parameters('omsWorkspaceName'), '/opezf')]",
+		"type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+		"apiVersion": "[variables('alertResourcesApiVersion')]",
+		"tags": {
+
+		},
+		"properties": {
+			"etag": "*",
+			"query": "[concat('let resourceName = \"',parameters('deploymentId'),'-as','\";let metricName =\"ThrottledSearchQueriesPercentage\";let resourceProvider =\"MICROSOFT.SEARCH\";let resourceIdContains =\"/SEARCHSERVICES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m) | top 30 by TimeGenerated')]",
+			"displayName": "[concat('Azure Search ',parameters('deploymentId'),'-as',' reporting throttled search queries')]",
+			"version": "2.0",
+			"category": "AlertIbiza",
+			"tags": [{
+					"name": "tier",
+					"value": "1"
+				},
+				{
+					"name": "frequency",
+					"value": "5"
+				}
+			]
+		},
+		"resources": [{
+			"name": "[Concat(parameters('omsWorkspaceName'),'/opezf/thelf')]",
+			"type": "Microsoft.OperationalInsights/workspaces/savedSearches/schedules/",
+			"apiVersion": "[variables('alertResourcesApiVersion')]",
+			"dependsOn": [
+				"[Concat('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'),'/savedSearches/opezf')]"
+			],
+			"properties": {
+				"etag": "*",
+				"interval": "5",
+				"queryTimeSpan": "60",
+				"enabled": true,
+				"NearRealTime": false
+			},
+			"resources": [{
+				"name": "[concat(parameters('omsWorkspaceName'), '/opezf/thelf/plixd')]",
+				"type": "Microsoft.OperationalInsights/workspaces/savedSearches/schedules/actions",
+				"apiVersion": "[variables('alertResourcesApiVersion')]",
+				"dependsOn": [
+					"[concat('Microsoft.OperationalInsights/workspaces/',parameters('omsWorkspaceName'),'/savedSearches/opezf/schedules/thelf')]"
+				],
+				"properties": {
+					"etag": "*",
+					"Type": "Alert",
+					"Name": "[concat('Azure Search ',parameters('deploymentId'),'-as',' reporting throttled search queries')]",
+					"Description": "[concat('Check Azure Search ',parameters('deploymentId'),'-as',' : Reporting high rate of throttled search queries')]",
+					"Severity": "warning",
+					"Threshold": {
+						"Operator": "gt",
+						"Value": "30",
+						"MetricsTrigger": {
+							"TriggerCondition": "Total",
+							"Operator": "gt",
+							"Value": "30"
+						}
+					},
+					"Throttling": {
+						"DurationInMinutes": "0"
+					},
+					"AzNsNotification": {
+						"GroupIds": [
+							"[variables('actionGroupResourceId')]"
+						],
+						"CustomEmailSubject": "[concat('Check Azure Search ',parameters('deploymentId'),'-as',' : Reporting high rate of throttled search queries')]"
+					},
+					"ScheduleTypeSpecified": false,
+					"Version": 2
+				}
+			}]
+		}]
+	}],
+	"variables": {
+		"actionGroupResourceId": "[resourceId('Microsoft.Insights/actionGroups',parameters('actionGroupName'))]",
+		"alertResourcesApiVersion": "2017-04-26-preview"
+	}
+}
