@@ -2,8 +2,8 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "webApiVersion": "2016-08-01",
-    "serverFarmApiVersion": "2016-09-01",
+    "webApiVersion": "2018-02-01",
+    "serverFarmApiVersion": "2018-02-01",
     "dbApiVersion": "2014-04-01-preview",
     "searchApiVersion": "2015-08-19",
     "appInsightsApiVersion": "2015-05-01",
@@ -35,6 +35,32 @@
       "master": "master",
       "pools": "prc-pools",
       "tasks": "prc-tasks"
+    },
+
+    "useAse": "[not(empty(parameters('aseName')))]",
+    "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
+    "hostingPlanProperties":{
+      "prcProperties":{
+        "name": "[variables('prcHostingPlanNameTidy')]"
+      },
+      "prcPropertiesWithASE":{
+        "name": "[variables('prcHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": {
+          "id": "[variables('aseResourceId')]"
+        }
+      },
+      "repProperties":{
+        "name": "[variables('repHostingPlanNameTidy')]"
+      },
+      "repPropertiesWithASE":{
+        "name": "[variables('repHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": {
+          "id": "[variables('aseResourceId')]"
+        }
+      },
+      "authCertificateHostingEnvironmentProfile": {
+        "id": "[variables('aseResourceId')]"
+      }
     }
   },
   "parameters": {
@@ -182,8 +208,16 @@
             "SkuName": "S1",
             "SkuCapacity": 1
           },
+          "prcHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          },
           "repHostingPlan": {
             "SkuName": "S1",
+            "SkuCapacity": 1
+          },
+          "repHostingPlanIsolated": {
+            "SkuName": "I1",
             "SkuCapacity": 1
           },
           "coreSqlDatabase": {
@@ -223,8 +257,16 @@
             "SkuName": "S1",
             "SkuCapacity": 1
           },
+          "prcHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          },
           "repHostingPlan": {
             "SkuName": "S1",
+            "SkuCapacity": 1
+          },
+          "repHostingPlanIsolated": {
+            "SkuName": "I1",
             "SkuCapacity": 1
           },
           "coreSqlDatabase": {
@@ -264,8 +306,16 @@
             "SkuName": "S1",
             "SkuCapacity": 1
           },
+          "prcHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          },
           "repHostingPlan": {
             "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "repHostingPlanIsolated": {
+            "SkuName": "I1",
             "SkuCapacity": 1
           },
           "coreSqlDatabase": {
@@ -305,8 +355,16 @@
             "SkuName": "S2",
             "SkuCapacity": 1
           },
+          "prcHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          },
           "repHostingPlan": {
             "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "repHostingPlanIsolated": {
+            "SkuName": "I2",
             "SkuCapacity": 1
           },
           "coreSqlDatabase": {
@@ -346,8 +404,16 @@
             "SkuName": "S2",
             "SkuCapacity": 1
           },
+          "prcHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          },
           "repHostingPlan": {
             "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "repHostingPlanIsolated": {
+            "SkuName": "I2",
             "SkuCapacity": 1
           },
           "coreSqlDatabase": {
@@ -387,6 +453,14 @@
     "resourceSizes": {
       "type": "object",
       "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
+    },
+    "aseName":{
+      "type": "string",
+      "defaultValue": ""
+    },
+    "aseResourceGroupName":{
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
     }
   },
   "resources": [
@@ -395,12 +469,10 @@
       "name": "[variables('prcHostingPlanNameTidy')]",
       "apiVersion": "[variables('serverFarmApiVersion')]",
       "sku": {
-        "name": "[parameters('resourceSizes').prcHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').prcHostingPlan.SkuCapacity]"
+        "name": "[if(not(variables('useAse')), parameters('resourceSizes').prcHostingPlan.SkuName, parameters('resourceSizes').prcHostingPlanIsolated.SkuName)]",
+        "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').prcHostingPlan.SkuCapacity, parameters('resourceSizes').prcHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": {
-        "name": "[variables('prcHostingPlanNameTidy')]"
-      },
+      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').prcProperties, variables('hostingPlanProperties').prcPropertiesWithASE)]",
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -412,12 +484,10 @@
       "name": "[variables('repHostingPlanNameTidy')]",
       "apiVersion": "[variables('serverFarmApiVersion')]",
       "sku": {
-        "name": "[parameters('resourceSizes').repHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').repHostingPlan.SkuCapacity]"
+        "name": "[if(not(variables('useAse')), parameters('resourceSizes').repHostingPlan.SkuName, parameters('resourceSizes').repHostingPlanIsolated.SkuName)]",
+        "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').repHostingPlan.SkuCapacity, parameters('resourceSizes').repHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": {
-        "name": "[variables('repHostingPlanNameTidy')]"
-      },
+      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').repProperties, variables('hostingPlanProperties').repPropertiesWithASE)]",
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -679,7 +749,8 @@
       ],
       "properties": {
         "password": "[parameters('authCertificatePassword')]",
-        "pfxBlob": "[parameters('authCertificateBlob')]"
+        "pfxBlob": "[parameters('authCertificateBlob')]",
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('hostingPlanProperties').authCertificateHostingEnvironmentProfile, '')]"
       },
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
