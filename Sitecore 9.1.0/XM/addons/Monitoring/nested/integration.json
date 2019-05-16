@@ -7,8 +7,8 @@
 			"type": "string"
 		},
 		"infrastructure": {
-			"defaultValue": { 
-			
+			"defaultValue": {
+
 			},
 			"type": "secureObject"
 		},
