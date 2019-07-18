@@ -2,21 +2,17 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "standard": {
-      "type": "secureObject",
-      "defaultValue": {
-      }
-    },
     "extension": {
       "type": "secureObject",
-      "defaultValue": { 
+      "defaultValue": {
         "omsWorkspaceMetricsRetentionDays": null,
         "omsWorkspaceLocation": null,
         "omsWorkspaceAlertRecipients": null
       }
     },
     "deploymentId": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
     },
     "omsWorkspaceMetricsRetentionDays": {
       "type": "int",
@@ -28,7 +24,16 @@
     "omsWorkspaceLocation": {
       "type": "string",
       "defaultValue": "[parameters('extension').omsWorkspaceLocation]",
-      "allowedValues": [ "Australia Southeast", "Canada Central", "Central India", "East US", "Japan East", "Southeast Asia", "UK South", "West Europe" ],
+      "allowedValues": [
+        "Australia Southeast",
+        "Canada Central",
+        "Central India",
+        "East US",
+        "Japan East",
+        "Southeast Asia",
+        "UK South",
+        "West Europe"
+      ],
       "metadata": {
         "description": "the Location in which your OMS will be provisioned the available Location currently are (Australia Southeast, Canada Central, Central India, East US, Japan East, Southeast Asia, UK South, West Europe)"
       }
@@ -39,15 +44,24 @@
       "metadata": {
         "Description": "List of recipients for the email alert separated by semicolon"
       }
+    },
+    "templateLinkBase": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri,' ','%20'), '.')]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": ""
     }
   },
-
   "variables": {
     "subscription": "[subscription().subscriptionId]",
     "sitecoreResourceGroup": "[resourceGroup().name]",
     "omsWorkspaceName": "[concat(toLower(parameters('deploymentId')), '-oms')]",
     "omsWorkspaceId": "[Concat('/subscriptions/', variables('subscription'), '/resourceGroups/', variables('sitecoreResourceGroup'), '/providers/Microsoft.OperationalInsights/workspaces/', variables('omsWorkspaceName'))]",
     "recipientsEmailsArray": "[split(parameters('omsWorkspaceAlertRecipients'),';')]",
+    "resourcesApiVersion": "2016-09-01",
     "omsWorkspaceApiVersion": "2017-03-15-preview",
     "omsWorkspaceSku": "standalone",
     "actionGroupApiVersion": "2018-03-01",
@@ -83,7 +97,8 @@
             "count": "[length(variables('recipientsEmailsArray'))]",
             "input": {
               "name": "[concat('email',copyIndex('emailReceivers'))]",
-              "emailAddress": "[variables('recipientsEmailsArray')[copyIndex('emailReceivers')]]"
+              "emailAddress": "[variables('recipientsEmailsArray')[copyIndex('emailReceivers')]]",
+              "useCommonAlertSchema": true
             }
           }
         ]

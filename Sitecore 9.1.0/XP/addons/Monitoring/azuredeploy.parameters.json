@@ -6,7 +6,7 @@
       "value": ""
     },
     "omsWorkspaceMetricsRetentionDays": {
-      "value": 
+      "value": ""
     },
     "omsWorkspaceAlertRecipients": {
       "value": ""
@@ -15,9 +15,6 @@
       "value": ""
     },
     "applicationInsightsLocation": {
-      "value": ""
-    },
-    "searchProvider": {
       "value": ""
     }
   }

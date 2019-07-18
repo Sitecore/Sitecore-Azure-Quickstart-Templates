@@ -25,7 +25,8 @@ Steps to configure the Sitecore deployment parameters to include the Application
     "name": "monitoring",
     "templateLink": "<placeholder>",
     "parameters": {
-        "omsWorkspaceMetricsRetentionDays" : <integer value. Plan comes with 31 by default>,
+        "omsWorkspaceSku" : "<free, pernode or standalone>",
+        "omsWorkspaceMetricsRetentionDays" : <integer value. free plans are always 7, other plans comes with 31 by default>,
 		"omsWorkspaceAlertRecipients" : "<emails seperated by a semi colon>",
 		"omsWorkspaceLocation" : "<Australia Southeast, Canada Central, Central India, East US, Japan East, Southeast Asia, UK South or West Europe>",
 		"applicationInsightsLocation" : "<location of the application insight associated with Sitecore>"

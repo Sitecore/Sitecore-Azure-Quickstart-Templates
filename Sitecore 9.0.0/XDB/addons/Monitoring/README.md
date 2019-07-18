@@ -8,7 +8,7 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 
 | Parameter                                 | Description
 --------------------------------------------|------------------------------------------------
-| deploymentId                              | The prefix of the Sitecore resources names within a resource group
+| deploymentId                              | The prefix of the Sitecore resources names within a resource group.
 | omsWorkspaceMetricsRetentionDays          | The number of days OMS will retain data.
 | omsWorkspaceAlertRecipients               | List of email addresses for people to recieve alerts. 
 | omsWorkspaceLocation                      | The location of the provisioned OMS.
