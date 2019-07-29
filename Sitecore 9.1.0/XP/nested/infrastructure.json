@@ -2,8 +2,8 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "webApiVersion": "2016-08-01",
-    "serverFarmApiVersion": "2016-09-01",
+    "webApiVersion": "2018-02-01",
+    "serverFarmApiVersion": "2018-02-01",
     "dbApiVersion": "2014-04-01-preview",
     "searchApiVersion": "2015-08-19",
     "redisApiVersion": "2016-04-01",
@@ -53,6 +53,59 @@
       "tasks": "prc-tasks",
       "forms": "forms",
       "exmmaster" : "exmmaster"
+    },
+
+    "useAse": "[not(empty(parameters('aseName')))]",
+    "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
+    "hostingPlanProperties":{
+      "siProperties":{
+        "name": "[variables('siHostingPlanNameTidy')]"
+      },
+      "siPropertiesWithASE":{
+        "name": "[variables('siHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": {
+          "id": "[variables('aseResourceId')]"
+        }
+      },
+      "cmProperties":{
+        "name": "[variables('cmHostingPlanNameTidy')]"
+      },
+      "cmPropertiesWithASE":{
+        "name": "[variables('cmHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": {
+          "id": "[variables('aseResourceId')]"
+        }
+      },
+      "cdProperties":{
+        "name": "[variables('cdHostingPlanNameTidy')]"
+      },
+      "cdPropertiesWithASE":{
+        "name": "[variables('cdHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": {
+          "id": "[variables('aseResourceId')]"
+        }
+      },
+      "prcProperties":{
+        "name": "[variables('prcHostingPlanNameTidy')]"
+      },
+      "prcPropertiesWithASE":{
+        "name": "[variables('prcHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": {
+          "id": "[variables('aseResourceId')]"
+        }
+      },
+      "repProperties":{
+        "name": "[variables('repHostingPlanNameTidy')]"
+      },
+      "repPropertiesWithASE":{
+        "name": "[variables('repHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": {
+          "id": "[variables('aseResourceId')]"
+        }
+      },
+      "authCertificateHostingEnvironmentProfile": {
+        "id": "[variables('aseResourceId')]"
+      }
     }
   },
   "parameters": {
@@ -251,20 +304,40 @@
             "SkuName": "S2",
             "SkuCapacity": 1
           },
+          "siHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          },
           "cmHostingPlan": {
             "SkuName": "S3",
+            "SkuCapacity": 1
+          },
+          "cmHostingPlanIsolated": {
+            "SkuName": "I2",
             "SkuCapacity": 1
           },
           "cdHostingPlan": {
             "SkuName": "S2",
             "SkuCapacity": 1
           },
+          "cdHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          },
           "prcHostingPlan": {
             "SkuName": "S1",
             "SkuCapacity": 1
           },
+          "prcHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          },
           "repHostingPlan": {
             "SkuName": "S1",
+            "SkuCapacity": 1
+          },
+          "repHostingPlanIsolated": {
+            "SkuName": "I1",
             "SkuCapacity": 1
           },
           "coreSqlDatabase": {
@@ -324,20 +397,40 @@
             "SkuName": "S2",
             "SkuCapacity": 1
           },
+          "siHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          },
           "cmHostingPlan": {
             "SkuName": "S3",
+            "SkuCapacity": 1
+          },
+          "cmHostingPlanIsolated": {
+            "SkuName": "I2",
             "SkuCapacity": 1
           },
           "cdHostingPlan": {
             "SkuName": "S2",
             "SkuCapacity": 2
           },
+          "cdHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          },
           "prcHostingPlan": {
             "SkuName": "S1",
             "SkuCapacity": 1
           },
+          "prcHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          },
           "repHostingPlan": {
             "SkuName": "S1",
+            "SkuCapacity": 1
+          },
+          "repHostingPlanIsolated": {
+            "SkuName": "I1",
             "SkuCapacity": 1
           },
           "coreSqlDatabase": {
@@ -397,20 +490,40 @@
             "SkuName": "S2",
             "SkuCapacity": 1
           },
+          "siHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          },
           "cmHostingPlan": {
             "SkuName": "S3",
+            "SkuCapacity": 1
+          },
+          "cmHostingPlanIsolated": {
+            "SkuName": "I2",
             "SkuCapacity": 1
           },
           "cdHostingPlan": {
             "SkuName": "S2",
             "SkuCapacity": 3
           },
+          "cdHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 2
+          },
           "prcHostingPlan": {
             "SkuName": "S1",
             "SkuCapacity": 1
           },
+          "prcHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          },
           "repHostingPlan": {
             "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "repHostingPlanIsolated": {
+            "SkuName": "I1",
             "SkuCapacity": 1
           },
           "coreSqlDatabase": {
@@ -470,20 +583,40 @@
             "SkuName": "S2",
             "SkuCapacity": 1
           },
+          "siHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          },
           "cmHostingPlan": {
             "SkuName": "S3",
+            "SkuCapacity": 1
+          },
+          "cmHostingPlanIsolated": {
+            "SkuName": "I2",
             "SkuCapacity": 1
           },
           "cdHostingPlan": {
             "SkuName": "S3",
             "SkuCapacity": 4
           },
+          "cdHostingPlanIsolated": {
+            "SkuName": "I3",
+            "SkuCapacity": 2
+          },
           "prcHostingPlan": {
             "SkuName": "S2",
             "SkuCapacity": 1
           },
+          "prcHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          },
           "repHostingPlan": {
             "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "repHostingPlanIsolated": {
+            "SkuName": "I2",
             "SkuCapacity": 1
           },
           "coreSqlDatabase": {
@@ -543,20 +676,40 @@
             "SkuName": "S2",
             "SkuCapacity": 1
           },
+          "siHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          },
           "cmHostingPlan": {
             "SkuName": "S3",
+            "SkuCapacity": 1
+          },
+          "cmHostingPlanIsolated": {
+            "SkuName": "I2",
             "SkuCapacity": 1
           },
           "cdHostingPlan": {
             "SkuName": "S3",
             "SkuCapacity": 8
           },
+          "cdHostingPlanIsolated": {
+            "SkuName": "I3",
+            "SkuCapacity": 4
+          },
           "prcHostingPlan": {
             "SkuName": "S2",
             "SkuCapacity": 1
           },
+          "prcHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          },
           "repHostingPlan": {
             "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "repHostingPlanIsolated": {
+            "SkuName": "I2",
             "SkuCapacity": 1
           },
           "coreSqlDatabase": {
@@ -616,6 +769,14 @@
     "resourceSizes": {
       "type": "object",
       "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
+    },
+    "aseName":{
+      "type": "string",
+      "defaultValue": ""
+    },
+    "aseResourceGroupName":{
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
     }
   },
   "resources": [
@@ -624,12 +785,10 @@
       "name": "[variables('siHostingPlanNameTidy')]",
       "apiVersion": "[variables('serverFarmApiVersion')]",
       "sku": {
-        "name": "[parameters('resourceSizes').siHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').siHostingPlan.SkuCapacity]"
+        "name": "[if(not(variables('useAse')), parameters('resourceSizes').siHostingPlan.SkuName, parameters('resourceSizes').siHostingPlanIsolated.SkuName)]",
+        "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').siHostingPlan.SkuCapacity, parameters('resourceSizes').siHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": {
-        "name": "[variables('siHostingPlanNameTidy')]"
-      },
+      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').siProperties, variables('hostingPlanProperties').siPropertiesWithASE)]",
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -641,12 +800,10 @@
       "name": "[variables('cmHostingPlanNameTidy')]",
       "apiVersion": "[variables('serverFarmApiVersion')]",
       "sku": {
-        "name": "[parameters('resourceSizes').cmHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').cmHostingPlan.SkuCapacity]"
+        "name": "[if(not(variables('useAse')), parameters('resourceSizes').cmHostingPlan.SkuName, parameters('resourceSizes').cmHostingPlanIsolated.SkuName)]",
+        "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').cmHostingPlan.SkuCapacity, parameters('resourceSizes').cmHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": {
-        "name": "[variables('cmHostingPlanNameTidy')]"
-      },
+      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').cmProperties, variables('hostingPlanProperties').cmPropertiesWithASE)]",
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -658,12 +815,10 @@
       "name": "[variables('cdHostingPlanNameTidy')]",
       "apiVersion": "[variables('serverFarmApiVersion')]",
       "sku": {
-        "name": "[parameters('resourceSizes').cdHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').cdHostingPlan.SkuCapacity]"
+        "name": "[if(not(variables('useAse')), parameters('resourceSizes').cdHostingPlan.SkuName, parameters('resourceSizes').cdHostingPlanIsolated.SkuName)]",
+        "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').cdHostingPlan.SkuCapacity, parameters('resourceSizes').cdHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": {
-        "name": "[variables('cdHostingPlanNameTidy')]"
-      },
+      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').cdProperties, variables('hostingPlanProperties').cdPropertiesWithASE)]",
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -675,12 +830,10 @@
       "name": "[variables('prcHostingPlanNameTidy')]",
       "apiVersion": "[variables('serverFarmApiVersion')]",
       "sku": {
-        "name": "[parameters('resourceSizes').prcHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').prcHostingPlan.SkuCapacity]"
+        "name": "[if(not(variables('useAse')), parameters('resourceSizes').prcHostingPlan.SkuName, parameters('resourceSizes').prcHostingPlanIsolated.SkuName)]",
+        "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').prcHostingPlan.SkuCapacity, parameters('resourceSizes').prcHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": {
-        "name": "[variables('prcHostingPlanNameTidy')]"
-      },
+      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').prcProperties, variables('hostingPlanProperties').prcPropertiesWithASE)]",
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -692,13 +845,10 @@
       "name": "[variables('repHostingPlanNameTidy')]",
       "apiVersion": "[variables('serverFarmApiVersion')]",
       "sku": {
-        "name": "[parameters('resourceSizes').repHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').repHostingPlan.SkuCapacity]"
+        "name": "[if(not(variables('useAse')), parameters('resourceSizes').repHostingPlan.SkuName, parameters('resourceSizes').repHostingPlanIsolated.SkuName)]",
+        "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').repHostingPlan.SkuCapacity, parameters('resourceSizes').repHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": {
-        "name": "[variables('repHostingPlanNameTidy')]"
-      },
-      "location": "[parameters('location')]",
+      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').repProperties, variables('hostingPlanProperties').repPropertiesWithASE)]",      "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
         "logicalName": "[variables('sitecoreTags').rep]"
@@ -1159,7 +1309,8 @@
       ],
       "properties": {
         "password": "[parameters('authCertificatePassword')]",
-        "pfxBlob": "[parameters('authCertificateBlob')]"
+        "pfxBlob": "[parameters('authCertificateBlob')]",
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('hostingPlanProperties').authCertificateHostingEnvironmentProfile, '')]"
       },
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"

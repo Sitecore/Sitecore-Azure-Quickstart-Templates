@@ -2,7 +2,7 @@
 This repo contains all currently available Azure Resource Manager templates for Sitecore
 
 # Documentation
-You can read all about Sitecore Azure AppService integration and ARM Template deployment at [Sitecore Documentation Site](https://doc.sitecore.net/cloud)
+You can read all about Sitecore Azure AppService integration and ARM Template deployment at [Sitecore Documentation Site](https://doc.sitecore.com/developers/90/#sitecore_azure)
 
 # Compatibility
 Choose the compatible templates for your Sitecore version:
@@ -18,6 +18,8 @@ Choose the compatible templates for your Sitecore version:
 | Sitecore 9.0.1   | Sitecore 9.0 Update-1 <br />Please note that these ARM templates link to an additional WDP in order to resolve a potential performance issue on start-up (see KB [article](https://kb.sitecore.net/articles/290593) for more info).                                               	|
 | Sitecore 9.0.2   | Sitecore 9.0 Update-2                                                 |
 | Sitecore 9.1.0   | Sitecore 9.1                                                          |
+| Sitecore 9.1.1   | Sitecore 9.1 Update-1                                                 |
+| Sitecore 9.2.0   | Sitecore 9.2                                                          |
 | WFFM 8.2.3       | Web Forms For Marketers 8.2 Update-3, Update-4 and Update-5           |
 | WFFM 9.0.0       | Web Forms For Marketers 9.0				           |
 | AD 1.3.0         | Active Directory 1.3                                                  |
@@ -68,9 +70,13 @@ $additionalParams = New-Object -TypeName Hashtable
 
 $params = Get-Content $ArmParametersPath -Raw | ConvertFrom-Json
 
+if ($params | Get-Member -Name parameters) {
+  $params = $params.parameters
+}
+
 foreach($p in $params | Get-Member -MemberType *Property)
 {
-    $additionalParams.Add($p.Name, $params.$($p.Name).value)
+  $additionalParams.Add($p.Name, $params.$($p.Name).value)
 }
 
 $additionalParams.Set_Item('licenseXml',$licenseFileContent)

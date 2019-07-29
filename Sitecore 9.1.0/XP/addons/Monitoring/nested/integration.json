@@ -1,0 +1,587 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"deploymentId": {
+			"defaultValue": "[parameters('infrastructure').deploymentId]",
+			"type": "string"
+		},
+		"infrastructure": {
+			"defaultValue": {
+
+			},
+			"type": "secureObject"
+		},
+		"omsWorkspaceId": {
+			"defaultValue": "[parameters('infrastructure').omsWorkspaceId]",
+			"metadata": {
+				"description": "OMS Workspace ID."
+			},
+			"type": "string"
+		},
+		"searchProvider": {
+			"defaultValue": "[parameters('infrastructure').searchProvider]",
+			"type": "string"
+		}
+	},
+	"resources": [{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-redis','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Cache/Redis/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-as','/Microsoft.Insights/service')]",
+			"condition": "[equals(parameters('searchProvider'), 'Azure')]",
+			"type": "Microsoft.Search/searchServices/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-core-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-exmmaster-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-forms-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-ma-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-master-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-messaging-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-pools-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-processingenginestorage-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-processingenginetasks-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-refdata-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-reporting-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-shard0-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-shard1-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-smm-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-tasks-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-web-db','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-cd-hp','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/serverFarms/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-cm-hp','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/serverFarms/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-prc-hp','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/serverFarms/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-rep-hp','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/serverFarms/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-si-hp','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/serverFarms/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-xc-basic-hp','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/serverFarms/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-xc-resourceintensive-hp','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/serverFarms/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-cd','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/sites/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-cm','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/sites/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-cortex-processing','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/sites/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-cortex-reporting','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/sites/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-ma-ops','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/sites/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-ma-rep','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/sites/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-prc','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/sites/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-rep','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/sites/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-si','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/sites/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-xc-collect','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/sites/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-xc-refdata','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/sites/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		},
+		{
+			"apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+			"name": "[concat(parameters('deploymentId'),'-xc-search','/Microsoft.Insights/service')]",
+			"type": "Microsoft.Web/sites/providers/diagnosticSettings",
+			"properties": {
+				"mode": "Incremental",
+				"workspaceId": "[parameters('omsWorkspaceId')]",
+				"logs": [
+
+				],
+				"metrics": [{
+					"enabled": true
+				}]
+			}
+		}
+	],
+	"variables": {
+		"diagnosticSettingsApiVersion": "2017-05-01-preview"
+	}
+}

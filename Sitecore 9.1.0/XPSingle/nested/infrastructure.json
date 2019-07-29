@@ -2,8 +2,8 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "webApiVersion": "2016-08-01",
-    "serverFarmApiVersion": "2016-09-01",
+    "webApiVersion": "2018-02-01",
+    "serverFarmApiVersion": "2018-02-01",
     "dbApiVersion": "2014-04-01-preview",
     "searchApiVersion": "2015-08-19",
     "applicationInsightsApiVersion": "2015-05-01",
@@ -20,7 +20,6 @@
     "formsSqlDatabaseNameTidy": "[toLower(trim(parameters('formsSqlDatabaseName')))]",
     "exmMasterSqlDatabaseNameTidy": "[toLower(trim(parameters('exmMasterSqlDatabaseName')))]",
 
-    "siHostingPlanNameTidy": "[toLower(trim(parameters('siHostingPlanName')))]",
     "singleHostingPlanNameTidy": "[toLower(trim(parameters('singleHostingPlanName')))]",
 
     "siWebAppNameTidy": "[toLower(trim(parameters('siWebAppName')))]",
@@ -191,27 +190,14 @@
       "defaultValue": "0.33"
     },
 
-    "siHostingPlanName": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-si-hp')]"
-    },
     "singleHostingPlanName": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-single-hp')]"
     },
-    "siHostingPlanSkuName": {
-      "type": "string",
-      "defaultValue": "S1"
-    },
     "singleHostingPlanSkuName": {
       "type": "string",
       "defaultValue": "S3"
-    },
-    "siHostingPlanSkuCapacity": {
-      "type": "int",
-      "defaultValue": 1
     },
     "singleHostingPlanSkuCapacity": {
       "type": "int",
@@ -245,23 +231,6 @@
   "resources": [
     {
       "type": "Microsoft.Web/serverfarms",
-      "name": "[variables('siHostingPlanNameTidy')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]",
-      "sku": {
-        "name": "[parameters('siHostingPlanSkuName')]",
-        "capacity": "[parameters('siHostingPlanSkuCapacity')]"
-      },
-      "properties": {
-        "name": "[variables('siHostingPlanNameTidy')]"
-      },
-      "location": "[parameters('location')]",
-      "tags": {
-        "provider": "[variables('sitecoreTags').provider]",
-        "logicalName": "[variables('sitecoreTags').si]"
-      }
-    },
-    {
-      "type": "Microsoft.Web/serverfarms",
       "name": "[variables('singleHostingPlanNameTidy')]",
       "apiVersion": "[variables('serverFarmApiVersion')]",
       "sku": {
@@ -284,7 +253,7 @@
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
         "clientAffinityEnabled": false,
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('siHostingPlanNameTidy'))]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('singleHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,
           "alwaysOn": true,
@@ -295,7 +264,7 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('siHostingPlanNameTidy'))]"
+        "[resourceId('Microsoft.Web/serverfarms', variables('singleHostingPlanNameTidy'))]"
       ],
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -632,7 +601,6 @@
       "apiVersion": "[variables('certificateApiVersion')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('siHostingPlanNameTidy'))]",
         "[resourceId('Microsoft.Web/serverfarms', variables('singleHostingPlanNameTidy'))]"
       ],
       "properties": {

@@ -2,8 +2,8 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "webApiVersion": "2016-08-01",
-    "serverFarmApiVersion": "2016-09-01",
+    "webApiVersion": "2018-02-01",
+    "serverFarmApiVersion": "2018-02-01",
     "dbApiVersion": "2014-04-01-preview",
     "searchApiVersion": "2015-08-19",
     "applicationInsightsApiVersion": "2015-05-01",

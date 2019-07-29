@@ -2,7 +2,7 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "resourcesApiVersion": "2016-09-01",
+    "resourcesApiVersion": "2018-05-01",
     "defaultDependency": [
       {
         "name": "application"
@@ -24,6 +24,20 @@
         ]
       }
     },
+    "prerequisites": {
+      "type": "secureObject",
+      "defaultValue": {
+        "items": [
+          {
+            "name": "empty-prerequisite",
+            "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
+            "parameters": {
+            }
+          }
+        ]
+      }
+    },
+
     "templateLinkBase": {
       "type": "string",
       "minLength": 1,
@@ -187,24 +201,11 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-single-hp')]"
     },
-    "siHostingPlanName": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-si-hp')]"
-    },
     "singleHostingPlanSkuName": {
       "type": "string",
       "defaultValue": "B3"
     },
-    "siHostingPlanSkuName": {
-      "type": "string",
-      "defaultValue": "S1"
-    },
     "singleHostingPlanSkuCapacity": {
-      "type": "int",
-      "defaultValue": 1
-    },
-    "siHostingPlanSkuCapacity": {
       "type": "int",
       "defaultValue": 1
     },
@@ -316,6 +317,24 @@
   },
   "resources": [
     {
+      "copy": {
+        "name": "[concat(parameters('deploymentId'), '-prerequisites')]",
+        "count": "[length(parameters('prerequisites').items)]",
+        "mode": "Serial",
+        "batchSize": 1
+      },
+      "name": "[concat(parameters('deploymentId'), '-', parameters('prerequisites').items[copyIndex()].name)]",
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('prerequisites').items[copyIndex()].templateLink]"
+        },
+        "parameters": "[parameters('prerequisites').items[copyIndex()].parameters]"
+      }
+    },
+    {
       "apiVersion": "[variables('resourcesApiVersion')]",
       "name": "[concat(parameters('deploymentId'), '-infrastructure')]",
       "type": "Microsoft.Resources/deployments",
@@ -422,15 +441,6 @@
             "value": "[parameters('applicationInsightsDataVolumeCap')]"
           },
 
-          "siHostingPlanName": {
-            "value": "[parameters('siHostingPlanName')]"
-          },
-          "siHostingPlanSkuCapacity": {
-            "value": "[parameters('siHostingPlanSkuCapacity')]"
-          },
-          "siHostingPlanSkuName": {
-            "value": "[parameters('siHostingPlanSkuName')]"
-          },
           "singleHostingPlanName": {
             "value": "[parameters('singleHostingPlanName')]"
           },
@@ -447,7 +457,10 @@
             "value": "[parameters('singleWebAppName')]"
           }
         }
-      }
+      },
+      "dependsOn": [
+        "[concat(parameters('deploymentId'), '-prerequisites')]"
+      ]
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",

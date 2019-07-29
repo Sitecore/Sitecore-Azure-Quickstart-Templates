@@ -2,7 +2,7 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "webApiVersion": "2016-08-01",
+    "webApiVersion": "2018-02-01",
     "searchApiVersion": "2015-08-19",
     "appInsightsApiVersion": "2015-05-01",
 

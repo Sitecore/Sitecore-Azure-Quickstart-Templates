@@ -1,0 +1,113 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"actionGroupName": {
+			"defaultValue": "[parameters('infrastructure').actionGroupName]",
+			"metadata": {
+				"description": "The name of the action group to be associated with the alerts actions"
+			},
+			"type": "string"
+		},
+		"deploymentId": {
+			"type": "string"
+		},
+		"infrastructure": {
+			"defaultValue": {
+
+			},
+			"type": "secureObject"
+		},
+		"omsWorkspaceAlertRecipients": {
+			"metadata": {
+				"Description": "List of recipients for the email alert separated by semicolon"
+			},
+			"type": "string"
+		},
+		"omsWorkspaceName": {
+			"defaultValue": "[parameters('infrastructure').omsWorkspaceName]",
+			"metadata": {
+				"description": "OMS Workspace name."
+			},
+			"type": "string"
+		}
+	},
+	"resources": [{
+		"name": "[concat(parameters('omsWorkspaceName'), '/eosaq')]",
+		"type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+		"apiVersion": "[variables('alertResourcesApiVersion')]",
+		"tags": {
+
+		},
+		"properties": {
+			"etag": "*",
+			"query": "[concat('let resourceName = \"',parameters('deploymentId'),'-redis','\";let metricName =\"serverLoad\";let resourceProvider =\"MICROSOFT.CACHE\";let resourceIdContains =\"/REDIS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+			"displayName": "[concat('Redis Cache ',parameters('deploymentId'),'-redis',' reporting high server load')]",
+			"version": "2.0",
+			"category": "AlertIbiza",
+			"tags": [{
+					"name": "tier",
+					"value": "3"
+				},
+				{
+					"name": "frequency",
+					"value": "15"
+				}
+			]
+		},
+		"resources": [{
+			"name": "[Concat(parameters('omsWorkspaceName'),'/eosaq/tohzn')]",
+			"type": "Microsoft.OperationalInsights/workspaces/savedSearches/schedules/",
+			"apiVersion": "[variables('alertResourcesApiVersion')]",
+			"dependsOn": [
+				"[Concat('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'),'/savedSearches/eosaq')]"
+			],
+			"properties": {
+				"etag": "*",
+				"interval": "15",
+				"queryTimeSpan": "60",
+				"enabled": true,
+				"NearRealTime": false
+			},
+			"resources": [{
+				"name": "[concat(parameters('omsWorkspaceName'), '/eosaq/tohzn/zgqkx')]",
+				"type": "Microsoft.OperationalInsights/workspaces/savedSearches/schedules/actions",
+				"apiVersion": "[variables('alertResourcesApiVersion')]",
+				"dependsOn": [
+					"[concat('Microsoft.OperationalInsights/workspaces/',parameters('omsWorkspaceName'),'/savedSearches/eosaq/schedules/tohzn')]"
+				],
+				"properties": {
+					"etag": "*",
+					"Type": "Alert",
+					"Name": "[concat('Redis Cache ',parameters('deploymentId'),'-redis',' reporting high server load')]",
+					"Description": "[concat('Check Redis Cache ',parameters('deploymentId'),'-redis',' : Reporting high server load')]",
+					"Severity": "warning",
+					"Threshold": {
+						"Operator": "gt",
+						"Value": "95",
+						"MetricsTrigger": {
+							"TriggerCondition": "Total",
+							"Operator": "gt",
+							"Value": "30"
+						}
+					},
+					"Throttling": {
+						"DurationInMinutes": "0"
+					},
+					"AzNsNotification": {
+						"GroupIds": [
+							"[variables('actionGroupResourceId')]"
+						],
+						"CustomEmailSubject": "[concat('Check Redis Cache ',parameters('deploymentId'),'-redis',' : Reporting high server load')]"
+					},
+					"ScheduleTypeSpecified": false,
+					"Version": 2
+				}
+			}]
+		}]
+	}],
+	"variables": {
+		"actionGroupResourceId": "[resourceId('Microsoft.Insights/actionGroups',parameters('actionGroupName'))]",
+		"alertResourcesApiVersion": "2017-04-26-preview"
+	}
+}

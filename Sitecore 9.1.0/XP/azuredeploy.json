@@ -2,7 +2,7 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "resourcesApiVersion": "2016-09-01",
+    "resourcesApiVersion": "2018-05-01",
     "defaultDependency": [
       {
         "name": "[if(parameters('deployExmDds'), 'application-exm', 'application')]"
@@ -17,6 +17,19 @@
         "items": [
           {
             "name": "empty",
+            "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
+            "parameters": {
+            }
+          }
+        ]
+      }
+    },
+    "prerequisites": {
+      "type": "secureObject",
+      "defaultValue": {
+        "items": [
+          {
+            "name": "empty-prerequisite",
             "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
             "parameters": {
             }
@@ -643,6 +656,14 @@
       "type": "bool",
       "defaultValue": false
     },
+    "aseName":{
+      "type": "string",
+      "defaultValue": ""
+    },
+    "aseResourceGroupName":{
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
     "cmNodeJsVersion":{
       "type": "string",
       "defaultValue": "8.11.1"
@@ -654,6 +675,24 @@
 
   },
   "resources": [
+    {
+      "copy": {
+        "name": "[concat(parameters('deploymentId'), '-prerequisites')]",
+        "count": "[length(parameters('prerequisites').items)]",
+        "mode": "Serial",
+        "batchSize": 1
+      },
+      "name": "[concat(parameters('deploymentId'), '-', parameters('prerequisites').items[copyIndex()].name)]",
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[parameters('prerequisites').items[copyIndex()].templateLink]"
+        },
+        "parameters": "[parameters('prerequisites').items[copyIndex()].parameters]"
+      }
+    },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
       "name": "[concat(parameters('deploymentId'), '-infrastructure')]",
@@ -783,9 +822,19 @@
           },
           "authCertificatePassword": {
             "value": "[parameters('authCertificatePassword')]"
+          },
+
+          "aseName": {
+            "value": "[parameters('aseName')]"
+          },
+          "aseResourceGroupName":{
+            "value": "[parameters('aseResourceGroupName')]"
           }
         }
-      }
+      },
+      "dependsOn": [
+        "[concat(parameters('deploymentId'), '-prerequisites')]"
+      ]
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
@@ -846,6 +895,13 @@
           },
           "xcSearchWebAppName": {
             "value": "[parameters('xcSearchWebAppName')]"
+          },
+          
+          "aseName": {
+            "value": "[parameters('aseName')]"
+          },
+          "aseResourceGroupName":{
+            "value": "[parameters('aseResourceGroupName')]"
           }
         }
       },
@@ -880,6 +936,13 @@
 
           "exmDdsWebAppName": {
             "value": "[parameters('exmDdsWebAppName')]"
+          },
+
+          "aseName": {
+            "value": "[parameters('aseName')]"
+          },
+          "aseResourceGroupName":{
+            "value": "[parameters('aseResourceGroupName')]"
           }
         }
       }

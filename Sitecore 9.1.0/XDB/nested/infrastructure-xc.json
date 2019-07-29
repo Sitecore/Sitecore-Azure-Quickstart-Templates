@@ -2,8 +2,8 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "webApiVersion": "2016-08-01",
-    "serverFarmApiVersion": "2016-09-01",
+    "webApiVersion": "2018-02-01",
+    "serverFarmApiVersion": "2018-02-01",
     "dbApiVersion": "2014-04-01-preview",
 
     "sqlServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
@@ -31,6 +31,29 @@
       "xcShard1": "xc-shard-1",
       "xcShardMapManager": "xc-smm",
       "messaging": "messaging"
+    },
+
+    "useAse": "[not(empty(parameters('aseName')))]",
+    "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
+    "hostingPlanProperties":{
+      "xcBasicProperties":{
+        "name": "[variables('xcBasicHostingPlanNameTidy')]"
+      },
+      "xcBasicPropertiesWithASE":{
+        "name": "[variables('xcBasicHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": {
+          "id": "[variables('aseResourceId')]"
+        }
+      },
+      "xcResourceIntensiveProperties":{
+        "name": "[variables('xcResourceIntensiveHostingPlanNameTidy')]"
+      },
+      "xcResourceIntensivePropertiesWithASE":{
+        "name": "[variables('xcResourceIntensiveHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": {
+          "id": "[variables('aseResourceId')]"
+        }
+      }
     }
   },
   "parameters": {
@@ -125,8 +148,16 @@
             "SkuName": "S1",
             "SkuCapacity": 1
           },
+          "xcBasicHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          },
           "xcResourceIntensiveHostingPlan": {
             "SkuName": "S1",
+            "SkuCapacity": 1
+          },
+          "xcResourceIntensiveHostingPlanIsolated": {
+            "SkuName": "I1",
             "SkuCapacity": 1
           },
           "refDataSqlDatabase": {
@@ -160,8 +191,16 @@
             "SkuName": "S1",
             "SkuCapacity": 1
           },
+          "xcBasicHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          },
           "xcResourceIntensiveHostingPlan": {
             "SkuName": "S1",
+            "SkuCapacity": 1
+          },
+          "xcResourceIntensiveHostingPlanIsolated": {
+            "SkuName": "I1",
             "SkuCapacity": 1
           },
           "refDataSqlDatabase": {
@@ -195,8 +234,16 @@
             "SkuName": "S2",
             "SkuCapacity": 1
           },
+          "xcBasicHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          },
           "xcResourceIntensiveHostingPlan": {
             "SkuName": "S3",
+            "SkuCapacity": 1
+          },
+          "xcResourceIntensiveHostingPlanIsolated": {
+            "SkuName": "I2",
             "SkuCapacity": 1
           },
           "refDataSqlDatabase": {
@@ -230,8 +277,16 @@
             "SkuName": "S3",
             "SkuCapacity": 1
           },
+          "xcBasicHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          },
           "xcResourceIntensiveHostingPlan": {
             "SkuName": "S3",
+            "SkuCapacity": 2
+          },
+          "xcResourceIntensiveHostingPlanIsolated": {
+            "SkuName": "I2",
             "SkuCapacity": 2
           },
           "refDataSqlDatabase": {
@@ -265,9 +320,17 @@
             "SkuName": "S3",
             "SkuCapacity": 2
           },
+          "xcBasicHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 2
+          },
           "xcResourceIntensiveHostingPlan": {
             "SkuName": "S3",
             "SkuCapacity": 4
+          },
+          "xcResourceIntensiveHostingPlanIsolated": {
+            "SkuName": "I3",
+            "SkuCapacity": 2
           },
           "refDataSqlDatabase": {
             "Edition": "Standard",
@@ -300,6 +363,14 @@
     "resourceSizes": {
       "type": "object",
       "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
+    },
+    "aseName":{
+      "type": "string",
+      "defaultValue": ""
+    },
+    "aseResourceGroupName":{
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
     }
   },
   "resources": [
@@ -308,12 +379,10 @@
       "name": "[variables('xcBasicHostingPlanNameTidy')]",
       "apiVersion": "[variables('serverFarmApiVersion')]",
       "sku": {
-        "name": "[parameters('resourceSizes').xcBasicHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').xcBasicHostingPlan.SkuCapacity]"
+        "name": "[if(not(variables('useAse')), parameters('resourceSizes').xcBasicHostingPlan.SkuName, parameters('resourceSizes').xcBasicHostingPlanIsolated.SkuName)]",
+        "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').xcBasicHostingPlan.SkuCapacity, parameters('resourceSizes').xcBasicHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": {
-        "name": "[variables('xcBasicHostingPlanNameTidy')]"
-      },
+      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').xcBasicProperties, variables('hostingPlanProperties').xcBasicPropertiesWithASE)]",      
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -325,12 +394,10 @@
       "name": "[variables('xcResourceIntensiveHostingPlanNameTidy')]",
       "apiVersion": "[variables('serverFarmApiVersion')]",
       "sku": {
-        "name": "[parameters('resourceSizes').xcResourceIntensiveHostingPlan.SkuName]",
-        "capacity": "[parameters('resourceSizes').xcResourceIntensiveHostingPlan.SkuCapacity]"
+        "name": "[if(not(variables('useAse')), parameters('resourceSizes').xcResourceIntensiveHostingPlan.SkuName, parameters('resourceSizes').xcResourceIntensiveHostingPlanIsolated.SkuName)]",
+        "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').xcResourceIntensiveHostingPlan.SkuCapacity, parameters('resourceSizes').xcResourceIntensiveHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": {
-        "name": "[variables('xcResourceIntensiveHostingPlanNameTidy')]"
-      },
+      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').xcResourceIntensiveProperties, variables('hostingPlanProperties').xcResourceIntensivePropertiesWithASE)]",      
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
