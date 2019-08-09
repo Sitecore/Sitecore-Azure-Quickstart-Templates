@@ -1,0 +1,138 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentId": {
+      "value": ""
+    },
+    "location": {
+      "value": ""
+    },
+    "sitecoreAdminPassword": {
+      "value": ""
+    },
+    "licenseXml": {
+      "value": ""
+    },
+    "repAuthenticationApiKey": {
+      "value": ""
+    },
+    "sqlServerLogin": {
+      "value": ""
+    },
+    "sqlServerPassword": {
+      "value": ""
+    },
+    "solrConnectionString": {
+      "value": ""
+    },
+    "siMsDeployPackageUrl": {
+      "value": ""
+    },
+    "cmMsDeployPackageUrl": {
+      "value": ""
+    },
+    "cdMsDeployPackageUrl": {
+      "value": ""
+    },
+    "prcMsDeployPackageUrl": {
+      "value": ""
+    },
+    "repMsDeployPackageUrl": {
+      "value": ""
+    },
+    "xcRefDataMsDeployPackageUrl": {
+      "value": ""
+    },
+    "xcCollectMsDeployPackageUrl": {
+      "value": ""
+    },
+    "xcSearchMsDeployPackageUrl": {
+      "value": ""
+    },
+    "maOpsMsDeployPackageUrl": {
+      "value": ""
+    },
+    "maRepMsDeployPackageUrl": {
+      "value": ""
+    },
+    "cortexProcessingMsDeployPackageUrl": {
+      "value": ""
+    },
+    "cortexReportingMsDeployPackageUrl": {
+      "value": ""
+    },
+    "authCertificateBlob": {
+      "value": ""
+    },
+    "authCertificatePassword": {
+      "value": ""
+    },
+    "modules": {
+      "value": {
+        "items": [
+          {
+            "name": "Commerce",
+            "templateLink": "",
+            "parameters": {
+              "templateLinkAccessToken": "",
+              "commerceConnectMsDeployPackageUrl": "",
+              "commerceEngineAzureMsDeployPackageUrl": "",
+              "commerceEngineSolrCloudMsDeployPackageUrl": "",
+              "commerceEngineConnectCdAzureMsDeployPackageUrl": "",
+              "commerceEngineConnectCmAzureMsDeployPackageUrl": "",
+              "commerceEngineConnectCdSolrMsDeployPackageUrl": "",
+              "commerceEngineConnectCmSolrMsDeployPackageUrl": "",
+              "identityConfigCommerceMsDeployPackageUrl": "",
+              "bizfxCloudMsDeployPackageUrl": "",
+              "adventureWorksImagesDeployPackageUrl": "",
+              "habitatImagesDeployPackageUrl": "",
+              "indexWorkerDefinitionsDeployPackageUrl": "",
+              "xConnectDefinitionsDeployPackageUrl": "",
+              "xProfileCoreDeployPackageUrl": "",
+              "xAnalyticsCoreDeployPackageUrl": "",
+              "maCoreDeployPackageUrl": "",
+              "maAzureDeployPackageUrl": "",
+              "braintreeMerchantId": "",
+              "braintreePublicKey": "",
+              "braintreePrivateKey": "",
+              "braintreeEnvironment": "",
+              "environmentName": "",
+              "defaultShopName": "",
+              "defaultShopCurrency": "",
+              "defaultShopLanguage": ""
+            }
+          },
+          {
+            "name": "sxa",
+            "templateLink": "",
+            "parameters": {
+              "cdSxaMsDeployPackageUrl": "",
+              "cmSxaMsDeployPackageUrl": "",
+              "speMsDeployPackageUrl": "",
+              "solrSupportSxaMsDeployPackageUrl":"",
+              "templateLinkAccessToken": ""
+            }
+          },
+          {
+            "name": "sxa-sf",
+            "templateLink": "",
+            "parameters": {
+              "sxaMsDeployPackageUrl": "",
+              "sxaStorefrontMsDeployPackageUrl": "",
+              "sxaHabitatCatalogMsDeployPackageUrl": "",
+              "sxaStorefrontThemesMsDeployPackageUrl": ""
+            }
+          },
+          {
+            "name": "bootloader",
+            "templateLink": "",
+            "parameters": {
+              "msDeployPackageUrl": ""
+            }
+          }
+        ]
+      }
+    }
+  }
+}
