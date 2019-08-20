@@ -1,0 +1,128 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentId": {
+      "value": ""
+    },
+    "location": {
+      "value": ""
+    },
+    "sitecoreAdminPassword": {
+      "value": ""
+    },
+    "sitecoreDomain": {
+      "value": ""
+    },
+    "sitecorePassword": {
+      "value": ""
+    },
+    "sqlServerName": {
+      "value": ""
+    },
+    "sqlServerLogin": {
+      "value": ""
+    },
+    "sqlServerPassword": {
+      "value": ""
+    },
+    "solrConnectionString": {
+      "value": ""
+    },
+    "authCertificateBlob": {
+      "value": ""
+    },
+    "authCertificatePassword": {
+      "value": ""
+    },
+    "commerceConnectMsDeployPackageUrl": {
+      "value": ""
+    },
+    "commerceEngineAzureMsDeployPackageUrl": {
+      "value": ""
+    },
+    "commerceEngineSolrCloudMsDeployPackageUrl": {
+      "value": ""
+    },
+    "commerceEngineConnectCdAzureMsDeployPackageUrl": {
+      "value": ""
+    },
+    "commerceEngineConnectCmAzureMsDeployPackageUrl": {
+      "value": ""
+    },
+    "commerceEngineConnectCdSolrMsDeployPackageUrl": {
+      "value": ""
+    },
+    "commerceEngineConnectCmSolrMsDeployPackageUrl": {
+      "value": ""
+    },
+    "identityConfigCommerceMsDeployPackageUrl": {
+      "value": ""
+    },
+    "bizfxCloudMsDeployPackageUrl": {
+      "value": ""
+    },
+    "adventureWorksImagesDeployPackageUrl": {
+      "value": ""
+    },
+    "habitatImagesDeployPackageUrl": {
+      "value": ""
+    },
+    "indexWorkerDefinitionsDeployPackageUrl": {
+      "value": ""
+    },
+    "xConnectDefinitionsDeployPackageUrl": {
+      "value": ""
+    },
+    "xProfileCoreDeployPackageUrl": {
+      "value": ""
+    },
+    "xAnalyticsCoreDeployPackageUrl": {
+      "value": ""
+    },
+    "maCoreDeployPackageUrl": {
+      "value": ""
+    },
+    "maAzureDeployPackageUrl": {
+      "value": ""
+    },
+    "braintreeMerchantId": {
+      "value": ""
+    },
+    "braintreePublicKey": {
+      "value": ""
+    },
+    "braintreePrivateKey": {
+      "value": ""
+    },
+    "braintreeEnvironment": {
+      "value": ""
+    },
+    "environmentName": {
+      "value": ""
+    },
+    "defaultShopName": {
+      "value": ""
+    },
+    "defaultShopCurrency": {
+      "value": ""
+    },
+    "defaultShopLanguage": {
+      "value": ""
+    },
+
+    "modules": {
+      "value": {
+        "items": [
+          {
+            "name": "bootloader",
+            "templateLink": "",
+            "parameters": {
+              "msDeployPackageUrl": ""
+            }
+          }
+        ]
+      }
+    }
+  }
+}
