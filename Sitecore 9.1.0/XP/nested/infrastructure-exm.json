@@ -3,17 +3,16 @@
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
-    "serverFarmApiVersion": "2018-02-01",
 
     "exmDdsHostingPlanNameTidy": "[toLower(trim(parameters('exmDdsHostingPlanName')))]",
     "exmDdsWebAppNameTidy": "[toLower(trim(parameters('exmDdsWebAppName')))]",
     "useAse": "[not(empty(parameters('aseName')))]",
     "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
-    "hostingPlanProperties":{
-      "exmDdsProperties":{
+    "hostingPlanProperties": {
+      "exmDdsProperties": {
         "name": "[variables('exmDdsHostingPlanNameTidy')]"
       },
-      "exmDdsPropertiesWithASE":{
+      "exmDdsPropertiesWithASE": {
         "name": "[variables('exmDdsHostingPlanNameTidy')]",
         "hostingEnvironmentProfile": {
           "id": "[variables('aseResourceId')]"
@@ -36,7 +35,13 @@
     },
     "sitecoreSKU": {
       "type": "string",
-      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large" ],
+      "allowedValues": [
+        "Extra Small",
+        "Small",
+        "Medium",
+        "Large",
+        "Extra Large"
+      ],
       "defaultValue": "Extra Small",
       "metadata": {
         "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
@@ -109,11 +114,11 @@
       "type": "object",
       "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
     },
-    "aseName":{
+    "aseName": {
       "type": "string",
       "defaultValue": ""
     },
-    "aseResourceGroupName":{
+    "aseResourceGroupName": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
     }
@@ -122,12 +127,12 @@
     {
       "type": "Microsoft.Web/serverfarms",
       "name": "[variables('exmDdsHostingPlanNameTidy')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "apiVersion": "2018-02-01",
       "sku": {
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').exmDdsHostingPlan.SkuName, parameters('resourceSizes').exmDdsHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').exmDdsHostingPlan.SkuCapacity, parameters('resourceSizes').exmDdsHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').exmDdsProperties, variables('hostingPlanProperties').exmDdsPropertiesWithASE)]",
+      "properties": "[if(variables('useAse'), variables('hostingPlanProperties').exmDdsPropertiesWithASE, variables('hostingPlanProperties').exmDdsProperties)]",
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",

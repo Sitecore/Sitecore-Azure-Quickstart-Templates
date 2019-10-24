@@ -3,7 +3,6 @@
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
-    "serverFarmApiVersion": "2018-02-01",
     "dbApiVersion": "2014-04-01-preview",
     "searchApiVersion": "2015-08-19",
     "redisApiVersion": "2016-04-01",
@@ -33,29 +32,29 @@
 
     "useAse": "[not(empty(parameters('aseName')))]",
     "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
-    "hostingPlanProperties":{
-      "siProperties":{
+    "hostingPlanProperties": {
+      "siProperties": {
         "name": "[variables('siHostingPlanNameTidy')]"
       },
-      "siPropertiesWithASE":{
+      "siPropertiesWithASE": {
         "name": "[variables('siHostingPlanNameTidy')]",
         "hostingEnvironmentProfile": {
           "id": "[variables('aseResourceId')]"
         }
       },
-      "cmProperties":{
+      "cmProperties": {
         "name": "[variables('cmHostingPlanNameTidy')]"
       },
-      "cmPropertiesWithASE":{
+      "cmPropertiesWithASE": {
         "name": "[variables('cmHostingPlanNameTidy')]",
         "hostingEnvironmentProfile": {
           "id": "[variables('aseResourceId')]"
         }
       },
-      "cdProperties":{
+      "cdProperties": {
         "name": "[variables('cdHostingPlanNameTidy')]"
       },
-      "cdPropertiesWithASE":{
+      "cdPropertiesWithASE": {
         "name": "[variables('cdHostingPlanNameTidy')]",
         "hostingEnvironmentProfile": {
           "id": "[variables('aseResourceId')]"
@@ -91,7 +90,13 @@
     },
     "sitecoreSKU": {
       "type": "string",
-      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large" ],
+      "allowedValues": [
+        "Extra Small",
+        "Small",
+        "Medium",
+        "Large",
+        "Extra Large"
+      ],
       "defaultValue": "Extra Small",
       "metadata": {
         "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
@@ -154,7 +159,7 @@
       "type": "int",
       "defaultValue": 1
     },
-    
+
     "redisCacheName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-redis')]"
@@ -538,11 +543,11 @@
       "type": "object",
       "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
     },
-    "aseName":{
+    "aseName": {
       "type": "string",
       "defaultValue": ""
     },
-    "aseResourceGroupName":{
+    "aseResourceGroupName": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
     }
@@ -551,12 +556,12 @@
     {
       "type": "Microsoft.Web/serverfarms",
       "name": "[variables('siHostingPlanNameTidy')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "apiVersion": "2018-02-01",
       "sku": {
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').siHostingPlan.SkuName, parameters('resourceSizes').siHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').siHostingPlan.SkuCapacity, parameters('resourceSizes').siHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').siProperties, variables('hostingPlanProperties').siPropertiesWithASE)]",
+      "properties": "[if(variables('useAse'), variables('hostingPlanProperties').siPropertiesWithASE, variables('hostingPlanProperties').siProperties)]",
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -566,32 +571,38 @@
     {
       "type": "Microsoft.Web/serverfarms",
       "name": "[variables('cmHostingPlanNameTidy')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "apiVersion": "2018-02-01",
       "sku": {
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').cmHostingPlan.SkuName, parameters('resourceSizes').cmHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').cmHostingPlan.SkuCapacity, parameters('resourceSizes').cmHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').cmProperties, variables('hostingPlanProperties').cmPropertiesWithASE)]",
+      "properties": "[if(variables('useAse'), variables('hostingPlanProperties').cmPropertiesWithASE, variables('hostingPlanProperties').cmProperties)]",
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
         "logicalName": "[variables('sitecoreTags').cm]"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('siHostingPlanNameTidy'))]"
+      ]
     },
     {
       "type": "Microsoft.Web/serverfarms",
       "name": "[variables('cdHostingPlanNameTidy')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "apiVersion": "2018-02-01",
       "sku": {
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').cdHostingPlan.SkuName, parameters('resourceSizes').cdHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').cdHostingPlan.SkuCapacity, parameters('resourceSizes').cdHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').cdProperties, variables('hostingPlanProperties').cdPropertiesWithASE)]",
+      "properties": "[if(variables('useAse'), variables('hostingPlanProperties').cdPropertiesWithASE, variables('hostingPlanProperties').cdProperties)]",
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
         "logicalName": "[variables('sitecoreTags').cd]"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('cmHostingPlanNameTidy'))]"
+      ]
     },
     {
       "type": "Microsoft.Web/sites",
@@ -693,7 +704,9 @@
             "startIpAddress": "0.0.0.0"
           },
           "name": "AllowAllAzureIps",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ]
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ]
         },
         {
           "type": "databases",
@@ -719,7 +732,9 @@
           ],
           "name": "[variables('coreSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').core]"
@@ -749,13 +764,15 @@
           ],
           "name": "[variables('masterSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').master]"
           }
         },
-		    {
+        {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
@@ -779,7 +796,9 @@
           ],
           "name": "[variables('webSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').web]"
@@ -809,12 +828,14 @@
           ],
           "name": "[variables('formsSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').forms]"
           }
-              }
+        }
       ]
     },
     {

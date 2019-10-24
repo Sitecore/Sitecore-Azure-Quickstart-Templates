@@ -3,7 +3,6 @@
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
-    "serverFarmApiVersion": "2018-02-01",
     "dbApiVersion": "2014-04-01-preview",
     "searchApiVersion": "2015-08-19",
     "applicationInsightsApiVersion": "2015-05-01",
@@ -161,7 +160,10 @@
     "applicationInsightsCurrentBillingFeatures": {
       "type": "string",
       "defaultValue": "Basic",
-      "allowedValues": [ "Basic", "Application Insights Enterprise" ]
+      "allowedValues": [
+        "Basic",
+        "Application Insights Enterprise"
+      ]
     },
     "applicationInsightsDataVolumeCap": {
       "type": "string",
@@ -211,7 +213,7 @@
     {
       "type": "Microsoft.Web/serverfarms",
       "name": "[variables('singleHostingPlanNameTidy')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "apiVersion": "2018-02-01",
       "sku": {
         "name": "[parameters('singleHostingPlanSkuName')]",
         "capacity": "[parameters('singleHostingPlanSkuCapacity')]"
@@ -240,7 +242,7 @@
             "index.html"
           ]
         }
-      },      
+      },
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', variables('singleHostingPlanNameTidy'))]"
       ],
@@ -301,7 +303,9 @@
             "startIpAddress": "0.0.0.0"
           },
           "name": "AllowAllAzureIps",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ]
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ]
         },
         {
           "type": "databases",
@@ -327,7 +331,9 @@
           ],
           "name": "[variables('coreSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').core]"
@@ -357,7 +363,9 @@
           ],
           "name": "[variables('masterSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').master]"
@@ -387,7 +395,9 @@
           ],
           "name": "[variables('webSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').web]"
@@ -417,12 +427,14 @@
           ],
           "name": "[variables('formsSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').forms]"
           }
-              }
+        }
       ]
     },
     {
