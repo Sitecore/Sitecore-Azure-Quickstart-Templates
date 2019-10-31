@@ -240,7 +240,10 @@
           "XConnect Server Instance Name": "MarketingAutomation",
           "License Xml": "[parameters('licenseXml')]"
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/config', variables('maOpsWebAppNameTidy'),'appsettings')]"
+      ]
     },
     {
       "name": "[concat(variables('maRepWebAppNameTidy'), '/', 'MSDeploy')]",
@@ -267,7 +270,10 @@
           "XConnect Server Instance Name": "MarketingAutomationReporting",
           "License Xml": "[parameters('licenseXml')]"
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/config', variables('maRepWebAppNameTidy'),'appsettings')]"
+      ]
     },
     {
       "name": "[concat(variables('maOpsWebAppNameTidy'), '/', 'appsettings')]",
@@ -276,10 +282,7 @@
       "properties": {
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "WEBSITE_DYNAMIC_CACHE": 0
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('maOpsWebAppNameTidy'),'MSDeploy')]"
-      ]
+      }
     },
     {
       "name": "[concat(variables('maRepWebAppNameTidy'), '/', 'appsettings')]",
@@ -289,8 +292,8 @@
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "WEBSITE_DYNAMIC_CACHE": 0
       },
-       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('maRepWebAppNameTidy'),'MSDeploy')]"
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/extensions', variables('maOpsWebAppNameTidy'),'MSDeploy')]"
       ]
     }
   ]

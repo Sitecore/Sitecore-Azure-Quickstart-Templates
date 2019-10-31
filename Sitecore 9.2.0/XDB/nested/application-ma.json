@@ -236,7 +236,10 @@
           "XConnect Server Instance Name": "MarketingAutomation",
           "License Xml": "[parameters('licenseXml')]"
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/config', variables('maOpsWebAppNameTidy'),'appsettings')]"
+      ]
     },
     {
       "name": "[concat(variables('maRepWebAppNameTidy'), '/', 'MSDeploy')]",
@@ -265,7 +268,7 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('maOpsWebAppNameTidy'), 'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/config', variables('maRepWebAppNameTidy'),'appsettings')]"
       ]
     },
     {
@@ -276,10 +279,7 @@
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('maRepWebAppNameTidy'),'MSDeploy')]"
-      ]
+      }
     },
     {
       "name": "[concat(variables('maRepWebAppNameTidy'), '/', 'appsettings')]",
@@ -290,8 +290,8 @@
         "WEBSITE_DYNAMIC_CACHE": 0,
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       },
-       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/config', variables('maOpsWebAppNameTidy'),'appsettings')]"
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/extensions', variables('maOpsWebAppNameTidy'),'MSDeploy')]"
       ]
     }
   ]

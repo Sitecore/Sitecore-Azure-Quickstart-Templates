@@ -1806,8 +1806,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-infrastructure-cortex-prc-rep'))]",
-        "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-application-xc'))]",
-        "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-infrastructure-asb'))]"
+        "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-application-ma'))]"
       ]
     },
     {

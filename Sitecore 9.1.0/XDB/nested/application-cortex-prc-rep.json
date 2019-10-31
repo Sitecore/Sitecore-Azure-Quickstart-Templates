@@ -225,7 +225,10 @@
           "XConnect Server Instance Name": "Reporting",
           "License Xml": "[parameters('licenseXml')]"
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/config', variables('cortexReportingWebAppNameTidy'), 'appsettings')]"
+      ]
     },
     {
       "name": "[concat(variables('cortexReportingWebAppNameTidy'), '/', 'appsettings')]",
@@ -234,10 +237,7 @@
       "properties": {
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "WEBSITE_DYNAMIC_CACHE": 0
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('cortexReportingWebAppNameTidy'),'MSDeploy')]"
-      ]
+      }
     },
     {
       "name": "[concat(variables('cortexProcessingWebAppNameTidy'), '/', 'MSDeploy')]",
@@ -284,7 +284,7 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('cortexReportingWebAppNameTidy'),'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/config', variables('cortexProcessingWebAppNameTidy'), 'appsettings')]"
       ]
     },
     {
@@ -296,7 +296,7 @@
         "WEBSITE_DYNAMIC_CACHE": 0
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('cortexProcessingWebAppNameTidy'),'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/extensions', variables('cortexReportingWebAppNameTidy'), 'MSDeploy')]"
       ]
     }
   ]

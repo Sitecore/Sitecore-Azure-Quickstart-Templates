@@ -32,37 +32,8 @@
 
     "useAse": "[not(empty(parameters('aseName')))]",
     "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
-    "hostingPlanProperties": {
-      "siProperties": {
-        "name": "[variables('siHostingPlanNameTidy')]"
-      },
-      "siPropertiesWithASE": {
-        "name": "[variables('siHostingPlanNameTidy')]",
-        "hostingEnvironmentProfile": {
-          "id": "[variables('aseResourceId')]"
-        }
-      },
-      "cmProperties": {
-        "name": "[variables('cmHostingPlanNameTidy')]"
-      },
-      "cmPropertiesWithASE": {
-        "name": "[variables('cmHostingPlanNameTidy')]",
-        "hostingEnvironmentProfile": {
-          "id": "[variables('aseResourceId')]"
-        }
-      },
-      "cdProperties": {
-        "name": "[variables('cdHostingPlanNameTidy')]"
-      },
-      "cdPropertiesWithASE": {
-        "name": "[variables('cdHostingPlanNameTidy')]",
-        "hostingEnvironmentProfile": {
-          "id": "[variables('aseResourceId')]"
-        }
-      },
-      "authCertificateHostingEnvironmentProfile": {
-        "id": "[variables('aseResourceId')]"
-      }
+    "aseHostingEnvironmentProfile": {
+      "id": "[variables('aseResourceId')]"
     },
 
     "authCertificateNameTidy": "[toLower(trim(parameters('authCertificateName')))]",
@@ -561,7 +532,10 @@
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').siHostingPlan.SkuName, parameters('resourceSizes').siHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').siHostingPlan.SkuCapacity, parameters('resourceSizes').siHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(variables('useAse'), variables('hostingPlanProperties').siPropertiesWithASE, variables('hostingPlanProperties').siProperties)]",
+      "properties": {
+        "name": "[variables('siHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('aseHostingEnvironmentProfile'), '')]"
+      },
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -576,7 +550,10 @@
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').cmHostingPlan.SkuName, parameters('resourceSizes').cmHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').cmHostingPlan.SkuCapacity, parameters('resourceSizes').cmHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(variables('useAse'), variables('hostingPlanProperties').cmPropertiesWithASE, variables('hostingPlanProperties').cmProperties)]",
+      "properties": {
+        "name": "[variables('cmHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('aseHostingEnvironmentProfile'), '')]"
+      },
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -594,7 +571,10 @@
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').cdHostingPlan.SkuName, parameters('resourceSizes').cdHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').cdHostingPlan.SkuCapacity, parameters('resourceSizes').cdHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(variables('useAse'), variables('hostingPlanProperties').cdPropertiesWithASE, variables('hostingPlanProperties').cdProperties)]",
+      "properties": {
+        "name": "[variables('cdHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('aseHostingEnvironmentProfile'), '')]"
+      },
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -851,7 +831,7 @@
       "properties": {
         "password": "[parameters('authCertificatePassword')]",
         "pfxBlob": "[parameters('authCertificateBlob')]",
-        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('hostingPlanProperties').authCertificateHostingEnvironmentProfile, '')]"
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('aseHostingEnvironmentProfile'), '')]"
       },
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
