@@ -39,28 +39,8 @@
 
     "useAse": "[not(empty(parameters('aseName')))]",
     "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
-    "hostingPlanProperties":{
-      "prcProperties":{
-        "name": "[variables('prcHostingPlanNameTidy')]"
-      },
-      "prcPropertiesWithASE":{
-        "name": "[variables('prcHostingPlanNameTidy')]",
-        "hostingEnvironmentProfile": {
-          "id": "[variables('aseResourceId')]"
-        }
-      },
-      "repProperties":{
-        "name": "[variables('repHostingPlanNameTidy')]"
-      },
-      "repPropertiesWithASE":{
-        "name": "[variables('repHostingPlanNameTidy')]",
-        "hostingEnvironmentProfile": {
-          "id": "[variables('aseResourceId')]"
-        }
-      },
-      "authCertificateHostingEnvironmentProfile": {
-        "id": "[variables('aseResourceId')]"
-      }
+    "aseHostingEnvironmentProfile": {
+      "id": "[variables('aseResourceId')]"
     }
   },
   "parameters": {
@@ -472,7 +452,10 @@
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').prcHostingPlan.SkuName, parameters('resourceSizes').prcHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').prcHostingPlan.SkuCapacity, parameters('resourceSizes').prcHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').prcProperties, variables('hostingPlanProperties').prcPropertiesWithASE)]",
+      "properties": {
+        "name": "[variables('prcHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('aseHostingEnvironmentProfile'), '')]"
+      },
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -487,7 +470,10 @@
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').repHostingPlan.SkuName, parameters('resourceSizes').repHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').repHostingPlan.SkuCapacity, parameters('resourceSizes').repHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').repProperties, variables('hostingPlanProperties').repPropertiesWithASE)]",
+      "properties": {
+        "name": "[variables('repHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('aseHostingEnvironmentProfile'), '')]"
+      },
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -753,7 +739,7 @@
       "properties": {
         "password": "[parameters('authCertificatePassword')]",
         "pfxBlob": "[parameters('authCertificateBlob')]",
-        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('hostingPlanProperties').authCertificateHostingEnvironmentProfile, '')]"
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('aseHostingEnvironmentProfile'), '')]"
       },
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"

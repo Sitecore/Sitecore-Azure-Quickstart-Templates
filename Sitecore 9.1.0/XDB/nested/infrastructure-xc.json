@@ -3,7 +3,6 @@
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
-    "serverFarmApiVersion": "2018-02-01",
     "dbApiVersion": "2014-04-01-preview",
 
     "sqlServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
@@ -35,25 +34,8 @@
 
     "useAse": "[not(empty(parameters('aseName')))]",
     "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
-    "hostingPlanProperties":{
-      "xcBasicProperties":{
-        "name": "[variables('xcBasicHostingPlanNameTidy')]"
-      },
-      "xcBasicPropertiesWithASE":{
-        "name": "[variables('xcBasicHostingPlanNameTidy')]",
-        "hostingEnvironmentProfile": {
-          "id": "[variables('aseResourceId')]"
-        }
-      },
-      "xcResourceIntensiveProperties":{
-        "name": "[variables('xcResourceIntensiveHostingPlanNameTidy')]"
-      },
-      "xcResourceIntensivePropertiesWithASE":{
-        "name": "[variables('xcResourceIntensiveHostingPlanNameTidy')]",
-        "hostingEnvironmentProfile": {
-          "id": "[variables('aseResourceId')]"
-        }
-      }
+    "aseHostingEnvironmentProfile": {
+      "id": "[variables('aseResourceId')]"
     }
   },
   "parameters": {
@@ -68,7 +50,13 @@
     },
     "sitecoreSKU": {
       "type": "string",
-      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large" ],
+      "allowedValues": [
+        "Extra Small",
+        "Small",
+        "Medium",
+        "Large",
+        "Extra Large"
+      ],
       "defaultValue": "Extra Small",
       "metadata": {
         "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
@@ -364,11 +352,11 @@
       "type": "object",
       "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
     },
-    "aseName":{
+    "aseName": {
       "type": "string",
       "defaultValue": ""
     },
-    "aseResourceGroupName":{
+    "aseResourceGroupName": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
     }
@@ -377,12 +365,15 @@
     {
       "type": "Microsoft.Web/serverfarms",
       "name": "[variables('xcBasicHostingPlanNameTidy')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "apiVersion": "2018-02-01",
       "sku": {
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').xcBasicHostingPlan.SkuName, parameters('resourceSizes').xcBasicHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').xcBasicHostingPlan.SkuCapacity, parameters('resourceSizes').xcBasicHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').xcBasicProperties, variables('hostingPlanProperties').xcBasicPropertiesWithASE)]",      
+      "properties": {
+        "name": "[variables('xcBasicHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('aseHostingEnvironmentProfile'), '')]"
+      },
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -392,17 +383,23 @@
     {
       "type": "Microsoft.Web/serverfarms",
       "name": "[variables('xcResourceIntensiveHostingPlanNameTidy')]",
-      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "apiVersion": "2018-02-01",
       "sku": {
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').xcResourceIntensiveHostingPlan.SkuName, parameters('resourceSizes').xcResourceIntensiveHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').xcResourceIntensiveHostingPlan.SkuCapacity, parameters('resourceSizes').xcResourceIntensiveHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').xcResourceIntensiveProperties, variables('hostingPlanProperties').xcResourceIntensivePropertiesWithASE)]",      
+      "properties": {
+        "name": "[variables('xcResourceIntensiveHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('aseHostingEnvironmentProfile'), '')]"
+      },
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
         "logicalName": "[variables('sitecoreTags').xc]"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('xcBasicHostingPlanNameTidy'))]"
+      ]
     },
     {
       "type": "Microsoft.Web/sites",

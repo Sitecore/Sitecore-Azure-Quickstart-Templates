@@ -34,25 +34,8 @@
 
     "useAse": "[not(empty(parameters('aseName')))]",
     "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
-    "hostingPlanProperties":{
-      "xcBasicProperties":{
-        "name": "[variables('xcBasicHostingPlanNameTidy')]"
-      },
-      "xcBasicPropertiesWithASE":{
-        "name": "[variables('xcBasicHostingPlanNameTidy')]",
-        "hostingEnvironmentProfile": {
-          "id": "[variables('aseResourceId')]"
-        }
-      },
-      "xcResourceIntensiveProperties":{
-        "name": "[variables('xcResourceIntensiveHostingPlanNameTidy')]"
-      },
-      "xcResourceIntensivePropertiesWithASE":{
-        "name": "[variables('xcResourceIntensiveHostingPlanNameTidy')]",
-        "hostingEnvironmentProfile": {
-          "id": "[variables('aseResourceId')]"
-        }
-      }
+    "aseHostingEnvironmentProfile": {
+      "id": "[variables('aseResourceId')]"
     }
   },
   "parameters": {
@@ -351,7 +334,10 @@
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').xcBasicHostingPlan.SkuName, parameters('resourceSizes').xcBasicHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').xcBasicHostingPlan.SkuCapacity, parameters('resourceSizes').xcBasicHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').xcBasicProperties, variables('hostingPlanProperties').xcBasicPropertiesWithASE)]",
+      "properties": {
+        "name": "[variables('xcBasicHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('aseHostingEnvironmentProfile'), '')]"
+      },
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
@@ -366,7 +352,10 @@
         "name": "[if(not(variables('useAse')), parameters('resourceSizes').xcResourceIntensiveHostingPlan.SkuName, parameters('resourceSizes').xcResourceIntensiveHostingPlanIsolated.SkuName)]",
         "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').xcResourceIntensiveHostingPlan.SkuCapacity, parameters('resourceSizes').xcResourceIntensiveHostingPlanIsolated.SkuCapacity)]"
       },
-      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').xcResourceIntensiveProperties, variables('hostingPlanProperties').xcResourceIntensivePropertiesWithASE)]",
+      "properties": {
+        "name": "[variables('xcResourceIntensiveHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": "[if(variables('useAse'), variables('aseHostingEnvironmentProfile'), '')]"
+      },
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",

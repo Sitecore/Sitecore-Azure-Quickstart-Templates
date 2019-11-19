@@ -8,7 +8,6 @@
     "searchApiVersion": "2015-08-19",
     "applicationInsightsApiVersion": "2015-05-01",
     "certificateApiVersion": "2014-11-01",
-    "siteExtensionsVersion": "2015-04-01",
 
     "sqlServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
 
@@ -259,6 +258,12 @@
           "phpVersion": "",
           "defaultDocuments": [
             "index.html"
+          ],
+          "metadata": [
+            {
+              "name": "CURRENT_STACK",
+              "value": "dotnetcore"
+            }
           ]
         }
       },
@@ -268,20 +273,7 @@
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
         "logicalName": "[variables('sitecoreTags').si]"
-      },
-      "resources": [
-        {
-          "type": "siteextensions",
-          "name": "AspNetCoreRuntime",
-          "apiVersion": "[variables('siteExtensionsVersion')]",
-          "location": "[resourceGroup().location]",
-          "properties": {
-          },
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites', variables('siWebAppNameTidy'))]"
-          ]
-        }
-      ]
+      }
     },
     {
       "type": "Microsoft.Web/sites",

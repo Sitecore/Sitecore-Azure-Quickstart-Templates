@@ -3,7 +3,6 @@
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
-    "serverFarmApiVersion": "2018-02-01",
     "dbApiVersion": "2014-04-01-preview",
 
     "sqlServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
@@ -34,7 +33,13 @@
     },
     "sitecoreSKU": {
       "type": "string",
-      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large" ],
+      "allowedValues": [
+        "Extra Small",
+        "Small",
+        "Medium",
+        "Large",
+        "Extra Large"
+      ],
       "defaultValue": "Extra Small",
       "metadata": {
         "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
