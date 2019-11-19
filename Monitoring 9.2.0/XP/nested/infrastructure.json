@@ -1,0 +1,119 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "extension": {
+      "type": "secureObject",
+      "defaultValue": {
+        "omsWorkspaceMetricsRetentionDays": null,
+        "omsWorkspaceLocation": null,
+        "omsWorkspaceAlertRecipients": null
+      }
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "omsWorkspaceMetricsRetentionDays": {
+      "type": "int",
+      "defaultValue": "[parameters('extension').omsWorkspaceMetricsRetentionDays]",
+      "metadata": {
+        "description": "Number of days of retention. Free plans can only have 7 days, Standalone and Per Note include 31 days for free"
+      }
+    },
+    "omsWorkspaceLocation": {
+      "type": "string",
+      "defaultValue": "[parameters('extension').omsWorkspaceLocation]",
+      "allowedValues": [
+        "Australia Southeast",
+        "Canada Central",
+        "Central India",
+        "East US",
+        "Japan East",
+        "Southeast Asia",
+        "UK South",
+        "West Europe"
+      ],
+      "metadata": {
+        "description": "the Location in which your OMS will be provisioned the available Location currently are (Australia Southeast, Canada Central, Central India, East US, Japan East, Southeast Asia, UK South, West Europe)"
+      }
+    },
+    "omsWorkspaceAlertRecipients": {
+      "type": "string",
+      "defaultValue": "[parameters('extension').omsWorkspaceAlertRecipients]",
+      "metadata": {
+        "Description": "List of recipients for the email alert separated by semicolon"
+      }
+    },
+    "templateLinkBase": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri,' ','%20'), '.')]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": ""
+    }
+  },
+  "variables": {
+    "subscription": "[subscription().subscriptionId]",
+    "sitecoreResourceGroup": "[resourceGroup().name]",
+    "omsWorkspaceName": "[concat(toLower(parameters('deploymentId')), '-oms')]",
+    "omsWorkspaceId": "[Concat('/subscriptions/', variables('subscription'), '/resourceGroups/', variables('sitecoreResourceGroup'), '/providers/Microsoft.OperationalInsights/workspaces/', variables('omsWorkspaceName'))]",
+    "recipientsEmailsArray": "[split(parameters('omsWorkspaceAlertRecipients'),';')]",
+    "resourcesApiVersion": "2016-09-01",
+    "omsWorkspaceApiVersion": "2017-03-15-preview",
+    "omsWorkspaceSku": "standalone",
+    "actionGroupApiVersion": "2018-03-01",
+    "actionGroupName": "[concat(toLower(parameters('deploymentId')), '-AG')]"
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('omsWorkspaceApiVersion')]",
+      "name": "[variables('omsWorkspaceName')]",
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "location": "[parameters('omsWorkspaceLocation')]",
+      "id": "[variables('omsWorkspaceId')]",
+      "properties": {
+        "sku": {
+          "name": "[variables('omsWorkspaceSku')]"
+        },
+        "retention": "[parameters('omsWorkspaceMetricsRetentionDays')]"
+      }
+    },
+    {
+      "type": "Microsoft.Insights/actionGroups",
+      "apiVersion": "[variables('actionGroupApiVersion')]",
+      "name": "[variables('actionGroupName')]",
+      "location": "global",
+      "properties": {
+        "groupShortName": "ScAlerts",
+        "enabled": true,
+        "smsReceivers": [],
+        "webhookReceivers": [],
+        "copy": [
+          {
+            "name": "emailReceivers",
+            "count": "[length(variables('recipientsEmailsArray'))]",
+            "input": {
+              "name": "[concat('email',copyIndex('emailReceivers'))]",
+              "emailAddress": "[variables('recipientsEmailsArray')[copyIndex('emailReceivers')]]",
+              "useCommonAlertSchema": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {
+    "infrastructure": {
+      "type": "object",
+      "value": {
+        "omsWorkspaceApiVersion": "[variables('omsWorkspaceApiVersion')]",
+        "omsWorkspaceName": "[variables('omsWorkspaceName')]",
+        "omsWorkspaceId": "[variables('omsWorkspaceId')]",
+        "actionGroupName": "[variables('actionGroupName')]"
+      }
+    }
+  }
+}
