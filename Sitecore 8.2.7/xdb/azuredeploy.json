@@ -259,6 +259,11 @@
       "type": "securestring",
       "minLength": 32
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
+    },
     "setTlsVersionMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1,
@@ -521,6 +526,9 @@
           "repAuthenticationApiKey": {
             "value": "[parameters('repAuthenticationApiKey')]"
           },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
+          },
           "setTlsVersionMsDeployPackageUrl": {
             "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
           },
@@ -682,6 +690,9 @@
           },
           "repAuthenticationApiKey": {
             "value": "[parameters('repAuthenticationApiKey')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           },
           "setTlsVersionMsDeployPackageUrl": {
             "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"

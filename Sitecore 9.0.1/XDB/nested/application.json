@@ -202,6 +202,10 @@
       "minLength": 1,
       "defaultValue": " "
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1
+    },
     "securityClientIp": {
       "type": "string",
       "minLength": 1,
@@ -231,6 +235,15 @@
       "properties": {
         "mode": "Incremental",
         "addOnPackages": [
+          {
+            "packageUri": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",            
+            "setParameters": {
+              "Application Path": "[variables('prcWebAppNameTidy')]",
+              "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
+          },
           {
             "packageUri": "[parameters('prcMsDeployPackageUrl')]",
             "dbType": "SQL",

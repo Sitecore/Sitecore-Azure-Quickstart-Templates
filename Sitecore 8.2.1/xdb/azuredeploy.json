@@ -49,6 +49,11 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-rep')]"
     },
+    "setcompatibilitylevel.msdeploy.packageurl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
+    },
     "prc.msdeploy.packageurl": {
       "type": "securestring"
     },
@@ -554,6 +559,24 @@
                 "packageUri": "[parameters('settlsversion.msdeploy.packageurl')]",
                 "setParameters": {
                   "Application Path": "[variables('prcWebAppNameTidy')]"
+                }
+              },
+              {
+                "packageUri": "[parameters('setcompatibilitylevel.msdeploy.packageurl')]",
+                "dbType": "SQL",
+                "connectionString": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=master;User Id=', parameters('sqlserver.login'), '@', variables('dbServerNameTidy'), ';Password=', parameters('sqlserver.password'), ';')]",
+                "setParameters": {
+                  "Application Path": "[variables('prcWebAppNameTidy')]",
+                  "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=master;User Id=', parameters('sqlserver.login'), ';Password=', parameters('sqlserver.password'), ';')]"
+                }
+              },
+              {
+                "packageUri": "[parameters('setcompatibilitylevel.msdeploy.packageurl')]",
+                "dbType": "SQL",
+                "connectionString": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=master;User Id=', parameters('web.sqlserver.login'), '@', variables('webDbServerNameTidy'), ';Password=', parameters('web.sqlserver.password'), ';')]",
+                "setParameters": {
+                  "Application Path": "[variables('prcWebAppNameTidy')]",
+                  "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=master;User Id=', parameters('web.sqlserver.login'), ';Password=', parameters('web.sqlserver.password'), ';')]"
                 }
               },
               {

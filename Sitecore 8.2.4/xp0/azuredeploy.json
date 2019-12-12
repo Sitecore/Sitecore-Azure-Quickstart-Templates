@@ -163,6 +163,11 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-single')]"
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
+    },
     "singleMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
@@ -397,6 +402,9 @@
           "singleWebAppName": {
             "value": "[parameters('singleWebAppName')]"
           },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
+          },
           "singleMsDeployPackageUrl": {
             "value": "[parameters('singleMsDeployPackageUrl')]"
           },
@@ -425,9 +433,6 @@
             "value": "[parameters('singleReportingSqlDatabasePassword')]"
           },
 
-          "setTlsVersionMsDeployPackageUrl": {
-            "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
-          },
           
           "analyticsMongoDbConnectionString": {
             "value": "[parameters('analyticsMongoDbConnectionString')]"

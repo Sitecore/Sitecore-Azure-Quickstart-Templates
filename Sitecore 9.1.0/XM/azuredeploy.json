@@ -251,6 +251,11 @@
       "type": "securestring",
       "minLength": 1
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
+    },
     "securityClientIp": {
       "type": "string",
       "defaultValue": "0.0.0.0"
@@ -574,6 +579,9 @@
           },
           "cdMsDeployPackageUrl": {
             "value": "[parameters('cdMsDeployPackageUrl')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           },
           "securityClientIp": {
             "value": "[parameters('securityClientIp')]"

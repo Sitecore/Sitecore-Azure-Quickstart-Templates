@@ -227,6 +227,11 @@
       "type": "securestring",
       "minLength": 1
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
+    },
     "coreSqlDatabaseUserName": {
       "type": "string",
       "minLength": 1,
@@ -577,6 +582,10 @@
           "siClientSecret": {
             "value": "[parameters('siClientSecret')]"
           },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
+          },
+
           "telerikEncryptionKey": {
             "value": "[parameters('telerikEncryptionKey')]"
           },

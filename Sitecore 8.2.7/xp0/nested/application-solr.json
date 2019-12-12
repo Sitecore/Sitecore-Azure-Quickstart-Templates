@@ -83,6 +83,10 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-single')]"
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1
+    },
     "singleMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
@@ -227,6 +231,9 @@
 
           "singleWebAppName": {
             "value": "[parameters('singleWebAppName')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           },
           "singleMsDeployPackageUrl": {
             "value": "[parameters('singleMsDeployPackageUrl')]"
