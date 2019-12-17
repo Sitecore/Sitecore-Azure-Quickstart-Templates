@@ -455,6 +455,10 @@
       "type": "string",
       "minLength": 1,
       "defaultValue": "[parameters('infrastructure').redisInstanceName]"
+    },
+    "setCompatibilityLevelMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
     }
   },
   "resources": [
@@ -972,6 +976,9 @@
           },
           "redisInstanceName": {
             "value": "[parameters('redisInstanceName')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           }
         }
       }
