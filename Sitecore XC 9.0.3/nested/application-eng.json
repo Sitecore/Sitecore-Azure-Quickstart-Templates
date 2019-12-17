@@ -252,6 +252,10 @@
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
+    },
+    "setCompatibilityLevelMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
     }
   },
   "resources": [
@@ -382,6 +386,9 @@
           },
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           }
         }
       }
@@ -516,6 +523,9 @@
           },
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           }
         }
       }
