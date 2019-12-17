@@ -24,18 +24,8 @@
     },
     "omsWorkspaceLocation": {
       "type": "string",
-      "allowedValues": [
-        "Australia Southeast",
-        "Canada Central",
-        "Central India",
-        "East US",
-        "Japan East",
-        "Southeast Asia",
-        "UK South",
-        "West Europe"
-      ],
       "metadata": {
-        "description": "the Location in which your OMS will be provisioned the available Location currently are (Australia Southeast, Canada Central, Central India, East US, Japan East, Southeast Asia, UK South, West Europe)"
+        "description": "the Location in which your OMS will be provisioned"
       }
     }
   },
@@ -191,146 +181,6 @@
                         "displayUnit": "AUTO"
                       },
                       "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat(parameters('deploymentId'),'-cortex-processing')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "HTTP requests by response code",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cortex-processing','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Bytes In/Out",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cortex-processing','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Bits",
-                        "baseUnit": "Bytes",
-                        "displayUnit": "Kilobytes"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cortex-processing','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Milliseconds",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat(parameters('deploymentId'),'-cortex-reporting')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "HTTP requests by response code",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cortex-reporting','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Bytes In/Out",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cortex-reporting','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Bits",
-                        "baseUnit": "Bytes",
-                        "displayUnit": "Kilobytes"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cortex-reporting','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Milliseconds",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": ""
                     },
                     "NavigationSelect": {}
                   }
@@ -1248,146 +1098,6 @@
             "Version": 0,
             "Configuration": {
               "General": {
-                "title": "[concat(parameters('deploymentId'),'-processingenginestorage-db')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "DTU %",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceProvider=\"MICROSOFT.SQL\"; let resourceName=\"',parameters('deploymentId'),'-processingenginestorage-db','\"; let resourceIdContains=\"/DATABASES/\"; let metricName=\"dtu_consumption_percent\"; AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | extend  Legends = case( MetricName == \"dtu_consumption_percent\" , \"DTU\" ,\"\") | summarize  DTUValue = avg(Maximum) by Legends , bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Percentage",
-                        "baseUnit": "ZeroToOne",
-                        "displayUnit": "ZeroToOne"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "CPU, Data I/O and Log I/O",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceProvider=\"MICROSOFT.SQL\";let resourceName=\"',parameters('deploymentId'),'-processingenginestorage-db','\";let resourceIdContains=\"/DATABASES/\"; let  MetricNameIn=dynamic([\"cpu_percent\", \"physical_data_read_percent\", \"log_write_percent\"]); AzureMetrics | where Resource ==toupper(resourceName) and MetricName in (MetricNameIn) | extend  Legends = case( MetricName == \"cpu_percent\" , \"CPU\" ,MetricName == \"physical_data_read_percent\" , \"Data I/O\" , MetricName == \"log_write_percent\" , \"Log I/O\" ,\"\") | summarize AggregatedValue = avg(Maximum) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Percentage",
-                        "baseUnit": "ZeroToOne",
-                        "displayUnit": "ZeroToOne"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Storage Utilization",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceProvider=\"MICROSOFT.SQL\";let resourceName=\"',parameters('deploymentId'),'-processingenginestorage-db','\";let resourceIdContains=\"/DATABASES/\"; let metricName=\"storage_percent\"; AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource ==toupper(resourceName) | extend  Legends = case( MetricName == \"storage_percent\" , \"Space Used\" ,\"\") | summarize value = avg(Maximum) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Percentage",
-                        "baseUnit": "ZeroToOne",
-                        "displayUnit": "ZeroToOne"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat(parameters('deploymentId'),'-processingenginetasks-db')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "DTU %",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceProvider=\"MICROSOFT.SQL\"; let resourceName=\"',parameters('deploymentId'),'-processingenginetasks-db','\"; let resourceIdContains=\"/DATABASES/\"; let metricName=\"dtu_consumption_percent\"; AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | extend  Legends = case( MetricName == \"dtu_consumption_percent\" , \"DTU\" ,\"\") | summarize  DTUValue = avg(Maximum) by Legends , bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Percentage",
-                        "baseUnit": "ZeroToOne",
-                        "displayUnit": "ZeroToOne"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "CPU, Data I/O and Log I/O",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceProvider=\"MICROSOFT.SQL\";let resourceName=\"',parameters('deploymentId'),'-processingenginetasks-db','\";let resourceIdContains=\"/DATABASES/\"; let  MetricNameIn=dynamic([\"cpu_percent\", \"physical_data_read_percent\", \"log_write_percent\"]); AzureMetrics | where Resource ==toupper(resourceName) and MetricName in (MetricNameIn) | extend  Legends = case( MetricName == \"cpu_percent\" , \"CPU\" ,MetricName == \"physical_data_read_percent\" , \"Data I/O\" , MetricName == \"log_write_percent\" , \"Log I/O\" ,\"\") | summarize AggregatedValue = avg(Maximum) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Percentage",
-                        "baseUnit": "ZeroToOne",
-                        "displayUnit": "ZeroToOne"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Storage Utilization",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceProvider=\"MICROSOFT.SQL\";let resourceName=\"',parameters('deploymentId'),'-processingenginetasks-db','\";let resourceIdContains=\"/DATABASES/\"; let metricName=\"storage_percent\"; AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource ==toupper(resourceName) | extend  Legends = case( MetricName == \"storage_percent\" , \"Space Used\" ,\"\") | summarize value = avg(Maximum) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Percentage",
-                        "baseUnit": "ZeroToOne",
-                        "displayUnit": "ZeroToOne"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
                 "title": "[concat(parameters('deploymentId'),'-refdata-db')]",
                 "newGroup": false
               },
@@ -1787,6 +1497,76 @@
                   },
                   "LineChart": {
                     "Query": "[concat('let resourceProvider=\"MICROSOFT.SQL\";let resourceName=\"',parameters('deploymentId'),'-tasks-db','\";let resourceIdContains=\"/DATABASES/\"; let metricName=\"storage_percent\"; AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource ==toupper(resourceName) | extend  Legends = case( MetricName == \"storage_percent\" , \"Space Used\" ,\"\") | summarize value = avg(Maximum) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Percentage",
+                        "baseUnit": "ZeroToOne",
+                        "displayUnit": "ZeroToOne"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat(parameters('deploymentId'),'-web-db')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "DTU %",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceProvider=\"MICROSOFT.SQL\"; let resourceName=\"',parameters('deploymentId'),'-web-db','\"; let resourceIdContains=\"/DATABASES/\"; let metricName=\"dtu_consumption_percent\"; AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | extend  Legends = case( MetricName == \"dtu_consumption_percent\" , \"DTU\" ,\"\") | summarize  DTUValue = avg(Maximum) by Legends , bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Percentage",
+                        "baseUnit": "ZeroToOne",
+                        "displayUnit": "ZeroToOne"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "CPU, Data I/O and Log I/O",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceProvider=\"MICROSOFT.SQL\";let resourceName=\"',parameters('deploymentId'),'-web-db','\";let resourceIdContains=\"/DATABASES/\"; let  MetricNameIn=dynamic([\"cpu_percent\", \"physical_data_read_percent\", \"log_write_percent\"]); AzureMetrics | where Resource ==toupper(resourceName) and MetricName in (MetricNameIn) | extend  Legends = case( MetricName == \"cpu_percent\" , \"CPU\" ,MetricName == \"physical_data_read_percent\" , \"Data I/O\" , MetricName == \"log_write_percent\" , \"Log I/O\" ,\"\") | summarize AggregatedValue = avg(Maximum) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Percentage",
+                        "baseUnit": "ZeroToOne",
+                        "displayUnit": "ZeroToOne"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Storage Utilization",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceProvider=\"MICROSOFT.SQL\";let resourceName=\"',parameters('deploymentId'),'-web-db','\";let resourceIdContains=\"/DATABASES/\"; let metricName=\"storage_percent\"; AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource ==toupper(resourceName) | extend  Legends = case( MetricName == \"storage_percent\" , \"Space Used\" ,\"\") | summarize value = avg(Maximum) by Legends,bin(TimeGenerated, 5m)')]",
                     "yAxis": {
                       "isLogarithmic": false,
                       "units": {
