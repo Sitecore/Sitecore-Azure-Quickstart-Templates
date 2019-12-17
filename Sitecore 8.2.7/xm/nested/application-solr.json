@@ -150,6 +150,10 @@
       "type": "securestring",
       "defaultValue": ""
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1
+    },
     "setTlsVersionMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
@@ -250,6 +254,9 @@
           },
           "cdWebSqlDatabasePassword": {
             "value": "[parameters('cdWebSqlDatabasePassword')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           },
           "setTlsVersionMsDeployPackageUrl": {
             "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"

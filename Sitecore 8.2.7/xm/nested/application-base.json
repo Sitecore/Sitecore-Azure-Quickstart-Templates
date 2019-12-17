@@ -157,6 +157,10 @@
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('cdweb', parameters('passwordSalt'))), uniqueString('cdweb', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('cdweb', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1
+    },
     "setTlsVersionMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
@@ -192,6 +196,24 @@
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
         "addOnPackages": [
+          {
+            "packageUri": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",            
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
+          },
+          {
+            "packageUri": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]",            
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]"
+            }
+          },
           {
             "packageUri": "[parameters('setTlsVersionMsDeployPackageUrl')]",
             "setParameters": {

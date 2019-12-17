@@ -189,6 +189,11 @@
       "minLength": 1,
       "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.0.1/DisablePrefetchCache.scwdp.zip"
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
+    },
     "coreSqlDatabaseUserName": {
       "type": "string",
       "minLength": 1,
@@ -433,6 +438,9 @@
           },
           "disablePrefetchCachingMsDeployPackageUrl": {
             "value": "[parameters('disablePrefetchCachingMsDeployPackageUrl')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           },
           
           "telerikEncryptionKey": {

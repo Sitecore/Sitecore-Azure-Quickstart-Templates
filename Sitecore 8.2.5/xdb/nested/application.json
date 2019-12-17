@@ -100,6 +100,10 @@
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-prc')]"
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1
+    },
     "prcMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
@@ -242,6 +246,24 @@
             "packageUri": "[parameters('setTlsVersionMsDeployPackageUrl')]",
             "setParameters": {
               "Application Path": "[variables('prcWebAppNameTidy')]"
+            }
+          },
+          {
+            "packageUri": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+            "setParameters": {
+              "Application Path": "[variables('prcWebAppNameTidy')]",
+              "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
+          },
+          {
+            "packageUri": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]",            
+            "setParameters": {
+              "Application Path": "[variables('prcWebAppNameTidy')]",
+              "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]"
             }
           },
           {

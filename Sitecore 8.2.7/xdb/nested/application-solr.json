@@ -196,6 +196,10 @@
       "type": "securestring",
       "minLength": 32
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1
+    },
     "setTlsVersionMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
@@ -287,6 +291,9 @@
           },
           "prcReportingSqlDatabasePassword": {
             "value": "[parameters('prcReportingSqlDatabasePassword')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           },
           "setTlsVersionMsDeployPackageUrl": {
             "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"

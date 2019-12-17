@@ -199,6 +199,10 @@
       "minLength": 6,
       "defaultValue": "[toUpper(replace(guid(uniqueString('siClientSecret', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '-',''))]"
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1
+    },
     "securityClientIp": {
       "type": "string",
       "defaultValue": "0.0.0.0"
@@ -274,6 +278,15 @@
       "properties": {
         "mode": "Incremental",
         "addOnPackages": [
+          {
+            "packageUri": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",            
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
+          },
           {
             "packageUri": "[parameters('cmMsDeployPackageUrl')]",
             "dbType": "SQL",

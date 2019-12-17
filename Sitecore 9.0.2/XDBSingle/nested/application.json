@@ -182,6 +182,11 @@
       "type": "securestring",
       "minLength": 1
     },
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1
+    },
+
     "allowInvalidClientCertificates": {
       "type": "bool",
       "defaultValue": false
@@ -201,6 +206,15 @@
       "properties": {
         "mode": "Incremental",
         "addOnPackages": [
+          {
+            "packageUri": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",            
+            "setParameters": {
+              "Application Path": "[variables('singleWebAppNameTidy')]",
+              "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
+          },
           {
             "packageUri": "[parameters('singleMsDeployPackageUrl')]",
             "dbType": "SQL",

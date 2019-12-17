@@ -210,6 +210,10 @@
       "minLength": 32
     },
 
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1
+    },
     "setTlsVersionMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
@@ -468,6 +472,9 @@
           },
           "repAuthenticationApiKey": {
             "value": "[parameters('repAuthenticationApiKey')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           },
           "setTlsVersionMsDeployPackageUrl": {
             "value": "[parameters('setTlsVersionMsDeployPackageUrl')]"
