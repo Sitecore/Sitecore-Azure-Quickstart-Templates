@@ -4,26 +4,19 @@
   "variables": {
     "webApiVersion": "2016-08-01",
     "searchApiVersion": "2015-08-19",
-
     "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
-
     "globalSqlDatabaseNameTidy": "[toLower(trim(parameters('globalSqlDatabaseName')))]",
     "sharedSqlDatabaseNameTidy": "[toLower(trim(parameters('sharedSqlDatabaseName')))]",
-
     "cmWebAppFqdnTidy": "[toLower(trim(parameters('cmWebAppFqdn')))]",
-
     "shopsWebAppNameTidy": "[toLower(trim(parameters('shopsWebAppName')))]",
     "opsWebAppNameTidy": "[toLower(trim(parameters('opsWebAppName')))]",
     "authoringWebAppNameTidy": "[toLower(trim(parameters('authoringWebAppName')))]",
     "minionsWebAppNameTidy": "[toLower(trim(parameters('minionsWebAppName')))]",
     "idserverAppFqdnTidy": "[toLower(trim(parameters('idserverAppFqdn')))]",
     "bizfxAppFqdnTidy": "[toLower(trim(parameters('bizfxAppFqdn')))]",
-
     "sitecoreDomainTidy": "[toLower(trim(parameters('sitecoreDomain')))]",
-
     "searchServiceNameTidy": "[toLower(trim(parameters('searchServiceName')))]",
     "solrUrl": "[toLower(trim(parameters('solrConnectionString')))]",
-
     "siteTitle": "Sitecore Commerce Engine"
   },
   "parameters": {
@@ -31,7 +24,6 @@
       "type": "secureObject",
       "defaultValue": {
         "sqlServerFqdn": "[concat(parameters('deploymentId'), '-sql.database.windows.net')]",
-
         "cdWebAppFqdn": "[concat(parameters('deploymentId'), '-cd.windowsazure.net')]",
         "cmWebAppFqdn": "[concat(parameters('deploymentId'), '-cm.windowsazure.net')]",
         "prcWebAppFqdn": "[concat(parameters('deploymentId'), '-prc.windowsazure.net')]",
@@ -41,18 +33,15 @@
         "xcRefDataWebAppFqdn": "[concat(parameters('deploymentId'), '-xc-refdata.windowsazure.net')]",
         "maOpsWebAppFqdn": "[concat(parameters('deploymentId'), '-ma-ops.windowsazure.net')]",
         "maRepWebAppFqdn": "[concat(parameters('deploymentId'), '-ma-rep.windowsazure.net')]",
-
         "shopsWebAppFqdn": "[concat(parameters('deploymentId'), '-shop.windowsazure.net')]",
         "opsWebAppFqdn": "[concat(parameters('deploymentId'), '-ops.windowsazure.net')]",
         "authoringWebAppFqdn": "[concat(parameters('deploymentId'), '-authoring.windowsazure.net')]",
         "minionsWebAppFqdn": "[concat(parameters('deploymentId'), '-minions.windowsazure.net')]",
         "bizfxAppFqdn": "[concat(parameters('deploymentId'), '-bizfx.windowsazure.net')]",
-
         "authCertificateThumbprint": null,
         "applicationInsightsKey": null
       }
     },
-
     "deploymentId": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
@@ -65,7 +54,6 @@
       "type": "securestring",
       "minLength": 8
     },
-
     "sitecoreDomain": {
       "type": "string",
       "minLength": 1,
@@ -80,7 +68,6 @@
       "type": "securestring",
       "minLength": 8
     },
-
     "sqlServerFqdn": {
       "type": "string",
       "minLength": 1,
@@ -193,7 +180,6 @@
       "minLength": 1,
       "defaultValue": "[parameters('infrastructure').bizfxAppFqdn]"
     },
-
     "applicationInsightsKey": {
       "type": "securestring",
       "defaultValue": "[parameters('infrastructure').applicationInsightsKey]"
@@ -219,7 +205,6 @@
     "braintreeEnvironment": {
       "type": "string"
     },
-
     "environmentName": {
       "type": "string",
       "minLength": 1,
@@ -241,6 +226,10 @@
     },
     "commerceServicesHostPostfix": {
       "type": "string"
+    },
+    "setCompatibilityLevelMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
     }
   },
   "resources": [
@@ -252,48 +241,48 @@
       "properties": {
         "addOnPackages": [
           {
+            "packageUri": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+            "setParameters": {
+              "Application Path": "[variables('opsWebAppNameTidy')]",
+              "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
+          },
+          {
             "packageUri": "[parameters('commerceEngineSolrCloudMsDeployPackageUrl')]",
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
             "setParameters": {
               "IIS Web Application Name": "[variables('opsWebAppNameTidy')]",
-
               "CommerceEngineGlobalConnectionString-Admin": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('globalSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
               "CommerceEngineSharedConnectionString-Admin": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('sharedSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
-
               "SiteTitle": "[variables('siteTitle')]",
               "DeploymentId": "[parameters('deploymentId')]",
               "EnvironmentName": "HabitatAuthoring",
               "ApplicationInsightsKey": "[parameters('applicationInsightsKey')]",
               "CertificateThumbprint": "[parameters('authCertificateThumbprint')]",
               "AntiForgeryEnabled": "[parameters('antiForgeryEnabled')]",
-
               "GlobalDatabaseName": "[variables('globalSqlDatabaseNameTidy')]",
               "GlobalDatabaseUserName": "[parameters('globalSqlDatabaseUserName')]",
               "GlobalDatabasePassword": "[parameters('globalSqlDatabaseUserPassword')]",
               "GlobalDatabaseServer": "[variables('sqlServerFqdnTidy')]",
-
               "SharedDatabaseName": "[variables('sharedSqlDatabaseNameTidy')]",
               "SharedDatabaseUserName": "[parameters('sharedSqlDatabaseUserName')]",
               "SharedDatabasePassword": "[parameters('sharedSqlDatabaseUserPassword')]",
               "SharedDatabaseServer": "[variables('sqlServerFqdnTidy')]",
-
               "BraintreeMerchantId": "[parameters('braintreeMerchantId')]",
               "BraintreePublicKey": "[parameters('braintreePublicKey')]",
               "BraintreePrivateKey": "[parameters('braintreePrivateKey')]",
               "BraintreeEnvironment": "[parameters('braintreeEnvironment')]",
-
               "SitecoreHost": "[variables('cmWebAppFqdnTidy')]",
               "SitecoreDatabase": "[parameters('masterSqlDatabaseLogicalName')]",
               "SitecoreUserName": "[parameters('sitecoreUserName')]",
               "SitecoreDomain": "[variables('sitecoreDomainTidy')]",
               "SitecorePassword": "[parameters('sitecorePassword')]",
-
               "SitecoreIdentityServerUrl": "[concat('https://', variables('idserverAppFqdnTidy'))]",
               "BizFxUrl": "[concat('https://', variables('bizfxAppFqdnTidy'))]",
-
               "SolrUrl": "[variables('solrUrl')]",
-
               "CommerceServicesHostPostfix": "[parameters('commerceServicesHostPostfix')]"
             }
           }
@@ -305,7 +294,9 @@
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
-      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('opsWebAppNameTidy'), '/Extensions/MSDeploy')]" ],
+      "dependsOn": [
+        "[concat('Microsoft.Web/sites/', variables('opsWebAppNameTidy'), '/Extensions/MSDeploy')]"
+      ],
       "properties": {
         "addOnPackages": [
           {
@@ -314,43 +305,34 @@
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
             "setParameters": {
               "IIS Web Application Name": "[variables('authoringWebAppNameTidy')]",
-
               "CommerceEngineGlobalConnectionString-Admin": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('globalSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
               "CommerceEngineSharedConnectionString-Admin": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('sharedSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
-
               "SiteTitle": "[variables('siteTitle')]",
               "DeploymentId": "[parameters('deploymentId')]",
               "EnvironmentName": "HabitatAuthoring",
               "ApplicationInsightsKey": "[parameters('applicationInsightsKey')]",
               "CertificateThumbprint": "[parameters('authCertificateThumbprint')]",
               "AntiForgeryEnabled": "[parameters('antiForgeryEnabled')]",
-
               "GlobalDatabaseName": "[variables('globalSqlDatabaseNameTidy')]",
               "GlobalDatabaseUserName": "[parameters('globalSqlDatabaseUserName')]",
               "GlobalDatabasePassword": "[parameters('globalSqlDatabaseUserPassword')]",
               "GlobalDatabaseServer": "[variables('sqlServerFqdnTidy')]",
-
               "SharedDatabaseName": "[variables('sharedSqlDatabaseNameTidy')]",
               "SharedDatabaseUserName": "[parameters('sharedSqlDatabaseUserName')]",
               "SharedDatabasePassword": "[parameters('sharedSqlDatabaseUserPassword')]",
               "SharedDatabaseServer": "[variables('sqlServerFqdnTidy')]",
-
               "BraintreeMerchantId": "[parameters('braintreeMerchantId')]",
               "BraintreePublicKey": "[parameters('braintreePublicKey')]",
               "BraintreePrivateKey": "[parameters('braintreePrivateKey')]",
               "BraintreeEnvironment": "[parameters('braintreeEnvironment')]",
-
               "SitecoreHost": "[variables('cmWebAppFqdnTidy')]",
               "SitecoreDatabase": "[parameters('masterSqlDatabaseLogicalName')]",
               "SitecoreUserName": "[parameters('sitecoreUserName')]",
               "SitecoreDomain": "[variables('sitecoreDomainTidy')]",
               "SitecorePassword": "[parameters('sitecorePassword')]",
-
               "SitecoreIdentityServerUrl": "[concat('https://', variables('idserverAppFqdnTidy'))]",
               "BizFxUrl": "[concat('https://', variables('bizfxAppFqdnTidy'))]",
-
               "SolrUrl": "[variables('solrUrl')]",
-
               "CommerceServicesHostPostfix": "[parameters('commerceServicesHostPostfix')]"
             }
           }
@@ -362,7 +344,9 @@
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
-      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('authoringWebAppNameTidy'), '/Extensions/MSDeploy')]" ],
+      "dependsOn": [
+        "[concat('Microsoft.Web/sites/', variables('authoringWebAppNameTidy'), '/Extensions/MSDeploy')]"
+      ],
       "properties": {
         "addOnPackages": [
           {
@@ -371,43 +355,34 @@
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
             "setParameters": {
               "IIS Web Application Name": "[variables('minionsWebAppNameTidy')]",
-
               "CommerceEngineGlobalConnectionString-Admin": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('globalSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
               "CommerceEngineSharedConnectionString-Admin": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('sharedSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
-
               "SiteTitle": "[variables('siteTitle')]",
               "DeploymentId": "[parameters('deploymentId')]",
               "EnvironmentName": "HabitatMinions",
               "ApplicationInsightsKey": "[parameters('applicationInsightsKey')]",
               "CertificateThumbprint": "[parameters('authCertificateThumbprint')]",
               "AntiForgeryEnabled": "[parameters('antiForgeryEnabled')]",
-
               "GlobalDatabaseName": "[variables('globalSqlDatabaseNameTidy')]",
               "GlobalDatabaseUserName": "[parameters('globalSqlDatabaseUserName')]",
               "GlobalDatabasePassword": "[parameters('globalSqlDatabaseUserPassword')]",
               "GlobalDatabaseServer": "[variables('sqlServerFqdnTidy')]",
-
               "SharedDatabaseName": "[variables('sharedSqlDatabaseNameTidy')]",
               "SharedDatabaseUserName": "[parameters('sharedSqlDatabaseUserName')]",
               "SharedDatabasePassword": "[parameters('sharedSqlDatabaseUserPassword')]",
               "SharedDatabaseServer": "[variables('sqlServerFqdnTidy')]",
-
               "BraintreeMerchantId": "[parameters('braintreeMerchantId')]",
               "BraintreePublicKey": "[parameters('braintreePublicKey')]",
               "BraintreePrivateKey": "[parameters('braintreePrivateKey')]",
               "BraintreeEnvironment": "[parameters('braintreeEnvironment')]",
-
               "SitecoreHost": "[variables('cmWebAppFqdnTidy')]",
               "SitecoreDatabase": "[parameters('masterSqlDatabaseLogicalName')]",
               "SitecoreUserName": "[parameters('sitecoreUserName')]",
               "SitecoreDomain": "[variables('sitecoreDomainTidy')]",
               "SitecorePassword": "[parameters('sitecorePassword')]",
-
               "SitecoreIdentityServerUrl": "[concat('https://', variables('idserverAppFqdnTidy'))]",
               "BizFxUrl": "[concat('https://', variables('bizfxAppFqdnTidy'))]",
-
               "SolrUrl": "[variables('solrUrl')]",
-
               "CommerceServicesHostPostfix": "[parameters('commerceServicesHostPostfix')]"
             }
           }
@@ -419,7 +394,9 @@
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
-      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('minionsWebAppNameTidy'), '/Extensions/MSDeploy')]" ],
+      "dependsOn": [
+        "[concat('Microsoft.Web/sites/', variables('minionsWebAppNameTidy'), '/Extensions/MSDeploy')]"
+      ],
       "properties": {
         "addOnPackages": [
           {
@@ -428,43 +405,34 @@
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
             "setParameters": {
               "IIS Web Application Name": "[variables('shopsWebAppNameTidy')]",
-
               "CommerceEngineGlobalConnectionString-Admin": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('globalSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
               "CommerceEngineSharedConnectionString-Admin": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('sharedSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
-
               "SiteTitle": "[variables('siteTitle')]",
               "DeploymentId": "[parameters('deploymentId')]",
               "EnvironmentName": "HabitatShops",
               "ApplicationInsightsKey": "[parameters('applicationInsightsKey')]",
               "CertificateThumbprint": "[parameters('authCertificateThumbprint')]",
               "AntiForgeryEnabled": "[parameters('antiForgeryEnabled')]",
-
               "GlobalDatabaseName": "[variables('globalSqlDatabaseNameTidy')]",
               "GlobalDatabaseUserName": "[parameters('globalSqlDatabaseUserName')]",
               "GlobalDatabasePassword": "[parameters('globalSqlDatabaseUserPassword')]",
               "GlobalDatabaseServer": "[variables('sqlServerFqdnTidy')]",
-
               "SharedDatabaseName": "[variables('sharedSqlDatabaseNameTidy')]",
               "SharedDatabaseUserName": "[parameters('sharedSqlDatabaseUserName')]",
               "SharedDatabasePassword": "[parameters('sharedSqlDatabaseUserPassword')]",
               "SharedDatabaseServer": "[variables('sqlServerFqdnTidy')]",
-
               "BraintreeMerchantId": "[parameters('braintreeMerchantId')]",
               "BraintreePublicKey": "[parameters('braintreePublicKey')]",
               "BraintreePrivateKey": "[parameters('braintreePrivateKey')]",
               "BraintreeEnvironment": "[parameters('braintreeEnvironment')]",
-
               "SitecoreHost": "[variables('cmWebAppFqdnTidy')]",
               "SitecoreDatabase": "[parameters('masterSqlDatabaseLogicalName')]",
               "SitecoreUserName": "[parameters('sitecoreUserName')]",
               "SitecoreDomain": "[variables('sitecoreDomainTidy')]",
               "SitecorePassword": "[parameters('sitecorePassword')]",
-
               "SitecoreIdentityServerUrl": "[concat('https://', variables('idserverAppFqdnTidy'))]",
               "BizFxUrl": "[concat('https://', variables('bizfxAppFqdnTidy'))]",
-
               "SolrUrl": "[variables('solrUrl')]",
-
               "CommerceServicesHostPostfix": "[parameters('commerceServicesHostPostfix')]"
             }
           }

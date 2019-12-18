@@ -13,17 +13,14 @@
         "sitecoreSKU": null,
         "sitecoreAdminPassword": null,
         "solrConnectionString": null,
-
         "sqlServerName": null,
         "sqlServerLogin": null,
         "sqlServerPassword": null,
-
         "coreSqlDatabaseName": null,
         "masterSqlDatabaseName": null,
         "webSqlDatabaseName": null,
         "shard0SqlDatabaseName": null,
         "shard1SqlDatabaseName": null,
-
         "cdWebAppName": null,
         "cmWebAppName": null,
         "prcWebAppName": null,
@@ -66,27 +63,22 @@
         "braintreePublicKey": null,
         "braintreePrivateKey": null,
         "braintreeEnvironment": null,
-
         "environmentName": "HabitatShops",
         "defaultShopName": "CommerceEngineDefaultStorefront",
         "defaultShopCurrency": "USD",
         "defaultShopLanguage": "en"
       }
     },
-
     "extensionExpanded": {
       "type": "secureObject",
       "defaultValue": "[union(parameters('extensionDefaults'), parameters('extension'))]"
     },
-
     "modules": {
       "type": "secureObject",
       "defaultValue": {
-        "items": [
-        ]
+        "items": []
       }
     },
-
     "templateLinkBase": {
       "type": "string",
       "minLength": 1,
@@ -96,7 +88,6 @@
       "type": "securestring",
       "defaultValue": "[parameters('extensionExpanded').templateLinkAccessToken]"
     },
-
     "deploymentId": {
       "type": "string",
       "defaultValue": "[coalesce(parameters('standard').deploymentId, resourceGroup().name)]"
@@ -107,19 +98,23 @@
     },
     "sitecoreSKU": {
       "type": "string",
-      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large" ],
+      "allowedValues": [
+        "Extra Small",
+        "Small",
+        "Medium",
+        "Large",
+        "Extra Large"
+      ],
       "defaultValue": "[coalesce(parameters('standard').sitecoreSKU, 'Small')]",
       "metadata": {
         "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
       }
     },
-
     "sitecoreAdminPassword": {
       "type": "securestring",
       "minLength": 8,
       "defaultValue": "[parameters('standard').sitecoreAdminPassword]"
     },
-
     "sitecoreDomain": {
       "type": "string",
       "minLength": 1,
@@ -135,7 +130,11 @@
       "minLength": 8,
       "defaultValue": "[parameters('standard').sitecoreAdminPassword]"
     },
-
+    "setCompatibilityLevelMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
+    },
     "sqlServerName": {
       "type": "string",
       "minLength": 1,
@@ -151,18 +150,15 @@
       "minLength": 8,
       "defaultValue": "[parameters('standard').sqlServerPassword]"
     },
-
     "sqlDatabaseCollation": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
     },
-
     "solrConnectionString": {
       "type": "securestring",
       "defaultValue": "[parameters('standard').solrConnectionString]"
     },
-
     "coreSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -188,7 +184,6 @@
       "minLength": 1,
       "defaultValue": "[coalesce(parameters('standard').shard1SqlDatabaseName, concat(parameters('deploymentId'), '-shard1-db'))]"
     },
-
     "globalSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -254,7 +249,6 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-xc-resourceintensive-hp')]"
     },
-
     "cdWebAppName": {
       "type": "string",
       "minLength": 1,
@@ -456,7 +450,6 @@
       "minLength": 1,
       "defaultValue": "[resourceGroup().id]"
     },
-
     "searchServiceName": {
       "type": "string",
       "minLength": 1,
@@ -580,14 +573,12 @@
           "infrastructure": {
             "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
           },
-
           "templateLinkBase": {
             "value": "[parameters('templateLinkBase')]"
           },
           "templateLinkAccessToken": {
             "value": "[parameters('templateLinkAccessToken')]"
           },
-
           "deploymentId": {
             "value": "[parameters('deploymentId')]"
           },
@@ -606,18 +597,15 @@
           "sitecorePassword": {
             "value": "[parameters('sitecorePassword')]"
           },
-
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
           },
           "sqlServerPassword": {
             "value": "[parameters('sqlServerPassword')]"
           },
-
           "solrConnectionString": {
             "value": "[parameters('solrConnectionString')]"
           },
-
           "coreSqlDatabaseName": {
             "value": "[parameters('coreSqlDatabaseName')]"
           },
@@ -759,13 +747,14 @@
           "defaultShopLanguage": {
             "value": "[parameters('defaultShopLanguage')]"
           },
-
           "passwordSalt": {
             "value": "[parameters('passwordSalt')]"
           },
-
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           }
         }
       },
