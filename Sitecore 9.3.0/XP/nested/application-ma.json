@@ -266,6 +266,7 @@
           "IIS Web Application Name": "[variables('maRepWebAppNameTidy')]",
           "Database Server Name": "[variables('sqlServerFqdnTidy')]",
           "Marketing Automation Database Name": "[variables('maSqlDatabaseNameTidy')]",
+          "Messaging Connection String": "[listkeys(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.ServiceBus/namespaces/authorizationRules', variables('azureServiceBusNamespaceNameTidy'), parameters('azureServiceBusAccessKeyName')), variables('azureServiceBusVersion')).primaryConnectionString]",
           "Reference Data Database Name": "[variables('refDataSqlDatabaseNameTidy')]",
           "Reference Data Database Application User Name": "[parameters('xcRefDataSqlDatabaseUserName')]",
           "Reference Data Database Application User Password": "[parameters('xcRefDataSqlDatabasePassword')]",
