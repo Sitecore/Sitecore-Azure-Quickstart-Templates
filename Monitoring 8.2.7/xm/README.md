@@ -29,7 +29,7 @@ Steps to configure the Sitecore deployment parameters to include the Application
         "omsWorkspaceSku" : "<free, pernode or standalone>",
         "omsWorkspaceMetricsRetentionDays" : <integer value. free plans are always 7, other plans comes with 31 by default>,
 		"omsWorkspaceAlertRecipients" : "<emails seperated by a semi colon>",
-		"omsWorkspaceLocation" : "<Australia Southeast, Canada Central, Central India, East US, Japan East, Southeast Asia, UK South or West Europe>",
+		"omsWorkspaceLocation" : "<OMS Workspace location, must be supported by Azure>",
     "applicationInsightsLocation" : "<location of the application insight associated with Sitecore>",
     "searchProvider" : "<Azure or Solr>"
     }

@@ -24,18 +24,8 @@
     "omsWorkspaceLocation": {
       "type": "string",
       "defaultValue": "[parameters('extension').omsWorkspaceLocation]",
-      "allowedValues": [
-        "Australia Southeast",
-        "Canada Central",
-        "Central India",
-        "East US",
-        "Japan East",
-        "Southeast Asia",
-        "UK South",
-        "West Europe"
-      ],
       "metadata": {
-        "description": "the Location in which your OMS will be provisioned the available Location currently are (Australia Southeast, Canada Central, Central India, East US, Japan East, Southeast Asia, UK South, West Europe)"
+        "description": "the Location in which your OMS will be provisioned"
       }
     },
     "omsWorkspaceAlertRecipients": {
