@@ -93,7 +93,7 @@
         "Large",
         "Extra Large"
       ],
-      "defaultValue": "[coalesce(parameters('standard').sitecoreSKU, 'Extra Small')]",
+      "defaultValue": "[coalesce(parameters('standard').sitecoreSKU, 'Small')]",
       "metadata": {
         "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
       }
@@ -193,25 +193,20 @@
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('engine-shared', parameters('passwordSalt'))), '@', uniqueString('engine-shared', parameters('sqlServerPassword')), toUpper(uniqueString('engine-shared', parameters('sitecoreAdminPassword'))))]"
     },
-    "shopsHostingPlanName": {
+    "engineHostingPlanName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-shops-hp')]"
-    },
-    "opsHostingPlanName": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-ops-hp')]"
-    },
-    "authoringHostingPlanName": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-authoring-hp')]"
+      "defaultValue": "[concat(parameters('deploymentId'), '-engine-hp')]"
     },
     "minionsHostingPlanName": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-minions-hp')]"
+    },
+    "cmHostingPlanName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-cm-hp')]"
     },
     "cdWebAppName": {
       "type": "string",
@@ -412,17 +407,14 @@
           "sharedSqlDatabaseName": {
             "value": "[parameters('sharedSqlDatabaseName')]"
           },
-          "shopsHostingPlanName": {
-            "value": "[parameters('shopsHostingPlanName')]"
-          },
-          "opsHostingPlanName": {
-            "value": "[parameters('opsHostingPlanName')]"
-          },
-          "authoringHostingPlanName": {
-            "value": "[parameters('authoringHostingPlanName')]"
+          "engineHostingPlanName": {
+            "value": "[parameters('engineHostingPlanName')]"
           },
           "minionsHostingPlanName": {
             "value": "[parameters('minionsHostingPlanName')]"
+          },
+          "cmHostingPlanName": {
+            "value": "[parameters('cmHostingPlanName')]"
           },
           "shopsWebAppName": {
             "value": "[parameters('shopsWebAppName')]"

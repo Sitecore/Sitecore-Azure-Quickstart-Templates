@@ -869,6 +869,9 @@
           },
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
+          },
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           }
         }
       }

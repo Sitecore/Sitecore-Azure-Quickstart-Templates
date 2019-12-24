@@ -386,6 +386,12 @@
       "defaultValue": "[coalesce(parameters('standardExpanded').applicationInsightsName, concat(parameters('deploymentId'), '-ai'))]"
     },
 
+    "setCompatibilityLevelMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
+    },
+
     "exmPatches": {
       "type": "array",
       "defaultValue": [
@@ -639,6 +645,10 @@
 
           "infrastructure": {
             "value": "[reference(concat(deployment().name, '-infrastructure')).outputs.infrastructure.value]"
+          },
+
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           }
         }
       },

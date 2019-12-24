@@ -30,6 +30,11 @@
     "emailCampaignClientService": "[concat('url=', parameters('cmWebAppUrl') ,'/sitecore%20modules/web/exm/ecmclientservice.asmx;timeout=60000')]"
   },
   "parameters": {
+    "setCompatibilityLevelMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
+    },
     "deploymentId": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
@@ -305,6 +310,24 @@
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
         "addOnPackages": [
+          {
+            "packageUri": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+            "setParameters": {
+              "Application Path": "[variables('cdWebAppNameTidy')]",
+              "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
+          },
+          {
+            "packageUri": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]"
+            }
+          },
           {
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
