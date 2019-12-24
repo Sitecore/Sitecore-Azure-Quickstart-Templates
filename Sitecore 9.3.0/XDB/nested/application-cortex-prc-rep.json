@@ -1,0 +1,308 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2018-02-01",
+    "appInsightsApiVersion": "2015-05-01",
+    "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
+    "processingEngineTasksSqlDatabaseNameTidy": "[toLower(trim(parameters('processingEngineTasksSqlDatabaseName')))]",
+    "processingEngineStorageSqlDatabaseNameTidy": "[toLower(trim(parameters('processingEngineStorageSqlDatabaseName')))]",
+    "reportingSqlDatabaseNameTidy": "[toLower(trim(parameters('reportingSqlDatabaseName')))]",
+    "cortexProcessingWebAppNameTidy": "[toLower(trim(parameters('cortexProcessingWebAppName')))]",
+    "cortexReportingWebAppNameTidy": "[toLower(trim(parameters('cortexReportingWebAppName')))]",
+    "xcCollectWebAppNameTidy": "[toLower(trim(parameters('xcCollectWebAppName')))]",
+    "xcSearchWebAppNameTidy": "[toLower(trim(parameters('xcSearchWebAppName')))]",
+    "appInsightsNameTidy": "[toLower(trim(parameters('applicationInsightsName')))]",
+    "machineLearningServerConnectionStringTidy": "[trim(parameters('machineLearningServerConnectionString'))]",
+    "azureServiceBusVersion": "2017-04-01",
+    "azureServiceBusNamespaceNameTidy": "[toLower(trim(parameters('azureServiceBusNamespaceName')))]"
+  },
+  "parameters": {
+    "infrastructure": {
+      "type": "secureObject",
+      "defaultValue": {
+        "sqlServerFqdn": null,
+        "authCertificateThumbprint": null
+      }
+    },
+
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().location]"
+    },
+
+    "sitecoreAdminPassword": {
+      "type": "securestring",
+      "minLength": 8
+    },
+    "licenseXml": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
+    "sqlServerFqdn": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('infrastructure').sqlServerFqdn]"
+    },
+    "sqlServerLogin": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8
+    },
+
+    "processingEngineTasksSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-processingenginetasks-db')]"
+    },
+    "processingEngineStorageSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-processingenginestorage-db')]"
+    },
+    "reportingSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-reporting-db')]"
+    },
+    "processingEngineSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "processingengineuser"
+    },
+    "processingEngineSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('processingengine', parameters('passwordSalt'))), uniqueString('processingengine', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('processingengine', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
+    },
+    "reportingSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "reportinguser"
+    },
+    "reportingSqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('reporting', parameters('passwordSalt'))), uniqueString('reporting', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('reporting', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
+    },
+    "machineLearningServerConnectionString": {
+      "type": "securestring",
+      "minLength": 0,
+      "defaultValue": ""
+    },
+
+    "machineLearningServerBlobEndpointCertificatePath": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "machineLearningServerBlobEndpointCertificatePassword": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "machineLearningServerTableEndpointCertificatePath": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "machineLearningServerTableEndpointCertificatePassword": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "machineLearningServerEndpointCertificationAuthorityCertificatePath": {
+      "type": "string",
+      "defaultValue": ""
+    },
+
+    "useApplicationInsights": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "applicationInsightsName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ai')]"
+    },
+
+    "xcCollectWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-xc-collect')]"
+    },
+    "xcSearchWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-xc-search')]"
+    },
+    "cortexProcessingWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-cortex-processing')]"
+    },
+    "cortexReportingWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-cortex-reporting')]"
+    },
+
+    "authCertificateThumbprint": {
+      "type": "string",
+      "minLength": 8,
+      "defaultValue": "[parameters('infrastructure').authCertificateThumbprint]"
+    },
+
+    "cortexProcessingMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "cortexReportingMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+
+    "allowInvalidClientCertificates": {
+      "type": "bool",
+      "defaultValue": false
+    },
+
+    "passwordSalt": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().id]"
+    },
+
+    "xcServerConfigurationEnvironment": {
+      "type": "string",
+      "defaultValue": "Production",
+      "allowedValues": [ "Development", "Production" ]
+    },
+
+    "environmentType": {
+      "type": "string",
+      "defaultValue": "Non-Production"
+    },
+
+    "azureServiceBusNamespaceName" : {
+      "type": "string",
+      "minLength": 1
+    },
+    "azureServiceBusAccessKeyName" : {
+      "type": "string",
+      "minLength": 1
+    },
+    "xpPerformanceCountersType": {
+      "type": "string",
+      "allowedValues": [ "Disable", "ApplicationInsights" ],
+      "defaultValue": "Disable"
+    }
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('cortexReportingWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "packageUri": "[parameters('cortexReportingMsDeployPackageUrl')]",
+        "dbType": "SQL",
+        "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+        "setParameters": {
+          "IIS Web Application Name": "[variables('cortexReportingWebAppNameTidy')]",
+          "Database Server Name": "[variables('sqlServerFqdnTidy')]",
+          "Database Admin User Name": "[parameters('sqlServerLogin')]",
+          "Database Admin User Password": "[parameters('sqlServerPassword')]",
+          "Reporting Database Name": "[variables('reportingSqlDatabaseNameTidy')]",
+          "Reporting Database Application User Name": "[parameters('reportingSqlDatabaseUserName')]",
+          "Reporting Database Application User Password": "[parameters('reportingSqlDatabasePassword')]",
+          "XConnect Server Configuration Environment": "[parameters('xcServerConfigurationEnvironment')]",
+          "XConnect Server Certificate Validation Thumbprint": "[parameters('authCertificateThumbprint')]",
+          "Allow Invalid Client Certificates": "[parameters('allowInvalidClientCertificates')]",
+          "XConnect Server Application Insights Key": "[if(parameters('useApplicationInsights'), reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey, '')]",
+          "XP Performance Counters Type": "[if(parameters('useApplicationInsights'), concat('Sitecore:XConnect:Diagnostics:PerformanceCounters:', parameters('xpPerformanceCountersType')), 'Sitecore:XConnect:Diagnostics:PerformanceCounters:Disable')]",
+          "XConnect Server Instance Name": "Reporting",
+          "License Xml": "[parameters('licenseXml')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/config', variables('cortexReportingWebAppNameTidy'), 'appsettings')]"
+      ]
+    },
+    {
+      "name": "[concat(variables('cortexReportingWebAppNameTidy'), '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
+        "WEBSITE_DYNAMIC_CACHE": 0,
+        "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
+      }
+    },
+    {
+      "name": "[concat(variables('cortexProcessingWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "packageUri": "[parameters('cortexProcessingMsDeployPackageUrl')]",
+        "dbType": "SQL",
+        "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+        "setParameters": {
+          "IIS Web Application Name": "[variables('cortexProcessingWebAppNameTidy')]",
+          "Database Server Name": "[variables('sqlServerFqdnTidy')]",
+          "Database Admin User Name": "[parameters('sqlServerLogin')]",
+          "Database Admin User Password": "[parameters('sqlServerPassword')]",
+          "Processing Engine Tasks Database Name": "[variables('processingEngineTasksSqlDatabaseNameTidy')]",
+          "Processing Engine Storage Database Name": "[variables('processingEngineStorageSqlDatabaseNameTidy')]",
+          "Messaging Connection String": "[listkeys(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.ServiceBus/namespaces/authorizationRules', variables('azureServiceBusNamespaceNameTidy'), parameters('azureServiceBusAccessKeyName')), variables('azureServiceBusVersion')).primaryConnectionString]",
+          "Reporting Database Name": "[variables('reportingSqlDatabaseNameTidy')]",
+          "Processing Engine Database Application User Name": "[parameters('processingEngineSqlDatabaseUserName')]",
+          "Processing Engine Database Application User Password": "[parameters('processingEngineSqlDatabasePassword')]",
+          "Reporting Database Application User Name": "[parameters('reportingSqlDatabaseUserName')]",
+          "Reporting Database Application User Password": "[parameters('reportingSqlDatabasePassword')]",
+          "XConnect Server Configuration Environment": "[parameters('xcServerConfigurationEnvironment')]",
+          "XConnect Server Certificate Validation Thumbprint": "[parameters('authCertificateThumbprint')]",
+          "Processing Engine Xconnect Collection Client Endpoint": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('xcCollectWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
+          "Processing Engine Xconnect Collection Client Certificate Thumbprint": "[parameters('authCertificateThumbprint')]",
+          "Processing Engine Xconnect Search Client Endpoint": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('xcSearchWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
+          "Processing Engine Xconnect Search Client Certificate Thumbprint": "[parameters('authCertificateThumbprint')]",
+          "Processing Engine Blob Storage WebApi Endpoint": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('cortexProcessingWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
+          "Processing Engine Table Storage WebApi Endpoint": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('cortexProcessingWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
+          "Processing Engine Machine Learning Server Endpoint": "[variables('machineLearningServerConnectionStringTidy')]",
+          "Machine Learning Server Blob Storage WebApi Endpoint Certificate Path": "[parameters('machineLearningServerBlobEndpointCertificatePath')]",
+          "Machine Learning Server Blob Storage WebApi Endpoint Certificate Password": "[parameters('machineLearningServerBlobEndpointCertificatePassword')]",
+          "Machine Learning Server Table Storage WebApi Endpoint Certificate Path": "[parameters('machineLearningServerTableEndpointCertificatePath')]",
+          "Machine Learning Server Table Storage WebApi Endpoint Certificate Password": "[parameters('machineLearningServerTableEndpointCertificatePassword')]",
+          "Machine Learning Server Storage WebApi Endpoint Certification Authority Certificate Path": "[parameters('machineLearningServerEndpointCertificationAuthorityCertificatePath')]",
+          "Allow Invalid Client Certificates": "[parameters('allowInvalidClientCertificates')]",
+          "XConnect Server Application Insights Key": "[if(parameters('useApplicationInsights'), reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey, '')]",
+          "XP Performance Counters Type": "[if(parameters('useApplicationInsights'), concat('Sitecore:XConnect:Diagnostics:PerformanceCounters:', parameters('xpPerformanceCountersType')), 'Sitecore:XConnect:Diagnostics:PerformanceCounters:Disable')]",
+          "XConnect Server Instance Name": "Processing",
+          "License Xml": "[parameters('licenseXml')]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/config', variables('cortexProcessingWebAppNameTidy'), 'appsettings')]"
+      ]
+    },
+    {
+      "name": "[concat(variables('cortexProcessingWebAppNameTidy'), '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
+        "WEBSITE_DYNAMIC_CACHE": 0,
+        "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/extensions', variables('cortexReportingWebAppNameTidy'), 'MSDeploy')]"
+      ]
+    }
+  ]
+}
