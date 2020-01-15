@@ -3,8 +3,8 @@
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2016-08-01",
-    "searchApiVersion": "2015-08-19",
-    "searchPreviewApiVersion": "2015-02-28-preview",
+    "searchApiVersion": "2017-11-11",
+    "searchManagementApiVersion": "2015-08-19",
     "appInsightsApiVersion": "2015-05-01",
 
     "sqlServerFqdnTidy": "[trim(toLower(parameters('sqlServerFqdn')))]",
@@ -298,7 +298,7 @@
               "XConnect Collection": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('xcCollectWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
               "XConnect Collection Certificate": "[concat('StoreName=My;StoreLocation=CurrentUser;FindType=FindByThumbprint;FindValue=', parameters('authCertificateThumbprint'))]",
               "Reporting Service Api Key": "[parameters('repAuthenticationApiKey')]",
-              "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchPreviewApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchManagementApiVersion')).primaryKey)]",
               "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey]",
               "Application Insights Role": "Processing",
               "Allow Invalid Client Certificates": "[parameters('allowInvalidClientCertificates')]",
@@ -334,7 +334,7 @@
               "Web Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('webSqlDatabaseNameTidy'),';User Id=', parameters('webSqlDatabaseUserName'), ';Password=', parameters('webSqlDatabasePassword'), ';')]",
               "Reporting Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('reportingSqlDatabaseNameTidy'),';User Id=', parameters('reportingSqlDatabaseUserName'), ';Password=', parameters('reportingSqlDatabasePassword'), ';')]",
               "Reporting Service Api Key": "[parameters('repAuthenticationApiKey')]",
-              "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchPreviewApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchManagementApiVersion')).primaryKey)]",
               "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey]",
               "Application Insights Role": "Reporting",
               "License Xml": "[parameters('licenseXml')]"

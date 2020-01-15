@@ -5,7 +5,7 @@
     "webApiVersion": "2016-08-01",
     "serverFarmApiVersion": "2016-09-01",
     "dbApiVersion": "2014-04-01-preview",
-    "searchApiVersion": "2015-08-19",
+    "searchManagementApiVersion": "2015-08-19",
     "redisApiVersion": "2016-04-01",
     "appInsightsApiVersion": "2015-05-01",
     "cmHostingPlanNameTidy": "[toLower(trim(parameters('cmHostingPlanName')))]",
@@ -540,7 +540,7 @@
     {
       "type": "Microsoft.Search/searchServices",
       "condition": "[parameters('deployAzureSearch')]",
-      "apiVersion": "[variables('searchApiVersion')]",
+      "apiVersion": "[variables('searchManagementApiVersion')]",
       "name": "[variables('searchServiceNameTidy')]",
       "location": "[if(parameters('deployAzureSearch'), parameters('searchServiceLocation'), 'westus')]",
       "sku": {

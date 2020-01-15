@@ -4,7 +4,8 @@
   "variables": {
     "webApiVersion": "2015-08-01",
     "dbApiVersion": "2014-04-01-preview",
-    "searchApiVersion": "2015-02-28",
+    "searchApiVersion": "2017-11-11",
+    "searchManagementApiVersion": "2015-08-19",
     "redisApiVersion": "2016-04-01",
     "appInsightsApiVersion": "2014-08-01",
     "cmHostingPlanNameTidy": "[toLower(trim(parameters('cm.hostingplan.name')))]",
@@ -551,7 +552,7 @@
                   "Web DB Password": "[parameters('cm.web.sqldatabase.password')]",
                   "Web Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('web.sqlserver.login'), ';Password=', parameters('web.sqlserver.password'), ';')]",
                   "Web Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('cm.web.sqldatabase.username'), ';Password=', parameters('cm.web.sqldatabase.password'), ';')]",
-                  "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+                  "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchManagementApiVersion')).primaryKey)]",
                   "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
                   "Application Insights Role": "CM",
                   "KeepAlive Url": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('cmWebAppNameTidy'))).hostNames[0], '/sitecore/service/keepalive.aspx')]",
@@ -636,7 +637,7 @@
                   "Web DB Password": "[parameters('cd.web.sqldatabase.password')]",
                   "Web Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('web.sqlserver.login'), ';Password=', parameters('web.sqlserver.password'), ';')]",
                   "Web Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('webDbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('webDbNameTidy'),';User Id=', parameters('cd.web.sqldatabase.username'), ';Password=', parameters('cd.web.sqldatabase.password'), ';')]",
-                  "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+                  "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchManagementApiVersion')).primaryKey)]",
                   "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))).InstrumentationKey]",
                   "Application Insights Role": "CD",
                   "KeepAlive Url": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('cdWebAppNameTidy'))).hostNames[0], '/sitecore/service/keepalive.aspx')]",
@@ -763,15 +764,15 @@
     },
     {
       "type": "Microsoft.Search/searchServices",
-      "apiVersion": "[variables('searchApiVersion')]",
+      "apiVersion": "[variables('searchManagementApiVersion')]",
       "name": "[variables('searchServiceNameTidy')]",
       "location": "[parameters('location')]",
       "properties": {
-        "sku": {
-          "name": "[toLower(parameters('resourceSizes').SearchService.SkuName)]"
-        },
         "replicaCount": "[parameters('resourceSizes').SearchService.Replicas]",
         "partitionCount": "[parameters('resourceSizes').SearchService.Partitions]"
+      },
+      "sku": {
+        "name": "[toLower(parameters('resourceSizes').SearchService.SkuName)]"
       },
       "tags": {
         "provider": "[parameters('sitecoreTags').provider]"

@@ -3,8 +3,8 @@
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2016-08-01",
-    "searchApiVersion": "2015-08-19",
-    "searchPreviewApiVersion": "2015-02-28-preview",
+    "searchApiVersion": "2017-11-11",
+    "searchManagementApiVersion": "2015-08-19",
     "redisApiVersion": "2016-04-01",
     "appInsightsApiVersion": "2015-05-01",
     "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebAppName')))]",
@@ -357,7 +357,7 @@
             "dbType": "SQL",
             "connectionString": "[concat('Data Source=tcp:', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]",            
             "setParameters": {
-              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Application Path": "[variables('prcWebAppNameTidy')]",
               "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('webSqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('webSqlServerLogin'), ';Password=', parameters('webSqlServerPassword'), ';')]"
             }
           },
@@ -384,7 +384,7 @@
               "Reporting Service Url": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('repWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
               "Reporting Service Api Key": "[parameters('repAuthenticationApiKey')]",
               "Analytics Connection String": "[variables('analyticsMongoDbConnStrTidy')]",
-              "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchPreviewApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchManagementApiVersion')).primaryKey)]",
               "Tracking Live Connection String": "[variables('trackingLiveMongoDbConnStrTidy')]",
               "Tracking Contact Connection String": "[variables('trackingContactMongoDbConnStrTidy')]",
               "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey]",
@@ -442,7 +442,7 @@
           "Tracking Live Connection String": "[variables('trackingLiveMongoDbConnStrTidy')]",
           "Tracking Contact Connection String": "[variables('trackingContactMongoDbConnStrTidy')]",
           "Redis Connection String": "[concat(reference(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).hostName, ':', reference(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).sslPort, ',password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).primaryKey, ',ssl=True,abortConnect=False')]",
-          "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchPreviewApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+          "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchManagementApiVersion')).primaryKey)]",
           "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey]",
           "Application Insights Role": "CD",
           "License Xml": "[parameters('licenseXml')]"
@@ -503,7 +503,7 @@
               "Tracking Live Connection String": "[variables('trackingLiveMongoDbConnStrTidy')]",
               "Tracking Contact Connection String": "[variables('trackingContactMongoDbConnStrTidy')]",
               "Tracking History Connection String": "[variables('trackingHistoryMongoDbConnStrTidy')]",
-              "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchPreviewApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchManagementApiVersion')).primaryKey)]",
               "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey]",
               "Application Insights Role": "Processing",
               "IP Security Client IP": "[parameters('securityClientIp')]",
@@ -566,7 +566,7 @@
               "Tracking Live Connection String": "[variables('trackingLiveMongoDbConnStrTidy')]",
               "Tracking History Connection String": "[variables('trackingHistoryMongoDbConnStrTidy')]",
               "Reporting Service Api Key": "[parameters('repAuthenticationApiKey')]",
-              "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchPreviewApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+              "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchManagementApiVersion')).primaryKey)]",
               "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey]",
               "Application Insights Role": "Reporting",
               "License Xml": "[parameters('licenseXml')]"
