@@ -250,10 +250,7 @@
           "XConnect Server Instance Name": "MarketingAutomation",
           "License Xml": "[parameters('licenseXml')]"
         }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/config', variables('maOpsWebAppNameTidy'),'appsettings')]"
-      ]
+      }
     },
     {
       "name": "[concat(variables('maRepWebAppNameTidy'), '/', 'MSDeploy')]",
@@ -266,7 +263,6 @@
           "IIS Web Application Name": "[variables('maRepWebAppNameTidy')]",
           "Database Server Name": "[variables('sqlServerFqdnTidy')]",
           "Marketing Automation Database Name": "[variables('maSqlDatabaseNameTidy')]",
-          "Messaging Connection String": "[listkeys(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.ServiceBus/namespaces/authorizationRules', variables('azureServiceBusNamespaceNameTidy'), parameters('azureServiceBusAccessKeyName')), variables('azureServiceBusVersion')).primaryConnectionString]",
           "Reference Data Database Name": "[variables('refDataSqlDatabaseNameTidy')]",
           "Reference Data Database Application User Name": "[parameters('xcRefDataSqlDatabaseUserName')]",
           "Reference Data Database Application User Password": "[parameters('xcRefDataSqlDatabasePassword')]",
@@ -280,10 +276,7 @@
           "XConnect Server Instance Name": "MarketingAutomationReporting",
           "License Xml": "[parameters('licenseXml')]"
         }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/config', variables('maRepWebAppNameTidy'),'appsettings')]"
-      ]
+      }
     },
     {
       "name": "[concat(variables('maOpsWebAppNameTidy'), '/', 'appsettings')]",
@@ -293,7 +286,10 @@
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/extensions', variables('maOpsWebAppNameTidy'),'MSDeploy')]"
+      ]
     },
     {
       "name": "[concat(variables('maRepWebAppNameTidy'), '/', 'appsettings')]",
@@ -305,7 +301,7 @@
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('maOpsWebAppNameTidy'),'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/extensions', variables('maRepWebAppNameTidy'),'MSDeploy')]"
       ]
     }
   ]
