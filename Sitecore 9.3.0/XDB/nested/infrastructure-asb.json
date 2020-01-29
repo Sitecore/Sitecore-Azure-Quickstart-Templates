@@ -106,7 +106,8 @@
         ]
       },
       "dependsOn": [
-        "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'))]"
+        "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'))]",
+        "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'),'/authorizationRules/', parameters('azureServiceBusManageSharedAccessKeyName'))]"
       ]
     },
     {
