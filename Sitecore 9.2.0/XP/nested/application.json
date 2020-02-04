@@ -468,7 +468,7 @@
             "packageUri": "[parameters('siMsDeployPackageUrl')]",
             "setParameters": {
                 "IIS Web Application Name": "[variables('siWebAppNameTidy')]",
-                "Security Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('coreSqlDatabaseUserName'), ';Password=', parameters('coreSqlDatabasePassword'), ';')]",
+                "Security Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('securitySqlDatabaseNameTidy'),';User Id=', parameters('securitySqlDatabaseUserName'), ';Password=', parameters('securitySqlDatabasePassword'), ';')]",
                 "CertificateThumbprint": "[parameters('authCertificateThumbprint')]",
                 "CertificateStoreLocation": "CurrentUser",
                 "PasswordRecoveryUrl": "[concat('https://', parameters('cmWebAppHostName'))]",
