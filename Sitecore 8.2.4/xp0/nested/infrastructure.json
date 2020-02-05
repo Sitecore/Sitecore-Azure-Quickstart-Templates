@@ -5,7 +5,7 @@
     "webApiVersion": "2016-08-01",
     "serverFarmApiVersion": "2016-09-01",
     "dbApiVersion": "2014-04-01-preview",
-    "searchApiVersion": "2015-08-19",
+    "searchManagementApiVersion": "2015-08-19",
     "appInsightsApiVersion": "2015-05-01",
     "hostingPlanNameTidy": "[toLower(trim(parameters('singleHostingPlanName')))]",
     "webAppNameTidy": "[toLower(trim(parameters('singleWebAppName')))]",
@@ -300,7 +300,7 @@
     },
     {
       "type": "Microsoft.Search/searchServices",
-      "apiVersion": "[variables('searchApiVersion')]",
+      "apiVersion": "[variables('searchManagementApiVersion')]",
       "name": "[variables('searchServiceNameTidy')]",
       "location": "[parameters('location')]",
       "sku": {

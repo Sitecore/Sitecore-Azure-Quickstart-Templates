@@ -3,8 +3,8 @@
   "contentVersion": "1.0.0.0",
   "variables": {    
     "resourcesApiVersion": "2016-09-01",
-    "searchApiVersion": "2015-08-19",
-    "searchPreviewApiVersion": "2015-02-28-preview",
+    "searchApiVersion": "2017-11-11",
+    "searchManagementApiVersion": "2015-08-19",
     "searchServiceNameTidy": "[trim(toLower(parameters('searchServiceName')))]"
   },
   "parameters": {
@@ -283,7 +283,7 @@
           },
 
           "cloudSearchConnectionString": {
-            "value": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchPreviewApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]"
+            "value": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchManagementApiVersion')).primaryKey)]"
           },
 
           "applicationInsightsName": {

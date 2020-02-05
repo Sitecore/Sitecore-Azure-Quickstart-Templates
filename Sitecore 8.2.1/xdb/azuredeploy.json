@@ -4,7 +4,8 @@
   "variables": {
     "webApiVersion": "2015-08-01",
     "dbApiVersion": "2014-04-01-preview",
-    "searchApiVersion": "2015-02-28",
+    "searchApiVersion": "2017-11-11",
+    "searchManagementApiVersion": "2015-08-19",
     "appInsightsApiVersion": "2014-08-01",
     "prcHostingPlanNameTidy": "[toLower(trim(parameters('prc.hostingplan.name')))]",
     "repHostingPlanNameTidy": "[toLower(trim(parameters('rep.hostingplan.name')))]",
@@ -603,7 +604,7 @@
                   "Reporting Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('repDbNameTidy'),';User Id=', parameters('sqlserver.login'), ';Password=', parameters('sqlserver.password'), ';')]",
                   "Reporting Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('repDbNameTidy'),';User Id=', parameters('prc.reporting.sqldatabase.username'), ';Password=', parameters('prc.reporting.sqldatabase.password'), ';')]",
                   "Analytics Connection String": "[variables('analyticsMongoDbConnStrTidy')]",
-                  "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+                  "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchManagementApiVersion')).primaryKey)]",
                   "Tracking Live Connection String": "[variables('trackingLiveMongoDbConnStrTidy')]",
                   "Tracking History Connection String": "[variables('trackingHistoryMongoDbConnStrTidy')]",
                   "Tracking Contact Connection String": "[variables('trackingContactMongoDbConnStrTidy')]",
@@ -701,7 +702,7 @@
                   "Reporting Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('repDbNameTidy'),';User Id=', parameters('sqlserver.login'), ';Password=', parameters('sqlserver.password'), ';')]",
                   "Reporting Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', reference(concat('Microsoft.Sql/servers/', variables('dbServerNameTidy'))).fullyQualifiedDomainName, ',1433;Initial Catalog=',variables('repDbNameTidy'),';User Id=', parameters('rep.reporting.sqldatabase.username'), ';Password=', parameters('rep.reporting.sqldatabase.password'), ';')]",
                   "Reporting Service Api Key": "[parameters('rep.authentication.apikey')]",
-                  "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey)]",
+                  "Cloud Search Connection String": "[concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchManagementApiVersion')).primaryKey)]",
                   "Analytics Connection String": "[variables('analyticsMongoDbConnStrTidy')]",
                   "Tracking Live Connection String": "[variables('trackingLiveMongoDbConnStrTidy')]",
                   "Tracking History Connection String": "[variables('trackingHistoryMongoDbConnStrTidy')]",
@@ -846,15 +847,15 @@
     },
     {
       "type": "Microsoft.Search/searchServices",
-      "apiVersion": "[variables('searchApiVersion')]",
+      "apiVersion": "[variables('searchManagementApiVersion')]",
       "name": "[variables('searchServiceNameTidy')]",
       "location": "[parameters('location')]",
       "properties": {
-        "sku": {
-          "name": "[toLower(parameters('resourceSizes').SearchService.SkuName)]"
-        },
         "replicaCount": "[parameters('resourceSizes').SearchService.Replicas]",
         "partitionCount": "[parameters('resourceSizes').SearchService.Partitions]"
+      },
+      "sku": {
+        "name": "[toLower(parameters('resourceSizes').SearchService.SkuName)]"
       },
       "tags": {
         "provider": "[parameters('sitecoreTags').provider]"
