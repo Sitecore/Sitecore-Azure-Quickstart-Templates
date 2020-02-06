@@ -44,36 +44,19 @@
   },
   "resources": [
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/geqmw')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-as','\";let metricName =\"ThrottledSearchQueriesPercentage\";let resourceProvider =\"MICROSOFT.SEARCH\";let resourceIdContains =\"/SEARCHSERVICES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m) | top 30 by TimeGenerated')]",
-        "displayName": "[concat('Azure Search ',parameters('deploymentId'),'-as',' reporting throttled search queries')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat('Azure Search ',parameters('deploymentId'),'-as',' reporting throttled search queries')]",
+      "name": "[concat('Azure Search reporting throttled search queries_', parameters('deploymentId'),'-as')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "8.2.5",
+        "sc-monitoring-sc-topology": "xdb"
+      },
       "properties": {
-        "description": "[concat('Check Azure Search ',parameters('deploymentId'),'-as',' : Reporting high rate of throttled search queries')]",
+        "description": "[concat('Check Azure Search reporting throttled search queries_', parameters('deploymentId'),'-as')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-as','\";let metricName =\"ThrottledSearchQueriesPercentage\";let resourceProvider =\"MICROSOFT.SEARCH\";let resourceIdContains =\"/SEARCHSERVICES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m) | top 30 by TimeGenerated')]",
@@ -92,7 +75,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check Azure Search ',parameters('deploymentId'),'-as',' : Reporting high rate of throttled search queries')]"
+            "emailSubject": "[concat('Check Azure Search reporting throttled search queries_', parameters('deploymentId'),'-as')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",

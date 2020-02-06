@@ -222,35 +222,6 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(parameters('deploymentId'), '-alertsqlserversdatabases')]",
-      "type": "Microsoft.Resources/deployments",
-      "dependson": [
-        "[concat(deployment().name,'-infrastructure')]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertsqlserversdatabases.json'), parameters('templateLinkAccessToken'))]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "deploymentId": {
-            "value": "[parameters('deploymentId')]"
-          },
-          "infrastructure": {
-            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
-          },
-          "omsWorkspaceLocation": {
-            "value": "[parameters('omsWorkspaceLocation')]"
-          },
-          "omsWorkspaceAlertRecipients": {
-            "value": "[parameters('omsWorkspaceAlertRecipients')]"
-          }
-        }
-      }
-    },
-    {
-      "apiVersion": "[variables('resourcesApiVersion')]",
       "name": "[concat(parameters('deploymentId'), '-alertwebserverfarms')]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
@@ -289,6 +260,35 @@
         "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertwebsites.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "omsWorkspaceLocation": {
+            "value": "[parameters('omsWorkspaceLocation')]"
+          },
+          "omsWorkspaceAlertRecipients": {
+            "value": "[parameters('omsWorkspaceAlertRecipients')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-alertsqlserversdatabases')]",
+      "type": "Microsoft.Resources/deployments",
+      "dependson": [
+        "[concat(deployment().name,'-infrastructure')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertsqlserversdatabases.json'), parameters('templateLinkAccessToken'))]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {

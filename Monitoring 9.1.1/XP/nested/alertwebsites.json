@@ -44,36 +44,19 @@
   },
   "resources": [
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/oqygl')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
-        "displayName": "[concat(parameters('deploymentId'),'-cd',' WebApp returning high rate of 5xx errors')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-cd',' WebApp returning high rate of 5xx errors')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cd')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-cd',' WebApp: High rate of Http Requests returning 5xx error')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cd')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
@@ -92,7 +75,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-cd',' WebApp: High rate of Http Requests returning 5xx error')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cd')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -107,36 +90,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/svtze')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
-        "displayName": "[concat(parameters('deploymentId'),'-cm',' WebApp returning high rate of 5xx errors')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-cm',' WebApp returning high rate of 5xx errors')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cm')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-cm',' WebApp: High rate of Http Requests returning 5xx error')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cm')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
@@ -155,7 +121,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-cm',' WebApp: High rate of Http Requests returning 5xx error')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cm')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -170,36 +136,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/crbot')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cortex-processing','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
-        "displayName": "[concat(parameters('deploymentId'),'-cortex-processing',' WebApp returning high rate of 5xx errors')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-cortex-processing',' WebApp returning high rate of 5xx errors')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cortex-processing')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-cortex-processing',' WebApp: High rate of Http Requests returning 5xx error')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cortex-processing')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cortex-processing','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
@@ -218,7 +167,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-cortex-processing',' WebApp: High rate of Http Requests returning 5xx error')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cortex-processing')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -233,36 +182,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/oavpq')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cortex-reporting','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
-        "displayName": "[concat(parameters('deploymentId'),'-cortex-reporting',' WebApp returning high rate of 5xx errors')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-cortex-reporting',' WebApp returning high rate of 5xx errors')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cortex-reporting')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-cortex-reporting',' WebApp: High rate of Http Requests returning 5xx error')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cortex-reporting')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cortex-reporting','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
@@ -281,7 +213,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-cortex-reporting',' WebApp: High rate of Http Requests returning 5xx error')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cortex-reporting')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -296,36 +228,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/vtdew')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-ops','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
-        "displayName": "[concat(parameters('deploymentId'),'-ma-ops',' WebApp returning high rate of 5xx errors')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-ma-ops',' WebApp returning high rate of 5xx errors')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-ma-ops')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-ma-ops',' WebApp: High rate of Http Requests returning 5xx error')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-ma-ops')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-ops','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
@@ -344,7 +259,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-ma-ops',' WebApp: High rate of Http Requests returning 5xx error')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-ma-ops')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -359,36 +274,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/zpdpf')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-rep','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
-        "displayName": "[concat(parameters('deploymentId'),'-ma-rep',' WebApp returning high rate of 5xx errors')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-ma-rep',' WebApp returning high rate of 5xx errors')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-ma-rep')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-ma-rep',' WebApp: High rate of Http Requests returning 5xx error')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-ma-rep')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-rep','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
@@ -407,7 +305,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-ma-rep',' WebApp: High rate of Http Requests returning 5xx error')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-ma-rep')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -422,36 +320,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/upkac')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-prc','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
-        "displayName": "[concat(parameters('deploymentId'),'-prc',' WebApp returning high rate of 5xx errors')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-prc',' WebApp returning high rate of 5xx errors')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-prc')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-prc',' WebApp: High rate of Http Requests returning 5xx error')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-prc')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-prc','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
@@ -470,7 +351,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-prc',' WebApp: High rate of Http Requests returning 5xx error')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-prc')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -485,36 +366,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/brdep')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
-        "displayName": "[concat(parameters('deploymentId'),'-rep',' WebApp returning high rate of 5xx errors')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-rep',' WebApp returning high rate of 5xx errors')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-rep')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-rep',' WebApp: High rate of Http Requests returning 5xx error')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-rep')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
@@ -533,7 +397,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-rep',' WebApp: High rate of Http Requests returning 5xx error')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-rep')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -548,36 +412,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/whfag')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-si','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
-        "displayName": "[concat(parameters('deploymentId'),'-si',' WebApp returning high rate of 5xx errors')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-si',' WebApp returning high rate of 5xx errors')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-si')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-si',' WebApp: High rate of Http Requests returning 5xx error')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-si')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-si','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
@@ -596,7 +443,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-si',' WebApp: High rate of Http Requests returning 5xx error')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-si')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -611,36 +458,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/gkbbs')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-collect','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
-        "displayName": "[concat(parameters('deploymentId'),'-xc-collect',' WebApp returning high rate of 5xx errors')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-xc-collect',' WebApp returning high rate of 5xx errors')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-xc-collect')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-xc-collect',' WebApp: High rate of Http Requests returning 5xx error')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-xc-collect')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-collect','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
@@ -659,7 +489,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-xc-collect',' WebApp: High rate of Http Requests returning 5xx error')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-xc-collect')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -674,36 +504,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/ecbai')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-refdata','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
-        "displayName": "[concat(parameters('deploymentId'),'-xc-refdata',' WebApp returning high rate of 5xx errors')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-xc-refdata',' WebApp returning high rate of 5xx errors')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-xc-refdata')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-xc-refdata',' WebApp: High rate of Http Requests returning 5xx error')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-xc-refdata')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-refdata','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
@@ -722,7 +535,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-xc-refdata',' WebApp: High rate of Http Requests returning 5xx error')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-xc-refdata')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -737,36 +550,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/vybgj')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-search','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
-        "displayName": "[concat(parameters('deploymentId'),'-xc-search',' WebApp returning high rate of 5xx errors')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "1"
-          },
-          {
-            "name": "frequency",
-            "value": "5"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-xc-search',' WebApp returning high rate of 5xx errors')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-xc-search')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-xc-search',' WebApp: High rate of Http Requests returning 5xx error')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-xc-search')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-search','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h)')]",
@@ -785,7 +581,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-xc-search',' WebApp: High rate of Http Requests returning 5xx error')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-xc-search')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",

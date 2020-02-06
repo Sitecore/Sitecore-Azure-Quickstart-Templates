@@ -44,36 +44,19 @@
   },
   "resources": [
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/jvzre')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-cd-hp',' Hosting Plan reporting high CPU usage')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-cd-hp',' Hosting Plan reporting high CPU usage')]",
+      "name": "[concat('Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-cd-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-cd-hp',' Hosting Plan: Reporting high CPU usage')]",
+        "description": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-cd-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -92,7 +75,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-cd-hp',' Hosting Plan: Reporting high CPU usage')]"
+            "emailSubject": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-cd-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -107,36 +90,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/pdcee')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-cd-hp',' Hosting plan reporting low available memory')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-cd-hp',' Hosting plan reporting low available memory')]",
+      "name": "[concat('Hosting plan reporting low available memory_', parameters('deploymentId'),'-cd-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-cd-hp',' Hosting Plan: Reporting low available memory')]",
+        "description": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-cd-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -155,7 +121,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-cd-hp',' Hosting Plan: Reporting low available memory')]"
+            "emailSubject": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-cd-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -170,36 +136,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/npucl')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-cm-hp',' Hosting Plan reporting high CPU usage')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-cm-hp',' Hosting Plan reporting high CPU usage')]",
+      "name": "[concat('Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-cm-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-cm-hp',' Hosting Plan: Reporting high CPU usage')]",
+        "description": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-cm-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -218,7 +167,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-cm-hp',' Hosting Plan: Reporting high CPU usage')]"
+            "emailSubject": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-cm-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -233,36 +182,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/jwkrt')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-cm-hp',' Hosting plan reporting low available memory')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-cm-hp',' Hosting plan reporting low available memory')]",
+      "name": "[concat('Hosting plan reporting low available memory_', parameters('deploymentId'),'-cm-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-cm-hp',' Hosting Plan: Reporting low available memory')]",
+        "description": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-cm-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -281,7 +213,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-cm-hp',' Hosting Plan: Reporting low available memory')]"
+            "emailSubject": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-cm-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -296,36 +228,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/cqtgu')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-prc-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-prc-hp',' Hosting Plan reporting high CPU usage')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-prc-hp',' Hosting Plan reporting high CPU usage')]",
+      "name": "[concat('Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-prc-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-prc-hp',' Hosting Plan: Reporting high CPU usage')]",
+        "description": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-prc-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-prc-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -344,7 +259,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-prc-hp',' Hosting Plan: Reporting high CPU usage')]"
+            "emailSubject": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-prc-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -359,36 +274,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/wchtg')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-prc-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-prc-hp',' Hosting plan reporting low available memory')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-prc-hp',' Hosting plan reporting low available memory')]",
+      "name": "[concat('Hosting plan reporting low available memory_', parameters('deploymentId'),'-prc-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-prc-hp',' Hosting Plan: Reporting low available memory')]",
+        "description": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-prc-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-prc-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -407,7 +305,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-prc-hp',' Hosting Plan: Reporting low available memory')]"
+            "emailSubject": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-prc-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -422,36 +320,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/ndrue')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-rep-hp',' Hosting Plan reporting high CPU usage')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-rep-hp',' Hosting Plan reporting high CPU usage')]",
+      "name": "[concat('Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-rep-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-rep-hp',' Hosting Plan: Reporting high CPU usage')]",
+        "description": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-rep-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -470,7 +351,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-rep-hp',' Hosting Plan: Reporting high CPU usage')]"
+            "emailSubject": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-rep-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -485,36 +366,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/rmfhj')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-rep-hp',' Hosting plan reporting low available memory')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-rep-hp',' Hosting plan reporting low available memory')]",
+      "name": "[concat('Hosting plan reporting low available memory_', parameters('deploymentId'),'-rep-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-rep-hp',' Hosting Plan: Reporting low available memory')]",
+        "description": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-rep-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -533,7 +397,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-rep-hp',' Hosting Plan: Reporting low available memory')]"
+            "emailSubject": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-rep-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -548,36 +412,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/fnriq')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-si-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-si-hp',' Hosting Plan reporting high CPU usage')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-si-hp',' Hosting Plan reporting high CPU usage')]",
+      "name": "[concat('Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-si-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-si-hp',' Hosting Plan: Reporting high CPU usage')]",
+        "description": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-si-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-si-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -596,7 +443,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-si-hp',' Hosting Plan: Reporting high CPU usage')]"
+            "emailSubject": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-si-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -611,36 +458,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/wcskz')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-si-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-si-hp',' Hosting plan reporting low available memory')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-si-hp',' Hosting plan reporting low available memory')]",
+      "name": "[concat('Hosting plan reporting low available memory_', parameters('deploymentId'),'-si-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-si-hp',' Hosting Plan: Reporting low available memory')]",
+        "description": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-si-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-si-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -659,7 +489,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-si-hp',' Hosting Plan: Reporting low available memory')]"
+            "emailSubject": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-si-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -674,36 +504,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/jhpeh')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-basic-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-xc-basic-hp',' Hosting Plan reporting high CPU usage')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-xc-basic-hp',' Hosting Plan reporting high CPU usage')]",
+      "name": "[concat('Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-xc-basic-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-xc-basic-hp',' Hosting Plan: Reporting high CPU usage')]",
+        "description": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-xc-basic-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-basic-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -722,7 +535,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-xc-basic-hp',' Hosting Plan: Reporting high CPU usage')]"
+            "emailSubject": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-xc-basic-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -737,36 +550,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/mptzy')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-basic-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-xc-basic-hp',' Hosting plan reporting low available memory')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-xc-basic-hp',' Hosting plan reporting low available memory')]",
+      "name": "[concat('Hosting plan reporting low available memory_', parameters('deploymentId'),'-xc-basic-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-xc-basic-hp',' Hosting Plan: Reporting low available memory')]",
+        "description": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-xc-basic-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-basic-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -785,7 +581,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-xc-basic-hp',' Hosting Plan: Reporting low available memory')]"
+            "emailSubject": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-xc-basic-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -800,36 +596,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/igbzh')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-resourceintensive-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-xc-resourceintensive-hp',' Hosting Plan reporting high CPU usage')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-xc-resourceintensive-hp',' Hosting Plan reporting high CPU usage')]",
+      "name": "[concat('Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-xc-resourceintensive-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-xc-resourceintensive-hp',' Hosting Plan: Reporting high CPU usage')]",
+        "description": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-xc-resourceintensive-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-resourceintensive-hp','\";let metricName =\"CpuPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SERVERFARMS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -848,7 +627,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-xc-resourceintensive-hp',' Hosting Plan: Reporting high CPU usage')]"
+            "emailSubject": "[concat('Check Hosting Plan reporting high CPU usage_', parameters('deploymentId'),'-xc-resourceintensive-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -863,36 +642,19 @@
       }
     },
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/njnoh')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-resourceintensive-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
-        "displayName": "[concat(parameters('deploymentId'),'-xc-resourceintensive-hp',' Hosting plan reporting low available memory')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "2"
-          },
-          {
-            "name": "frequency",
-            "value": "10"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(parameters('deploymentId'),'-xc-resourceintensive-hp',' Hosting plan reporting low available memory')]",
+      "name": "[concat('Hosting plan reporting low available memory_', parameters('deploymentId'),'-xc-resourceintensive-hp')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
       "properties": {
-        "description": "[concat('Check ',parameters('deploymentId'),'-xc-resourceintensive-hp',' Hosting Plan: Reporting low available memory')]",
+        "description": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-xc-resourceintensive-hp')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-resourceintensive-hp','\"; let metricName =\"MemoryPercentage\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"SERVERFARMS\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
@@ -911,7 +673,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check ',parameters('deploymentId'),'-xc-resourceintensive-hp',' Hosting Plan: Reporting low available memory')]"
+            "emailSubject": "[concat('Check Hosting plan reporting low available memory_', parameters('deploymentId'),'-xc-resourceintensive-hp')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
