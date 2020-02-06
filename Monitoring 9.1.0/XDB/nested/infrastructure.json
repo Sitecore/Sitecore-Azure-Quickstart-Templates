@@ -55,13 +55,27 @@
     "omsWorkspaceApiVersion": "2017-03-15-preview",
     "omsWorkspaceSku": "standalone",
     "actionGroupApiVersion": "2018-03-01",
-    "actionGroupName": "[concat(toLower(parameters('deploymentId')), '-AG')]"
+    "actionGroupName": "[concat(toLower(parameters('deploymentId')), '-AG')]",
+    "resourceTags": {
+      "sc-monitoring-type": "Basic",
+      "sc-monitoring-pkg-version": "2.2.3-r200205",
+      "sc-monitoring": "Yes",
+      "sc-monitoring-sc-version": "9.1.0",
+      "sc-monitoring-sc-topology": "xdb"
+    }
   },
   "resources": [
     {
       "apiVersion": "[variables('omsWorkspaceApiVersion')]",
       "name": "[variables('omsWorkspaceName')]",
       "type": "Microsoft.OperationalInsights/workspaces",
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xdb"
+      },
       "location": "[parameters('omsWorkspaceLocation')]",
       "id": "[variables('omsWorkspaceId')]",
       "properties": {
@@ -75,6 +89,13 @@
       "type": "Microsoft.Insights/actionGroups",
       "apiVersion": "[variables('actionGroupApiVersion')]",
       "name": "[variables('actionGroupName')]",
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.0",
+        "sc-monitoring-sc-topology": "xdb"
+      },
       "location": "global",
       "properties": {
         "groupShortName": "ScAlerts",
