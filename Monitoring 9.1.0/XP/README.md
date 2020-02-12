@@ -25,7 +25,7 @@ Steps to configure the Sitecore deployment parameters to include the Application
 {
     "name": "monitoring",
     "templateLink": "<placeholder>",
-    "parameters": {
+    "parameters": { 
         "omsWorkspaceMetricsRetentionDays" : <integer value. free plans are always 7, other plans comes with 31 by default>,
 		"omsWorkspaceAlertRecipients" : "<emails seperated by a semi colon>",
 		"omsWorkspaceLocation" : "<OMS Workspace location, must be supported by Azure>",

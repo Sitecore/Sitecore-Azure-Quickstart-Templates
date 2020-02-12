@@ -36,7 +36,12 @@
       "apiVersion": "[variables('webTestApiVersion')]",
       "location": "[parameters('applicationInsightsLocation')]",
       "tags": {
-        "[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource"
+        "[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource",
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "8.2.1",
+        "sc-monitoring-sc-topology": "xm"
       },
       "name": "[concat(parameters('deploymentId'),'-cd','-pingWebTest')]",
       "kind": "ping",
@@ -81,7 +86,12 @@
       ],
       "tags": {
         "[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource",
-        "[concat('hidden-link:', resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cd','-pingWebTest')))]": "Resource"
+        "[concat('hidden-link:', resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cd','-pingWebTest')))]": "Resource",
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "8.2.1",
+        "sc-monitoring-sc-topology": "xm"
       },
       "properties": {
         "description": "Alert to be triggered when the Web Test fails",
@@ -91,13 +101,13 @@
           "[resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName'))]",
           "[resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cd','-pingWebTest'))]"
         ],
-        "evaluationFrequency": "PT1M",
+        "evaluationFrequency": "PT5M",
         "windowSize": "PT5M",
         "criteria": {
           "odata.type": "Microsoft.Azure.Monitor.WebtestLocationAvailabilityCriteria",
           "webTestId": "[resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cd','-pingWebTest'))]",
           "componentId": "[resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName'))]",
-          "failedLocationCount": "2"
+          "failedLocationCount": "3"
         },
         "actions": [
           {
@@ -111,7 +121,12 @@
       "apiVersion": "[variables('webTestApiVersion')]",
       "location": "[parameters('applicationInsightsLocation')]",
       "tags": {
-        "[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource"
+        "[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource",
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "8.2.1",
+        "sc-monitoring-sc-topology": "xm"
       },
       "name": "[concat(parameters('deploymentId'),'-cm','-pingWebTest')]",
       "kind": "ping",
@@ -156,7 +171,12 @@
       ],
       "tags": {
         "[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource",
-        "[concat('hidden-link:', resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cm','-pingWebTest')))]": "Resource"
+        "[concat('hidden-link:', resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cm','-pingWebTest')))]": "Resource",
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "8.2.1",
+        "sc-monitoring-sc-topology": "xm"
       },
       "properties": {
         "description": "Alert to be triggered when the Web Test fails",
@@ -166,13 +186,13 @@
           "[resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName'))]",
           "[resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cm','-pingWebTest'))]"
         ],
-        "evaluationFrequency": "PT1M",
+        "evaluationFrequency": "PT5M",
         "windowSize": "PT5M",
         "criteria": {
           "odata.type": "Microsoft.Azure.Monitor.WebtestLocationAvailabilityCriteria",
           "webTestId": "[resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cm','-pingWebTest'))]",
           "componentId": "[resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName'))]",
-          "failedLocationCount": "2"
+          "failedLocationCount": "3"
         },
         "actions": [
           {

@@ -44,36 +44,19 @@
   },
   "resources": [
     {
-      "name": "[concat(parameters('omsWorkspaceName'), '/xfhwz')]",
-      "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "[variables('workspaceApiVersion')]",
-      "tags": {},
-      "properties": {
-        "etag": "*",
-        "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-redis','\";let metricName =\"serverLoad\";let resourceProvider =\"MICROSOFT.CACHE\";let resourceIdContains =\"/REDIS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
-        "displayName": "[concat('Redis Cache ',parameters('deploymentId'),'-redis',' reporting high server load')]",
-        "version": "2.0",
-        "category": "AlertIbiza",
-        "tags": [
-          {
-            "name": "tier",
-            "value": "3"
-          },
-          {
-            "name": "frequency",
-            "value": "15"
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat('Redis Cache ',parameters('deploymentId'),'-redis',' reporting high server load')]",
+      "name": "[concat('Redis Cache reporting high server load_', parameters('deploymentId'),'-redis')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {},
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "9.1.1",
+        "sc-monitoring-sc-topology": "xm"
+      },
       "properties": {
-        "description": "[concat('Check Redis Cache ',parameters('deploymentId'),'-redis',' : Reporting high server load')]",
+        "description": "[concat('Check Redis Cache reporting high server load_', parameters('deploymentId'),'-redis')]",
         "enabled": "true",
         "source": {
           "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-redis','\";let metricName =\"serverLoad\";let resourceProvider =\"MICROSOFT.CACHE\";let resourceIdContains =\"/REDIS/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
@@ -92,7 +75,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check Redis Cache ',parameters('deploymentId'),'-redis',' : Reporting high server load')]"
+            "emailSubject": "[concat('Check Redis Cache reporting high server load_', parameters('deploymentId'),'-redis')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
