@@ -1120,7 +1120,9 @@
     {
       "copy": {
         "name": "modules",
-        "count": "[length(parameters('modules').items)]"
+        "count": "[length(parameters('modules').items)]",
+        "mode": "serial",
+        "batchSize": 1
       },
       "name": "[concat(deployment().name, '-', parameters('modules').items[copyIndex()].name)]",
       "condition": "[parameters('deployPlatform')]",
