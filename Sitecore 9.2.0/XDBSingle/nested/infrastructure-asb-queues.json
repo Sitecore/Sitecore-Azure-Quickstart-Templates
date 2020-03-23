@@ -1,0 +1,71 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deploymentId": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]"
+        },
+        "location": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "azureServiceBusQueues": {
+            "type": "array",
+            "defaultValue": [
+                "error",
+                "Sitecore_CT_ModelTrainingTaskStatusSubscriber",
+                "Sitecore_EXM_AutomatedMessagesQueue",
+                "Sitecore_EXM_ClearSuppressionListQueue",
+                "Sitecore_EXM_ConfirmSubscriptionMessagesQueue",
+                "Sitecore_EXM_EmailAddressHistoryMessagesQueue",
+                "Sitecore_EXM_EmailOpenedMessagesQueue",
+                "Sitecore_EXM_SentMessagesQueue",
+                "Sitecore_EXM_UpdateListSubscriptionMessagesQueue",
+                "Sitecore_MA_PurgeFromCampaignMessages",
+                "Sitecore_PE_TaskRegistrationProducer",
+                "Sitecore_PE_TaskProgressProducer",
+                "Sitecore_PE_TaskStatusPublisher",
+                "Sitecore_PE_TaskRegistrationConsumer",
+                "Sitecore_PE_TaskProgressConsumer"
+            ]
+        },
+        "azureServiceBusNamespaceName": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "[concat(parameters('deploymentId'), '-asb')]"
+        }
+    },
+    "variables": {
+        "azureServiceBusVersion": "2017-04-01",
+        "azureServiceBusNamespaceNameTidy": "[toLower(trim(parameters('azureServiceBusNamespaceName')))]"
+    },
+    "resources": [
+        {
+            "copy": {
+                "name": "queues",
+                "mode": "Serial",
+                "batchSize": 1,
+                "count": "[length(parameters('azureServiceBusQueues'))]"
+            },
+            "apiVersion": "[variables('azureServiceBusVersion')]",
+            "name": "[concat(variables('azureServiceBusNamespaceNameTidy'), '/', toLower(parameters('azureServiceBusQueues')[copyIndex()]))]",
+            "type": "Microsoft.ServiceBus/Namespaces/Queues",
+            "location": "[parameters('location')]",
+            "properties": {
+                "lockDuration": "PT5M",
+                "maxSizeInMegabytes": "1024",
+                "requiresDuplicateDetection": "false",
+                "requiresSession": "false",
+                "defaultMessageTimeToLive": "P10675199DT2H48M5.4775807S",
+                "deadLetteringOnMessageExpiration": "false",
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "maxDeliveryCount": "10",
+                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+                "enablePartitioning": "false",
+                "enableExpress": "false"
+            }
+        }
+    ]
+}

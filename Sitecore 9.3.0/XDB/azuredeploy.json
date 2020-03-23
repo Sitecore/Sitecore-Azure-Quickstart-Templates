@@ -596,6 +596,9 @@
           "location": {
             "value": "[parameters('location')]"
           },
+          "templateLinkAccessToken": {
+            "value": "[parameters('templateLinkAccessToken')]"
+          },
           "azureServiceBusQueues": {
             "value": "[parameters('azureServiceBusQueues')]"
           },

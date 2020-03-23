@@ -11,6 +11,15 @@
       "minLength": 1,
       "defaultValue": "[resourceGroup().location]"
     },
+    "templateLinkBase": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri,' ','%20'), '.')]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
     "azureServiceBusQueues": {
       "type": "array",
       "defaultValue": [
@@ -66,6 +75,7 @@
   },
   "variables": {
     "azureServiceBusVersion": "2017-04-01",
+    "resourcesApiVersion": "2018-05-01",
     "azureServiceBusNamespaceNameTidy": "[toLower(trim(parameters('azureServiceBusNamespaceName')))]"
   },
   "resources": [
@@ -106,34 +116,63 @@
         ]
       },
       "dependsOn": [
-        "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'))]",
         "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'),'/authorizationRules/', parameters('azureServiceBusManageSharedAccessKeyName'))]"
       ]
     },
     {
-      "copy": {
-        "name": "topics",
-        "count": "[length(parameters('azureServiceBusTopics'))]"
-      },
-      "type": "Microsoft.ServiceBus/namespaces/topics",
-      "name": "[concat(variables('azureServiceBusNamespaceNameTidy'), '/', toLower(parameters('azureServiceBusTopics')[copyIndex()]))]",
-      "apiVersion": "[variables('azureServiceBusVersion')]",
-      "location": "[parameters('location')]",
-      "scale": null,
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-asb-topics')]",
+      "type": "Microsoft.Resources/deployments",
       "properties": {
-        "defaultMessageTimeToLive": "P14D",
-        "maxSizeInMegabytes": 1024,
-        "requiresDuplicateDetection": false,
-        "duplicateDetectionHistoryTimeWindow": "PT10M",
-        "enableBatchedOperations": true,
-        "status": "Active",
-        "supportOrdering": true,
-        "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
-        "enablePartitioning": false,
-        "enableExpress": false
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'infrastructure-asb-topics.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "azureServiceBusTopics": {
+            "value": "[parameters('azureServiceBusTopics')]"
+          },
+          "azureServiceBusNamespaceName": {
+            "value": "[variables('azureServiceBusNamespaceNameTidy')]"
+          }
+        }
       },
       "dependsOn": [
-        "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'))]"
+        "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'),'/authorizationRules/', parameters('azureServiceBusSharedAccessKeyName'))]"
+      ]
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-asb-queues')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'infrastructure-asb-queues.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "azureServiceBusQueues": {
+            "value": "[parameters('azureServiceBusQueues')]"
+          },
+          "azureServiceBusNamespaceName": {
+            "value": "[variables('azureServiceBusNamespaceNameTidy')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-asb-topics'))]"
       ]
     },
     {
@@ -159,36 +198,8 @@
         "forwardTo": "[toLower(parameters('azureServiceBusSubscriptions')[copyIndex()].subscription)]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.ServiceBus/namespaces', variables('azureServiceBusNamespaceNameTidy'))]",
-        "[resourceId('Microsoft.ServiceBus/namespaces/topics', variables('azureServiceBusNamespaceNameTidy'), toLower(parameters('azureServiceBusSubscriptions')[copyIndex()].topic))]",
-        "[resourceId('Microsoft.ServiceBus/namespaces/queues', variables('azureServiceBusNamespaceNameTidy'), toLower(parameters('azureServiceBusSubscriptions')[copyIndex()].subscription))]"
+        "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-asb-queues'))]"
       ]
-    },
-    {
-      "copy": {
-        "name": "queues",
-        "count": "[length(parameters('azureServiceBusQueues'))]"
-      },
-      "apiVersion": "[variables('azureServiceBusVersion')]",
-      "name": "[concat(variables('azureServiceBusNamespaceNameTidy'), '/', toLower(parameters('azureServiceBusQueues')[copyIndex()]))]",
-      "type": "Microsoft.ServiceBus/Namespaces/Queues",
-      "location": "[parameters('location')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.ServiceBus/namespaces', variables('azureServiceBusNamespaceNameTidy'))]"
-      ],
-      "properties": {
-        "lockDuration": "PT5M",
-        "maxSizeInMegabytes": "1024",
-        "requiresDuplicateDetection": "false",
-        "requiresSession": "false",
-        "defaultMessageTimeToLive": "P10675199DT2H48M5.4775807S",
-        "deadLetteringOnMessageExpiration": "false",
-        "duplicateDetectionHistoryTimeWindow": "PT10M",
-        "maxDeliveryCount": "10",
-        "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
-        "enablePartitioning": "false",
-        "enableExpress": "false"
-      }
     }
   ]
 }
