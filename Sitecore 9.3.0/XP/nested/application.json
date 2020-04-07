@@ -38,6 +38,8 @@
     "cmWebAppHostUrl": "[concat('https://', parameters('cmWebAppHostName'))]",
     "exmDdsWebAppHostUrl": "[concat('https://', parameters('exmDdsWebAppHostName'))]",
 
+    "exmDdsWebAppHostUrlOrEmpty": "[if(empty(parameters('exmDdsWebAppHostName')), '', variables('exmDdsWebAppHostUrl'))]",
+
     "searchProvider": "[if(empty(parameters('solrConnectionString')), 'Azure', 'Solr')]",
 
     "searchServiceNameTidy": "[toLower(trim(parameters('searchServiceName')))]",
@@ -474,7 +476,7 @@
                 "PasswordRecoveryUrl": "[concat('https://', parameters('cmWebAppHostName'))]",
                 "Application Insights Instrumentation Key": "[if(parameters('useApplicationInsights'), reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey, '')]",
                 "License Xml": "[parameters('licenseXml')]",
-                "AllowedCorsOrigins": "[concat(variables('cmWebAppHostUrl'), '|', variables('exmDdsWebAppHostUrl'))]",
+                "AllowedCorsOrigins": "[concat(variables('cmWebAppHostUrl'), '|', variables('exmDdsWebAppHostUrlOrEmpty'))]",
                 "ClientSecret": "[parameters('siClientSecret')]"
             }
           }
