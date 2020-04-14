@@ -16,9 +16,10 @@
       "defaultValue": {
         "items": [
           {
-            "name": "empty",
-            "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
+            "name": "sc2020-002-293863",
+            "templateLink": "[concat(uri(parameters('templateLinkBase'), 'addons/SC2020-002-293863.json'), parameters('templateLinkAccessToken'))]",
             "parameters": {
+              "msDeployPackageUrl" : "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/raw/master/Security%20patches/SC2020-002-293863/9.0/SC2020-002-293863.zip"
             }
           }
         ]
