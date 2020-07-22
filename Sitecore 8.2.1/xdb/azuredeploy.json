@@ -189,6 +189,11 @@
       "minLength": 1,
       "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
     },
+    "SC2019-002-312864.msdeploy.packageurl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/raw/master/Security%20patches/SC2019-002-312864/8.2/SC2019-002-312864.zip"
+    },
 
     "analytics.mongodb.connectionstring": {
       "type": "securestring"
@@ -615,6 +620,12 @@
                   "IP Security Client IP": "[parameters('security.clientIp')]",
                   "IP Security Client IP Mask": "[parameters('security.clientIpMask')]"
                 }
+              },
+              {
+                "packageUri": "[parameters('SC2019-002-312864.msdeploy.packageurl')]",
+                "setParameters": {
+                  "Application Path": "[variables('prcWebAppNameTidy')]"
+                }
               }
             ]
           }
@@ -710,6 +721,12 @@
                   "Application Insights Role": "Reporting",
                   "KeepAlive Url": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('repWebAppNameTidy'))).hostNames[0], '/sitecore/service/keepalive.aspx')]",
                   "License Xml": "[variables('licenseXml')]"
+                }
+              },
+              {
+                "packageUri": "[parameters('SC2019-002-312864.msdeploy.packageurl')]",
+                "setParameters": {
+                  "Application Path": "[variables('repWebAppNameTidy')]"
                 }
               }
             ]

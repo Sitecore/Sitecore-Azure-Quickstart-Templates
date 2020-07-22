@@ -250,6 +250,11 @@
       "minLength": 1,
       "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v2.2.1/set_tlsVersion.scwdp.zip"
     },
+    "SC2019-002-312864.msdeploy.packageurl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/raw/master/Security%20patches/SC2019-002-312864/8.2/SC2019-002-312864.zip"
+    },
 
     "sitecoreSKU" : {
       "type" : "string",
@@ -560,6 +565,12 @@
                   "IP Security Client IP": "[parameters('security.clientIp')]",
                   "IP Security Client IP Mask": "[parameters('security.clientIpMask')]"
                 }
+              },
+              {
+                "packageUri": "[parameters('SC2019-002-312864.msdeploy.packageurl')]",
+                "setParameters": {
+                  "Application Path": "[variables('cmWebAppNameTidy')]"
+                }
               }
             ]
           }
@@ -621,7 +632,7 @@
                 "setParameters": {
                   "Application Path": "[variables('cdWebAppNameTidy')]"
                 }
-              },
+              },            
               {
                 "packageUri": "[parameters('cd.msdeploy.packageurl')]",
                 "dbType": "SQL",
@@ -643,6 +654,12 @@
                   "KeepAlive Url": "[concat('https://', reference(resourceId('Microsoft.Web/sites', variables('cdWebAppNameTidy'))).hostNames[0], '/sitecore/service/keepalive.aspx')]",
                   "Redis Connection String": "[concat(reference(variables('redisCacheNameTidy')).hostName, ':', reference(variables('redisCacheNameTidy')).sslPort, ',password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).primaryKey, ',ssl=True,abortConnect=False')]",
                   "License Xml": "[variables('licenseXml')]"
+                }
+              },
+              {
+                "packageUri": "[parameters('SC2019-002-312864.msdeploy.packageurl')]",
+                "setParameters": {
+                  "Application Path": "[variables('cdWebAppNameTidy')]"
                 }
               }
             ]

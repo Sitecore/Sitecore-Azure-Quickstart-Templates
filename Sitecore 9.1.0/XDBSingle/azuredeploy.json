@@ -8,7 +8,8 @@
         "name": "application"
       }
     ],
-    "dependencies": "[concat(variables('defaultDependency'), parameters('modules').items)]"
+    "moduleFullList": "[union(parameters('systemModules').items, parameters('modules').items)]",
+    "dependencies": "[concat(variables('defaultDependency'), variables('moduleFullList'))]"
   },
   "parameters": {
     "modules": {
@@ -19,6 +20,20 @@
             "name": "empty",
             "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
             "parameters": {
+            }
+          }
+        ]
+      }
+    },
+    "systemModules": {
+      "type": "secureObject",
+      "defaultValue": {
+        "items": [
+          {
+            "name": "sc2020-002-293863",
+            "templateLink": "[concat(uri(parameters('templateLinkBase'), 'addons/sc2020-002-293863.json'), parameters('templateLinkAccessToken'))]",
+            "parameters": {
+              "msDeployPackageUrl" : "[parameters('sc2020002293863MsDeployPackageUrl')]"
             }
           }
         ]
@@ -433,6 +448,11 @@
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
+    },
+    "sc2020002293863MsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/raw/master/Security%20patches/SC2020-002-293863/9.1/SC2020-002-293863.zip"
     },
     "authCertificateName": {
       "type": "string",
@@ -1010,15 +1030,15 @@
     {
       "copy": {
         "name": "modules",
-        "count": "[length(parameters('modules').items)]"
+        "count": "[length(variables('moduleFullList'))]"
       },
-      "name": "[concat(parameters('deploymentId'), '-', parameters('modules').items[copyIndex()].name)]",
+      "name": "[concat(parameters('deploymentId'), '-', variables('moduleFullList')[copyIndex()].name)]",
       "apiVersion": "[variables('resourcesApiVersion')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[parameters('modules').items[copyIndex()].templateLink]"
+          "uri": "[variables('moduleFullList')[copyIndex()].templateLink]"
         },
         "parameters": {
           "standard": {
@@ -1114,7 +1134,7 @@
               "machineLearningServerEndpointCertificationAuthorityCertificatePath": "[parameters('machineLearningServerEndpointCertificationAuthorityCertificatePath')]"
             }
           },
-          "extension": { "value": "[parameters('modules').items[copyIndex()].parameters]" }
+          "extension": { "value": "[variables('moduleFullList')[copyIndex()].parameters]" }
         }
       },
       "dependsOn": [

@@ -8,7 +8,8 @@
         "name": "application"
       }
     ],
-    "dependencies": "[concat(variables('defaultDependency'), parameters('modules').items)]"
+    "moduleFullList": "[union(parameters('systemModules').items, parameters('modules').items)]",
+    "dependencies": "[concat(variables('defaultDependency'), variables('moduleFullList'))]"
   },
   "parameters": {
     "modules": {
@@ -24,6 +25,21 @@
         ]
       }
     },
+    "systemModules": {
+      "type": "secureObject",
+      "defaultValue": {
+        "items": [
+          {
+            "name": "sc2020-002-293863",
+            "templateLink": "[concat(uri(parameters('templateLinkBase'), 'addons/sc2020-002-293863.json'), parameters('templateLinkAccessToken'))]",
+            "parameters": {
+              "msDeployPackageUrl" : "[parameters('sc2020002293863MsDeployPackageUrl')]"
+            }
+          }
+        ]
+      }
+    },
+
     "templateLinkBase": {
       "type": "string",
       "minLength": 1,
@@ -194,6 +210,11 @@
       "minLength": 1,
       "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
     },
+    "sc2020002293863MsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/raw/master/Security%20patches/SC2020-002-293863/9.0/SC2020-002-293863.zip"
+    },    
     "coreSqlDatabaseUserName": {
       "type": "string",
       "minLength": 1,
@@ -457,15 +478,15 @@
     {
       "copy": {
         "name": "modules",
-        "count": "[length(parameters('modules').items)]"
+        "count": "[length(variables('moduleFullList'))]"
       },
-      "name": "[concat(deployment().name, '-' , parameters('modules').items[copyIndex()].name)]",
+      "name": "[concat(deployment().name, '-' , variables('moduleFullList')[copyIndex()].name)]",
       "apiVersion": "[variables('resourcesApiVersion')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "incremental",
         "templateLink": {
-          "uri": "[parameters('modules').items[copyIndex()].templateLink]"
+          "uri": "[variables('moduleFullList')[copyIndex()].templateLink]"
         },
         "parameters": {
           "standard": {
@@ -515,7 +536,7 @@
               "passwordSalt": "[parameters('passwordSalt')]"
             }
           },
-          "extension": { "value": "[parameters('modules').items[copyIndex()].parameters]" }
+          "extension": { "value": "[variables('moduleFullList')[copyIndex()].parameters]" }
         }
       },
       "dependsOn": [

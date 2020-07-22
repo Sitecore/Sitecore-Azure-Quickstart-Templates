@@ -16,9 +16,10 @@
       "defaultValue": {
         "items": [
           {
-            "name": "empty",
-            "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
+            "name": "SC2019-002-312864",
+            "templateLink": "[concat(uri(parameters('templateLinkBase'), 'addons/SC2019-002-312864.json'), parameters('templateLinkAccessToken'))]",
             "parameters": {
+              "msDeployPackageUrl" : "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/raw/master/Security%20patches/SC2019-002-312864/8.2/SC2019-002-312864.zip"
             }
           }
         ]
@@ -432,8 +433,6 @@
           "singleReportingSqlDatabasePassword": {
             "value": "[parameters('singleReportingSqlDatabasePassword')]"
           },
-
-          
           "analyticsMongoDbConnectionString": {
             "value": "[parameters('analyticsMongoDbConnectionString')]"
           },
