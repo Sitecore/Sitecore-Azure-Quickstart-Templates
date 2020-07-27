@@ -1,0 +1,57 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "variables": {
+        "webApiVersion": "2018-02-01",
+        "singleWebAppNameTidy": "[trim(toLower(parameters('singleWebAppName')))]"
+    },
+    "parameters": {
+        "deploymentId": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "singleWebAppName": {
+            "type": "string",
+            "defaultValue": "[concat(parameters('deploymentId'), '-single')]"
+        },
+        "blobStorageConnectionString": {
+            "type": "string",
+            "minLength": 1
+        },
+        "blobStorageMsDeployPackageUrl": {
+            "type": "string",
+            "minLength": 1
+        },
+         "defaultProvider": {
+            "type": "string",
+            "minLength": 1
+        },
+        "containerName": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "blobcontainer"
+        }
+    },
+    "resources": [{
+        "apiVersion": "[variables('webApiVersion')]",
+        "name": "[concat(variables('singleWebAppNameTidy'), '/', 'MSDeploy')]",
+        "type": "Microsoft.Web/sites/extensions",
+        "location": "[parameters('location')]",
+        "properties": {
+            "addOnPackages": [{
+                "packageUri": "[parameters('blobStorageMsDeployPackageUrl')]",
+                "dbType": "None",
+                "connectionString": "",
+                "setParameters": {
+                    "AzureStorageConnectionString": "[parameters('blobStorageConnectionString')]",
+                    "DefaultProvider": "[parameters('defaultProvider')]",
+                    "AzureStorageContainerName": "[parameters('containerName')]"
+                }
+            }]
+        }
+    }]
+}
