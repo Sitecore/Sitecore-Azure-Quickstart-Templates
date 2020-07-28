@@ -38,7 +38,7 @@
       "tags": {
         "[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource",
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "8.2.4",
         "sc-monitoring-sc-topology": "xm"
@@ -88,7 +88,7 @@
         "[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource",
         "[concat('hidden-link:', resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cd','-pingWebTest')))]": "Resource",
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "8.2.4",
         "sc-monitoring-sc-topology": "xm"
@@ -123,7 +123,7 @@
       "tags": {
         "[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource",
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "8.2.4",
         "sc-monitoring-sc-topology": "xm"
@@ -173,7 +173,7 @@
         "[concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName')))]": "Resource",
         "[concat('hidden-link:', resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cm','-pingWebTest')))]": "Resource",
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "8.2.4",
         "sc-monitoring-sc-topology": "xm"

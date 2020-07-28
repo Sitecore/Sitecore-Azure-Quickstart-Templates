@@ -50,7 +50,7 @@
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": {
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "9.3.0",
         "sc-monitoring-sc-topology": "xp"
@@ -96,7 +96,7 @@
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": {
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "9.3.0",
         "sc-monitoring-sc-topology": "xp"
@@ -142,7 +142,7 @@
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": {
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "9.3.0",
         "sc-monitoring-sc-topology": "xp"
@@ -188,7 +188,7 @@
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": {
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "9.3.0",
         "sc-monitoring-sc-topology": "xp"
@@ -234,7 +234,7 @@
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": {
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "9.3.0",
         "sc-monitoring-sc-topology": "xp"
@@ -280,7 +280,7 @@
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": {
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "9.3.0",
         "sc-monitoring-sc-topology": "xp"
@@ -326,7 +326,7 @@
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": {
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "9.3.0",
         "sc-monitoring-sc-topology": "xp"
@@ -372,7 +372,7 @@
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": {
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "9.3.0",
         "sc-monitoring-sc-topology": "xp"
@@ -418,7 +418,7 @@
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": {
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "9.3.0",
         "sc-monitoring-sc-topology": "xp"
@@ -464,7 +464,7 @@
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": {
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "9.3.0",
         "sc-monitoring-sc-topology": "xp"
@@ -510,7 +510,7 @@
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": {
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "9.3.0",
         "sc-monitoring-sc-topology": "xp"
@@ -556,7 +556,7 @@
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": {
         "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.2.3-r200205",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
         "sc-monitoring": "Yes",
         "sc-monitoring-sc-version": "9.3.0",
         "sc-monitoring-sc-topology": "xp"
