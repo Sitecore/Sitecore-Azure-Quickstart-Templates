@@ -1,0 +1,205 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "templateLinkBase": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri,' ','%20'), '.')]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "azureServiceBusQueues": {
+      "type": "array",
+      "defaultValue": [
+        "error",
+        "Sitecore_CT_ModelTrainingTaskStatusSubscriber",
+        "Sitecore_EXM_AutomatedMessagesQueue",
+        "Sitecore_EXM_ClearSuppressionListQueue",
+        "Sitecore_EXM_ConfirmSubscriptionMessagesQueue",
+        "Sitecore_EXM_EmailAddressHistoryMessagesQueue",
+        "Sitecore_EXM_EmailOpenedMessagesQueue",
+        "Sitecore_EXM_SentMessagesQueue",
+        "Sitecore_EXM_UpdateListSubscriptionMessagesQueue",
+        "Sitecore_MA_PurgeFromCampaignMessages",
+        "Sitecore_PE_TaskRegistrationProducer",
+        "Sitecore_PE_TaskProgressProducer",
+        "Sitecore_PE_TaskStatusPublisher",
+        "Sitecore_PE_TaskRegistrationConsumer",
+        "Sitecore_PE_TaskProgressConsumer"
+      ]
+    },
+    "azureServiceBusTopics": {
+      "type": "array",
+      "defaultValue": [
+        "sitecore_processing_engine_abstractions_messages_taskstatus__sitecore_processing_engine_abstractions"
+      ]
+    },
+    "azureServiceBusSubscriptions": {
+      "type": "array",
+      "defaultValue": [
+        {
+          "topic": "sitecore_processing_engine_abstractions_messages_taskstatus__sitecore_processing_engine_abstractions",
+          "subscription": "Sitecore_CT_ModelTrainingTaskStatusSubscriber"
+        }
+      ]
+    },
+    "azureServiceBusSkuName": {
+      "type": "string",
+      "defaultValue": "standard"
+    },
+    "azureServiceBusManageSharedAccessKeyName": {
+      "type": "string",
+      "defaultValue": "RootManageSharedAccessKey"
+    },
+    "azureServiceBusSharedAccessKeyName": {
+      "type": "string",
+      "defaultValue": "RootSharedAccessKey"
+    },
+    "azureServiceBusNamespaceName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-asb')]"
+    }
+  },
+  "variables": {
+    "azureServiceBusVersion": "2017-04-01",
+    "resourcesApiVersion": "2018-05-01",
+    "azureServiceBusNamespaceNameTidy": "[toLower(trim(parameters('azureServiceBusNamespaceName')))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('azureServiceBusVersion')]",
+      "name": "[variables('azureServiceBusNamespaceNameTidy')]",
+      "type": "Microsoft.ServiceBus/namespaces",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('azureServiceBusSkuName')]"
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/authorizationRules",
+      "name": "[concat(variables('azureServiceBusNamespaceNameTidy'),'/',parameters('azureServiceBusManageSharedAccessKeyName'))]",
+      "apiVersion": "[variables('azureServiceBusVersion')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "rights": [
+          "Listen",
+          "Manage",
+          "Send"
+        ]
+      },
+      "dependsOn": [
+        "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/authorizationRules",
+      "name": "[concat(variables('azureServiceBusNamespaceNameTidy'),'/', parameters('azureServiceBusSharedAccessKeyName'))]",
+      "apiVersion": "[variables('azureServiceBusVersion')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "rights": [
+          "Listen",
+          "Send"
+        ]
+      },
+      "dependsOn": [
+        "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'),'/authorizationRules/', parameters('azureServiceBusManageSharedAccessKeyName'))]"
+      ]
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-asb-topics')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'infrastructure-asb-topics.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "azureServiceBusTopics": {
+            "value": "[parameters('azureServiceBusTopics')]"
+          },
+          "azureServiceBusNamespaceName": {
+            "value": "[variables('azureServiceBusNamespaceNameTidy')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'),'/authorizationRules/', parameters('azureServiceBusSharedAccessKeyName'))]"
+      ]
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-asb-queues')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'infrastructure-asb-queues.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "azureServiceBusQueues": {
+            "value": "[parameters('azureServiceBusQueues')]"
+          },
+          "azureServiceBusNamespaceName": {
+            "value": "[variables('azureServiceBusNamespaceNameTidy')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-asb-topics'))]"
+      ]
+    },
+    {
+      "copy": {
+        "name": "subscriptions",
+        "count": "[length(parameters('azureServiceBusSubscriptions'))]"
+      },
+      "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+      "name": "[concat(variables('azureServiceBusNamespaceNameTidy'), '/', toLower(parameters('azureServiceBusSubscriptions')[copyIndex()].topic), '/', toLower(parameters('azureServiceBusSubscriptions')[copyIndex()].subscription))]",
+      "apiVersion": "[variables('azureServiceBusVersion')]",
+      "location": "[parameters('location')]",
+      "scale": null,
+      "properties": {
+        "lockDuration": "PT1M",
+        "requiresSession": false,
+        "defaultMessageTimeToLive": "P10675199DT2H48M5.4775807S",
+        "deadLetteringOnMessageExpiration": false,
+        "deadLetteringOnFilterEvaluationExceptions": true,
+        "maxDeliveryCount": 10,
+        "status": "Active",
+        "enableBatchedOperations": true,
+        "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+        "forwardTo": "[toLower(parameters('azureServiceBusSubscriptions')[copyIndex()].subscription)]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-asb-queues'))]"
+      ]
+    }
+  ]
+}

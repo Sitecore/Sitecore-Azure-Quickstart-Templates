@@ -1,0 +1,57 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deploymentId": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]"
+        },
+        "location": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "azureServiceBusTopics": {
+            "type": "array",
+            "defaultValue": [
+                "sitecore_processing_engine_abstractions_messages_taskstatus__sitecore_processing_engine_abstractions"
+            ]
+        },
+        "azureServiceBusNamespaceName": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "[concat(parameters('deploymentId'), '-asb')]"
+        }
+    },
+    "variables": {
+        "azureServiceBusVersion": "2017-04-01",
+        "azureServiceBusNamespaceNameTidy": "[toLower(trim(parameters('azureServiceBusNamespaceName')))]"
+    },
+    "resources": [
+        {
+            "copy": {
+                "name": "topics",
+                "mode": "Serial",
+                "batchSize": 1,
+                "count": "[length(parameters('azureServiceBusTopics'))]"
+            },
+            "type": "Microsoft.ServiceBus/namespaces/topics",
+            "name": "[concat(variables('azureServiceBusNamespaceNameTidy'), '/', toLower(parameters('azureServiceBusTopics')[copyIndex()]))]",
+            "apiVersion": "[variables('azureServiceBusVersion')]",
+            "location": "[parameters('location')]",
+            "scale": null,
+            "properties": {
+                "defaultMessageTimeToLive": "P14D",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": false,
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "enableBatchedOperations": true,
+                "status": "Active",
+                "supportOrdering": true,
+                "autoDeleteOnIdle": "P10675199DT2H48M5.4775807S",
+                "enablePartitioning": false,
+                "enableExpress": false
+            }
+        }
+    ]
+}
