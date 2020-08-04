@@ -1,0 +1,93 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "infrastructure": {
+      "type": "secureObject",
+      "defaultValue": {}
+    },
+    "deploymentId": {
+      "type": "string"
+    },
+    "omsWorkspaceName": {
+      "type": "string",
+      "defaultValue": "[parameters('infrastructure').omsWorkspaceName]",
+      "metadata": {
+        "description": "OMS Workspace name."
+      }
+    },
+    "omsWorkspaceLocation": {
+      "type": "string",
+      "defaultValue": "[parameters('infrastructure').omsWorkspaceLocation]",
+      "metadata": {
+        "description": "the Location in which your OMS will be provisioned"
+      }
+    },
+    "omsWorkspaceAlertRecipients": {
+      "type": "string",
+      "metadata": {
+        "Description": "List of recipients for the email alert separated by semicolon"
+      }
+    },
+    "actionGroupName": {
+      "type": "string",
+      "defaultValue": "[parameters('infrastructure').actionGroupName]",
+      "metadata": {
+        "description": "The name of the action group to be associated with the alerts actions"
+      }
+    }
+  },
+  "variables": {
+    "actionGroupResourceId": "[resourceId('Microsoft.Insights/actionGroups',parameters('actionGroupName'))]",
+    "workspaceApiVersion": "2017-04-26-preview",
+    "alertResourcesApiVersion": "2018-04-16"
+  },
+  "resources": [
+    {
+      "name": "[concat('Azure Search reporting throttled search queries_', parameters('deploymentId'),'-as')]",
+      "type": "Microsoft.Insights/scheduledqueryrules",
+      "apiVersion": "[variables('alertResourcesApiVersion')]",
+      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
+      "tags": {
+        "sc-monitoring-type": "Basic",
+        "sc-monitoring-pkg-version": "2.3.2-r200609",
+        "sc-monitoring": "Yes",
+        "sc-monitoring-sc-version": "10.0.0",
+        "sc-monitoring-sc-topology": "xp"
+      },
+      "properties": {
+        "description": "[concat('Check Azure Search reporting throttled search queries_', parameters('deploymentId'),'-as')]",
+        "enabled": "true",
+        "source": {
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-as','\";let metricName =\"ThrottledSearchQueriesPercentage\";let resourceProvider =\"MICROSOFT.SEARCH\";let resourceIdContains =\"/SEARCHSERVICES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 1m) | top 30 by TimeGenerated')]",
+          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
+          "queryType": "ResultCount"
+        },
+        "schedule": {
+          "frequencyInMinutes": "5",
+          "timeWindowInMinutes": "60"
+        },
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
+          "severity": "1",
+          "throttlingInMin": "0",
+          "aznsAction": {
+            "actionGroup": [
+              "[variables('actionGroupResourceId')]"
+            ],
+            "emailSubject": "[concat('Check Azure Search reporting throttled search queries_', parameters('deploymentId'),'-as')]"
+          },
+          "trigger": {
+            "thresholdOperator": "GreaterThan",
+            "threshold": "30",
+            "metricTrigger": {
+              "thresholdOperator": "GreaterThan",
+              "threshold": "30",
+              "metricTriggerType": "Total"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
