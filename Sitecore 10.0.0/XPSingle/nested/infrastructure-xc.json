@@ -75,6 +75,12 @@
       "defaultValue": "S0"
     },
 
+    "sqlDatabaseServiceObjectiveLevel": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "S1"
+    },    
+    
     "shardMapManagerSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -217,7 +223,7 @@
         "edition": "[parameters('sqlDatabaseEdition')]",
         "collation": "[parameters('sqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]",
-        "requestedServiceObjectiveName": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]"
+        "requestedServiceObjectiveName": "[parameters('sqlDatabaseServiceObjectiveLevel')]"
       },
       "resources": [
         {
