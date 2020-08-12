@@ -1,0 +1,618 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "resourcesApiVersion": "2016-09-01"
+  },
+  "parameters": {
+    "standard": {
+      "type": "secureObject",
+      "defaultValue": {
+        "infrastructure": {
+          "siWebAppHostName": null
+        },
+        "deploymentId": null,
+        "location": null,
+        "sitecoreAdminPassword": null,
+
+        "sqlServerName": null,
+        "sqlServerLogin": null,
+        "sqlServerPassword": null,
+
+        "coreSqlDatabaseName": null,
+        "masterSqlDatabaseName": null,
+
+        "singleWebAppName": null,
+        "xcSingleWebAppName": null,
+        "authCertificateBlob": null,
+        "authCertificatePassword": null
+      }
+    },
+    "extension": {
+      "type": "secureObject",
+      "defaultValue": {
+        "templateLinkAccessToken": "",
+        "commerceConnectMsDeployPackageUrl": null,
+        "commerceEngineCloudMsDeployPackageUrl": null,
+        "commerceEngineConnectMsDeployPackageUrl": null,
+        "identityConfigCommerceMsDeployPackageUrl": null,
+        "bizfxCloudMsDeployPackageUrl": null,
+        "adventureWorksImagesDeployPackageUrl": null,
+        "habitatImagesDeployPackageUrl": null,
+        "indexWorkerDefinitionsDeployPackageUrl": null,
+        "xConnectDefinitionsDeployPackageUrl": null,
+        "xProfileCoreDeployPackageUrl": null,
+        "xAnalyticsCoreDeployPackageUrl": null,
+        "maCoreDeployPackageUrl": null,
+        "maAzureDeployPackageUrl": null        
+      }
+    },
+    "extensionDefaults":{
+      "type": "secureObject",
+      "defaultValue": {
+        "braintreeMerchantId": null,
+        "braintreePublicKey": null,
+        "braintreePrivateKey": null,
+        "braintreeEnvironment": null,
+  
+        "environmentName": "HabitatShops",
+        "defaultShopName": "CommerceEngineDefaultStorefront",
+        "defaultShopCurrency": "USD",
+        "defaultShopLanguage": "en",
+        "sitecoreSKU": "Extra Small"
+      }  
+    },
+
+    "extensionExpanded":{
+      "type": "secureObject",
+      "defaultValue": "[union(parameters('extensionDefaults'), parameters('extension'))]"
+    },
+
+    "modules": {
+      "type": "secureObject",
+      "defaultValue": {
+        "items": [
+        ]
+      }
+    },
+
+    "templateLinkBase": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[uri(replace(deployment().properties.templateLink.uri,' ','%20'), '.')]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": "[parameters('extensionExpanded').templateLinkAccessToken]"
+    },
+
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').deploymentId, resourceGroup().name)]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').location, resourceGroup().location)]"
+    },
+    "sitecoreSKU": {
+      "type": "string",
+      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large" ],
+      "defaultValue": "[coalesce(parameters('extensionExpanded').sitecoreSKU, 'Extra Small')]",
+      "metadata": {
+        "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
+      }
+    },
+
+    "sitecoreAdminPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('standard').sitecoreAdminPassword]"
+    },
+
+    "sitecoreDomain": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "sitecore"
+    },
+    "sitecoreUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "admin"
+    },
+    "sitecorePassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('standard').sitecoreAdminPassword]"
+    },
+
+    "setCompatibilityLevelMsDeployPackageUrl":{
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
+    },
+    "sqlServerName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').sqlServerName, concat(parameters('deploymentId'), '-sql'))]"
+    },
+    "sqlServerLogin": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').sqlServerLogin]"
+    },
+    "sqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('standard').sqlServerPassword]"
+    },
+
+    "sqlDatabaseCollation": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+    },
+
+    "coreSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').coreSqlDatabaseName, concat(parameters('deploymentId'), '-core-db'))]"
+    },
+    "masterSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').masterSqlDatabaseName, concat(parameters('deploymentId'), '-master-db'))]"
+    },
+    "globalSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-global-db')]"
+    },
+    "sharedSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-shared-db')]"
+    },
+    "masterSqlDatabaseLogicalName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "master"
+    },
+    "webSqlDatabaseLogicalName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "web"
+    },
+    "globalSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "engineglobaluser"
+    },
+    "globalSqlDatabaseUserPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('engine-global', parameters('passwordSalt'))), '@', uniqueString('engine-global', parameters('sqlServerPassword')), toUpper(uniqueString('engine-global', parameters('sitecoreAdminPassword'))))]"
+    },
+    "sharedSqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "engineshareduser"
+    },
+    "sharedSqlDatabaseUserPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(toUpper(uniqueString('engine-shared', parameters('passwordSalt'))), '@', uniqueString('engine-shared', parameters('sqlServerPassword')), toUpper(uniqueString('engine-shared', parameters('sitecoreAdminPassword'))))]"
+    },
+    "engineHostingPlanName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-engine-hp')]"
+    },
+    "minionsHostingPlanName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-minions-hp')]"
+    },
+    "singleHostingPlanName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-single-hp')]"
+    },
+    "singleWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').singleWebAppName, concat(parameters('deploymentId'), '-single'))]"
+    },
+    "xcSingleWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').xcSingleWebAppName, concat(parameters('deploymentId'), '-xc-single'))]"
+    },
+	
+    "siWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[replace(coalesce(parameters('standard').infrastructure.siWebAppHostName, concat(parameters('deploymentId'), '-si')),'.azurewebsites.net','')]"
+    },
+    "siWebAppHostName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').infrastructure.siWebAppHostName, concat(parameters('siWebAppName'), '.azurewebsites.net'))]"
+    },
+	
+    "authCertificateBlob": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').authCertificateBlob]"
+    },
+    "authCertificatePassword": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').authCertificatePassword]"
+    },
+    "engineWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-engine')]"
+    },
+    "minionsWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-minions')]"
+    },
+    "authCertificateName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-auth')]"
+    },
+    "commerceConnectMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').commerceConnectMsDeployPackageUrl]"
+    },
+    "commerceEngineCloudMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').commerceEngineCloudMsDeployPackageUrl]"
+    },
+    "commerceEngineConnectMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').commerceEngineConnectMsDeployPackageUrl]"
+    },
+    "identityConfigCommerceMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').identityConfigCommerceMsDeployPackageUrl]"
+    },
+    "bizfxCloudMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').bizfxCloudMsDeployPackageUrl]"
+    },
+    "adventureWorksImagesDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').adventureWorksImagesDeployPackageUrl]"
+    },
+    "habitatImagesDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').habitatImagesDeployPackageUrl]"
+    },
+    "indexWorkerDefinitionsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').indexWorkerDefinitionsDeployPackageUrl]"
+    },
+    "xConnectDefinitionsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').xConnectDefinitionsDeployPackageUrl]"
+    },
+    "xProfileCoreDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').xProfileCoreDeployPackageUrl]"
+    },
+    "xAnalyticsCoreDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').xAnalyticsCoreDeployPackageUrl]"
+    },
+    "maCoreDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').maCoreDeployPackageUrl]"
+    },
+    "maAzureDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').maAzureDeployPackageUrl]"
+    },
+    "braintreeMerchantId": {
+      "type": "securestring",
+      "defaultValue": "[parameters('extensionExpanded').braintreeMerchantId]"
+    },
+    "braintreePublicKey": {
+      "type": "securestring",
+      "defaultValue": "[parameters('extensionExpanded').braintreePublicKey]"
+    },
+    "braintreePrivateKey": {
+      "type": "securestring",
+      "defaultValue": "[parameters('extensionExpanded').braintreePrivateKey]"
+    },
+    "braintreeEnvironment": {
+      "type": "string",
+      "defaultValue": "[parameters('extensionExpanded').braintreeEnvironment]"
+    },
+    "environmentName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').environmentName]"
+    },
+    "defaultShopName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').defaultShopName]"
+    },
+    "defaultShopCurrency": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').defaultShopCurrency]"
+    },
+    "defaultShopLanguage": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('extensionExpanded').defaultShopLanguage]"
+    },
+    "passwordSalt": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().id]"
+    },
+
+    "searchServiceName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-infrastructure')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/infrastructure.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "sitecoreSKU": {
+            "value": "[parameters('sitecoreSKU')]"
+          },
+          "sqlServerName": {
+            "value": "[parameters('sqlServerName')]"
+          },
+
+          "sqlDatabaseCollation": {
+            "value": "[parameters('sqlDatabaseCollation')]"
+          },
+
+          "globalSqlDatabaseName": {
+            "value": "[parameters('globalSqlDatabaseName')]"
+          },
+          "sharedSqlDatabaseName": {
+            "value": "[parameters('sharedSqlDatabaseName')]"
+          },
+          "engineHostingPlanName": {
+            "value": "[parameters('engineHostingPlanName')]"
+          },
+          "minionsHostingPlanName": {
+            "value": "[parameters('minionsHostingPlanName')]"
+          },
+          "singleHostingPlanName": {
+            "value": "[parameters('singleHostingPlanName')]"
+          },
+          "engineWebAppName": {
+            "value": "[parameters('engineWebAppName')]"
+          },
+          "minionsWebAppName": {
+            "value": "[parameters('minionsWebAppName')]"
+          },
+          "singleWebAppName": {
+            "value": "[parameters('singleWebAppName')]"
+          },
+          "xcSingleWebAppName": {
+            "value": "[parameters('xcSingleWebAppName')]"
+          },    
+          "authCertificateName": {
+            "value": "[parameters('authCertificateName')]"
+          },
+          "authCertificateBlob": {
+            "value": "[parameters('authCertificateBlob')]"
+          },
+          "authCertificatePassword": {
+            "value": "[parameters('authCertificatePassword')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-application')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "sitecoreAdminPassword": {
+            "value": "[parameters('sitecoreAdminPassword')]"
+          },
+          "sitecoreDomain": {
+            "value": "[parameters('sitecoreDomain')]"
+          },
+          "sitecoreUserName": {
+            "value": "[parameters('sitecoreUserName')]"
+          },
+          "sitecorePassword": {
+            "value": "[parameters('sitecorePassword')]"
+          },
+
+          "sqlServerLogin": {
+            "value": "[parameters('sqlServerLogin')]"
+          },
+          "sqlServerPassword": {
+            "value": "[parameters('sqlServerPassword')]"
+          },
+
+          "coreSqlDatabaseName": {
+            "value": "[parameters('coreSqlDatabaseName')]"
+          },
+          "masterSqlDatabaseName": {
+            "value": "[parameters('masterSqlDatabaseName')]"
+          },
+          "globalSqlDatabaseName": {
+            "value": "[parameters('globalSqlDatabaseName')]"
+          },
+          "sharedSqlDatabaseName": {
+            "value": "[parameters('sharedSqlDatabaseName')]"
+          },
+          "masterSqlDatabaseLogicalName": {
+            "value": "[parameters('masterSqlDatabaseLogicalName')]"
+          },
+          "webSqlDatabaseLogicalName": {
+            "value": "[parameters('webSqlDatabaseLogicalName')]"
+          },
+          "globalSqlDatabaseUserName": {
+            "value": "[parameters('globalSqlDatabaseUserName')]"
+          },
+          "globalSqlDatabaseUserPassword": {
+            "value": "[parameters('globalSqlDatabaseUserPassword')]"
+          },
+          "sharedSqlDatabaseUserName": {
+            "value": "[parameters('sharedSqlDatabaseUserName')]"
+          },
+          "sharedSqlDatabaseUserPassword": {
+            "value": "[parameters('sharedSqlDatabaseUserPassword')]"
+          },
+          "singleWebAppName": {
+            "value": "[parameters('singleWebAppName')]"
+          },
+          "xcSingleWebAppName": {
+            "value": "[parameters('xcSingleWebAppName')]"
+          },
+          "engineWebAppName": {
+            "value": "[parameters('engineWebAppName')]"
+          },
+          "minionsWebAppName": {
+            "value": "[parameters('minionsWebAppName')]"
+          },
+          "commerceConnectMsDeployPackageUrl": {
+            "value": "[parameters('commerceConnectMsDeployPackageUrl')]"
+          },
+          "commerceEngineCloudMsDeployPackageUrl": {
+            "value": "[parameters('commerceEngineCloudMsDeployPackageUrl')]"
+          },
+          "commerceEngineConnectMsDeployPackageUrl": {
+            "value": "[parameters('commerceEngineConnectMsDeployPackageUrl')]"
+          },
+          "identityConfigCommerceMsDeployPackageUrl": {
+            "value": "[parameters('identityConfigCommerceMsDeployPackageUrl')]"
+          },
+          "bizfxCloudMsDeployPackageUrl": {
+            "value": "[parameters('bizfxCloudMsDeployPackageUrl')]"
+          },
+          "adventureWorksImagesDeployPackageUrl": {
+            "value": "[parameters('adventureWorksImagesDeployPackageUrl')]"
+          },
+          "habitatImagesDeployPackageUrl": {
+            "value": "[parameters('habitatImagesDeployPackageUrl')]"
+          },
+          "indexWorkerDefinitionsDeployPackageUrl": {
+            "value": "[parameters('indexWorkerDefinitionsDeployPackageUrl')]"
+          },
+          "xConnectDefinitionsDeployPackageUrl": {
+            "value": "[parameters('xConnectDefinitionsDeployPackageUrl')]"
+          },
+          "xProfileCoreDeployPackageUrl": {
+            "value": "[parameters('xProfileCoreDeployPackageUrl')]"
+          },
+          "xAnalyticsCoreDeployPackageUrl": {
+            "value": "[parameters('xAnalyticsCoreDeployPackageUrl')]"
+          },
+          "maCoreDeployPackageUrl": {
+            "value": "[parameters('maCoreDeployPackageUrl')]"
+          },
+          "maAzureDeployPackageUrl": {
+            "value": "[parameters('maAzureDeployPackageUrl')]"
+          },
+          "braintreeMerchantId": {
+            "value": "[parameters('braintreeMerchantId')]"
+          },
+          "braintreePublicKey": {
+            "value": "[parameters('braintreePublicKey')]"
+          },
+          "braintreePrivateKey": {
+            "value": "[parameters('braintreePrivateKey')]"
+          },
+          "braintreeEnvironment": {
+            "value": "[parameters('braintreeEnvironment')]"
+          },
+          "environmentName": {
+            "value": "[parameters('environmentName')]"
+          },
+          "defaultShopName": {
+            "value": "[parameters('defaultShopName')]"
+          },
+          "defaultShopCurrency": {
+            "value": "[parameters('defaultShopCurrency')]"
+          },
+          "defaultShopLanguage": {
+            "value": "[parameters('defaultShopLanguage')]"
+          },
+
+          "idserverAppName": {
+            "value": "[parameters('siWebAppName')]"
+          },
+          "idserverAppFqdn": {
+            "value": "[parameters('siWebAppHostName')]"
+          },
+
+          "passwordSalt": {
+            "value": "[parameters('passwordSalt')]"
+          },
+
+          "searchServiceName": {
+            "value": "[parameters('searchServiceName')]"
+          },
+
+          "setCompatibilityLevelMsDeployPackageUrl": {
+            "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
+          }
+        }
+      },
+      "dependsOn": [ 
+        "[resourceId('Microsoft.Resources/deployments', concat(deployment().name, '-infrastructure'))]"
+        ]
+    }
+  ]
+}
