@@ -32,11 +32,15 @@ Choose the compatible templates for your Sitecore version:
 | Sitecore XC 9.0.3 | Commerce 9.0 Update-3. Use with templates: Sitecore 9.0.2, SXA 1.8, SXA Storefront 1.4 |
 | Sitecore XC 9.1.0 | Commerce 9.1 Initial. Use with templates: Sitecore 9.1.1, SXA 1.8, SXA Storefront 2.0 |
 | Sitecore XC 9.2.0 | Commerce 9.2 Initial. Use with templates: Sitecore 9.2.0, SXA 1.9.0, SXA Storefront 3.0 |
+| Sitecore XC 9.3.0 | Commerce 9.3 Initial. Use with templates: Sitecore 9.3.0, SXA 9.3.0, SXA Storefront 4.0 |
+| Sitecore XC 10.0.0 | Commerce 10.0.0. Use with templates: Sitecore 10.0.0, SXA 10.0.0, SXA Storefront 5.0 |
 | SXA Storefront 1.0 | SXA Storefront 1.0. Use with templates: Sitecore 9.0.1, Sitecore XC 9.0.0, SXA 1.6 |
 | SXA Storefront 1.2 | SXA Storefront 1.2. Use with templates: Sitecore 9.0.2, Sitecore XC 9.0.2, SXA 1.7.1 |
 | SXA Storefront 1.4 | SXA Storefront 1.4. Use with templates: Sitecore 9.0.2, Sitecore XC 9.0.3, SXA 1.8 |
 | SXA Storefront 2.0 | SXA Storefront 2.0. Use with templates: Sitecore 9.1.1, Sitecore XC 9.1.0, SXA 1.8 |
 | SXA Storefront 3.0 | SXA Storefront 3.0. Use with templates: Sitecore 9.2.0, Sitecore XC 9.2.0, SXA 1.9.0 |
+| SXA Storefront 4.0 | SXA Storefront 4.0. Use with templates: Sitecore 9.3.0, Sitecore XC 9.3.0, SXA 9.3.0 |
+| SXA Storefront 5.0 | SXA Storefront 5.0. Use with templates: Sitecore 10.0.0, Sitecore XC 10.0.0, SXA 10.0.0 |
 
 # Pre-deployment Checklist
 1. Ensure you have the latest Azure PowerShell Az module installed. You can find installation instructions at [Install Azure PowerShell](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps)
