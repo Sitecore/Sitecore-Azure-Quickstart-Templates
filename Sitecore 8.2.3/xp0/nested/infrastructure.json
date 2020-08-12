@@ -161,6 +161,7 @@
       "name": "[variables('webAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,

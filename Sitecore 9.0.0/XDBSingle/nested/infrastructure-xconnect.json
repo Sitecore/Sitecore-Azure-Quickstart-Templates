@@ -135,6 +135,7 @@
       "name": "[variables('xcSingleWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "clientCertEnabled": true,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('xcSingleHostingPlanNameTidy'))]",
         "siteConfig": {

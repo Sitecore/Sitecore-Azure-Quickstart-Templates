@@ -140,6 +140,7 @@
       "name": "[variables('exmDdsWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('exmDdsHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,

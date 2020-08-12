@@ -380,6 +380,7 @@
       "name": "[variables('prcWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('prcHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,
@@ -403,6 +404,7 @@
       "name": "[variables('repWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('repHostingPlanNameTidy'))]",
         "siteConfig": {
           "use32BitWorkerProcess": false,

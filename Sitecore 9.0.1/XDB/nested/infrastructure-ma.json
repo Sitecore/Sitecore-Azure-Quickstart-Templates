@@ -157,6 +157,7 @@
       "apiVersion": "[variables('webApiVersion')]",
       "location": "[parameters('location')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "clientCertEnabled": true,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('xcBasicHostingPlanNameTidy'))]",
         "siteConfig": {
@@ -178,6 +179,7 @@
       "name": "[variables('maOpsWebAppNameTidy')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "clientAffinityEnabled": false,
         "clientCertEnabled": true,
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('xcBasicHostingPlanNameTidy'))]",
         "siteConfig": {
