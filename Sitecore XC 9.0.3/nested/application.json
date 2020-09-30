@@ -49,7 +49,8 @@
     "defaultShopNameTidy": "[toLower(trim(parameters('defaultShopName')))]",
 
     "searchServiceNameTidy": "[toLower(trim(parameters('searchServiceName')))]",
-    "siteTitle": "Sitecore Commerce Engine"
+    "siteTitle": "Sitecore Commerce Engine",
+    "searchProvider": "[if(empty(parameters('solrConnectionString')), 'Azure', 'Solr')]"
   },
   "parameters": {
     "infrastructure": {
@@ -471,7 +472,8 @@
   "resources": [
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(deployment().name, '-cec')]",
+      "name": "[concat(deployment().name, '-cec-az')]",
+      "condition": "[equals(variables('searchProvider'), 'Azure')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
@@ -499,9 +501,6 @@
           },
           "sqlServerPassword": {
             "value": "[parameters('sqlServerPassword')]"
-          },
-          "solrConnectionString": {
-            "value": "[parameters('solrConnectionString')]"
           },
           "coreSqlDatabaseName": {
             "value": "[parameters('coreSqlDatabaseName')]"
@@ -548,16 +547,120 @@
           "commerceConnectMsDeployPackageUrl": {
             "value": "[parameters('commerceConnectMsDeployPackageUrl')]"
           },
-          "commerceEngineConnectCdAzureMsDeployPackageUrl": {
+          "commerceEngineConnectCdMsDeployPackageUrl": {
             "value": "[parameters('commerceEngineConnectCdAzureMsDeployPackageUrl')]"
           },
-          "commerceEngineConnectCmAzureMsDeployPackageUrl": {
+          "commerceEngineConnectCmMsDeployPackageUrl": {
             "value": "[parameters('commerceEngineConnectCmAzureMsDeployPackageUrl')]"
           },
-          "commerceEngineConnectCdSolrMsDeployPackageUrl": {
+          "adventureWorksImagesDeployPackageUrl": {
+            "value": "[parameters('adventureWorksImagesDeployPackageUrl')]"
+          },
+          "habitatImagesDeployPackageUrl": {
+            "value": "[parameters('habitatImagesDeployPackageUrl')]"
+          },
+          "xProfileCoreDeployPackageUrl": {
+            "value": "[parameters('xProfileCoreDeployPackageUrl')]"
+          },
+          "xAnalyticsCoreDeployPackageUrl": {
+            "value": "[parameters('xAnalyticsCoreDeployPackageUrl')]"
+          },
+          "maCoreDeployPackageUrl": {
+            "value": "[parameters('maCoreDeployPackageUrl')]"
+          },
+          "environmentName": {
+            "value": "[parameters('environmentName')]"
+          },
+          "defaultShopName": {
+            "value": "[parameters('defaultShopName')]"
+          },
+          "defaultShopCurrency": {
+            "value": "[parameters('defaultShopCurrency')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-cec-solr')]",
+      "condition": "[equals(variables('searchProvider'), 'Solr')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application-cec.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "infrastructure": {
+            "value": "[parameters('infrastructure')]"
+          },
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "templateLinkAccessToken": {
+            "value": "[parameters('templateLinkAccessToken')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "sqlServerFqdn": {
+            "value": "[parameters('infrastructure').sqlServerFqdn]"
+          },
+          "sqlServerLogin": {
+            "value": "[parameters('sqlServerLogin')]"
+          },
+          "sqlServerPassword": {
+            "value": "[parameters('sqlServerPassword')]"
+          },
+          "coreSqlDatabaseName": {
+            "value": "[parameters('coreSqlDatabaseName')]"
+          },
+          "masterSqlDatabaseName": {
+            "value": "[parameters('masterSqlDatabaseName')]"
+          },
+          "cdWebAppName": {
+            "value": "[parameters('cdWebAppName')]"
+          },
+          "cmWebAppName": {
+            "value": "[parameters('cmWebAppName')]"
+          },
+          "shopsWebAppName": {
+            "value": "[parameters('shopsWebAppName')]"
+          },
+          "shopsWebAppFqdn": {
+            "value": "[parameters('shopsWebAppFqdn')]"
+          },
+          "opsWebAppName": {
+            "value": "[parameters('opsWebAppName')]"
+          },
+          "opsWebAppFqdn": {
+            "value": "[parameters('opsWebAppFqdn')]"
+          },
+          "authoringWebAppName": {
+            "value": "[parameters('authoringWebAppName')]"
+          },
+          "authoringWebAppFqdn": {
+            "value": "[parameters('authoringWebAppFqdn')]"
+          },
+          "minionsWebAppName": {
+            "value": "[parameters('minionsWebAppName')]"
+          },
+          "minionsWebAppFqdn": {
+            "value": "[parameters('minionsWebAppFqdn')]"
+          },
+          "bizfxAppFqdn": {
+            "value": "[parameters('bizfxAppFqdn')]"
+          },
+          "authCertificateThumbprint": {
+            "value": "[parameters('authCertificateThumbprint')]"
+          },
+          "commerceConnectMsDeployPackageUrl": {
+            "value": "[parameters('commerceConnectMsDeployPackageUrl')]"
+          },
+          "commerceEngineConnectCdMsDeployPackageUrl": {
             "value": "[parameters('commerceEngineConnectCdSolrMsDeployPackageUrl')]"
           },
-          "commerceEngineConnectCmSolrMsDeployPackageUrl": {
+          "commerceEngineConnectCmMsDeployPackageUrl": {
             "value": "[parameters('commerceEngineConnectCmSolrMsDeployPackageUrl')]"
           },
           "adventureWorksImagesDeployPackageUrl": {
@@ -593,7 +696,8 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', concat(concat(deployment().name, '-cec')))]"
+        "[resourceId('Microsoft.Resources/deployments', concat(concat(deployment().name, '-cec-az')))]",
+        "[resourceId('Microsoft.Resources/deployments', concat(concat(deployment().name, '-cec-solr')))]"
       ],
       "properties": {
         "addOnPackages": [
@@ -922,6 +1026,10 @@
       "name": "[concat(variables('cdWebAppNameTidy'), '/', 'appsettings')]",
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat(concat(deployment().name, '-cec-az')))]",
+        "[resourceId('Microsoft.Resources/deployments', concat(concat(deployment().name, '-cec-solr')))]"
+      ],
       "properties": {
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]"
       }
@@ -930,6 +1038,10 @@
       "name": "[concat(variables('cmWebAppNameTidy'), '/', 'appsettings')]",
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat(concat(deployment().name, '-cec-az')))]",
+        "[resourceId('Microsoft.Resources/deployments', concat(concat(deployment().name, '-cec-solr')))]"
+      ],
       "properties": {
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]"
       }
