@@ -5,6 +5,9 @@ This template deploys the Sitecore Experience Commerce (Sitecore XC) module into
 
 Sitecore XC 9.1.0 is compatible with: Sitecore XP 9.1.1, SXA 1.8.1 (SXA 1.8 ARM template applies), SXA Storefront 2.0
 
+Release note Sep2020: Some previous release XC 9.0.3 deployments have experienced deployment issues at the application-cec.json file step. This issue could potentially also occur in XC 9.1. Refer to the "Fix for error at application-cec step" description checked in to the XC 9.0.3 application-cec.json file. 
+
+
 ## Parameters
 
 The **deploymentId** parameter is filled in by the PowerShell script.
