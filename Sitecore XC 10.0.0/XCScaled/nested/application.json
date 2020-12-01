@@ -5,14 +5,11 @@
     "resourcesApiVersion": "2016-09-01",
     "webApiVersion": "2016-08-01",
     "searchApiVersion": "2015-08-19",
-
     "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
-
     "coreSqlDatabaseNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
     "masterSqlDatabaseNameTidy": "[toLower(trim(parameters('masterSqlDatabaseName')))]",
     "globalSqlDatabaseNameTidy": "[toLower(trim(parameters('globalSqlDatabaseName')))]",
     "sharedSqlDatabaseNameTidy": "[toLower(trim(parameters('sharedSqlDatabaseName')))]",
-
     "cdWebAppNameTidy": "[toLower(trim(parameters('cdWebAppName')))]",
     "cdWebAppFqdnTidy": "[toLower(trim(parameters('cdWebAppFqdn')))]",
     "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebAppName')))]",
@@ -31,7 +28,6 @@
     "maOpsWebAppFqdnTidy": "[toLower(trim(parameters('maOpsWebAppFqdn')))]",
     "maRepWebAppNameTidy": "[toLower(trim(parameters('maRepWebAppName')))]",
     "maRepWebAppFqdnTidy": "[toLower(trim(parameters('maRepWebAppFqdn')))]",
-
     "shopsWebAppNameTidy": "[toLower(trim(parameters('shopsWebAppName')))]",
     "shopsWebAppFqdnTidy": "[toLower(trim(parameters('shopsWebAppFqdn')))]",
     "opsWebAppNameTidy": "[toLower(trim(parameters('opsWebAppName')))]",
@@ -44,10 +40,8 @@
     "idserverAppFqdnTidy": "[toLower(trim(parameters('idserverAppFqdn')))]",
     "bizfxAppNameTidy": "[toLower(trim(parameters('bizfxAppName')))]",
     "bizfxAppFqdnTidy": "[toLower(trim(parameters('bizfxAppFqdn')))]",
-
     "sitecoreDomainTidy": "[toLower(trim(parameters('sitecoreDomain')))]",
     "defaultShopNameTidy": "[toLower(trim(parameters('defaultShopName')))]",
-
     "searchServiceNameTidy": "[toLower(trim(parameters('searchServiceName')))]",
     "siteTitle": "Sitecore Commerce Engine",
     "searchProvider": "[if(empty(parameters('solrConnectionString')), 'Azure', 'Solr')]"
@@ -57,7 +51,6 @@
       "type": "secureObject",
       "defaultValue": {
         "sqlServerFqdn": "[concat(parameters('deploymentId'), '-sql.database.windows.net')]",
-
         "cdWebAppFqdn": "[concat(parameters('deploymentId'), '-cd.windowsazure.net')]",
         "cmWebAppFqdn": "[concat(parameters('deploymentId'), '-cm.windowsazure.net')]",
         "prcWebAppFqdn": "[concat(parameters('deploymentId'), '-prc.windowsazure.net')]",
@@ -67,19 +60,17 @@
         "xcRefDataWebAppFqdn": "[concat(parameters('deploymentId'), '-xc-refdata.windowsazure.net')]",
         "maOpsWebAppFqdn": "[concat(parameters('deploymentId'), '-ma-ops.windowsazure.net')]",
         "maRepWebAppFqdn": "[concat(parameters('deploymentId'), '-ma-rep.windowsazure.net')]",
-
         "shopsWebAppFqdn": "[concat(parameters('deploymentId'), '-shop.windowsazure.net')]",
         "opsWebAppFqdn": "[concat(parameters('deploymentId'), '-ops.windowsazure.net')]",
         "authoringWebAppFqdn": "[concat(parameters('deploymentId'), '-authoring.windowsazure.net')]",
         "minionsWebAppFqdn": "[concat(parameters('deploymentId'), '-minions.windowsazure.net')]",
-        "idserverAppFqdn": "[concat(parameters('deploymentId'), '-idserver.windowsazure.net')]",
         "bizfxAppFqdn": "[concat(parameters('deploymentId'), '-bizfx.windowsazure.net')]",
-
         "authCertificateThumbprint": null,
-        "applicationInsightsKey": null
+        "applicationInsightsKey": null,
+        "redisConfiguration": null,
+        "redisInstanceName": null
       }
     },
-
     "templateLinkBase": {
       "type": "string",
       "minLength": 1,
@@ -89,7 +80,6 @@
       "type": "securestring",
       "defaultValue": ""
     },
-
     "deploymentId": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
@@ -102,7 +92,6 @@
       "type": "securestring",
       "minLength": 8
     },
-
     "sitecoreDomain": {
       "type": "string",
       "minLength": 1,
@@ -117,7 +106,6 @@
       "type": "securestring",
       "minLength": 8
     },
-
     "sqlServerFqdn": {
       "type": "string",
       "minLength": 1,
@@ -131,12 +119,10 @@
       "type": "securestring",
       "minLength": 8
     },
-
     "solrConnectionString": {
       "type": "securestring",
       "defaultValue": ""
     },
-
     "coreSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -167,7 +153,6 @@
       "minLength": 1,
       "defaultValue": "web"
     },
-
     "globalSqlDatabaseUserName": {
       "type": "string",
       "minLength": 1,
@@ -278,7 +263,6 @@
       "minLength": 1,
       "defaultValue": "[parameters('infrastructure').maRepWebAppFqdn]"
     },
-
     "shopsWebAppName": {
       "type": "string",
       "minLength": 1,
@@ -322,12 +306,12 @@
     "idserverAppName": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-idserver')]"
+      "defaultValue": "[concat(parameters('deploymentId'), '-si')]"
     },
     "idserverAppFqdn": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "[parameters('infrastructure').idserverAppFqdn]"
+      "defaultValue": "[concat(parameters('idserverAppName'), '.azurewebsites.net')]"
     },
     "bizfxAppName": {
       "type": "string",
@@ -339,10 +323,8 @@
       "minLength": 1,
       "defaultValue": "[parameters('infrastructure').bizfxAppFqdn]"
     },
-
     "applicationInsightsKey": {
       "type": "securestring",
-      "minLength": 8,
       "defaultValue": "[parameters('infrastructure').applicationInsightsKey]"
     },
     "authCertificateThumbprint": {
@@ -350,7 +332,6 @@
       "minLength": 8,
       "defaultValue": "[parameters('infrastructure').authCertificateThumbprint]"
     },
-
     "commerceConnectMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
@@ -379,7 +360,7 @@
       "type": "securestring",
       "minLength": 1
     },
-    "idServerCloudMsDeployPackageUrl": {
+    "identityConfigCommerceMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
     },
@@ -431,7 +412,6 @@
     "braintreeEnvironment": {
       "type": "string"
     },
-
     "environmentName": {
       "type": "string",
       "minLength": 1,
@@ -450,21 +430,39 @@
     "defaultShopLanguage": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "en-US"
+      "defaultValue": "en"
     },
-
     "passwordSalt": {
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "[resourceGroup().id]"
     },
-
     "searchServiceName": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
     },
-    "setCompatibilityLevelMsDeployPackageUrl": {
+    "antiForgeryEnabled": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "redisConfiguration": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('infrastructure').redisConfiguration]"
+    },
+    "redisInstanceName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('infrastructure').redisInstanceName]"
+    },
+    "commerceEngineConnectClientId": {
+      "type": "string"
+    },
+    "commerceEngineConnectClientSecret": {
+      "type": "securestring"
+    },
+    "setCompatibilityLevelMsDeployPackageUrl":{
       "type": "securestring",
       "minLength": 1
     }
@@ -541,9 +539,6 @@
           "bizfxAppFqdn": {
             "value": "[parameters('bizfxAppFqdn')]"
           },
-          "authCertificateThumbprint": {
-            "value": "[parameters('authCertificateThumbprint')]"
-          },
           "commerceConnectMsDeployPackageUrl": {
             "value": "[parameters('commerceConnectMsDeployPackageUrl')]"
           },
@@ -576,7 +571,13 @@
           },
           "defaultShopCurrency": {
             "value": "[parameters('defaultShopCurrency')]"
-          }
+          },
+          "commerceEngineConnectClientId": {
+            "value": "[parameters('commerceEngineConnectClientId')]"
+          },
+          "commerceEngineConnectClientSecret": {
+            "value": "[parameters('commerceEngineConnectClientSecret')]"
+          }          
         }
       }
     },
@@ -651,9 +652,6 @@
           "bizfxAppFqdn": {
             "value": "[parameters('bizfxAppFqdn')]"
           },
-          "authCertificateThumbprint": {
-            "value": "[parameters('authCertificateThumbprint')]"
-          },
           "commerceConnectMsDeployPackageUrl": {
             "value": "[parameters('commerceConnectMsDeployPackageUrl')]"
           },
@@ -686,6 +684,12 @@
           },
           "defaultShopCurrency": {
             "value": "[parameters('defaultShopCurrency')]"
+          },
+          "commerceEngineConnectClientId": {
+            "value": "[parameters('commerceEngineConnectClientId')]"
+          },
+          "commerceEngineConnectClientSecret": {
+            "value": "[parameters('commerceEngineConnectClientSecret')]"
           }
         }
       }
@@ -717,7 +721,9 @@
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
-      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('prcWebAppNameTidy'), '/Extensions/MSDeploy')]" ],
+      "dependsOn": [
+        "[concat('Microsoft.Web/sites/', variables('prcWebAppNameTidy'), '/Extensions/MSDeploy')]"
+      ],
       "properties": {
         "addOnPackages": [
           {
@@ -753,7 +759,7 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "dependsOn": [
-        "[concat('Microsoft.Web/sites/', variables('xcRefDataWebAppNameTidy'), '/Extensions/MSDeploy')]" 
+        "[concat('Microsoft.Web/sites/', variables('xcRefDataWebAppNameTidy'), '/Extensions/MSDeploy')]"
       ],
       "properties": {
         "addOnPackages": [
@@ -772,7 +778,7 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "dependsOn": [
-        "[concat('Microsoft.Web/sites/', variables('xcCollectWebAppNameTidy'), '/Extensions/MSDeploy')]" 
+        "[concat('Microsoft.Web/sites/', variables('xcCollectWebAppNameTidy'), '/Extensions/MSDeploy')]"
       ],
       "properties": {
         "addOnPackages": [
@@ -799,12 +805,6 @@
       "properties": {
         "addOnPackages": [
           {
-            "packageUri": "[parameters('indexWorkerDefinitionsDeployPackageUrl')]",
-            "setParameters": {
-              "Application Path": "[variables('maOpsWebAppNameTidy')]"
-            }
-          },
-          {
             "packageUri": "[parameters('xConnectDefinitionsDeployPackageUrl')]",
             "setParameters": {
               "Application Path": "[variables('xcRefDataWebAppNameTidy')]"
@@ -814,25 +814,6 @@
             "packageUri": "[parameters('maAzureDeployPackageUrl')]",
             "setParameters": {
               "Application Path": "[variables('maOpsWebAppNameTidy')]"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "[concat(variables('maRepWebAppNameTidy'), '/', 'MSDeploy')]",
-      "type": "Microsoft.Web/sites/extensions",
-      "location": "[parameters('location')]",
-      "apiVersion": "[variables('webApiVersion')]",
-      "dependsOn": [
-        "[concat('Microsoft.Web/sites/', variables('maOpsWebAppNameTidy'), '/Extensions/MSDeploy')]"
-      ],
-      "properties": {
-        "addOnPackages": [
-          {
-            "packageUri": "[parameters('indexWorkerDefinitionsDeployPackageUrl')]",
-            "setParameters": {
-              "Application Path": "[variables('maRepWebAppNameTidy')]"
             }
           }
         ]
@@ -944,9 +925,6 @@
           "applicationInsightsKey": {
             "value": "[parameters('applicationInsightsKey')]"
           },
-          "authCertificateThumbprint": {
-            "value": "[parameters('authCertificateThumbprint')]"
-          },
           "commerceEngineAzureMsDeployPackageUrl": {
             "value": "[parameters('commerceEngineAzureMsDeployPackageUrl')]"
           },
@@ -974,6 +952,21 @@
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
           },
+          "antiForgeryEnabled": {
+            "value": "[parameters('antiForgeryEnabled')]"
+          },
+          "redisConfiguration": {
+            "value": "[parameters('redisConfiguration')]"
+          },
+          "redisInstanceName": {
+            "value": "[parameters('redisInstanceName')]"
+          },
+          "commerceEngineConnectClientId": {
+            "value": "[parameters('commerceEngineConnectClientId')]"
+          },
+          "commerceEngineConnectClientSecret": {
+            "value": "[parameters('commerceEngineConnectClientSecret')]"
+          },
           "setCompatibilityLevelMsDeployPackageUrl": {
             "value": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]"
           }
@@ -988,13 +981,15 @@
       "properties": {
         "addOnPackages": [
           {
-            "packageUri": "[parameters('idServerCloudMsDeployPackageUrl')]",
+            "packageUri": "[parameters('identityConfigCommerceMsDeployPackageUrl')]",
             "setParameters": {
               "IIS Web Application Name": "[variables('idserverAppNameTidy')]",
-              "BizFxUrl": "[concat('https://', variables('bizfxAppFqdnTidy'))]",
-              "BizFxUrlWildcard": "[concat('https://', variables('bizfxAppFqdnTidy'), '/?')]",
-              "SitecoreConnectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=', parameters('coreSqlDatabaseName'), ';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
-              "IDServerCertificateThumbprint": "[parameters('authCertificateThumbprint')]"
+              "BizFxHostName": "[variables('bizfxAppFqdnTidy')]",
+              "ShopsHostName": "[variables('shopsWebAppFqdnTidy')]",
+              "SitecoreCMHostName": "[variables('cmWebAppFqdnTidy')]",
+              "SitecoreCDHostName": "[variables('cdWebAppFqdnTidy')]",
+              "CommerceEngineConnectClientId": "[parameters('commerceEngineConnectClientId')]",
+              "CommerceEngineConnectClientSecret": "[parameters('commerceEngineConnectClientSecret')]"
             }
           }
         ]
@@ -1050,12 +1045,12 @@
       "name": "[concat(variables('idserverAppNameTidy'), '/', 'appsettings')]",
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
+      "dependsOn": [
+        "[concat('Microsoft.Web/sites/', variables('idserverAppNameTidy'), '/Extensions/MSDeploy')]"
+      ],
       "properties": {
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]"
-      },
-      "dependsOn": [
-        "[concat('Microsoft.Web/Sites/', variables('idserverAppNameTidy'), '/Extensions/MSDeploy')]"
-      ]
+      }
     }
   ]
 }

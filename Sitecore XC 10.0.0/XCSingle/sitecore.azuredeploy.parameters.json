@@ -1,0 +1,99 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentId": {
+      "value": ""
+    },
+    "location": {
+      "value": ""
+    },
+    "sitecoreAdminPassword": {
+      "value": ""
+    },
+    "licenseXml": {
+      "value": ""
+    },
+    "sqlServerLogin": {
+      "value": ""
+    },
+    "sqlServerPassword": {
+      "value": ""
+    },
+    "singleMsDeployPackageUrl": {
+      "value": ""
+    },
+    "xcSingleMsDeployPackageUrl": {
+      "value": ""
+    },
+    "authCertificateBlob": {
+      "value": ""
+    },
+    "authCertificatePassword": {
+      "value": ""
+    },
+    "allowInvalidClientCertificates": {
+      "value": true
+    }, 
+    "modules": {
+      "value": {
+        "items": [
+          {
+            "name": "Commerce",
+            "templateLink": "",
+            "parameters": {
+              "templateLinkAccessToken": "",
+              "commerceConnectMsDeployPackageUrl": "",
+              "commerceEngineCloudMsDeployPackageUrl": "",
+              "commerceEngineConnectMsDeployPackageUrl": "",
+              "identityConfigCommerceMsDeployPackageUrl": "",
+              "bizfxCloudMsDeployPackageUrl": "",
+              "adventureWorksImagesDeployPackageUrl": "",
+              "habitatImagesDeployPackageUrl": "",
+              "indexWorkerDefinitionsDeployPackageUrl": "",
+              "xConnectDefinitionsDeployPackageUrl": "",
+              "xProfileCoreDeployPackageUrl": "",
+              "xAnalyticsCoreDeployPackageUrl": "",
+              "maCoreDeployPackageUrl": "",
+              "maAzureDeployPackageUrl": "",
+              "environmentName": "",
+              "defaultShopName": "",
+              "defaultShopCurrency": "",
+              "defaultShopLanguage": "",
+              "braintreeMerchantId": "",
+              "braintreePublicKey": "",
+              "braintreePrivateKey": "",
+              "braintreeEnvironment": ""
+           }
+          },
+          {
+            "name": "sxa",
+            "templateLink": "",
+            "parameters":
+            {
+              "sxaMsDeployPackageUrl": "",
+              "speMsDeployPackageUrl": ""
+            }
+          },
+          {
+            "name": "sxa-sf",
+            "templateLink": "",
+            "parameters": {
+              "sxaMsDeployPackageUrl": "",
+              "sxaStorefrontMsDeployPackageUrl": "",
+              "sxaHabitatCatalogMsDeployPackageUrl": "",
+              "sxaStorefrontThemesMsDeployPackageUrl": ""
+            }
+          },
+          {
+            "name": "bootloader",
+            "templateLink": "",
+            "parameters": {
+              "msDeployPackageUrl" : ""
+            }
+          }
+        ]
+      }
+    }
+  }
+}

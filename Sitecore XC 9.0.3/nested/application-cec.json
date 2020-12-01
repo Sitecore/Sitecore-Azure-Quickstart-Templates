@@ -2,11 +2,28 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "resourcesApiVersion": "2016-09-01",
     "webApiVersion": "2016-08-01",
-    "searchApiVersion": "2015-08-19",
-    "searchProvider": "[if(empty(parameters('solrConnectionString')), 'Azure', 'Solr')]",
-    "siteTitle": "Sitecore Commerce Engine"
+    "resourcesApiVersion": "2016-09-01",
+
+    "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
+
+    "coreSqlDatabaseNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
+    "masterSqlDatabaseNameTidy": "[toLower(trim(parameters('masterSqlDatabaseName')))]",
+   
+    "cdWebAppNameTidy": "[toLower(trim(parameters('cdWebAppName')))]",
+    "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebAppName')))]",
+
+    "shopsWebAppNameTidy": "[toLower(trim(parameters('shopsWebAppName')))]",
+    "shopsWebAppFqdnTidy": "[toLower(trim(parameters('shopsWebAppFqdn')))]",
+    "opsWebAppNameTidy": "[toLower(trim(parameters('opsWebAppName')))]",
+    "opsWebAppFqdnTidy": "[toLower(trim(parameters('opsWebAppFqdn')))]",
+    "authoringWebAppNameTidy": "[toLower(trim(parameters('authoringWebAppName')))]",
+    "authoringWebAppFqdnTidy": "[toLower(trim(parameters('authoringWebAppFqdn')))]",
+    "minionsWebAppNameTidy": "[toLower(trim(parameters('minionsWebAppName')))]",
+    "minionsWebAppFqdnTidy": "[toLower(trim(parameters('minionsWebAppFqdn')))]",
+    "bizfxAppFqdnTidy": "[toLower(trim(parameters('bizfxAppFqdn')))]",
+   
+    "defaultShopNameTidy": "[toLower(trim(parameters('defaultShopName')))]"
   },
   "parameters": {
     "infrastructure": {
@@ -45,7 +62,6 @@
       "type": "securestring",
       "defaultValue": ""
     },
-
     "deploymentId": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
@@ -154,19 +170,11 @@
       "type": "securestring",
       "minLength": 1
     },
-    "commerceEngineConnectCdAzureMsDeployPackageUrl": {
+    "commerceEngineConnectCdMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
     },
-    "commerceEngineConnectCmAzureMsDeployPackageUrl": {
-      "type": "securestring",
-      "minLength": 1
-    },
-    "commerceEngineConnectCdSolrMsDeployPackageUrl": {
-      "type": "securestring",
-      "minLength": 1
-    },
-    "commerceEngineConnectCmSolrMsDeployPackageUrl": {
+    "commerceEngineConnectCmMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
     },
@@ -208,121 +216,115 @@
   },
   "resources": [
     {
-      "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(deployment().name, '-as')]",
-      "condition": "[equals(variables('searchProvider'), 'Azure')]",
-      "type": "Microsoft.Resources/deployments",
+      "name": "[concat(variables('cdWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
       "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'application-cec-as.json'), parameters('templateLinkAccessToken'))]"
-        },
-        "parameters": {
-          "infrastructure": {
-            "value": "[parameters('infrastructure')]"
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('commerceConnectMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+            "setParameters": {
+              "Application Path": "[variables('cdWebAppNameTidy')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
           },
-          "deploymentId": {
-            "value": "[parameters('deploymentId')]"
+          {
+            "packageUri": "[parameters('maCoreDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cdWebAppNameTidy')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
           },
-          "location": {
-            "value": "[parameters('location')]"
+          {
+            "packageUri": "[parameters('commerceEngineConnectCdMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+            "setParameters": {
+              "Application Path": "[variables('cdWebAppNameTidy')]",
+              "Ops Service URL": "[concat('https://', variables('opsWebAppFqdnTidy'), '/commerceops/')]",
+              "Shops Service URL": "[concat('https://', variables('shopsWebAppFqdnTidy'), '/api/')]",
+              "Default Environment": "[parameters('environmentName')]",
+              "Default Shop Name": "[variables('defaultShopNameTidy')]",
+              "Default Shop Currency": "[parameters('defaultShopCurrency')]",
+              "Certificate Thumbprint": "[parameters('authCertificateThumbprint')]"
+            }
+          }
+        ]
+      }
           },
-          "sqlServerFqdn": {
-            "value": "[parameters('infrastructure').sqlServerFqdn]"
+    {
+      "name": "[concat(variables('cmWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('cdWebAppNameTidy'), '/Extensions/MSDeploy')]" ],
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('commerceConnectMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
           },
-          "sqlServerLogin": {
-            "value": "[parameters('sqlServerLogin')]"
+          {
+            "packageUri": "[parameters('xProfileCoreDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
           },
-          "sqlServerPassword": {
-            "value": "[parameters('sqlServerPassword')]"
+          {
+            "packageUri": "[parameters('xAnalyticsCoreDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
           },
-          "coreSqlDatabaseName": {
-            "value": "[parameters('coreSqlDatabaseName')]"
+          {
+            "packageUri": "[parameters('maCoreDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
           },
-          "masterSqlDatabaseName": {
-            "value": "[parameters('masterSqlDatabaseName')]"
-          },
-          "cdWebAppName": {
-            "value": "[parameters('cdWebAppName')]"
-          },
-          "cmWebAppName": {
-            "value": "[parameters('cmWebAppName')]"
-          },
-          "shopsWebAppName": {
-            "value": "[parameters('shopsWebAppName')]"
-          },
-          "shopsWebAppFqdn": {
-            "value": "[parameters('shopsWebAppFqdn')]"
-          },
-          "opsWebAppName": {
-            "value": "[parameters('opsWebAppName')]"
-          },
-          "opsWebAppFqdn": {
-            "value": "[parameters('opsWebAppFqdn')]"
-          },
-          "authoringWebAppName": {
-            "value": "[parameters('authoringWebAppName')]"
-          },
-          "authoringWebAppFqdn": {
-            "value": "[parameters('authoringWebAppFqdn')]"
-          },
-          "minionsWebAppName": {
-            "value": "[parameters('minionsWebAppName')]"
-          },
-          "minionsWebAppFqdn": {
-            "value": "[parameters('minionsWebAppFqdn')]"
-          },
-          "bizfxAppFqdn": {
-            "value": "[parameters('bizfxAppFqdn')]"
-          },
-          "authCertificateThumbprint": {
-            "value": "[parameters('authCertificateThumbprint')]"
-          },
-          "commerceConnectMsDeployPackageUrl": {
-            "value": "[parameters('commerceConnectMsDeployPackageUrl')]"
-          },
-          "commerceEngineConnectCdAzureMsDeployPackageUrl": {
-            "value": "[parameters('commerceEngineConnectCdAzureMsDeployPackageUrl')]"
-          },
-          "commerceEngineConnectCmAzureMsDeployPackageUrl": {
-            "value": "[parameters('commerceEngineConnectCmAzureMsDeployPackageUrl')]"
-          },
-          "adventureWorksImagesDeployPackageUrl": {
-            "value": "[parameters('adventureWorksImagesDeployPackageUrl')]"
-          },
-          "habitatImagesDeployPackageUrl": {
-            "value": "[parameters('habitatImagesDeployPackageUrl')]"
-          },
-          "xProfileCoreDeployPackageUrl": {
-            "value": "[parameters('xProfileCoreDeployPackageUrl')]"
-          },
-          "xAnalyticsCoreDeployPackageUrl": {
-            "value": "[parameters('xAnalyticsCoreDeployPackageUrl')]"
-          },
-          "maCoreDeployPackageUrl": {
-            "value": "[parameters('maCoreDeployPackageUrl')]"
-          },
-          "environmentName": {
-            "value": "[parameters('environmentName')]"
-          },
-          "defaultShopName": {
-            "value": "[parameters('defaultShopName')]"
-          },
-          "defaultShopCurrency": {
-            "value": "[parameters('defaultShopCurrency')]"
+          {
+            "packageUri": "[parameters('commerceEngineConnectCmMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "Business Tools Link": "[concat('https://', variables('bizfxAppFqdnTidy'))]",
+              "Ops Service URL": "[concat('https://', variables('opsWebAppFqdnTidy'), '/commerceops/')]",
+              "Shops Service URL": "[concat('https://', variables('authoringWebAppFqdnTidy'), '/api/')]",
+              "Default Environment": "HabitatAuthoring",
+              "Default Shop Name": "[variables('defaultShopNameTidy')]",
+              "Default Shop Currency": "[parameters('defaultShopCurrency')]",
+              "Certificate Thumbprint": "[parameters('authCertificateThumbprint')]"
           }
         }
+        ]
       }
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(deployment().name, '-solr')]",
-      "condition": "[equals(variables('searchProvider'), 'Solr')]",
+      "dependsOn": [ "[concat('Microsoft.Web/sites/', variables('cmWebAppNameTidy'), '/Extensions/MSDeploy')]" ],
+      "name": "[concat(deployment().name, '-img')]",
       "type": "Microsoft.Resources/deployments",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'application-cec-solr.json'), parameters('templateLinkAccessToken'))]"
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'application-cec-img.json'), parameters('templateLinkAccessToken'))]"
         },
         "parameters": {
           "infrastructure": {
@@ -343,83 +345,17 @@
           "sqlServerPassword": {
             "value": "[parameters('sqlServerPassword')]"
           },
-          "solrConnectionString": {
-            "value": "[parameters('solrConnectionString')]"
-          },
-          "coreSqlDatabaseName": {
-            "value": "[parameters('coreSqlDatabaseName')]"
-          },
           "masterSqlDatabaseName": {
             "value": "[parameters('masterSqlDatabaseName')]"
           },
-          "cdWebAppName": {
-            "value": "[parameters('cdWebAppName')]"
-          },
           "cmWebAppName": {
             "value": "[parameters('cmWebAppName')]"
-          },
-          "shopsWebAppName": {
-            "value": "[parameters('shopsWebAppName')]"
-          },
-          "shopsWebAppFqdn": {
-            "value": "[parameters('shopsWebAppFqdn')]"
-          },
-          "opsWebAppName": {
-            "value": "[parameters('opsWebAppName')]"
-          },
-          "opsWebAppFqdn": {
-            "value": "[parameters('opsWebAppFqdn')]"
-          },
-          "authoringWebAppName": {
-            "value": "[parameters('authoringWebAppName')]"
-          },
-          "authoringWebAppFqdn": {
-            "value": "[parameters('authoringWebAppFqdn')]"
-          },
-          "minionsWebAppName": {
-            "value": "[parameters('minionsWebAppName')]"
-          },
-          "minionsWebAppFqdn": {
-            "value": "[parameters('minionsWebAppFqdn')]"
-          },
-          "bizfxAppFqdn": {
-            "value": "[parameters('bizfxAppFqdn')]"
-          },
-          "authCertificateThumbprint": {
-            "value": "[parameters('authCertificateThumbprint')]"
-          },
-          "commerceConnectMsDeployPackageUrl": {
-            "value": "[parameters('commerceConnectMsDeployPackageUrl')]"
-          },
-          "commerceEngineConnectCdSolrMsDeployPackageUrl": {
-            "value": "[parameters('commerceEngineConnectCdSolrMsDeployPackageUrl')]"
-          },
-          "commerceEngineConnectCmSolrMsDeployPackageUrl": {
-            "value": "[parameters('commerceEngineConnectCmSolrMsDeployPackageUrl')]"
           },
           "adventureWorksImagesDeployPackageUrl": {
             "value": "[parameters('adventureWorksImagesDeployPackageUrl')]"
           },
           "habitatImagesDeployPackageUrl": {
             "value": "[parameters('habitatImagesDeployPackageUrl')]"
-          },
-          "xProfileCoreDeployPackageUrl": {
-            "value": "[parameters('xProfileCoreDeployPackageUrl')]"
-          },
-          "xAnalyticsCoreDeployPackageUrl": {
-            "value": "[parameters('xAnalyticsCoreDeployPackageUrl')]"
-          },
-          "maCoreDeployPackageUrl": {
-            "value": "[parameters('maCoreDeployPackageUrl')]"
-          },
-          "environmentName": {
-            "value": "[parameters('environmentName')]"
-          },
-          "defaultShopName": {
-            "value": "[parameters('defaultShopName')]"
-          },
-          "defaultShopCurrency": {
-            "value": "[parameters('defaultShopCurrency')]"
           }
         }
       }

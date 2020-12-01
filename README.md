@@ -20,6 +20,8 @@ Choose the compatible templates for your Sitecore version:
 | Sitecore 9.1.0   | Sitecore 9.1                                                          |
 | Sitecore 9.1.1   | Sitecore 9.1 Update-1                                                 |
 | Sitecore 9.2.0   | Sitecore 9.2                                                          |
+| Sitecore 9.3.0   | Sitecore 9.3                                                          |
+| Sitecore 10.0.0  | Sitecore 10.0.0                                                       |
 | WFFM 8.2.3       | Web Forms For Marketers 8.2 Update-3, Update-4 and Update-5           |
 | WFFM 9.0.0       | Web Forms For Marketers 9.0				           |
 | AD 1.3.0         | Active Directory 1.3                                                  |
@@ -30,16 +32,44 @@ Choose the compatible templates for your Sitecore version:
 | Sitecore XC 9.0.3 | Commerce 9.0 Update-3. Use with templates: Sitecore 9.0.2, SXA 1.8, SXA Storefront 1.4 |
 | Sitecore XC 9.1.0 | Commerce 9.1 Initial. Use with templates: Sitecore 9.1.1, SXA 1.8, SXA Storefront 2.0 |
 | Sitecore XC 9.2.0 | Commerce 9.2 Initial. Use with templates: Sitecore 9.2.0, SXA 1.9.0, SXA Storefront 3.0 |
+| Sitecore XC 9.3.0 | Commerce 9.3 Initial. Use with templates: Sitecore 9.3.0, SXA 9.3.0, SXA Storefront 4.0 |
+| Sitecore XC 10.0.0 | Commerce 10.0.0. Use with templates: Sitecore 10.0.0, SXA 10.0.0, SXA Storefront 5.0 |
 | SXA Storefront 1.0 | SXA Storefront 1.0. Use with templates: Sitecore 9.0.1, Sitecore XC 9.0.0, SXA 1.6 |
 | SXA Storefront 1.2 | SXA Storefront 1.2. Use with templates: Sitecore 9.0.2, Sitecore XC 9.0.2, SXA 1.7.1 |
 | SXA Storefront 1.4 | SXA Storefront 1.4. Use with templates: Sitecore 9.0.2, Sitecore XC 9.0.3, SXA 1.8 |
 | SXA Storefront 2.0 | SXA Storefront 2.0. Use with templates: Sitecore 9.1.1, Sitecore XC 9.1.0, SXA 1.8 |
 | SXA Storefront 3.0 | SXA Storefront 3.0. Use with templates: Sitecore 9.2.0, Sitecore XC 9.2.0, SXA 1.9.0 |
+| SXA Storefront 4.0 | SXA Storefront 4.0. Use with templates: Sitecore 9.3.0, Sitecore XC 9.3.0, SXA 9.3.0 |
+| SXA Storefront 5.0 | SXA Storefront 5.0. Use with templates: Sitecore 10.0.0, Sitecore XC 10.0.0, SXA 10.0.0 |
 
 # Pre-deployment Checklist
-1. Ensure you have the latest Azure PowerShell SDK installed
+1. Ensure you have the latest Azure PowerShell Az module installed. You can find installation instructions at [Install Azure PowerShell](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps)
 2. Ensure that Sitecore Web Deploy packages you are going to deploy are available for download over the Internet
 3. Download and update the parameter values in the **azuredeploy.parameters.json** file
+
+# Preparing prerequisites
+Prerequisites section allows to deploy pre-step(s) (for example solr deployment, etc. ) before the main deployment.
+In order to deploy prerequisites as part of Sitecore deployment, you will need to change azuredeploy.parameters.json by adding prerequisites object with necessary parameters. 
+Parameters that should be passed to the prerequisite depend on the actual deployment template. For example:
+
+```JSON
+"prerequisites": {
+    "value": {
+        "items": [
+            {
+                "name": "<Name of the prerequisite>",
+                "templateLink": "<URL of the Resource Manager template that deploys the prerequisite>",
+                "parameters": {
+                    /* Parameters for the prerequisite. Can be empty */
+                    "<Name of the parameter>": {
+                        "value": "<Value of the parameter>"
+					}
+                }
+            }
+        ]
+    }
+}
+```
 
 # Sample PowerShell Script
 Below is a sample PowerShell script that can help you to get up and running quickly with the ARM Templates. There is also a Sitecore PowerShell CmdLet available for download at [Sitecore Downloads Site](https://dev.sitecore.net/) that makes the deployment even easier.
@@ -50,7 +80,7 @@ $ArmTemplateUrl = "AZUREDEPLOY_JSON_URL"
 $ArmParametersPath = ".\azuredeploy.parameters.json"
 $licenseFilePath = "PATH_TO_LICENSE_XML"
 
-# Specify the certificate file path and password if you want to deploy Sitecore 9.0 XP or XDB configurations
+# Specify the certificate file path and password if you want to deploy Sitecore XP or XDB configurations
 $certificateFilePath = $null 
 $certificatePassword = $null
 $certificateBlob = $null
@@ -73,13 +103,9 @@ $additionalParams = New-Object -TypeName Hashtable
 
 $params = Get-Content $ArmParametersPath -Raw | ConvertFrom-Json
 
-if ($params | Get-Member -Name parameters) {
-  $params = $params.parameters
-}
-
 foreach($p in $params | Get-Member -MemberType *Property)
 {
-  $additionalParams.Add($p.Name, $params.$($p.Name).value)
+    $additionalParams.Add($p.Name, $params.$($p.Name).value)
 }
 
 $additionalParams.Set_Item('licenseXml',$licenseFileContent)
@@ -123,16 +149,16 @@ try
 		
 	#endregion
 	
-	Write-Host "Setting Azure RM Context..."
+	Write-Host "Setting Azure PowerShell session context..."
 
  	if($UseServicePrincipal -eq $true)
 	{
 		#region Use Service Principle
 		$secpasswd = ConvertTo-SecureString $ApplicationPassword -AsPlainText -Force
 		$mycreds = New-Object System.Management.Automation.PSCredential ($ApplicationId, $secpasswd)
-		Login-AzureRmAccount -ServicePrincipal -Tenant $TenantId -Credential $mycreds
+        Connect-AzAccount -ServicePrincipal -Tenant $TenantId -Credential $mycreds
 		
-		Set-AzureRmContext -SubscriptionID $AzureSubscriptionId -TenantId $TenantId
+        Set-AzContext -SubscriptionId $AzureSubscriptionId -TenantId $TenantId
 		#endregion
 	}
 	else
@@ -141,27 +167,27 @@ try
 		try 
 		{
 			Write-Host "inside try"
-			Set-AzureRmContext -SubscriptionID $AzureSubscriptionId
+            Set-AzContext -SubscriptionId $AzureSubscriptionId
 		}
 		catch 
 		{
 			Write-Host "inside catch"
-			Login-AzureRmAccount
-			Set-AzureRmContext -SubscriptionID $AzureSubscriptionId
+            Connect-AzAccount
+            Set-AzContext -SubscriptionId $AzureSubscriptionId   
 		}
 		#endregion		
 	}
 	
  	Write-Host "Check if resource group already exists..."
-	$notPresent = Get-AzureRmResourceGroup -Name $Name -ev notPresent -ea 0
+    $notPresent = Get-AzResourceGroup -Name $Name -ev notPresent -ea 0
 	
 	if (!$notPresent) 
 	{
-		New-AzureRmResourceGroup -Name $Name -Location $location
+        New-AzResourceGroup -Name $Name -Location $location
 	}
 	
-	Write-Host "Starting ARM deployment..."
-	New-AzureRmResourceGroupDeployment `
+	Write-Host "Starting ARM deployment..."        
+    New-AzResourceGroupDeployment `
 			-Name $Name `
 			-ResourceGroupName $Name `
 			-TemplateUri $ArmTemplateUrl `
@@ -176,4 +202,3 @@ catch
 	Break 
 }
 ```
-

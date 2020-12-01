@@ -1,0 +1,220 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-08-01",
+    "serverFarmApiVersion": "2016-09-01",
+	"certificateApiVersion": "2014-11-01",
+	"appInsightsApiVersion": "2015-05-01",
+    "appInsightsNameTidy": "[toLower(trim(parameters('applicationInsightsName')))]",
+    "tsHostingPlanNameTidy": "[toLower(trim(parameters('tsHostingPlanName')))]",
+	"defTsWebAppNameTidy": "[trim(toLower(parameters('defTsWebAppName')))]",
+	"authCertificateNameTidy": "[toLower(trim(parameters('authCertificateName')))]",
+	"xcCollectWebAppNameTidy": "[toLower(trim(parameters('xcCollectWebAppName')))]",
+	"connectionStringParameters": {
+	  "hostName": "[coalesce(parameters('standard').cmWebAppName, concat(parameters('deploymentId'), '-cm'))]",
+      "tenantId": "00000000-0000-0000-0000-000000000000",
+      "sitecoreUser": "sitecore\\admin",
+      "sitecoreUserPassword": "[parameters('sitecoreAdminPassword')]"
+    }
+  },
+  "parameters": {
+	"standard": {
+	  "type": "secureObject",
+	  "defaultValue": {
+	    "infrastructure": { "sqlServerFqdn":null },
+		"deploymentId": null,
+		"location": null,
+		"sitecoreAdminPassword": null,
+		"cmWebAppName": null,
+		"applicationInsightsName": null,
+		"authCertificateBlob": "",
+		"authCertificatePassword": "",
+		"authCertificateName":null,
+		"useApplicationInsights":false
+	  }
+	},
+	"extension": {
+		"type": "secureObject",
+		"defaultValue": {
+			"msDeployPackageUrl": null
+		}
+	},
+	"tsHostingPlanSkuName": {
+      "type": "string",
+      "defaultValue": "S1"
+    },
+    "tsHostingPlanSkuCapacity": {
+      "type": "int",
+      "defaultValue": 1
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().location]"
+    },
+	"tsHostingPlanName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-def-ts-hp')]"
+    },
+    "defTsWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-def-ts')]"
+    },
+    "xcCollectWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-xc-collect')]"
+    },
+	"cmWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').cmWebAppName, concat(parameters('deploymentId'), '-cm'))]"
+    },
+	"sitecoreAdminPassword": {
+      "type": "securestring",
+      "minLength": 8,
+	  "defaultValue": "[parameters('standard').sitecoreAdminPassword]"
+    },
+    "passwordSalt": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().id]"
+    },
+	"msDeployPackageUrl": {
+		"type": "securestring",
+		"minLength": 1,
+		"defaultValue": "[parameters('extension').msDeployPackageUrl]"
+	},
+    "authCertificateName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-auth')]"
+    },
+    "authCertificateBlob": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').authCertificateBlob]"
+    },
+    "authCertificatePassword": {
+      "type": "securestring",
+      "minLength": 1,
+	  "defaultValue": "[parameters('standard').authCertificatePassword]"
+    },
+	"useApplicationInsights": {
+      "type": "bool",
+      "defaultValue": "[parameters('standard').useApplicationInsights]"
+    },
+    "applicationInsightsName": {
+      "type": "string",
+      "defaultValue": "[parameters('standard').applicationInsightsName]"
+    },
+	"tsHostingPlanSkuName": {
+      "type": "string",
+      "defaultValue": "S1"
+    },
+    "tsHostingPlanSkuCapacity": {
+      "type": "int",
+      "defaultValue": 1
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "name": "[variables('tsHostingPlanNameTidy')]",
+      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "sku": {
+        "name": "[parameters('tsHostingPlanSkuName')]",
+        "capacity": "[parameters('tsHostingPlanSkuCapacity')]"
+      },
+      "properties": {
+        "name": "[variables('tsHostingPlanNameTidy')]"
+      },
+      "location": "[parameters('location')]"
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "name": "[variables('defTsWebAppNameTidy')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "clientCertEnabled": true,
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('tsHostingPlanNameTidy'))]",
+        "siteConfig": {
+          "use32BitWorkerProcess": false,
+          "alwaysOn": true,
+          "phpVersion": "",
+          "defaultDocuments": [
+            "index.html"
+          ]
+        }
+      },
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('tsHostingPlanNameTidy'))]"
+      ]
+    },
+	{
+      "type": "Microsoft.Web/certificates",
+      "name": "[variables('authCertificateNameTidy')]",
+      "apiVersion": "[variables('certificateApiVersion')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('tsHostingPlanNameTidy'))]",
+		"[resourceId('Microsoft.Web/sites', variables('defTsWebAppNameTidy'))]"
+      ],
+      "properties": {
+        "password": "[parameters('authCertificatePassword')]",
+        "pfxBlob": "[parameters('authCertificateBlob')]"
+      }
+    },
+    {
+      "name": "[concat(variables('defTsWebAppNameTidy'), '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "WEBSITE_LOAD_CERTIFICATES": "[reference(resourceId('Microsoft.Web/certificates', variables('authCertificateNameTidy'))).thumbprint]",
+        "WEBSITE_DYNAMIC_CACHE": 0
+      },
+      "dependsOn": [
+	    "[concat('Microsoft.Web/sites/', variables('defTsWebAppNameTidy'), '/Extensions/MSDeploy')]",
+		"[resourceId('Microsoft.Web/certificates', variables('authCertificateNameTidy'))]"
+      ]
+    },
+	{ 
+      "name": "[concat(variables('defTsWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "packageUri": "[parameters('msDeployPackageUrl')]",
+        "setParameters": {
+          "Application Path": "[variables('defTsWebAppNameTidy')]",
+          "Initial Tenant Service Tenant Id": "[variables('connectionStringParameters').tenantId]",
+          "Sitecore Web API Host Name": "[variables('connectionStringParameters').hostName]",
+          "Sitecore Web API User Name": "[variables('connectionStringParameters').sitecoreUser]",
+          "Sitecore Web API User Password": "[variables('connectionStringParameters').sitecoreUserPassword]",
+		  "XConnect Collection": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('xcCollectWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
+          "XConnect Collection Certificate": "[concat('StoreName=My;StoreLocation=CurrentUser;FindType=FindByThumbprint;FindValue=', reference(resourceId('Microsoft.Web/certificates', variables('authCertificateNameTidy'))).thumbprint)]",
+		  "Tenant Service Application Insights Key": "[if(greater(length(variables('appInsightsNameTidy')), 1), reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey, '00000000-0000-0000-0000-000000000000')]"
+        }
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Web/sites/', variables('defTsWebAppNameTidy'), '/config/appsettings')]"
+      ]
+    }
+  ],
+  "outputs": {
+    "infrastructure": {
+      "type": "object",
+      "value": {
+        "authCertificateThumbprint": "[reference(resourceId('Microsoft.Web/certificates', variables('authCertificateNameTidy'))).thumbprint]"
+      }
+    }
+  }
+}
