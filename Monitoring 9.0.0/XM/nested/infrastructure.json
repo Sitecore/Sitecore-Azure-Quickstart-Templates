@@ -43,6 +43,9 @@
     "templateLinkAccessToken": {
       "type": "securestring",
       "defaultValue": ""
+    },
+    "resourceTags": {
+      "type": "object"
     }
   },
   "variables": {
@@ -55,27 +58,14 @@
     "omsWorkspaceApiVersion": "2017-03-15-preview",
     "omsWorkspaceSku": "standalone",
     "actionGroupApiVersion": "2018-03-01",
-    "actionGroupName": "[concat(toLower(parameters('deploymentId')), '-AG')]",
-    "resourceTags": {
-      "sc-monitoring-type": "Basic",
-      "sc-monitoring-pkg-version": "2.3.2-r200609",
-      "sc-monitoring": "Yes",
-      "sc-monitoring-sc-version": "9.0.0",
-      "sc-monitoring-sc-topology": "xm"
-    }
+    "actionGroupName": "[concat(toLower(parameters('deploymentId')), '-AG')]"
   },
   "resources": [
     {
       "apiVersion": "[variables('omsWorkspaceApiVersion')]",
       "name": "[variables('omsWorkspaceName')]",
       "type": "Microsoft.OperationalInsights/workspaces",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "9.0.0",
-        "sc-monitoring-sc-topology": "xm"
-      },
+      "tags": "[parameters('resourceTags')]",
       "location": "[parameters('omsWorkspaceLocation')]",
       "id": "[variables('omsWorkspaceId')]",
       "properties": {
@@ -89,13 +79,7 @@
       "type": "Microsoft.Insights/actionGroups",
       "apiVersion": "[variables('actionGroupApiVersion')]",
       "name": "[variables('actionGroupName')]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "9.0.0",
-        "sc-monitoring-sc-topology": "xm"
-      },
+      "tags": "[parameters('resourceTags')]",
       "location": "global",
       "properties": {
         "groupShortName": "ScAlerts",
