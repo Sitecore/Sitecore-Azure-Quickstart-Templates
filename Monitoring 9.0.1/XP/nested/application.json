@@ -36,910 +36,6 @@
   "resources": [
     {
       "apiVersion": "[variables('dashboardApiVersion')]",
-      "name": "[concat(parameters('omsWorkspaceName'),'/Performance Overview | ',variables('sitecoreResourceGroup'))]",
-      "id": "[concat(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName')),'/views/Performance Overview | ',variables('sitecoreResourceGroup'))]",
-      "type": "Microsoft.OperationalInsights/workspaces/views",
-      "location": "[parameters('omsWorkspaceLocation')]",
-      "properties": {
-        "Id": "[concat('Performance Overview | ',variables('sitecoreResourceGroup'))]",
-        "Name": "[concat('Performance Overview | ',variables('sitecoreResourceGroup'))]",
-        "Description": "Performance Overview Description",
-        "Author": "Sitecore",
-        "Source": "Sitecore",
-        "Version": 2,
-        "Dashboard": [
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat('WEB APPLICATIONS LOAD')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "CPU Time per app",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceProvider=\"MICROSOFT.WEB\";let resourceIdContains=\"/MICROSOFT.WEB/SITES\";let metricName=\"CpuTime\";AzureMetrics | where ResourceId contains resourceIdContains and ResourceProvider == resourceProvider and MetricName == \"CpuTime\" | summarize AggregatedValue = avg(Average) by Resource,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "",
-                        "baseUnit": "",
-                        "displayUnit": ""
-                      },
-                      "customLabel": "sec"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Requests per second",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceProvider=\"MICROSOFT.WEB\"; let resourceIdContains=\"/MICROSOFT.WEB/SITES\"; let metricName=\"Requests\"; AzureMetrics | where ResourceId contains resourceIdContains and ResourceProvider == resourceProvider  and MetricName == \"Requests\" | summarize AggregatedValue = avg(Average) by Resource,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceProvider=\"MICROSOFT.WEB\";let resourceIdContains=\"/MICROSOFT.WEB/SITES\";let metricName=\"AverageResponseTime\";AzureMetrics | where ResourceId contains resourceIdContains and ResourceProvider == resourceProvider and MetricName == \"AverageResponseTime\" | summarize AggregatedValue = avg(Average) by Resource,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Milliseconds",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat('SEARCH SERVICES PERFORMANCE')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "Search requests per second",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let metricName =\"SearchQueriesPerSecond\";let resourceProvider =\"MICROSOFT.SEARCH\";let resourceIdContains =\"/SEARCHSERVICES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName | summarize AverageQueryResponsePerSec = avg(Average) by Resource,bin(TimeGenerated, 1s)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Search request latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let metricName =\"SearchLatency\";let resourceProvider =\"MICROSOFT.SEARCH\";let resourceIdContains =\"/SEARCHSERVICES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName | summarize AggregatedValue = max(Maximum) by bin(TimeGenerated, 5m),Resource')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Seconds",
-                        "displayUnit": "Milliseconds"
-                      },
-                      "customLabel": "ms"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Throttled requests per second",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let metricName =\"ThrottledSearchQueriesPercentage\";let resourceProvider =\"MICROSOFT.SEARCH\";let resourceIdContains =\"/SEARCHSERVICES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 5m),Resource')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat('REDIS CACHE ',parameters('deploymentId'),'-redis')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "Operations",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-redis','\";let metricName = dynamic ([\"operationsPerSecond\", \"totalcommandsprocessed\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"operationsPerSecond\" , \"Operations per second\" ,MetricName == \"totalcommandsprocessed\" , \"Total commands processed\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Count"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Load",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-redis','\";let metricName = dynamic ([\"serverLoad\", \"percentProcessorTime\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"serverLoad\" , \"Server Load\" ,MetricName == \"percentProcessorTime\" , \"CPU\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Percentage",
-                        "baseUnit": "ZeroToOne",
-                        "displayUnit": "ZeroToOne"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Memory",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-redis','\";let metricName = dynamic ([\"usedmemory\", \"usedmemoryRss\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"usedmemory\" , \"Used Memory\" ,MetricName == \"usedmemoryRss\" , \"Used Memory RSS\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Bits",
-                        "baseUnit": "Bytes",
-                        "displayUnit": "Bytes"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat(parameters('deploymentId'),'-cd')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "HTTP requests by response code",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Bytes In/Out",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Bits",
-                        "baseUnit": "Bytes",
-                        "displayUnit": "Kilobytes"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Milliseconds",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat(parameters('deploymentId'),'-cm')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "HTTP requests by response code",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Bytes In/Out",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Bits",
-                        "baseUnit": "Bytes",
-                        "displayUnit": "Kilobytes"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Milliseconds",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat(parameters('deploymentId'),'-ma-ops')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "HTTP requests by response code",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-ops','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Bytes In/Out",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-ops','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Bits",
-                        "baseUnit": "Bytes",
-                        "displayUnit": "Kilobytes"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-ops','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Milliseconds",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat(parameters('deploymentId'),'-ma-rep')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "HTTP requests by response code",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-rep','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Bytes In/Out",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-rep','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Bits",
-                        "baseUnit": "Bytes",
-                        "displayUnit": "Kilobytes"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-rep','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Milliseconds",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat(parameters('deploymentId'),'-prc')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "HTTP requests by response code",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-prc','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Bytes In/Out",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-prc','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Bits",
-                        "baseUnit": "Bytes",
-                        "displayUnit": "Kilobytes"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-prc','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Milliseconds",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat(parameters('deploymentId'),'-rep')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "HTTP requests by response code",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Bytes In/Out",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Bits",
-                        "baseUnit": "Bytes",
-                        "displayUnit": "Kilobytes"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Milliseconds",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat(parameters('deploymentId'),'-xc-collect')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "HTTP requests by response code",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-collect','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Bytes In/Out",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-collect','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Bits",
-                        "baseUnit": "Bytes",
-                        "displayUnit": "Kilobytes"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-collect','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Milliseconds",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat(parameters('deploymentId'),'-xc-refdata')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "HTTP requests by response code",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-refdata','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Bytes In/Out",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-refdata','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Bits",
-                        "baseUnit": "Bytes",
-                        "displayUnit": "Kilobytes"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-refdata','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Milliseconds",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Id": "LineChartCalloutStackedBuilderBlade",
-            "Type": "Blade",
-            "Version": 0,
-            "Configuration": {
-              "General": {
-                "title": "[concat(parameters('deploymentId'),'-xc-search')]",
-                "newGroup": false
-              },
-              "charts": [
-                {
-                  "Header": {
-                    "Title": "HTTP requests by response code",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-search','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Count",
-                        "baseUnit": "Ones",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": "Requests"
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Bytes In/Out",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-search','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "Bits",
-                        "baseUnit": "Bytes",
-                        "displayUnit": "Kilobytes"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                },
-                {
-                  "Header": {
-                    "Title": "Latency",
-                    "Subtitle": ""
-                  },
-                  "LineChart": {
-                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-search','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
-                    "yAxis": {
-                      "isLogarithmic": false,
-                      "units": {
-                        "baseUnitType": "TimeRange",
-                        "baseUnit": "Milliseconds",
-                        "displayUnit": "AUTO"
-                      },
-                      "customLabel": ""
-                    },
-                    "NavigationSelect": {}
-                  }
-                }
-              ]
-            }
-          }
-        ],
-        "Filters": [],
-        "OverviewTile": {
-          "Id": "MultiQueryDonutBuilderTile",
-          "Type": "OverviewTile",
-          "Version": 2,
-          "Configuration": {
-            "Donut": {
-              "Arcs": {
-                "Arc1": {
-                  "Legend": "Critical",
-                  "Query": "let resourceIdContains=\"MICROSOFT.WEB/SITES\";let metricName=\"AverageResponseTime\"; AzureMetrics | distinct  TimeGenerated |top 5 by TimeGenerated | join kind= inner (AzureMetrics | where ResourceId contains resourceIdContains and MetricName == metricName) on TimeGenerated | summarize  AvgRespTime = max(Maximum) , ResTotalResult = count(1) by Resource  | project Status = case( AvgRespTime > 2.5 , \"Critical\", \"\")  | summarize AggregratedValue = countif(Status == \"Critical\")"
-                },
-                "Arc2": {
-                  "Legend": "High-Load",
-                  "Query": "let resourceIdContains=\"MICROSOFT.WEB/SITES\";let metricName=\"AverageResponseTime\"; AzureMetrics | distinct  TimeGenerated |top 5 by TimeGenerated | join kind= inner (AzureMetrics | where ResourceId contains resourceIdContains and MetricName == metricName) on TimeGenerated | summarize  AvgRespTime = max(Maximum) , ResTotalResult = count(1) by Resource  | project Status = case( AvgRespTime > 0.5 and AvgRespTime <=2.5 , \"Warning\", \"\")  | summarize AggregratedValue = countif(Status == \"Warning\")"
-                },
-                "Arc3": {
-                  "Legend": "Normal",
-                  "Query": "let resourceIdContains=\"MICROSOFT.WEB/SITES\";let metricName=\"AverageResponseTime\"; AzureMetrics | distinct  TimeGenerated |top 5 by TimeGenerated | join kind= inner (AzureMetrics | where ResourceId contains resourceIdContains and MetricName == metricName) on TimeGenerated | summarize  AvgRespTime = max(Maximum) , ResTotalResult = count(1) by Resource  | project Status = case( AvgRespTime <=0.5  , \"Normal\", \"\")  | summarize AggregratedValue = countif(Status == \"Normal\")"
-                }
-              },
-              "CenterLegend": {
-                "Text": "",
-                "Operation": "Sum",
-                "ArcsToSelect": {
-                  "Arc1": true,
-                  "Arc2": true,
-                  "Arc3": true
-                }
-              },
-              "Options": {
-                "colors": [
-                  "#ba141a",
-                  "#ffb900",
-                  "#009e49"
-                ]
-              }
-            },
-            "Advanced": {
-              "DataFlowVerification": {
-                "Enabled": false,
-                "Query": "search * | limit 1 | project TimeGenerated",
-                "Message": ""
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "apiVersion": "[variables('dashboardApiVersion')]",
       "name": "[concat(parameters('omsWorkspaceName'),'/Database Performance | ',variables('sitecoreResourceGroup'))]",
       "id": "[concat(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName')),'/views/Database Performance | ',variables('sitecoreResourceGroup'))]",
       "type": "Microsoft.OperationalInsights/workspaces/views",
@@ -1952,6 +1048,910 @@
                 "Arc3": {
                   "Legend": "Normal",
                   "Query": "let resourceIdContains=\"MICROSOFT.SQL/SERVERS\";let metricName=\"dtu_consumption_percent\"; AzureMetrics | distinct  TimeGenerated | top 15 by TimeGenerated | join kind= inner (AzureMetrics | where ResourceId contains resourceIdContains and MetricName == metricName )  on TimeGenerated  | summarize  Load = max(Maximum) , ResTotalResult = count(1) by Resource | project Status = case( Load <=70 , \"Normal\",\"\") | summarize AggregratedValue = countif(Status == \"Normal\")"
+                }
+              },
+              "CenterLegend": {
+                "Text": "",
+                "Operation": "Sum",
+                "ArcsToSelect": {
+                  "Arc1": true,
+                  "Arc2": true,
+                  "Arc3": true
+                }
+              },
+              "Options": {
+                "colors": [
+                  "#ba141a",
+                  "#ffb900",
+                  "#009e49"
+                ]
+              }
+            },
+            "Advanced": {
+              "DataFlowVerification": {
+                "Enabled": false,
+                "Query": "search * | limit 1 | project TimeGenerated",
+                "Message": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('dashboardApiVersion')]",
+      "name": "[concat(parameters('omsWorkspaceName'),'/Performance Overview | ',variables('sitecoreResourceGroup'))]",
+      "id": "[concat(resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName')),'/views/Performance Overview | ',variables('sitecoreResourceGroup'))]",
+      "type": "Microsoft.OperationalInsights/workspaces/views",
+      "location": "[parameters('omsWorkspaceLocation')]",
+      "properties": {
+        "Id": "[concat('Performance Overview | ',variables('sitecoreResourceGroup'))]",
+        "Name": "[concat('Performance Overview | ',variables('sitecoreResourceGroup'))]",
+        "Description": "Performance Overview Description",
+        "Author": "Sitecore",
+        "Source": "Sitecore",
+        "Version": 2,
+        "Dashboard": [
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat('WEB APPLICATIONS LOAD')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "CPU Time per app",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceProvider=\"MICROSOFT.WEB\";let resourceIdContains=\"/MICROSOFT.WEB/SITES\";let metricName=\"CpuTime\";AzureMetrics | where ResourceId contains resourceIdContains and ResourceProvider == resourceProvider and MetricName == \"CpuTime\" | summarize AggregatedValue = avg(Average) by Resource,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "",
+                        "baseUnit": "",
+                        "displayUnit": ""
+                      },
+                      "customLabel": "sec"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Requests per second",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceProvider=\"MICROSOFT.WEB\"; let resourceIdContains=\"/MICROSOFT.WEB/SITES\"; let metricName=\"Requests\"; AzureMetrics | where ResourceId contains resourceIdContains and ResourceProvider == resourceProvider  and MetricName == \"Requests\" | summarize AggregatedValue = avg(Average) by Resource,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Requests"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Latency",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceProvider=\"MICROSOFT.WEB\";let resourceIdContains=\"/MICROSOFT.WEB/SITES\";let metricName=\"AverageResponseTime\";AzureMetrics | where ResourceId contains resourceIdContains and ResourceProvider == resourceProvider and MetricName == \"AverageResponseTime\" | summarize AggregatedValue = avg(Average) by Resource,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "TimeRange",
+                        "baseUnit": "Milliseconds",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat('SEARCH SERVICES PERFORMANCE')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "Search requests per second",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let metricName =\"SearchQueriesPerSecond\";let resourceProvider =\"MICROSOFT.SEARCH\";let resourceIdContains =\"/SEARCHSERVICES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName | summarize AverageQueryResponsePerSec = avg(Average) by Resource,bin(TimeGenerated, 1s)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Requests"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Search request latency",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let metricName =\"SearchLatency\";let resourceProvider =\"MICROSOFT.SEARCH\";let resourceIdContains =\"/SEARCHSERVICES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName | summarize AggregatedValue = max(Maximum) by bin(TimeGenerated, 5m),Resource')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "TimeRange",
+                        "baseUnit": "Seconds",
+                        "displayUnit": "Milliseconds"
+                      },
+                      "customLabel": "ms"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Throttled requests per second",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let metricName =\"ThrottledSearchQueriesPercentage\";let resourceProvider =\"MICROSOFT.SEARCH\";let resourceIdContains =\"/SEARCHSERVICES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName | summarize AggregatedValue = avg(Average) by bin(TimeGenerated, 5m),Resource')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Requests"
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat('REDIS CACHE ',parameters('deploymentId'),'-redis')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "Operations",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-redis','\";let metricName = dynamic ([\"operationsPerSecond\", \"totalcommandsprocessed\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"operationsPerSecond\" , \"Operations per second\" ,MetricName == \"totalcommandsprocessed\" , \"Total commands processed\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Count"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Load",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-redis','\";let metricName = dynamic ([\"serverLoad\", \"percentProcessorTime\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"serverLoad\" , \"Server Load\" ,MetricName == \"percentProcessorTime\" , \"CPU\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Percentage",
+                        "baseUnit": "ZeroToOne",
+                        "displayUnit": "ZeroToOne"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Memory",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-redis','\";let metricName = dynamic ([\"usedmemory\", \"usedmemoryRss\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"usedmemory\" , \"Used Memory\" ,MetricName == \"usedmemoryRss\" , \"Used Memory RSS\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Bits",
+                        "baseUnit": "Bytes",
+                        "displayUnit": "Bytes"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat(parameters('deploymentId'),'-cd')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "HTTP requests by response code",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Requests"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Bytes In/Out",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Bits",
+                        "baseUnit": "Bytes",
+                        "displayUnit": "Kilobytes"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Latency",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "TimeRange",
+                        "baseUnit": "Milliseconds",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat(parameters('deploymentId'),'-cm')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "HTTP requests by response code",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Requests"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Bytes In/Out",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Bits",
+                        "baseUnit": "Bytes",
+                        "displayUnit": "Kilobytes"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Latency",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "TimeRange",
+                        "baseUnit": "Milliseconds",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat(parameters('deploymentId'),'-ma-ops')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "HTTP requests by response code",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-ops','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Requests"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Bytes In/Out",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-ops','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Bits",
+                        "baseUnit": "Bytes",
+                        "displayUnit": "Kilobytes"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Latency",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-ops','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "TimeRange",
+                        "baseUnit": "Milliseconds",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat(parameters('deploymentId'),'-ma-rep')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "HTTP requests by response code",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-rep','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Requests"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Bytes In/Out",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-rep','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Bits",
+                        "baseUnit": "Bytes",
+                        "displayUnit": "Kilobytes"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Latency",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-ma-rep','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "TimeRange",
+                        "baseUnit": "Milliseconds",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat(parameters('deploymentId'),'-prc')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "HTTP requests by response code",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-prc','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Requests"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Bytes In/Out",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-prc','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Bits",
+                        "baseUnit": "Bytes",
+                        "displayUnit": "Kilobytes"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Latency",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-prc','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "TimeRange",
+                        "baseUnit": "Milliseconds",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat(parameters('deploymentId'),'-rep')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "HTTP requests by response code",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Requests"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Bytes In/Out",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Bits",
+                        "baseUnit": "Bytes",
+                        "displayUnit": "Kilobytes"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Latency",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "TimeRange",
+                        "baseUnit": "Milliseconds",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat(parameters('deploymentId'),'-xc-collect')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "HTTP requests by response code",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-collect','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Requests"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Bytes In/Out",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-collect','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Bits",
+                        "baseUnit": "Bytes",
+                        "displayUnit": "Kilobytes"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Latency",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-collect','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "TimeRange",
+                        "baseUnit": "Milliseconds",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat(parameters('deploymentId'),'-xc-refdata')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "HTTP requests by response code",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-refdata','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Requests"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Bytes In/Out",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-refdata','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Bits",
+                        "baseUnit": "Bytes",
+                        "displayUnit": "Kilobytes"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Latency",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-refdata','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "TimeRange",
+                        "baseUnit": "Milliseconds",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "Id": "LineChartCalloutStackedBuilderBlade",
+            "Type": "Blade",
+            "Version": 0,
+            "Configuration": {
+              "General": {
+                "title": "[concat(parameters('deploymentId'),'-xc-search')]",
+                "newGroup": false
+              },
+              "charts": [
+                {
+                  "Header": {
+                    "Title": "HTTP requests by response code",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-search','\";let metricName = dynamic ([\"Http101\", \"Http2xx\", \"Http3xx\", \"Http4xx\", \"Http5xx\"]);AzureMetrics | where Resource == toupper(resourceName) and MetricName in (metricName)  | summarize AggregatedValue = sum(Count) by MetricName, bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Count",
+                        "baseUnit": "Ones",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": "Requests"
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Bytes In/Out",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-search','\";let metricName = dynamic ([\"BytesSent\", \"BytesReceived\"]);AzureMetrics | where  Resource ==toupper(resourceName) and MetricName in (metricName) | extend  Legends = case( MetricName == \"BytesSent\" , \"Out\" ,MetricName == \"BytesReceived\" , \"In\"  ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "Bits",
+                        "baseUnit": "Bytes",
+                        "displayUnit": "Kilobytes"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                },
+                {
+                  "Header": {
+                    "Title": "Latency",
+                    "Subtitle": ""
+                  },
+                  "LineChart": {
+                    "Query": "[concat('let resourceName = \"',parameters('deploymentId'),'-xc-search','\";let metricName = \"AverageResponseTime\";AzureMetrics | where  Resource ==toupper(resourceName) and MetricName == metricName | extend  Legends = case( MetricName == \"AverageResponseTime\" , \"Response Time\" ,\"\") | summarize AggregatedValue = avg(Average) by Legends,bin(TimeGenerated, 5m)')]",
+                    "yAxis": {
+                      "isLogarithmic": false,
+                      "units": {
+                        "baseUnitType": "TimeRange",
+                        "baseUnit": "Milliseconds",
+                        "displayUnit": "AUTO"
+                      },
+                      "customLabel": ""
+                    },
+                    "NavigationSelect": {}
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "Filters": [],
+        "OverviewTile": {
+          "Id": "MultiQueryDonutBuilderTile",
+          "Type": "OverviewTile",
+          "Version": 2,
+          "Configuration": {
+            "Donut": {
+              "Arcs": {
+                "Arc1": {
+                  "Legend": "Critical",
+                  "Query": "let resourceIdContains=\"MICROSOFT.WEB/SITES\";let metricName=\"AverageResponseTime\"; AzureMetrics | distinct  TimeGenerated |top 5 by TimeGenerated | join kind= inner (AzureMetrics | where ResourceId contains resourceIdContains and MetricName == metricName) on TimeGenerated | summarize  AvgRespTime = max(Maximum) , ResTotalResult = count(1) by Resource  | project Status = case( AvgRespTime > 2.5 , \"Critical\", \"\")  | summarize AggregratedValue = countif(Status == \"Critical\")"
+                },
+                "Arc2": {
+                  "Legend": "High-Load",
+                  "Query": "let resourceIdContains=\"MICROSOFT.WEB/SITES\";let metricName=\"AverageResponseTime\"; AzureMetrics | distinct  TimeGenerated |top 5 by TimeGenerated | join kind= inner (AzureMetrics | where ResourceId contains resourceIdContains and MetricName == metricName) on TimeGenerated | summarize  AvgRespTime = max(Maximum) , ResTotalResult = count(1) by Resource  | project Status = case( AvgRespTime > 0.5 and AvgRespTime <=2.5 , \"Warning\", \"\")  | summarize AggregratedValue = countif(Status == \"Warning\")"
+                },
+                "Arc3": {
+                  "Legend": "Normal",
+                  "Query": "let resourceIdContains=\"MICROSOFT.WEB/SITES\";let metricName=\"AverageResponseTime\"; AzureMetrics | distinct  TimeGenerated |top 5 by TimeGenerated | join kind= inner (AzureMetrics | where ResourceId contains resourceIdContains and MetricName == metricName) on TimeGenerated | summarize  AvgRespTime = max(Maximum) , ResTotalResult = count(1) by Resource  | project Status = case( AvgRespTime <=0.5  , \"Normal\", \"\")  | summarize AggregratedValue = countif(Status == \"Normal\")"
                 }
               },
               "CenterLegend": {

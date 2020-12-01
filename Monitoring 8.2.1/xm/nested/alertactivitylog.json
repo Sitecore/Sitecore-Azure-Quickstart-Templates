@@ -1,0 +1,70 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "infrastructure": {
+            "type": "secureObject",
+            "defaultValue": {}
+        },
+        "deploymentId": {
+            "type": "string"
+        },
+        "resourceTags": {
+            "type": "object"
+        }
+    },
+    "variables": {
+        "applicationInsightsResourceName": "[concat(parameters('deploymentId'),'-ai')]",
+        "actionGroupResourceId": "[parameters('infrastructure').actionGroupName]"
+    },
+    "resources": [
+        {
+            "type": "microsoft.insights/activityLogAlerts",
+            "apiVersion": "2017-04-01",
+            "name": "Application Insights component daily cap reached",
+            "location": "global",
+            "tags": "[parameters('resourceTags')]",
+            "properties": {
+                "scopes": [
+                    "[concat('/subscriptions/',subscription().subscriptionId)]"
+                ],
+                "condition": {
+                    "allOf": [
+                        {
+                            "field": "category",
+                            "equals": "Administrative"
+                        },
+                        {
+                            "field": "resourceId",
+                            "equals": "[resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName'))]"
+                        },
+                        {
+                            "field": "operationName",
+                            "equals": "Microsoft.Insights/Components/DailyCapReached/Action"
+                        }
+                    ]
+                },
+                "actions": {
+                    "actionGroups": [
+                        {
+                            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('actionGroupResourceId'))]",
+                            "webhookProperties": {
+                                "resultCount": "§§#searchresultcount§§",
+                                "alertRuleName": "§§Application Insights component daily cap reached§§",
+                                "servicename": "§§Managed Cloud§§",
+                                "subsid": "[concat('§§',subscription().subscriptionId,'§§')]",
+                                "resgroup": "[concat('§§',resourceGroup().name,'§§')]",
+                                "subsname": "[concat('§§',subscription().displayName,'§§')]",
+                                "Resource": "§§Application Insights§§",
+                                "tentype": "[concat('§§','Customers','§§')]",
+                                "reslink": "[concat('§§','https://portal.azure.com/#@tenantid/resource/subscriptions/',subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/','Microsoft.Insights/components/',parameters('deploymentId'),'-ai/applicationInsightsBilling','§§')]",
+                                "alias": "[concat('§§',uniqueString(resourceGroup().id, concat(parameters('deploymentId'),'-ai','-dailycap-alert')),'§§')]"
+                            }
+                        }
+                    ]
+                },
+                "enabled": true
+            }
+        }
+    ]
+}

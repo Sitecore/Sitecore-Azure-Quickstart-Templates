@@ -35,12 +35,16 @@
       "metadata": {
         "description": "The name of the action group to be associated with the alerts actions"
       }
+    },
+    "resourceTags": {
+      "type": "object"
     }
   },
   "variables": {
     "actionGroupResourceId": "[resourceId('Microsoft.Insights/actionGroups',parameters('actionGroupName'))]",
     "workspaceApiVersion": "2017-04-26-preview",
-    "alertResourcesApiVersion": "2018-04-16"
+    "alertResourcesApiVersion": "2018-04-16",
+    "metricAlertResourcesApiVersion": "2018-03-01"
   },
   "resources": [
     {
@@ -48,18 +52,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high DTU_', parameters('deploymentId'),'-core-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\"; let metricName =\"dtu_consumption_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\"; let metricName =\"dtu_consumption_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -94,18 +92,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high CPU usage_', parameters('deploymentId'),'-core-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\"; let metricName =\"cpu_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\"; let metricName =\"cpu_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -140,18 +132,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting low storage space_', parameters('deploymentId'),'-core-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\"; let metricName =\"storage_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\"; let metricName =\"storage_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -186,18 +172,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high Data IO Utilization_', parameters('deploymentId'),'-core-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\";let metricName =\"physical_data_read_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\";let metricName =\"physical_data_read_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -232,18 +212,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high Resource Utilization_', parameters('deploymentId'),'-core-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\";let metricName =\"log_write_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\";let metricName =\"log_write_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -278,18 +252,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high concurrent requests_', parameters('deploymentId'),'-core-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\";let metricName =\"workers_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\";let metricName =\"workers_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -324,18 +292,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high DTU_', parameters('deploymentId'),'-master-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\"; let metricName =\"dtu_consumption_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\"; let metricName =\"dtu_consumption_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -370,18 +332,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high CPU usage_', parameters('deploymentId'),'-master-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\"; let metricName =\"cpu_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\"; let metricName =\"cpu_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -416,18 +372,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting low storage space_', parameters('deploymentId'),'-master-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\"; let metricName =\"storage_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\"; let metricName =\"storage_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -462,18 +412,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high Data IO Utilization_', parameters('deploymentId'),'-master-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\";let metricName =\"physical_data_read_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\";let metricName =\"physical_data_read_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -508,18 +452,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high Resource Utilization_', parameters('deploymentId'),'-master-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\";let metricName =\"log_write_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\";let metricName =\"log_write_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -554,18 +492,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high concurrent requests_', parameters('deploymentId'),'-master-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\";let metricName =\"workers_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\";let metricName =\"workers_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -600,18 +532,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high DTU_', parameters('deploymentId'),'-reporting-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\"; let metricName =\"dtu_consumption_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\"; let metricName =\"dtu_consumption_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -646,18 +572,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high CPU usage_', parameters('deploymentId'),'-reporting-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\"; let metricName =\"cpu_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\"; let metricName =\"cpu_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -692,18 +612,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting low storage space_', parameters('deploymentId'),'-reporting-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\"; let metricName =\"storage_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\"; let metricName =\"storage_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -738,18 +652,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high Data IO Utilization_', parameters('deploymentId'),'-reporting-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\";let metricName =\"physical_data_read_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\";let metricName =\"physical_data_read_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -784,18 +692,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high Resource Utilization_', parameters('deploymentId'),'-reporting-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\";let metricName =\"log_write_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\";let metricName =\"log_write_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -830,18 +732,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high concurrent requests_', parameters('deploymentId'),'-reporting-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\";let metricName =\"workers_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\";let metricName =\"workers_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -876,18 +772,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high DTU_', parameters('deploymentId'),'-web-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\"; let metricName =\"dtu_consumption_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m)| top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\"; let metricName =\"dtu_consumption_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -922,18 +812,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high CPU usage_', parameters('deploymentId'),'-web-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\"; let metricName =\"cpu_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\"; let metricName =\"cpu_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -968,18 +852,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting low storage space_', parameters('deploymentId'),'-web-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\"; let metricName =\"storage_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\"; let metricName =\"storage_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -1014,18 +892,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high Data IO Utilization_', parameters('deploymentId'),'-web-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\";let metricName =\"physical_data_read_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\";let metricName =\"physical_data_read_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -1060,18 +932,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high Resource Utilization_', parameters('deploymentId'),'-web-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\";let metricName =\"log_write_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\";let metricName =\"log_write_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -1106,18 +972,12 @@
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": {
-        "sc-monitoring-type": "Basic",
-        "sc-monitoring-pkg-version": "2.3.2-r200609",
-        "sc-monitoring": "Yes",
-        "sc-monitoring-sc-version": "8.2.4",
-        "sc-monitoring-sc-topology": "xp"
-      },
+      "tags": "[parameters('resourceTags')]",
       "properties": {
         "description": "[concat('Check Database reporting high concurrent requests_', parameters('deploymentId'),'-web-db')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\";let metricName =\"workers_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 30 by TimeGenerated')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\";let metricName =\"workers_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
