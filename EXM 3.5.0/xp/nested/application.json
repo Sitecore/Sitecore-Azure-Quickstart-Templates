@@ -4,7 +4,6 @@
   "variables": {
     "webApiVersion": "2016-08-01",
     "searchApiVersion": "2015-08-19",
-    "searchPreviewApiVersion": "2015-02-28-preview",
     "appInsightsApiVersion": "2015-05-01",
     "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebAppName')))]",
     "cdWebAppNameTidy": "[toLower(trim(parameters('cdWebAppName')))]",
@@ -466,7 +465,7 @@
               "Reporting Service Url": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('repWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
               "Reporting Service Api Key": "[parameters('repAuthenticationApiKey')]",
               "Analytics Connection String": "[variables('analyticsMongoDbConnStrTidy')]",
-              "Cloud Search Connection String": "[if(parameters('deployAzureSearch'), concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchPreviewApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey), 'NOT USED')]",
+              "Cloud Search Connection String": "[if(parameters('deployAzureSearch'), concat('serviceUrl=https://', variables('searchServiceNameTidy'), '.search.windows.net;apiVersion=', variables('searchApiVersion'), ';apiKey=', listAdminKeys(resourceId('Microsoft.Search/searchServices', variables('searchServiceNameTidy')), variables('searchApiVersion')).primaryKey), 'NOT USED')]",
               "Tracking Live Connection String": "[variables('trackingLiveMongoDbConnStrTidy')]",
               "Tracking Contact Connection String": "[variables('trackingContactMongoDbConnStrTidy')]",
               "Application Insights Instrumentation Key": "[reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).InstrumentationKey]",
