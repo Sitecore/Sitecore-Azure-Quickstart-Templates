@@ -62,13 +62,13 @@
           "queryType": "ResultCount"
         },
         "schedule": {
-          "frequencyInMinutes": "5",
+          "frequencyInMinutes": "15",
           "timeWindowInMinutes": "60"
         },
         "action": {
           "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
           "severity": "1",
-          "throttlingInMin": "0",
+          "throttlingInMin": "479",
           "aznsAction": {
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
@@ -102,13 +102,13 @@
           "queryType": "ResultCount"
         },
         "schedule": {
-          "frequencyInMinutes": "5",
+          "frequencyInMinutes": "15",
           "timeWindowInMinutes": "60"
         },
         "action": {
           "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
           "severity": "1",
-          "throttlingInMin": "0",
+          "throttlingInMin": "479",
           "aznsAction": {
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
@@ -142,13 +142,13 @@
           "queryType": "ResultCount"
         },
         "schedule": {
-          "frequencyInMinutes": "5",
+          "frequencyInMinutes": "15",
           "timeWindowInMinutes": "60"
         },
         "action": {
           "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
           "severity": "1",
-          "throttlingInMin": "0",
+          "throttlingInMin": "479",
           "aznsAction": {
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
@@ -182,13 +182,13 @@
           "queryType": "ResultCount"
         },
         "schedule": {
-          "frequencyInMinutes": "5",
+          "frequencyInMinutes": "15",
           "timeWindowInMinutes": "60"
         },
         "action": {
           "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
           "severity": "1",
-          "throttlingInMin": "0",
+          "throttlingInMin": "479",
           "aznsAction": {
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
@@ -222,13 +222,13 @@
           "queryType": "ResultCount"
         },
         "schedule": {
-          "frequencyInMinutes": "5",
+          "frequencyInMinutes": "15",
           "timeWindowInMinutes": "60"
         },
         "action": {
           "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
           "severity": "1",
-          "throttlingInMin": "0",
+          "throttlingInMin": "479",
           "aznsAction": {
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
@@ -262,13 +262,13 @@
           "queryType": "ResultCount"
         },
         "schedule": {
-          "frequencyInMinutes": "5",
+          "frequencyInMinutes": "15",
           "timeWindowInMinutes": "60"
         },
         "action": {
           "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
           "severity": "1",
-          "throttlingInMin": "0",
+          "throttlingInMin": "479",
           "aznsAction": {
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
@@ -302,13 +302,13 @@
           "queryType": "ResultCount"
         },
         "schedule": {
-          "frequencyInMinutes": "5",
+          "frequencyInMinutes": "15",
           "timeWindowInMinutes": "60"
         },
         "action": {
           "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
           "severity": "1",
-          "throttlingInMin": "0",
+          "throttlingInMin": "479",
           "aznsAction": {
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
@@ -342,13 +342,13 @@
           "queryType": "ResultCount"
         },
         "schedule": {
-          "frequencyInMinutes": "5",
+          "frequencyInMinutes": "15",
           "timeWindowInMinutes": "60"
         },
         "action": {
           "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
           "severity": "1",
-          "throttlingInMin": "0",
+          "throttlingInMin": "479",
           "aznsAction": {
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
@@ -382,13 +382,13 @@
           "queryType": "ResultCount"
         },
         "schedule": {
-          "frequencyInMinutes": "5",
+          "frequencyInMinutes": "15",
           "timeWindowInMinutes": "60"
         },
         "action": {
           "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
           "severity": "1",
-          "throttlingInMin": "0",
+          "throttlingInMin": "479",
           "aznsAction": {
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
@@ -422,13 +422,13 @@
           "queryType": "ResultCount"
         },
         "schedule": {
-          "frequencyInMinutes": "5",
+          "frequencyInMinutes": "15",
           "timeWindowInMinutes": "60"
         },
         "action": {
           "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
           "severity": "1",
-          "throttlingInMin": "0",
+          "throttlingInMin": "479",
           "aznsAction": {
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
@@ -462,13 +462,13 @@
           "queryType": "ResultCount"
         },
         "schedule": {
-          "frequencyInMinutes": "5",
+          "frequencyInMinutes": "15",
           "timeWindowInMinutes": "60"
         },
         "action": {
           "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
           "severity": "1",
-          "throttlingInMin": "0",
+          "throttlingInMin": "479",
           "aznsAction": {
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
@@ -502,13 +502,13 @@
           "queryType": "ResultCount"
         },
         "schedule": {
-          "frequencyInMinutes": "5",
+          "frequencyInMinutes": "15",
           "timeWindowInMinutes": "60"
         },
         "action": {
           "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
           "severity": "1",
-          "throttlingInMin": "0",
+          "throttlingInMin": "479",
           "aznsAction": {
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
