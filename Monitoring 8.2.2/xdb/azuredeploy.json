@@ -2,6 +2,16 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "extension": {
+      "type": "secureObject",
+      "defaultValue": {
+        "omsWorkspaceAlertRecipients": null,
+        "omsWorkspaceMetricsRetentionDays": null,
+        "omsWorkspaceLocation": null,
+        "applicationInsightsLocation": null,
+        "templateLinkAccessToken": ""
+      }
+    },
     "standard": {
       "type": "secureObject",
       "defaultValue": {
@@ -12,16 +22,6 @@
     "searchProvider": {
       "type": "string",
       "defaultValue": "Azure"
-    },
-    "extension": {
-      "type": "secureObject",
-      "defaultValue": {
-        "omsWorkspaceAlertRecipients": null,
-        "omsWorkspaceMetricsRetentionDays": null,
-        "omsWorkspaceLocation": null,
-        "applicationInsightsLocation": null,
-        "templateLinkAccessToken": ""
-      }
     },
     "deploymentId": {
       "type": "string",
@@ -72,7 +72,7 @@
     "resourcesApiVersion": "2016-09-01",
     "tags": {
       "sc-monitoring": "Yes",
-      "sc-monitoring-pkg-version": "2.3.4-r201119",
+      "sc-monitoring-pkg-version": "2.4.0-r210215",
       "sc-monitoring-sc-version": "8.2.2",
       "sc-monitoring-type": "Basic",
       "sc-monitoring-sc-topology": "xdb"
