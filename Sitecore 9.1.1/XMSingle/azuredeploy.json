@@ -674,6 +674,7 @@
 
               "singleHostingPlanName": "[parameters('singleHostingPlanName')]",
               "singleWebAppName": "[parameters('singleWebAppName')]",
+              "siWebAppName": "[parameters('siWebAppName')]",
 
               "passwordSalt": "[parameters('passwordSalt')]",
 

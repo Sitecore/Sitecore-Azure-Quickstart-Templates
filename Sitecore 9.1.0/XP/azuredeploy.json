@@ -2027,6 +2027,7 @@
 
               "cmHostingPlanName": "[parameters('cmHostingPlanName')]",
               "cdHostingPlanName": "[parameters('cdHostingPlanName')]",
+              "siHostingPlanName": "[parameters('siHostingPlanName')]",
               "prcHostingPlanName": "[parameters('prcHostingPlanName')]",
               "repHostingPlanName": "[parameters('repHostingPlanName')]",
               "xcBasicHostingPlanName": "[parameters('xcBasicHostingPlanName')]",
@@ -2034,6 +2035,7 @@
 
               "cmWebAppName": "[parameters('cmWebAppName')]",
               "cdWebAppName": "[parameters('cdWebAppName')]",
+              "siWebAppName": "[parameters('siWebAppName')]",
               "prcWebAppName": "[parameters('prcWebAppName')]",
               "repWebAppName": "[parameters('repWebAppName')]",
               "xcRefDataWebAppName": "[parameters('xcRefDataWebAppName')]",
