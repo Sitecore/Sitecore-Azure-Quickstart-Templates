@@ -1,0 +1,203 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "variables": {
+        "webApiVersion": "2016-08-01",
+        "resourcesApiVersion": "2016-09-01",
+        "singleWebAppNameTidy": "[trim(toLower(parameters('singleWebAppName')))]"
+    },
+    "parameters": {
+        "standard": {
+            "type": "secureObject",
+            "defaultValue": {
+                "deploymentId": null,
+                "location": null,
+                "singleWebAppName": null
+            }
+        },
+        "extension": {
+            "type": "secureObject",
+            "defaultValue": {}
+        },
+        "extensionDefaults": {
+            "type": "secureObject",
+            "defaultValue": {
+                "templateLinkAccessToken": "",
+                "defaultProvider":"azure", 
+                "hasStorageAccount": false,
+                "accessTier": "Hot",
+                "blobStorageSKU": "Standard_LRS",
+                "blobStorageType": "BlobStorage",
+                "containerName": "blobcontainer",
+                "supportsHttpsTrafficOnly": true,
+                "blobStorageConnectionString": "" 
+            }
+        },
+        "extensionExpanded": {
+            "type": "secureObject",
+            "defaultValue": "[union(parameters('extensionDefaults'), parameters('extension'))]"
+        },
+        "deploymentId": {
+            "type": "string",
+            "defaultValue": "[coalesce(parameters('standard').deploymentId, resourceGroup().name)]"
+        },
+        "location": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "[coalesce(parameters('standard').location, resourceGroup().location)]"
+        },
+        "blobStorageSKU": {
+            "type": "string",
+            "minLength": 1,
+            "allowedValues": ["Standard_LRS", "Standard_RAGRS", "Standard_GRS"],
+            "defaultValue": "[parameters('extensionExpanded').blobStorageSKU]",
+            "metadata": {
+                "description": "Name of the pricing tier of blob storage"
+            }
+        },
+        "singleWebAppName": {
+            "type": "string",
+            "defaultValue": "[coalesce(parameters('standard').singleWebAppName, concat(parameters('deploymentId'), '-single'))]"
+        },
+        "templateLinkBase": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "[uri(replace(deployment().properties.templateLink.uri,' ','%20'), '.')]"
+        },
+        "templateLinkAccessToken": {
+            "type": "securestring",
+            "defaultValue": "[parameters('extensionExpanded').templateLinkAccessToken]"
+        },
+        "hasStorageAccount": {
+            "type": "bool",
+            "defaultValue": "[parameters('extensionExpanded').hasStorageAccount]",
+            "metadata": {
+                "description": "Providing a blob storage provider"
+            }
+        },
+        "blobStorageConnectionString": {
+            "type": "string",
+            "defaultValue": "[parameters('extensionExpanded').blobStorageConnectionString]",
+            "metadata": {
+                "description": "The blob storage connection string"
+            }
+        },
+        "defaultProvider": {
+            "type": "string",
+            "allowedValues": ["classic", "azure"],
+            "defaultValue": "[parameters('extensionExpanded').defaultProvider]",
+            "metadata": {
+                "description": "The default blob provider"
+            }
+        },
+        "containerName": {
+            "type": "string",
+            "defaultValue": "[parameters('extensionExpanded').containerName]",
+            "metadata": {
+                "description": "The azure storage container name"
+            }
+        },
+        "blobStorageMsDeployPackageUrl": {
+            "type": "securestring",
+            "minLength": 1,
+            "defaultValue": "[parameters('extensionExpanded').blobStorageMsDeployPackageUrl]",
+            "metadata": {
+                "description": "Sitecore Azure Storage Blob provider module WDP url"
+            }
+        },
+        "storageAccountName": {
+            "type": "string",
+            "defaultValue": "[concat(take(replace(parameters('deploymentId'), '-', ''), 4), uniqueString(parameters('deploymentId')), 'sa')]",
+            "minLength": 3,
+            "maxLength": 24,
+            "metadata": {
+                "description": "Storage account name"
+            }
+        },
+        "accessTier": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "[parameters('extensionExpanded').accessTier]",
+            "allowedValues": ["Hot","Cool"],
+            "metadata": {
+                "description": "Storage account accessTier"
+            }
+        },
+        "supportsHttpsTrafficOnly": {
+            "type": "bool",
+            "defaultValue": "[parameters('extensionExpanded').supportsHttpsTrafficOnly]",
+            "metadata": {
+                "description": "Storage account supportsHttpsTrafficOnly"
+            }
+        }
+    },
+    "resources": [{
+            "apiVersion": "[variables('resourcesApiVersion')]",
+            "name": "[concat(parameters('deploymentId'), '-infrastructure')]",
+            "type": "Microsoft.Resources/deployments",
+            "condition": "[not(parameters('hasStorageAccount'))]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/infrastructure.json'), parameters('templateLinkAccessToken'))]"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "storageAccountName": {
+                        "value": "[parameters('storageAccountName')]"
+                    },
+                    "accessTier": {
+                        "value": "[parameters('accessTier')]"
+                    },
+                    "supportsHttpsTrafficOnly": {
+                        "value": "[parameters('supportsHttpsTrafficOnly')]"
+                    },
+                    "accountType": {
+                        "value": "[parameters('blobStorageSKU')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    }
+                }
+            }
+        },{
+            "apiVersion": "[variables('resourcesApiVersion')]",
+            "name": "[concat(parameters('deploymentId'), '-application')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application.json'), parameters('templateLinkAccessToken'))]"
+                },
+                "parameters": {
+                    "deploymentId": {
+                        "value": "[parameters('deploymentId')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "singleWebAppName": {
+                        "value": "[variables('singleWebAppNameTidy')]"
+                    },
+                    "blobStorageConnectionString": {
+                        "value": "[if(parameters('hasStorageAccount'), parameters('blobStorageConnectionString'), reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.storageAccountConnectionString.value)]"
+                    },
+                    "blobStorageMsDeployPackageUrl": {
+                        "value": "[parameters('blobStorageMsDeployPackageUrl')]"
+                    },
+                    "defaultProvider": {
+                        "value": "[parameters('defaultProvider')]"
+                    },
+                    "containerName": {
+                        "value": "[parameters('containerName')]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-infrastructure'))]"
+            ]
+        }
+    ]
+}
