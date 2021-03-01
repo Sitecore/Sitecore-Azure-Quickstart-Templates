@@ -22,6 +22,7 @@ Choose the compatible templates for your Sitecore version:
 | Sitecore 9.2.0   | Sitecore 9.2                                                          |
 | Sitecore 9.3.0   | Sitecore 9.3                                                          |
 | Sitecore 10.0.0  | Sitecore 10.0.0 and Sitecore 10.0.1                                   |
+| Sitecore 10.1.0  | Sitecore 10.1.0                                                       |
 | WFFM 8.2.3       | Web Forms For Marketers 8.2 Update-3, Update-4 and Update-5           |
 | WFFM 9.0.0       | Web Forms For Marketers 9.0				           |
 | AD 1.3.0         | Active Directory 1.3                                                  |

@@ -1,0 +1,190 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2018-02-01",
+    "serverFarmApiVersion": "2018-02-01",
+
+    "exmDdsHostingPlanNameTidy": "[toLower(trim(parameters('exmDdsHostingPlanName')))]",
+    "exmDdsWebAppNameTidy": "[toLower(trim(parameters('exmDdsWebAppName')))]",
+    "useAse": "[not(empty(parameters('aseName')))]",
+    "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
+    "hostingPlanProperties":{
+      "exmDdsProperties":{
+        "name": "[variables('exmDdsHostingPlanNameTidy')]"
+      },
+      "exmDdsPropertiesWithASE":{
+        "name": "[variables('exmDdsHostingPlanNameTidy')]",
+        "hostingEnvironmentProfile": {
+          "id": "[variables('aseResourceId')]"
+        }
+      }
+    },
+    "sitecoreTags": {
+      "provider": "b51535c2-ab3e-4a68-95f8-e2e3c9a19299",
+      "dds": "dds"
+    }
+  },
+  "parameters": {
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "sitecoreSKU": {
+      "type": "string",
+      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large", "2x Large", "3x Large" ],
+      "defaultValue": "Extra Small",
+      "metadata": {
+        "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
+      }
+    },
+    "exmDdsHostingPlanName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-dds-hp')]"
+    },
+    "exmDdsWebAppName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-exm-dds')]"
+    },
+    "skuMap": {
+      "type": "secureObject",
+      "defaultValue": {
+        "Extra Small": {
+          "exmDdsHostingPlan": {
+            "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "exmDdsHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          }
+        },
+        "Small": {
+          "exmDdsHostingPlan": {
+            "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "exmDdsHostingPlanIsolated": {
+            "SkuName": "I1",
+            "SkuCapacity": 1
+          }
+        },
+        "Medium": {
+          "exmDdsHostingPlan": {
+            "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "exmDdsHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          }
+        },
+        "Large": {
+          "exmDdsHostingPlan": {
+            "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "exmDdsHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          }
+        },
+        "Extra Large": {
+          "exmDdsHostingPlan": {
+            "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "exmDdsHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          }
+        },
+        "2x Large": {
+          "exmDdsHostingPlan": {
+            "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "exmDdsHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          }
+        },
+        "3x Large": {
+          "exmDdsHostingPlan": {
+            "SkuName": "S2",
+            "SkuCapacity": 1
+          },
+          "exmDdsHostingPlanIsolated": {
+            "SkuName": "I2",
+            "SkuCapacity": 1
+          }
+        }
+      }
+    },
+    "resourceSizes": {
+      "type": "object",
+      "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
+    },
+    "aseName":{
+      "type": "string",
+      "defaultValue": ""
+    },
+    "aseResourceGroupName":{
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "name": "[variables('exmDdsHostingPlanNameTidy')]",
+      "apiVersion": "[variables('serverFarmApiVersion')]",
+      "sku": {
+        "name": "[if(not(variables('useAse')), parameters('resourceSizes').exmDdsHostingPlan.SkuName, parameters('resourceSizes').exmDdsHostingPlanIsolated.SkuName)]",
+        "capacity": "[if(not(variables('useAse')), parameters('resourceSizes').exmDdsHostingPlan.SkuCapacity, parameters('resourceSizes').exmDdsHostingPlanIsolated.SkuCapacity)]"
+      },
+      "properties": "[if(not(variables('useAse')), variables('hostingPlanProperties').exmDdsProperties, variables('hostingPlanProperties').exmDdsPropertiesWithASE)]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]",
+        "logicalName": "[variables('sitecoreTags').dds]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "name": "[variables('exmDdsWebAppNameTidy')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('exmDdsHostingPlanNameTidy'))]",
+        "siteConfig": {
+          "use32BitWorkerProcess": false,
+          "alwaysOn": true,
+          "phpVersion": "",
+          "defaultDocuments": [
+            "index.html"
+          ]
+        }
+      },
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('exmDdsHostingPlanNameTidy'))]"
+      ],
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]",
+        "logicalName": "[variables('sitecoreTags').dds]"
+      }
+    }
+  ],
+  "outputs": {
+    "infrastructureExm": {
+      "type": "object",
+      "value": {
+        "exmDdsWebAppHostName": "[reference(concat('Microsoft.Web/sites/', variables('exmDdsWebAppNameTidy')), variables('webApiVersion')).defaultHostName]"
+      }
+    }
+  }
+}
