@@ -30,6 +30,21 @@
   "resources": [
     {
       "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+      "name": "[concat(parameters('deploymentId'),'-redis','/Microsoft.Insights/service')]",
+      "type": "Microsoft.Cache/Redis/providers/diagnosticSettings",
+      "properties": {
+        "mode": "Incremental",
+        "workspaceId": "[parameters('omsWorkspaceId')]",
+        "logs": [],
+        "metrics": [
+          {
+            "enabled": true
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
       "name": "[concat(parameters('deploymentId'),'-as','/Microsoft.Insights/service')]",
       "condition": "[equals(parameters('searchProvider'), 'Azure')]",
       "type": "Microsoft.Search/searchServices/providers/diagnosticSettings",
@@ -47,6 +62,36 @@
     {
       "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
       "name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-core-db','/Microsoft.Insights/service')]",
+      "type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+      "properties": {
+        "mode": "Incremental",
+        "workspaceId": "[parameters('omsWorkspaceId')]",
+        "logs": [],
+        "metrics": [
+          {
+            "enabled": true
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+      "name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-exmmaster-db','/Microsoft.Insights/service')]",
+      "type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+      "properties": {
+        "mode": "Incremental",
+        "workspaceId": "[parameters('omsWorkspaceId')]",
+        "logs": [],
+        "metrics": [
+          {
+            "enabled": true
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+      "name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-forms-db','/Microsoft.Insights/service')]",
       "type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
       "properties": {
         "mode": "Incremental",
@@ -226,6 +271,51 @@
     },
     {
       "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+      "name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-web-db','/Microsoft.Insights/service')]",
+      "type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
+      "properties": {
+        "mode": "Incremental",
+        "workspaceId": "[parameters('omsWorkspaceId')]",
+        "logs": [],
+        "metrics": [
+          {
+            "enabled": true
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+      "name": "[concat(parameters('deploymentId'),'-cd-hp','/Microsoft.Insights/service')]",
+      "type": "Microsoft.Web/serverFarms/providers/diagnosticSettings",
+      "properties": {
+        "mode": "Incremental",
+        "workspaceId": "[parameters('omsWorkspaceId')]",
+        "logs": [],
+        "metrics": [
+          {
+            "enabled": true
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+      "name": "[concat(parameters('deploymentId'),'-cm-hp','/Microsoft.Insights/service')]",
+      "type": "Microsoft.Web/serverFarms/providers/diagnosticSettings",
+      "properties": {
+        "mode": "Incremental",
+        "workspaceId": "[parameters('omsWorkspaceId')]",
+        "logs": [],
+        "metrics": [
+          {
+            "enabled": true
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
       "name": "[concat(parameters('deploymentId'),'-prc-hp','/Microsoft.Insights/service')]",
       "type": "Microsoft.Web/serverFarms/providers/diagnosticSettings",
       "properties": {
@@ -241,7 +331,7 @@
     },
     {
       "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
-      "name": "[concat(parameters('deploymentId'),'-rep-hp','/Microsoft.Insights/service')]",
+      "name": "[concat(parameters('deploymentId'),'-si-hp','/Microsoft.Insights/service')]",
       "type": "Microsoft.Web/serverFarms/providers/diagnosticSettings",
       "properties": {
         "mode": "Incremental",
@@ -273,6 +363,36 @@
       "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
       "name": "[concat(parameters('deploymentId'),'-xc-resourceintensive-hp','/Microsoft.Insights/service')]",
       "type": "Microsoft.Web/serverFarms/providers/diagnosticSettings",
+      "properties": {
+        "mode": "Incremental",
+        "workspaceId": "[parameters('omsWorkspaceId')]",
+        "logs": [],
+        "metrics": [
+          {
+            "enabled": true
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+      "name": "[concat(parameters('deploymentId'),'-cd','/Microsoft.Insights/service')]",
+      "type": "Microsoft.Web/sites/providers/diagnosticSettings",
+      "properties": {
+        "mode": "Incremental",
+        "workspaceId": "[parameters('omsWorkspaceId')]",
+        "logs": [],
+        "metrics": [
+          {
+            "enabled": true
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+      "name": "[concat(parameters('deploymentId'),'-cm','/Microsoft.Insights/service')]",
+      "type": "Microsoft.Web/sites/providers/diagnosticSettings",
       "properties": {
         "mode": "Incremental",
         "workspaceId": "[parameters('omsWorkspaceId')]",
@@ -361,7 +481,7 @@
     },
     {
       "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
-      "name": "[concat(parameters('deploymentId'),'-rep','/Microsoft.Insights/service')]",
+      "name": "[concat(parameters('deploymentId'),'-si','/Microsoft.Insights/service')]",
       "type": "Microsoft.Web/sites/providers/diagnosticSettings",
       "properties": {
         "mode": "Incremental",

@@ -48,6 +48,86 @@
   },
   "resources": [
     {
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cd')]",
+      "type": "Microsoft.Insights/scheduledqueryrules",
+      "apiVersion": "[variables('alertResourcesApiVersion')]",
+      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
+      "tags": "[parameters('resourceTags')]",
+      "properties": {
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cd')]",
+        "enabled": "true",
+        "source": {
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cd','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h),Resource')]",
+          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
+          "queryType": "ResultCount"
+        },
+        "schedule": {
+          "frequencyInMinutes": "15",
+          "timeWindowInMinutes": "60"
+        },
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
+          "severity": "1",
+          "throttlingInMin": "479",
+          "aznsAction": {
+            "actionGroup": [
+              "[variables('actionGroupResourceId')]"
+            ],
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cd')]"
+          },
+          "trigger": {
+            "thresholdOperator": "GreaterThan",
+            "threshold": "10",
+            "metricTrigger": {
+              "thresholdOperator": "GreaterThan",
+              "threshold": "0",
+              "metricTriggerType": "Total"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cm')]",
+      "type": "Microsoft.Insights/scheduledqueryrules",
+      "apiVersion": "[variables('alertResourcesApiVersion')]",
+      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
+      "tags": "[parameters('resourceTags')]",
+      "properties": {
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cm')]",
+        "enabled": "true",
+        "source": {
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-cm','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h),Resource')]",
+          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
+          "queryType": "ResultCount"
+        },
+        "schedule": {
+          "frequencyInMinutes": "15",
+          "timeWindowInMinutes": "60"
+        },
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
+          "severity": "1",
+          "throttlingInMin": "479",
+          "aznsAction": {
+            "actionGroup": [
+              "[variables('actionGroupResourceId')]"
+            ],
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cm')]"
+          },
+          "trigger": {
+            "thresholdOperator": "GreaterThan",
+            "threshold": "10",
+            "metricTrigger": {
+              "thresholdOperator": "GreaterThan",
+              "threshold": "0",
+              "metricTriggerType": "Total"
+            }
+          }
+        }
+      }
+    },
+    {
       "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-cortex-processing')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
@@ -248,16 +328,16 @@
       }
     },
     {
-      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-rep')]",
+      "name": "[concat('WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-si')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
       "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
       "tags": "[parameters('resourceTags')]",
       "properties": {
-        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-rep')]",
+        "description": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-si')]",
         "enabled": "true",
         "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-rep','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h),Resource')]",
+          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-si','\";let metricName =\"Http5xx\";let resourceProvider =\"MICROSOFT.WEB\";let resourceIdContains =\"/SITES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName)  | top 15 by TimeGenerated| summarize  AggregatedValue = sum(Total) by bin(TimeGenerated, 24h),Resource')]",
           "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
           "queryType": "ResultCount"
         },
@@ -273,7 +353,7 @@
             "actionGroup": [
               "[variables('actionGroupResourceId')]"
             ],
-            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-rep')]"
+            "emailSubject": "[concat('Check WebApp returning high rate of 5xx errors_', parameters('deploymentId'),'-si')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",

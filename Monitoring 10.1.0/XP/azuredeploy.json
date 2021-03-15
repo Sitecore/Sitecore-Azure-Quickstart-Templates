@@ -16,17 +16,12 @@
       "type": "secureObject",
       "defaultValue": {
         "deploymentId": null,
-        "searchServiceName": null,
-        "xcSolrConnectionString": null
+        "searchServiceName": null
       }
     },
     "searchProvider": {
       "type": "string",
-      "defaultValue": "[if(empty(parameters('standard').xcSolrConnectionString),'Azure','Solr')]",
-      "allowedValues": [
-        "Azure",
-        "Solr"
-      ]
+      "defaultValue": "Azure"
     },
     "deploymentId": {
       "type": "string",
@@ -78,9 +73,9 @@
     "tags": {
       "sc-monitoring": "Yes",
       "sc-monitoring-pkg-version": "2.4.0-r210215",
-      "sc-monitoring-sc-version": "10.0.0",
+      "sc-monitoring-sc-version": "10.1.0",
       "sc-monitoring-type": "Basic",
-      "sc-monitoring-sc-topology": "xdb"
+      "sc-monitoring-sc-topology": "xp"
     }
   },
   "resources": [
@@ -222,6 +217,38 @@
           },
           "infrastructure": {
             "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "resourceTags": {
+            "value": "[variables('tags')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-alertcacheredis')]",
+      "type": "Microsoft.Resources/deployments",
+      "dependson": [
+        "[concat(deployment().name,'-infrastructure')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertcacheredis.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "omsWorkspaceLocation": {
+            "value": "[parameters('omsWorkspaceLocation')]"
+          },
+          "omsWorkspaceAlertRecipients": {
+            "value": "[parameters('omsWorkspaceAlertRecipients')]"
           },
           "resourceTags": {
             "value": "[variables('tags')]"
