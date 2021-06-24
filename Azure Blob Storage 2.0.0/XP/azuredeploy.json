@@ -193,7 +193,7 @@
                         "value": "[parameters('location')]"
                     },
                     "storageAccountName": {
-                        "value": "[parameters('storageAccountName')]"
+                        "value": "[toLower(parameters('storageAccountName'))]"
                     },
                     "accessTier": {
                         "value": "[parameters('accessTier')]"
