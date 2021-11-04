@@ -1,0 +1,212 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2018-02-01",
+    "dbApiVersion": "2014-04-01-preview",
+
+    "sqlServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
+
+    "maSqlDatabaseNameTidy": "[toLower(trim(parameters('maSqlDatabaseName')))]",
+
+    "xcBasicHostingPlanNameTidy": "[toLower(trim(parameters('xcBasicHostingPlanName')))]",
+
+    "maOpsWebAppNameTidy": "[toLower(trim(parameters('maOpsWebAppName')))]",
+    "maRepWebAppNameTidy": "[toLower(trim(parameters('maRepWebAppName')))]",
+
+    "sitecoreTags": {
+      "provider": "b51535c2-ab3e-4a68-95f8-e2e3c9a19299",
+      "maOps": "ma-ops",
+      "maRep": "ma-rep",
+      "ma": "ma"
+    }
+  },
+  "parameters": {
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "sitecoreSKU": {
+      "type": "string",
+      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large", "2x Large", "3x Large" ],
+      "defaultValue": "Extra Small",
+      "metadata": {
+        "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
+      }
+    },
+
+    "sqlServerName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-sql')]"
+    },
+
+    "sqlDatabaseCollation": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+    },
+
+    "maSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ma-db')]"
+    },
+
+    "xcBasicHostingPlanName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-xc-basic-hp')]"
+    },
+
+    "maOpsWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ma-ops')]"
+    },
+    "maRepWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-ma-rep')]"
+    },
+
+    "skuMap": {
+      "type": "secureObject",
+      "defaultValue": {
+        "Extra Small": {
+          "maSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S0"
+          }
+        },
+        "Small": {
+          "maSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          }
+        },
+        "Medium": {
+          "maSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          }
+        },
+        "Large": {
+          "maSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          }
+        },
+        "Extra Large": {
+          "maSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          }
+        },
+        "2x Large": {
+          "maSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          }
+        },
+        "3x Large": {
+          "maSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S1"
+          }
+        }
+      }
+    },
+    "resourceSizes": {
+      "type": "object",
+      "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
+    }
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('sqlServerNameTidy'), '/', variables('maSqlDatabaseNameTidy'))]",
+      "type": "Microsoft.Sql/servers/databases",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('dbApiVersion')]",
+      "properties": {
+        "edition": "[parameters('resourceSizes').maSqlDatabase.Edition]",
+        "collation": "[parameters('sqlDatabaseCollation')]",
+        "maxSizeBytes": "[parameters('resourceSizes').maSqlDatabase.MaxSize]",
+        "requestedServiceObjectiveName": "[parameters('resourceSizes').maSqlDatabase.ServiceObjectiveLevel]"
+      },
+      "resources": [
+        {
+          "name": "current",
+          "type": "transparentDataEncryption",
+          "dependsOn": [
+            "[variables('maSqlDatabaseNameTidy')]"
+          ],
+          "apiVersion": "2014-04-01",
+          "properties": {
+            "status": "Enabled"
+          }
+        }
+      ],
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]",
+        "logicalName": "[variables('sitecoreTags').ma]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "name": "[variables('maRepWebAppNameTidy')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "clientCertEnabled": true,
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('xcBasicHostingPlanNameTidy'))]",
+        "siteConfig": {
+          "use32BitWorkerProcess": false,
+          "alwaysOn": true,
+          "phpVersion": "",
+          "defaultDocuments": [
+            "index.html"
+          ]
+        }
+      },
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]",
+        "logicalName": "[variables('sitecoreTags').maRep]"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "name": "[variables('maOpsWebAppNameTidy')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "clientCertEnabled": true,
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('xcBasicHostingPlanNameTidy'))]",
+        "siteConfig": {
+          "use32BitWorkerProcess": false,
+          "alwaysOn": true,
+          "phpVersion": "",
+          "defaultDocuments": [
+            "index.html"
+          ]
+        }
+      },
+      "location": "[parameters('location')]",
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]",
+        "logicalName": "[variables('sitecoreTags').maOps]"
+      }
+    }
+  ]
+}
