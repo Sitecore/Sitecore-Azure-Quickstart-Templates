@@ -24,11 +24,13 @@ Choose the compatible templates for your Sitecore version:
 | Sitecore 10.0.0  | Sitecore 10.0.0, 10.0.1, 10.0.2 and 10.0.3                            |
 | Sitecore 10.1.0  | Sitecore 10.1.0                                                       |
 | Sitecore 10.1.1  | Sitecore 10.1.1 and 10.1.2                                            |
+| Sitecore 10.2.0  | Sitecore 10.2.0                                                       |
 | WFFM 8.2.3       | Web Forms For Marketers 8.2 Update-3, Update-4 and Update-5           |
 | WFFM 9.0.0       | Web Forms For Marketers 9.0				           |
 | AD 1.3.0         | Active Directory 1.3                                                  |
 | EXM 3.5.0        | Email Experience Manager 3.5.0                                        |
 | SXA         | Sitecore Experience Accelerator 1.3 - 1.6 for Sitecore 8.2 and Sitecore 9.0	 |
+| SXA 10.2.0       | Sitecore Experience Accelerator 10.2.0 for Sitecore 10.2.0            |
 | Sitecore XC 9.0.0 | Commerce 9.0 Initial, Commerce 9.0 Update-1. Use with templates: Sitecore 9.0.1, SXA 1.6, SXA Storefront 1.0 |
 | Sitecore XC 9.0.2 | Commerce 9.0 Update-2. Use with templates: Sitecore 9.0.2, SXA 1.7.1, SXA Storefront 1.2 |
 | Sitecore XC 9.0.3 | Commerce 9.0 Update-3. Use with templates: Sitecore 9.0.2, SXA 1.8, SXA Storefront 1.4 |
