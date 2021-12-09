@@ -365,7 +365,7 @@
           "sharedSqlDatabase": {
             "Edition": "GeneralPurpose",
             "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "GP_Gen4_2"
+            "ServiceObjectiveLevel": "GP_Gen5_2"
           },
           "redisCache": {
             "SkuName": "Standard",
@@ -417,7 +417,7 @@
           "sharedSqlDatabase": {
             "Edition": "GeneralPurpose",
             "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "GP_Gen4_3"
+            "ServiceObjectiveLevel": "GP_Gen5_4"
           },
           "redisCache": {
             "SkuName": "Standard",
@@ -469,7 +469,7 @@
           "sharedSqlDatabase": {
             "Edition": "GeneralPurpose",
             "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "GP_Gen4_4"
+            "ServiceObjectiveLevel": "GP_Gen5_6"
           },
           "redisCache": {
             "SkuName": "Standard",
