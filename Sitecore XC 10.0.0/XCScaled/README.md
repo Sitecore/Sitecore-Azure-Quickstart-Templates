@@ -24,7 +24,7 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 | commerceEngineCloudMsDeployPackageUrl        | The HTTP(s) URL of the Sitecore.Commerce.Engine Web Deploy package.
 | commerceEngineConnectCdMsDeployPackageUrl    | The HTTP(s) URL of the Sitecore.Commerce.Engine.Connect.CD Web Deploy package.
 | commerceEngineConnectCmMsDeployPackageUrl    | The HTTP(s) URL of the Sitecore.Commerce.Engine.Connect.CM Web Deploy package.
-| idServerCloudMsDeployPackageUrl              | The HTTP(s) URL of the Sitecore.IdentityServer Web Deploy package.
+| identityConfigCommerceMsDeployPackageUrl     | The HTTP(s) URL of the Sitecore.IdentityServer Web Deploy package.
 | bizfxCloudMsDeployPackageUrl                 | The HTTP(s) URL of the Sitecore.BizFX Web Deploy package.
 | adventureWorksImagesDeployPackageUrl         | The HTTP(s) URL of the Adventure Works Images Web Deploy package.
 | habitatImagesDeployPackageUrl                | The HTTP(s) URL of the Sitecore.Commerce.Habitat.Images Web Deploy package.
