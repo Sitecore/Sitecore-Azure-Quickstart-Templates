@@ -24,7 +24,7 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 | commerceEngineCloudMsDeployPackageUrl        | The HTTP(s) URL of the Sitecore.Commerce.Engine Web Deploy package.
 | commerceEngineConnectCdMsDeployPackageUrl    | The HTTP(s) URL of the Sitecore.Commerce.Engine.Connect.CD Web Deploy package.
 | commerceEngineConnectCmMsDeployPackageUrl    | The HTTP(s) URL of the Sitecore.Commerce.Engine.Connect.CM Web Deploy package.
-| idServerCloudMsDeployPackageUrl              | The HTTP(s) URL of the Sitecore.IdentityServer Web Deploy package.
+| identityConfigCommerceMsDeployPackageUrl     | The HTTP(s) URL of the Sitecore.IdentityServer Web Deploy package.
 | bizfxCloudMsDeployPackageUrl                 | The HTTP(s) URL of the Sitecore.BizFX Web Deploy package.
 | adventureWorksImagesDeployPackageUrl         | The HTTP(s) URL of the Adventure Works Images Web Deploy package.
 | habitatImagesDeployPackageUrl                | The HTTP(s) URL of the Sitecore.Commerce.Habitat.Images Web Deploy package.
@@ -42,3 +42,7 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 | defaultShopName                              | The name of the Storefront site.
 | defaultShopCurrency                          | The default currency currency, e.g. "USD".
 | defaultShopLanguage                          | The default language configured language, e.g. "en".
+
+Prepare a secret client certificate for Commerce Engine Connect to authenticate to the Sitecore Identity Service.
+Create a random string to replace the default "IDServer Client Secret" parameter in file /XCSingle/nested/application.json.
+Refer to the Sitecore_XC-9.3_Installation_Guide_for_On-Prem.pdf on how to "Create a Secret Client Certificate"
