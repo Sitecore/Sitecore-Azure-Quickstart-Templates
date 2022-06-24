@@ -1220,6 +1220,10 @@
           "xcRefDataWebAppName": {
             "value": "[parameters('xcRefDataWebAppName')]"
           },
+          
+          "cortexProcessingWebAppName": {
+            "value": "[parameters('cortexProcessingWebAppName')]"
+          },
           "cortexReportingWebAppName": {
             "value": "[parameters('cortexReportingWebAppName')]"
           },
