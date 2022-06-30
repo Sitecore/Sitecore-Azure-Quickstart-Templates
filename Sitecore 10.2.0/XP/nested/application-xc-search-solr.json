@@ -252,7 +252,10 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
+        "WEBSITE_ADD_SITENAME_BINDINGS_IN_APPHOST_CONFIG": 1,
+        "MSDEPLOY_RENAME_LOCKED_FILES": 1,
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       }
     }
