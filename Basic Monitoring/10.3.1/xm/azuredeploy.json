@@ -77,7 +77,7 @@
     "resourcesApiVersion": "2016-09-01",
     "tags": {
       "sc-monitoring": "Yes",
-      "sc-monitoring-pkg-version": "2.6.17",
+      "sc-monitoring-pkg-version": "2.6.27",
       "sc-monitoring-sc-version": "10.3.1",
       "sc-monitoring-type": "Basic",
       "sc-monitoring-sc-topology": "xm"
