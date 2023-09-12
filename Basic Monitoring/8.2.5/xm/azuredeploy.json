@@ -1,5 +1,5 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "extension": {
@@ -72,7 +72,7 @@
     "resourcesApiVersion": "2016-09-01",
     "tags": {
       "sc-monitoring": "Yes",
-      "sc-monitoring-pkg-version": "2.4.0-r210215",
+      "sc-monitoring-pkg-version": "2.6.27",
       "sc-monitoring-sc-version": "8.2.5",
       "sc-monitoring-type": "Basic",
       "sc-monitoring-sc-topology": "xm"
@@ -200,7 +200,7 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(deployment().name, '-activitylog')]",
+      "name": "[concat(deployment().name, '-alertwebserverfarms')]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -208,7 +208,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertactivitylog.json'), parameters('templateLinkAccessToken'))]",
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertwebserverfarms.json'), parameters('templateLinkAccessToken'))]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -218,6 +218,12 @@
           "infrastructure": {
             "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
           },
+          "omsWorkspaceLocation": {
+            "value": "[parameters('omsWorkspaceLocation')]"
+          },
+          "omsWorkspaceAlertRecipients": {
+            "value": "[parameters('omsWorkspaceAlertRecipients')]"
+          },
           "resourceTags": {
             "value": "[variables('tags')]"
           }
@@ -226,7 +232,71 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(parameters('deploymentId'), '-alertcacheredis')]",
+      "name": "[concat(deployment().name, '-alertwebsites')]",
+      "type": "Microsoft.Resources/deployments",
+      "dependson": [
+        "[concat(deployment().name,'-infrastructure')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertwebsites.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "omsWorkspaceLocation": {
+            "value": "[parameters('omsWorkspaceLocation')]"
+          },
+          "omsWorkspaceAlertRecipients": {
+            "value": "[parameters('omsWorkspaceAlertRecipients')]"
+          },
+          "resourceTags": {
+            "value": "[variables('tags')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-alertsqlserversdatabases')]",
+      "type": "Microsoft.Resources/deployments",
+      "dependson": [
+        "[concat(deployment().name,'-infrastructure')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertsqlserversdatabases.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "omsWorkspaceLocation": {
+            "value": "[parameters('omsWorkspaceLocation')]"
+          },
+          "omsWorkspaceAlertRecipients": {
+            "value": "[parameters('omsWorkspaceAlertRecipients')]"
+          },
+          "resourceTags": {
+            "value": "[variables('tags')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-alertcacheredis')]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -259,7 +329,7 @@
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
       "condition": "[equals(parameters('searchProvider'), 'Azure')]",
-      "name": "[concat(parameters('deploymentId'), '-alertsearchsearchservices')]",
+      "name": "[concat(deployment().name, '-alertsearchsearchservices')]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -291,7 +361,7 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(parameters('deploymentId'), '-alertsqlserversdatabases')]",
+      "name": "[concat(deployment().name, '-alertinsightscomponents-activity')]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -299,71 +369,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertsqlserversdatabases.json'), parameters('templateLinkAccessToken'))]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "deploymentId": {
-            "value": "[parameters('deploymentId')]"
-          },
-          "infrastructure": {
-            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
-          },
-          "omsWorkspaceLocation": {
-            "value": "[parameters('omsWorkspaceLocation')]"
-          },
-          "omsWorkspaceAlertRecipients": {
-            "value": "[parameters('omsWorkspaceAlertRecipients')]"
-          },
-          "resourceTags": {
-            "value": "[variables('tags')]"
-          }
-        }
-      }
-    },
-    {
-      "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(parameters('deploymentId'), '-alertwebserverfarms')]",
-      "type": "Microsoft.Resources/deployments",
-      "dependson": [
-        "[concat(deployment().name,'-infrastructure')]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertwebserverfarms.json'), parameters('templateLinkAccessToken'))]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "deploymentId": {
-            "value": "[parameters('deploymentId')]"
-          },
-          "infrastructure": {
-            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
-          },
-          "omsWorkspaceLocation": {
-            "value": "[parameters('omsWorkspaceLocation')]"
-          },
-          "omsWorkspaceAlertRecipients": {
-            "value": "[parameters('omsWorkspaceAlertRecipients')]"
-          },
-          "resourceTags": {
-            "value": "[variables('tags')]"
-          }
-        }
-      }
-    },
-    {
-      "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(parameters('deploymentId'), '-alertwebsites')]",
-      "type": "Microsoft.Resources/deployments",
-      "dependson": [
-        "[concat(deployment().name,'-infrastructure')]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertwebsites.json'), parameters('templateLinkAccessToken'))]",
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertinsightscomponents-activity.json'), parameters('templateLinkAccessToken'))]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
