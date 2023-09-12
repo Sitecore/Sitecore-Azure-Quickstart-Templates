@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "infrastructure": {
@@ -43,8 +43,7 @@
   "variables": {
     "actionGroupResourceId": "[resourceId('Microsoft.Insights/actionGroups',parameters('actionGroupName'))]",
     "workspaceApiVersion": "2017-04-26-preview",
-    "alertResourcesApiVersion": "2018-04-16",
-    "metricAlertResourcesApiVersion": "2018-03-01"
+    "alertResourcesApiVersion": "2018-04-16"
   },
   "resources": [
     {
@@ -74,46 +73,6 @@
               "[variables('actionGroupResourceId')]"
             ],
             "emailSubject": "[concat('Check Database reporting high DTU_', parameters('deploymentId'),'-core-db')]"
-          },
-          "trigger": {
-            "thresholdOperator": "GreaterThan",
-            "threshold": "95",
-            "metricTrigger": {
-              "thresholdOperator": "GreaterThan",
-              "threshold": "30",
-              "metricTriggerType": "Total"
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "[concat('Database reporting high CPU usage_', parameters('deploymentId'),'-core-db')]",
-      "type": "Microsoft.Insights/scheduledqueryrules",
-      "apiVersion": "[variables('alertResourcesApiVersion')]",
-      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": "[parameters('resourceTags')]",
-      "properties": {
-        "description": "[concat('Check Database reporting high CPU usage_', parameters('deploymentId'),'-core-db')]",
-        "enabled": "true",
-        "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\"; let metricName =\"cpu_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
-          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-          "queryType": "ResultCount"
-        },
-        "schedule": {
-          "frequencyInMinutes": "10",
-          "timeWindowInMinutes": "60"
-        },
-        "action": {
-          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
-          "severity": "1",
-          "throttlingInMin": "0",
-          "aznsAction": {
-            "actionGroup": [
-              "[variables('actionGroupResourceId')]"
-            ],
-            "emailSubject": "[concat('Check Database reporting high CPU usage_', parameters('deploymentId'),'-core-db')]"
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
@@ -158,86 +117,6 @@
           "trigger": {
             "thresholdOperator": "GreaterThan",
             "threshold": "75",
-            "metricTrigger": {
-              "thresholdOperator": "GreaterThan",
-              "threshold": "30",
-              "metricTriggerType": "Total"
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "[concat('Database reporting high Data IO Utilization_', parameters('deploymentId'),'-core-db')]",
-      "type": "Microsoft.Insights/scheduledqueryrules",
-      "apiVersion": "[variables('alertResourcesApiVersion')]",
-      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": "[parameters('resourceTags')]",
-      "properties": {
-        "description": "[concat('Check Database reporting high Data IO Utilization_', parameters('deploymentId'),'-core-db')]",
-        "enabled": "true",
-        "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\";let metricName =\"physical_data_read_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
-          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-          "queryType": "ResultCount"
-        },
-        "schedule": {
-          "frequencyInMinutes": "15",
-          "timeWindowInMinutes": "60"
-        },
-        "action": {
-          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
-          "severity": "1",
-          "throttlingInMin": "0",
-          "aznsAction": {
-            "actionGroup": [
-              "[variables('actionGroupResourceId')]"
-            ],
-            "emailSubject": "[concat('Check Database reporting high Data IO Utilization_', parameters('deploymentId'),'-core-db')]"
-          },
-          "trigger": {
-            "thresholdOperator": "GreaterThan",
-            "threshold": "95",
-            "metricTrigger": {
-              "thresholdOperator": "GreaterThan",
-              "threshold": "30",
-              "metricTriggerType": "Total"
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "[concat('Database reporting high Resource Utilization_', parameters('deploymentId'),'-core-db')]",
-      "type": "Microsoft.Insights/scheduledqueryrules",
-      "apiVersion": "[variables('alertResourcesApiVersion')]",
-      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": "[parameters('resourceTags')]",
-      "properties": {
-        "description": "[concat('Check Database reporting high Resource Utilization_', parameters('deploymentId'),'-core-db')]",
-        "enabled": "true",
-        "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-core-db','\";let metricName =\"log_write_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
-          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-          "queryType": "ResultCount"
-        },
-        "schedule": {
-          "frequencyInMinutes": "15",
-          "timeWindowInMinutes": "60"
-        },
-        "action": {
-          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
-          "severity": "1",
-          "throttlingInMin": "0",
-          "aznsAction": {
-            "actionGroup": [
-              "[variables('actionGroupResourceId')]"
-            ],
-            "emailSubject": "[concat('Check Database reporting high Resource Utilization_', parameters('deploymentId'),'-core-db')]"
-          },
-          "trigger": {
-            "thresholdOperator": "GreaterThan",
-            "threshold": "95",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "30",
@@ -328,46 +207,6 @@
       }
     },
     {
-      "name": "[concat('Database reporting high CPU usage_', parameters('deploymentId'),'-master-db')]",
-      "type": "Microsoft.Insights/scheduledqueryrules",
-      "apiVersion": "[variables('alertResourcesApiVersion')]",
-      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": "[parameters('resourceTags')]",
-      "properties": {
-        "description": "[concat('Check Database reporting high CPU usage_', parameters('deploymentId'),'-master-db')]",
-        "enabled": "true",
-        "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\"; let metricName =\"cpu_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
-          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-          "queryType": "ResultCount"
-        },
-        "schedule": {
-          "frequencyInMinutes": "10",
-          "timeWindowInMinutes": "60"
-        },
-        "action": {
-          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
-          "severity": "1",
-          "throttlingInMin": "0",
-          "aznsAction": {
-            "actionGroup": [
-              "[variables('actionGroupResourceId')]"
-            ],
-            "emailSubject": "[concat('Check Database reporting high CPU usage_', parameters('deploymentId'),'-master-db')]"
-          },
-          "trigger": {
-            "thresholdOperator": "GreaterThan",
-            "threshold": "95",
-            "metricTrigger": {
-              "thresholdOperator": "GreaterThan",
-              "threshold": "30",
-              "metricTriggerType": "Total"
-            }
-          }
-        }
-      }
-    },
-    {
       "name": "[concat('Database reporting low storage space_', parameters('deploymentId'),'-master-db')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
@@ -398,86 +237,6 @@
           "trigger": {
             "thresholdOperator": "GreaterThan",
             "threshold": "75",
-            "metricTrigger": {
-              "thresholdOperator": "GreaterThan",
-              "threshold": "30",
-              "metricTriggerType": "Total"
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "[concat('Database reporting high Data IO Utilization_', parameters('deploymentId'),'-master-db')]",
-      "type": "Microsoft.Insights/scheduledqueryrules",
-      "apiVersion": "[variables('alertResourcesApiVersion')]",
-      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": "[parameters('resourceTags')]",
-      "properties": {
-        "description": "[concat('Check Database reporting high Data IO Utilization_', parameters('deploymentId'),'-master-db')]",
-        "enabled": "true",
-        "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\";let metricName =\"physical_data_read_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
-          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-          "queryType": "ResultCount"
-        },
-        "schedule": {
-          "frequencyInMinutes": "15",
-          "timeWindowInMinutes": "60"
-        },
-        "action": {
-          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
-          "severity": "1",
-          "throttlingInMin": "0",
-          "aznsAction": {
-            "actionGroup": [
-              "[variables('actionGroupResourceId')]"
-            ],
-            "emailSubject": "[concat('Check Database reporting high Data IO Utilization_', parameters('deploymentId'),'-master-db')]"
-          },
-          "trigger": {
-            "thresholdOperator": "GreaterThan",
-            "threshold": "95",
-            "metricTrigger": {
-              "thresholdOperator": "GreaterThan",
-              "threshold": "30",
-              "metricTriggerType": "Total"
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "[concat('Database reporting high Resource Utilization_', parameters('deploymentId'),'-master-db')]",
-      "type": "Microsoft.Insights/scheduledqueryrules",
-      "apiVersion": "[variables('alertResourcesApiVersion')]",
-      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": "[parameters('resourceTags')]",
-      "properties": {
-        "description": "[concat('Check Database reporting high Resource Utilization_', parameters('deploymentId'),'-master-db')]",
-        "enabled": "true",
-        "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-master-db','\";let metricName =\"log_write_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
-          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-          "queryType": "ResultCount"
-        },
-        "schedule": {
-          "frequencyInMinutes": "15",
-          "timeWindowInMinutes": "60"
-        },
-        "action": {
-          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
-          "severity": "1",
-          "throttlingInMin": "0",
-          "aznsAction": {
-            "actionGroup": [
-              "[variables('actionGroupResourceId')]"
-            ],
-            "emailSubject": "[concat('Check Database reporting high Resource Utilization_', parameters('deploymentId'),'-master-db')]"
-          },
-          "trigger": {
-            "thresholdOperator": "GreaterThan",
-            "threshold": "95",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "30",
@@ -568,46 +327,6 @@
       }
     },
     {
-      "name": "[concat('Database reporting high CPU usage_', parameters('deploymentId'),'-reporting-db')]",
-      "type": "Microsoft.Insights/scheduledqueryrules",
-      "apiVersion": "[variables('alertResourcesApiVersion')]",
-      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": "[parameters('resourceTags')]",
-      "properties": {
-        "description": "[concat('Check Database reporting high CPU usage_', parameters('deploymentId'),'-reporting-db')]",
-        "enabled": "true",
-        "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\"; let metricName =\"cpu_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
-          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-          "queryType": "ResultCount"
-        },
-        "schedule": {
-          "frequencyInMinutes": "10",
-          "timeWindowInMinutes": "60"
-        },
-        "action": {
-          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
-          "severity": "1",
-          "throttlingInMin": "0",
-          "aznsAction": {
-            "actionGroup": [
-              "[variables('actionGroupResourceId')]"
-            ],
-            "emailSubject": "[concat('Check Database reporting high CPU usage_', parameters('deploymentId'),'-reporting-db')]"
-          },
-          "trigger": {
-            "thresholdOperator": "GreaterThan",
-            "threshold": "95",
-            "metricTrigger": {
-              "thresholdOperator": "GreaterThan",
-              "threshold": "30",
-              "metricTriggerType": "Total"
-            }
-          }
-        }
-      }
-    },
-    {
       "name": "[concat('Database reporting low storage space_', parameters('deploymentId'),'-reporting-db')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
@@ -638,86 +357,6 @@
           "trigger": {
             "thresholdOperator": "GreaterThan",
             "threshold": "75",
-            "metricTrigger": {
-              "thresholdOperator": "GreaterThan",
-              "threshold": "30",
-              "metricTriggerType": "Total"
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "[concat('Database reporting high Data IO Utilization_', parameters('deploymentId'),'-reporting-db')]",
-      "type": "Microsoft.Insights/scheduledqueryrules",
-      "apiVersion": "[variables('alertResourcesApiVersion')]",
-      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": "[parameters('resourceTags')]",
-      "properties": {
-        "description": "[concat('Check Database reporting high Data IO Utilization_', parameters('deploymentId'),'-reporting-db')]",
-        "enabled": "true",
-        "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\";let metricName =\"physical_data_read_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
-          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-          "queryType": "ResultCount"
-        },
-        "schedule": {
-          "frequencyInMinutes": "15",
-          "timeWindowInMinutes": "60"
-        },
-        "action": {
-          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
-          "severity": "1",
-          "throttlingInMin": "0",
-          "aznsAction": {
-            "actionGroup": [
-              "[variables('actionGroupResourceId')]"
-            ],
-            "emailSubject": "[concat('Check Database reporting high Data IO Utilization_', parameters('deploymentId'),'-reporting-db')]"
-          },
-          "trigger": {
-            "thresholdOperator": "GreaterThan",
-            "threshold": "95",
-            "metricTrigger": {
-              "thresholdOperator": "GreaterThan",
-              "threshold": "30",
-              "metricTriggerType": "Total"
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "[concat('Database reporting high Resource Utilization_', parameters('deploymentId'),'-reporting-db')]",
-      "type": "Microsoft.Insights/scheduledqueryrules",
-      "apiVersion": "[variables('alertResourcesApiVersion')]",
-      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": "[parameters('resourceTags')]",
-      "properties": {
-        "description": "[concat('Check Database reporting high Resource Utilization_', parameters('deploymentId'),'-reporting-db')]",
-        "enabled": "true",
-        "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-reporting-db','\";let metricName =\"log_write_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
-          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-          "queryType": "ResultCount"
-        },
-        "schedule": {
-          "frequencyInMinutes": "15",
-          "timeWindowInMinutes": "60"
-        },
-        "action": {
-          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
-          "severity": "1",
-          "throttlingInMin": "0",
-          "aznsAction": {
-            "actionGroup": [
-              "[variables('actionGroupResourceId')]"
-            ],
-            "emailSubject": "[concat('Check Database reporting high Resource Utilization_', parameters('deploymentId'),'-reporting-db')]"
-          },
-          "trigger": {
-            "thresholdOperator": "GreaterThan",
-            "threshold": "95",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "30",
@@ -808,46 +447,6 @@
       }
     },
     {
-      "name": "[concat('Database reporting high CPU usage_', parameters('deploymentId'),'-web-db')]",
-      "type": "Microsoft.Insights/scheduledqueryrules",
-      "apiVersion": "[variables('alertResourcesApiVersion')]",
-      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": "[parameters('resourceTags')]",
-      "properties": {
-        "description": "[concat('Check Database reporting high CPU usage_', parameters('deploymentId'),'-web-db')]",
-        "enabled": "true",
-        "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\"; let metricName =\"cpu_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider== resourceProvider and ResourceId contains resourceIdContains and MetricName== metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
-          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-          "queryType": "ResultCount"
-        },
-        "schedule": {
-          "frequencyInMinutes": "10",
-          "timeWindowInMinutes": "60"
-        },
-        "action": {
-          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
-          "severity": "1",
-          "throttlingInMin": "0",
-          "aznsAction": {
-            "actionGroup": [
-              "[variables('actionGroupResourceId')]"
-            ],
-            "emailSubject": "[concat('Check Database reporting high CPU usage_', parameters('deploymentId'),'-web-db')]"
-          },
-          "trigger": {
-            "thresholdOperator": "GreaterThan",
-            "threshold": "95",
-            "metricTrigger": {
-              "thresholdOperator": "GreaterThan",
-              "threshold": "30",
-              "metricTriggerType": "Total"
-            }
-          }
-        }
-      }
-    },
-    {
       "name": "[concat('Database reporting low storage space_', parameters('deploymentId'),'-web-db')]",
       "type": "Microsoft.Insights/scheduledqueryrules",
       "apiVersion": "[variables('alertResourcesApiVersion')]",
@@ -878,86 +477,6 @@
           "trigger": {
             "thresholdOperator": "GreaterThan",
             "threshold": "75",
-            "metricTrigger": {
-              "thresholdOperator": "GreaterThan",
-              "threshold": "30",
-              "metricTriggerType": "Total"
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "[concat('Database reporting high Data IO Utilization_', parameters('deploymentId'),'-web-db')]",
-      "type": "Microsoft.Insights/scheduledqueryrules",
-      "apiVersion": "[variables('alertResourcesApiVersion')]",
-      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": "[parameters('resourceTags')]",
-      "properties": {
-        "description": "[concat('Check Database reporting high Data IO Utilization_', parameters('deploymentId'),'-web-db')]",
-        "enabled": "true",
-        "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\";let metricName =\"physical_data_read_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
-          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-          "queryType": "ResultCount"
-        },
-        "schedule": {
-          "frequencyInMinutes": "15",
-          "timeWindowInMinutes": "60"
-        },
-        "action": {
-          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
-          "severity": "1",
-          "throttlingInMin": "0",
-          "aznsAction": {
-            "actionGroup": [
-              "[variables('actionGroupResourceId')]"
-            ],
-            "emailSubject": "[concat('Check Database reporting high Data IO Utilization_', parameters('deploymentId'),'-web-db')]"
-          },
-          "trigger": {
-            "thresholdOperator": "GreaterThan",
-            "threshold": "95",
-            "metricTrigger": {
-              "thresholdOperator": "GreaterThan",
-              "threshold": "30",
-              "metricTriggerType": "Total"
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "[concat('Database reporting high Resource Utilization_', parameters('deploymentId'),'-web-db')]",
-      "type": "Microsoft.Insights/scheduledqueryrules",
-      "apiVersion": "[variables('alertResourcesApiVersion')]",
-      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
-      "tags": "[parameters('resourceTags')]",
-      "properties": {
-        "description": "[concat('Check Database reporting high Resource Utilization_', parameters('deploymentId'),'-web-db')]",
-        "enabled": "true",
-        "source": {
-          "query": "[concat('let resourceName = \"',parameters('deploymentId'),'-web-db','\";let metricName =\"log_write_percent\";let resourceProvider =\"MICROSOFT.SQL\";let resourceIdContains =\"/DATABASES/\";AzureMetrics | where ResourceProvider==resourceProvider and ResourceId contains resourceIdContains and MetricName==metricName and Resource == toupper(resourceName) | summarize AggregatedValue = avg(Maximum) by bin(TimeGenerated, 1m),Resource | top 60 by TimeGenerated')]",
-          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-          "queryType": "ResultCount"
-        },
-        "schedule": {
-          "frequencyInMinutes": "15",
-          "timeWindowInMinutes": "60"
-        },
-        "action": {
-          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
-          "severity": "1",
-          "throttlingInMin": "0",
-          "aznsAction": {
-            "actionGroup": [
-              "[variables('actionGroupResourceId')]"
-            ],
-            "emailSubject": "[concat('Check Database reporting high Resource Utilization_', parameters('deploymentId'),'-web-db')]"
-          },
-          "trigger": {
-            "thresholdOperator": "GreaterThan",
-            "threshold": "95",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "30",

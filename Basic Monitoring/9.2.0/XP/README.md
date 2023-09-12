@@ -14,6 +14,7 @@ The **deploymentId** parameter is filled in by the PowerShell script.
 | omsWorkspaceLocation                      | The location of the provisioned OMS.
 | applicationInsightsLocation               | The location of the provisioned application insights.
 | searchProvider                            | Types of Search Provider, Azure or Solr.
+| env                                       | Types of environment, Prod or NonProd.
 
 ## Deploying as part of Sitecore deployment
 
