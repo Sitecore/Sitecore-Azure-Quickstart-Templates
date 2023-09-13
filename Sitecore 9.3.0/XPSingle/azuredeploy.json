@@ -1357,6 +1357,7 @@
 
               "xcSingleWebAppName": "[parameters('xcSingleWebAppName')]",
               "singleWebAppName": "[parameters('singleWebAppName')]",
+              "siWebAppName": "[parameters('siWebAppName')]",
 
               "passwordSalt": "[parameters('passwordSalt')]",
 
