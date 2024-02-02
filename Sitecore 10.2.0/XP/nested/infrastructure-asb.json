@@ -1,5 +1,5 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "deploymentId": {
@@ -50,10 +50,14 @@
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-asb')]"
+    },
+    "minTlsVersion": {
+      "defaultValue": "1.2",
+      "type": "string"
     }
   },
   "variables": {
-    "azureServiceBusVersion": "2017-04-01",
+    "azureServiceBusVersion": "2022-01-01-preview",
     "resourcesApiVersion": "2018-05-01",
     "azureServiceBusNamespaceNameTidy": "[toLower(trim(parameters('azureServiceBusNamespaceName')))]"
   },
@@ -65,6 +69,9 @@
       "location": "[parameters('location')]",
       "sku": {
         "name": "[parameters('azureServiceBusSkuName')]"
+      },
+      "properties": {
+        "minimumTlsVersion": "[parameters('minTlsVersion')]"
       }
     },
     {
