@@ -1,10 +1,10 @@
 ﻿{
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "resourcesApiVersion": "2018-05-01",
     "webApiVersion": "2018-02-01",
-    "appInsightsApiVersion": "2015-05-01",
+    "appInsightsApiVersion": "2020-02-02-preview",
 
     "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
 
@@ -22,7 +22,7 @@
 
     "searchProvider": "[if(empty(parameters('xcSolrConnectionString')), 'Azure', 'Solr')]",
 
-    "azureServiceBusVersion": "2017-04-01",
+    "azureServiceBusVersion": "2022-01-01-preview",
     "azureServiceBusNamespaceNameTidy": "[toLower(trim(parameters('azureServiceBusNamespaceName')))]"
   },
   "parameters": {
@@ -240,6 +240,10 @@
       "type": "string",
       "allowedValues": [ "Disable", "ApplicationInsights" ],
       "defaultValue": "Disable"
+    },
+    "minTlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2"
     }
   },
   "resources": [
@@ -421,6 +425,9 @@
           },
           "xpPerformanceCountersType": {
             "value": "[parameters('xpPerformanceCountersType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -534,6 +541,9 @@
           },
           "xpPerformanceCountersType": {
             "value": "[parameters('xpPerformanceCountersType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -546,6 +556,7 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       }
@@ -555,6 +566,7 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       },

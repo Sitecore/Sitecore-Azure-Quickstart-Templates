@@ -1,5 +1,5 @@
-﻿{
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "resourcesApiVersion": "2018-05-01",
@@ -18,8 +18,7 @@
           {
             "name": "empty",
             "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
-            "parameters": {
-            }
+            "parameters": {}
           }
         ]
       }
@@ -31,13 +30,11 @@
           {
             "name": "empty-prerequisite",
             "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
-            "parameters": {
-            }
+            "parameters": {}
           }
         ]
       }
     },
-
     "templateLinkBase": {
       "type": "string",
       "minLength": 1,
@@ -47,7 +44,6 @@
       "type": "securestring",
       "defaultValue": ""
     },
-
     "deploymentId": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
@@ -57,7 +53,6 @@
       "minLength": 1,
       "defaultValue": "[resourceGroup().location]"
     },
-
     "sitecoreAdminPassword": {
       "type": "securestring",
       "minLength": 8
@@ -66,7 +61,6 @@
       "type": "securestring",
       "minLength": 1
     },
-
     "sqlServerName": {
       "type": "string",
       "minLength": 1,
@@ -80,7 +74,6 @@
       "type": "securestring",
       "minLength": 8
     },
-
     "sqlServerVersion": {
       "type": "string",
       "minLength": 1,
@@ -111,7 +104,6 @@
       "minLength": 1,
       "defaultValue": "S1"
     },
-
     "coreSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -163,7 +155,6 @@
       "type": "securestring",
       "defaultValue": ""
     },
-
     "useApplicationInsights": {
       "type": "bool",
       "defaultValue": true
@@ -189,13 +180,15 @@
     "applicationInsightsCurrentBillingFeatures": {
       "type": "string",
       "defaultValue": "Basic",
-      "allowedValues": [ "Basic", "Application Insights Enterprise" ]
+      "allowedValues": [
+        "Basic",
+        "Application Insights Enterprise"
+      ]
     },
     "applicationInsightsDataVolumeCap": {
       "type": "string",
       "defaultValue": "0.33"
     },
-
     "singleHostingPlanName": {
       "type": "string",
       "minLength": 1,
@@ -282,7 +275,6 @@
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('forms', parameters('passwordSalt'))), uniqueString('forms', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('forms', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
-
     "authCertificateName": {
       "type": "string",
       "minLength": 1,
@@ -296,33 +288,48 @@
       "type": "securestring",
       "minLength": 1
     },
-
     "siClientSecret": {
       "type": "securestring",
       "minLength": 6,
       "defaultValue": "[toUpper(replace(guid(uniqueString('siClientSecret', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '-',''))]"
     },
-
     "telerikEncryptionKey": {
       "type": "securestring",
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('telerik', parameters('passwordSalt'))), uniqueString('telerik', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('telerik', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
-
     "passwordSalt": {
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "[resourceGroup().id]"
     },
-
     "nodeJsVersion": {
-      "type" : "string",
-      "defaultValue" : "8.11.1"
+      "type": "string",
+      "defaultValue": "8.11.1"
     },
-
     "environmentType": {
       "type": "string",
       "defaultValue": "Non-Production"
+    },
+    "omsWorkspaceName": {
+      "defaultValue": "[concat(parameters('deploymentId'), '-oms')]",
+      "type": "string"
+    },
+    "omsWorkspaceMetricsRetentionDays": {
+      "defaultValue": 7,
+      "type": "int"
+    },
+    "omsWorkspaceSku": {
+      "defaultValue": "standalone",
+      "type": "string"
+    },
+    "omsCapSizeGb": {
+      "defaultValue": 1,
+      "type": "int"
+    },
+    "minTlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2"
     }
   },
   "resources": [
@@ -369,7 +376,6 @@
           "sqlServerPassword": {
             "value": "[parameters('sqlServerPassword')]"
           },
-
           "sqlServerVersion": {
             "value": "[parameters('sqlServerVersion')]"
           },
@@ -388,7 +394,6 @@
           "sqlDatabaseServiceObjectiveLevel": {
             "value": "[parameters('sqlDatabaseServiceObjectiveLevel')]"
           },
-
           "coreSqlDatabaseName": {
             "value": "[parameters('coreSqlDatabaseName')]"
           },
@@ -401,7 +406,6 @@
           "formsSqlDatabaseName": {
             "value": "[parameters('formsSqlDatabaseName')]"
           },
-
           "authCertificateName": {
             "value": "[parameters('authCertificateName')]"
           },
@@ -450,7 +454,6 @@
           "applicationInsightsDataVolumeCap": {
             "value": "[parameters('applicationInsightsDataVolumeCap')]"
           },
-
           "singleHostingPlanName": {
             "value": "[parameters('singleHostingPlanName')]"
           },
@@ -465,6 +468,21 @@
           },
           "singleWebAppName": {
             "value": "[parameters('singleWebAppName')]"
+          },
+          "omsWorkspaceName": {
+            "value": "[parameters('omsWorkspaceName')]"
+          },
+          "omsWorkspaceMetricsRetentionDays": {
+            "value": "[parameters('omsWorkspaceMetricsRetentionDays')]"
+          },
+          "omsWorkspaceSku": {
+            "value": "[parameters('omsWorkspaceSku')]"
+          },
+          "omsCapSizeGb": {
+            "value": "[parameters('omsCapSizeGb')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -485,27 +503,24 @@
           "infrastructure": {
             "value": "[reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value]"
           },
-
           "deploymentId": {
             "value": "[parameters('deploymentId')]"
           },
           "location": {
             "value": "[parameters('location')]"
-          },          
+          },
           "sitecoreAdminPassword": {
             "value": "[parameters('sitecoreAdminPassword')]"
           },
           "licenseXml": {
             "value": "[parameters('licenseXml')]"
           },
-
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
           },
           "sqlServerPassword": {
             "value": "[parameters('sqlServerPassword')]"
           },
-
           "coreSqlDatabaseName": {
             "value": "[parameters('coreSqlDatabaseName')]"
           },
@@ -521,7 +536,6 @@
           "formsSqlDatabaseName": {
             "value": "[parameters('formsSqlDatabaseName')]"
           },
-
           "coreSqlDatabaseUserName": {
             "value": "[parameters('coreSqlDatabaseUserName')]"
           },
@@ -552,7 +566,6 @@
           "formsSqlDatabasePassword": {
             "value": "[parameters('formsSqlDatabasePassword')]"
           },
-
           "solrConnectionString": {
             "value": "[parameters('solrConnectionString')]"
           },
@@ -570,7 +583,6 @@
           "storeSitecoreCountersInApplicationInsights": {
             "value": "[parameters('storeSitecoreCountersInApplicationInsights')]"
           },
-
           "singleWebAppName": {
             "value": "[parameters('singleWebAppName')]"
           },
@@ -583,7 +595,6 @@
           "singleMsDeployPackageUrl": {
             "value": "[parameters('singleMsDeployPackageUrl')]"
           },
-
           "siClientSecret": {
             "value": "[parameters('siClientSecret')]"
           },
@@ -594,21 +605,23 @@
           "telerikEncryptionKey": {
             "value": "[parameters('telerikEncryptionKey')]"
           },
-
           "passwordSalt": {
             "value": "[parameters('passwordSalt')]"
           },
-
           "nodeJsVersion": {
             "value": "[parameters('nodeJsVersion')]"
           },
-
           "environmentType": {
             "value": "[parameters('environmentType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
-      "dependsOn": [ "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-infrastructure'))]" ]
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-infrastructure'))]"
+      ]
     },
     {
       "copy": {
@@ -627,28 +640,23 @@
           "standard": {
             "value": {
               "infrastructure": "[reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value]",
-
               "deploymentId": "[parameters('deploymentId')]",
               "location": "[parameters('location')]",
               "sitecoreAdminPassword": "[parameters('sitecoreAdminPassword')]",
               "licenseXml": "[parameters('licenseXml')]",
-
               "sqlServerName": "[parameters('sqlServerName')]",
               "sqlServerLogin": "[parameters('sqlServerLogin')]",
               "sqlServerPassword": "[parameters('sqlServerPassword')]",
-
               "sqlServerVersion": "[parameters('sqlServerVersion')]",
               "sqlDatabaseCollation": "[parameters('sqlDatabaseCollation')]",
               "sqlDatabaseEdition": "[parameters('sqlDatabaseEdition')]",
               "sqlDatabaseMaxSize": "[parameters('sqlDatabaseMaxSize')]",
               "sqlBasicDatabaseServiceObjectiveLevel": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]",
               "sqlDatabaseServiceObjectiveLevel": "[parameters('sqlDatabaseServiceObjectiveLevel')]",
-
               "coreSqlDatabaseName": "[parameters('coreSqlDatabaseName')]",
               "masterSqlDatabaseName": "[parameters('masterSqlDatabaseName')]",
               "webSqlDatabaseName": "[parameters('webSqlDatabaseName')]",
               "formsSqlDatabaseName": "[parameters('formsSqlDatabaseName')]",
-
               "coreSqlDatabaseUserName": "[parameters('coreSqlDatabaseUserName')]",
               "coreSqlDatabasePassword": "[parameters('coreSqlDatabasePassword')]",
               "securitySqlDatabaseUserName": "[parameters('securitySqlDatabaseUserName')]",
@@ -666,21 +674,19 @@
               "searchServicePartitionCount": "[parameters('searchServicePartitionCount')]",
 
               "solrConnectionString": "[parameters('solrConnectionString')]",
-
               "useApplicationInsights": "[parameters('useApplicationInsights')]",
               "applicationInsightsName": "[parameters('applicationInsightsName')]",
               "applicationInsightsLocation": "[parameters('applicationInsightsLocation')]",
               "storeSitecoreCountersInApplicationInsights": "[parameters('storeSitecoreCountersInApplicationInsights')]",
-
               "singleHostingPlanName": "[parameters('singleHostingPlanName')]",
               "singleWebAppName": "[parameters('singleWebAppName')]",
-
               "passwordSalt": "[parameters('passwordSalt')]",
-
               "environmentType": "[parameters('environmentType')]"
             }
           },
-          "extension": { "value": "[parameters('modules').items[copyIndex()].parameters]" }
+          "extension": {
+            "value": "[parameters('modules').items[copyIndex()].parameters]"
+          }
         }
       },
       "dependsOn": [
