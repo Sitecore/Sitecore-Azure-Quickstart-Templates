@@ -1,17 +1,16 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
     "serverFarmApiVersion": "2018-02-01",
-    "dbApiVersion": "2014-04-01-preview",
+    "dbApiVersion": "2022-05-01-preview",
     "searchApiVersion": "2015-08-19",
-    "redisApiVersion": "2016-04-01",
-    "appInsightsApiVersion": "2015-05-01",
+    "redisApiVersion": "2020-06-01",
+    "appInsightsApiVersion": "2020-02-02-preview",
     "certificateApiVersion": "2014-11-01",
-
+    "omsWorkspaceApiVersion": "2017-03-15-preview",
     "sqlServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
-
     "coreSqlDatabaseNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
     "webSqlDatabaseNameTidy": "[toLower(trim(parameters('webSqlDatabaseName')))]",
     "masterSqlDatabaseNameTidy": "[toLower(trim(parameters('masterSqlDatabaseName')))]",
@@ -19,12 +18,10 @@
     "tasksSqlDatabaseNameTidy": "[toLower(trim(parameters('tasksSqlDatabaseName')))]",
     "formsSqlDatabaseNameTidy": "[toLower(trim(parameters('formsSqlDatabaseName')))]",
     "exmMasterSqlDatabaseNameTidy": "[toLower(trim(parameters('exmMasterSqlDatabaseName')))]",
-
     "siHostingPlanNameTidy": "[toLower(trim(parameters('siHostingPlanName')))]",
     "cmHostingPlanNameTidy": "[toLower(trim(parameters('cmHostingPlanName')))]",
     "cdHostingPlanNameTidy": "[toLower(trim(parameters('cdHostingPlanName')))]",
     "prcHostingPlanNameTidy": "[toLower(trim(parameters('prcHostingPlanName')))]",
-
     "siWebAppNameTidy": "[toLower(trim(parameters('siWebAppName')))]",
     "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebAppName')))]",
     "cdWebAppNameTidy": "[toLower(trim(parameters('cdWebAppName')))]",
@@ -35,7 +32,7 @@
     "appInsightsNameTidy": "[toLower(trim(parameters('applicationInsightsName')))]",
     "applicationInsightsPricePlanTidy": "[toLower(trim(parameters('applicationInsightsPricePlan')))]",
     "authCertificateNameTidy": "[toLower(trim(parameters('authCertificateName')))]",
-
+    "omsWorkspaceNameTidy": "[toLower(trim(parameters('omsWorkspaceName')))]",
     "sitecoreTags": {
       "provider": "b51535c2-ab3e-4a68-95f8-e2e3c9a19299",
       "si": "si",
@@ -48,43 +45,42 @@
       "pools": "prc-pools",
       "tasks": "prc-tasks",
       "forms": "forms",
-      "exmmaster" : "exmmaster"
+      "exmmaster": "exmmaster"
     },
-
     "useAse": "[not(empty(parameters('aseName')))]",
     "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
-    "hostingPlanProperties":{
-      "siProperties":{
+    "hostingPlanProperties": {
+      "siProperties": {
         "name": "[variables('siHostingPlanNameTidy')]"
       },
-      "siPropertiesWithASE":{
+      "siPropertiesWithASE": {
         "name": "[variables('siHostingPlanNameTidy')]",
         "hostingEnvironmentProfile": {
           "id": "[variables('aseResourceId')]"
         }
       },
-      "cmProperties":{
+      "cmProperties": {
         "name": "[variables('cmHostingPlanNameTidy')]"
       },
-      "cmPropertiesWithASE":{
+      "cmPropertiesWithASE": {
         "name": "[variables('cmHostingPlanNameTidy')]",
         "hostingEnvironmentProfile": {
           "id": "[variables('aseResourceId')]"
         }
       },
-      "cdProperties":{
+      "cdProperties": {
         "name": "[variables('cdHostingPlanNameTidy')]"
       },
-      "cdPropertiesWithASE":{
+      "cdPropertiesWithASE": {
         "name": "[variables('cdHostingPlanNameTidy')]",
         "hostingEnvironmentProfile": {
           "id": "[variables('aseResourceId')]"
         }
       },
-      "prcProperties":{
+      "prcProperties": {
         "name": "[variables('prcHostingPlanNameTidy')]"
       },
-      "prcPropertiesWithASE":{
+      "prcPropertiesWithASE": {
         "name": "[variables('prcHostingPlanNameTidy')]",
         "hostingEnvironmentProfile": {
           "id": "[variables('aseResourceId')]"
@@ -107,13 +103,20 @@
     },
     "sitecoreSKU": {
       "type": "string",
-      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large", "2x Large", "3x Large" ],
+      "allowedValues": [
+        "Extra Small",
+        "Small",
+        "Medium",
+        "Large",
+        "Extra Large",
+        "2x Large",
+        "3x Large"
+      ],
       "defaultValue": "Extra Small",
       "metadata": {
         "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
       }
     },
-
     "sqlServerName": {
       "type": "string",
       "minLength": 1,
@@ -127,7 +130,6 @@
       "type": "securestring",
       "minLength": 8
     },
-
     "sqlServerVersion": {
       "type": "string",
       "minLength": 1,
@@ -138,7 +140,6 @@
       "minLength": 1,
       "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
     },
-
     "coreSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -216,7 +217,6 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-ai-pp')]"
     },
-
     "siHostingPlanName": {
       "type": "string",
       "minLength": 1,
@@ -237,7 +237,6 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-prc-hp')]"
     },
-
     "siWebAppName": {
       "type": "string",
       "minLength": 1,
@@ -271,7 +270,6 @@
       "type": "securestring",
       "minLength": 1
     },
-
     "skuMap": {
       "type": "secureObject",
       "defaultValue": {
@@ -358,6 +356,13 @@
             "DataVolumeCap": {
               "Cap": 0.33
             }
+          },
+          "operationalInsightsWorkspace": {
+            "sku": "standalone",
+            "metricsRetentionDays": 7,
+            "workspaceCapping": {
+              "dailyQuotaGb": 1
+            }
           }
         },
         "Small": {
@@ -442,6 +447,13 @@
             "CurrentBillingFeatures": "Basic",
             "DataVolumeCap": {
               "Cap": 0.33
+            }
+          },
+          "operationalInsightsWorkspace": {
+            "sku": "standalone",
+            "metricsRetentionDays": 7,
+            "workspaceCapping": {
+              "dailyQuotaGb": 1
             }
           }
         },
@@ -528,6 +540,13 @@
             "DataVolumeCap": {
               "Cap": 0.33
             }
+          },
+          "operationalInsightsWorkspace": {
+            "sku": "standalone",
+            "metricsRetentionDays": 7,
+            "workspaceCapping": {
+              "dailyQuotaGb": 1
+            }
           }
         },
         "Large": {
@@ -612,6 +631,13 @@
             "CurrentBillingFeatures": "Basic",
             "DataVolumeCap": {
               "Cap": 0.33
+            }
+          },
+          "operationalInsightsWorkspace": {
+            "sku": "standalone",
+            "metricsRetentionDays": 7,
+            "workspaceCapping": {
+              "dailyQuotaGb": 1
             }
           }
         },
@@ -698,6 +724,13 @@
             "DataVolumeCap": {
               "Cap": 1.8
             }
+          },
+          "operationalInsightsWorkspace": {
+            "sku": "standalone",
+            "metricsRetentionDays": 7,
+            "workspaceCapping": {
+              "dailyQuotaGb": 2
+            }
           }
         },
         "2x Large": {
@@ -782,6 +815,13 @@
             "CurrentBillingFeatures": "Application Insights Enterprise",
             "DataVolumeCap": {
               "Cap": 1.8
+            }
+          },
+          "operationalInsightsWorkspace": {
+            "sku": "standalone",
+            "metricsRetentionDays": 7,
+            "workspaceCapping": {
+              "dailyQuotaGb": 2
             }
           }
         },
@@ -868,6 +908,13 @@
             "DataVolumeCap": {
               "Cap": 1.8
             }
+          },
+          "operationalInsightsWorkspace": {
+            "sku": "standalone",
+            "metricsRetentionDays": 7,
+            "workspaceCapping": {
+              "dailyQuotaGb": 2
+            }
           }
         }
       }
@@ -876,13 +923,21 @@
       "type": "object",
       "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
     },
-    "aseName":{
+    "aseName": {
       "type": "string",
       "defaultValue": ""
     },
-    "aseResourceGroupName":{
+    "aseResourceGroupName": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
+    },
+    "omsWorkspaceName": {
+      "defaultValue": "[concat(parameters('deploymentId'), '-oms')]",
+      "type": "string"
+    },
+    "minTlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2"
     }
   },
   "resources": [
@@ -915,8 +970,8 @@
         "provider": "[variables('sitecoreTags').provider]",
         "logicalName": "[variables('sitecoreTags').cm]"
       },
-      "dependsOn": [ 
-        "[resourceId('Microsoft.Web/serverfarms', variables('siHostingPlanNameTidy'))]" 
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('siHostingPlanNameTidy'))]"
       ]
     },
     {
@@ -933,8 +988,8 @@
         "provider": "[variables('sitecoreTags').provider]",
         "logicalName": "[variables('sitecoreTags').cd]"
       },
-      "dependsOn": [ 
-        "[resourceId('Microsoft.Web/serverfarms', variables('cmHostingPlanNameTidy'))]" 
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('cmHostingPlanNameTidy'))]"
       ]
     },
     {
@@ -951,9 +1006,28 @@
         "provider": "[variables('sitecoreTags').provider]",
         "logicalName": "[variables('sitecoreTags').prc]"
       },
-      "dependsOn": [ 
-        "[resourceId('Microsoft.Web/serverfarms', variables('cdHostingPlanNameTidy'))]" 
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('cdHostingPlanNameTidy'))]"
       ]
+    },
+    {
+      "apiVersion": "[variables('omsWorkspaceApiVersion')]",
+      "name": "[variables('omsWorkspaceNameTidy')]",
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "condition": "[parameters('useApplicationInsights')]",
+      "location": "[parameters('applicationInsightsLocation')]",
+      "properties": {
+        "sku": {
+          "name": "[parameters('resourceSizes').operationalInsightsWorkspace.sku]"
+        },
+        "retention": "[parameters('resourceSizes').operationalInsightsWorkspace.metricsRetentionDays]",
+        "workspaceCapping": {
+          "dailyQuotaGb": "[parameters('resourceSizes').operationalInsightsWorkspace.workspaceCapping.dailyQuotaGb]"
+        }
+      },
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]"
+      }
     },
     {
       "type": "Microsoft.Web/sites",
@@ -1063,7 +1137,8 @@
       "properties": {
         "administratorLogin": "[parameters('sqlServerLogin')]",
         "administratorLoginPassword": "[parameters('sqlServerPassword')]",
-        "version": "[parameters('sqlServerVersion')]"
+        "version": "[parameters('sqlServerVersion')]",
+        "minimalTlsVersion": "[parameters('minTlsVersion')]"
       },
       "name": "[variables('sqlServerNameTidy')]",
       "location": "[parameters('location')]",
@@ -1079,7 +1154,9 @@
             "startIpAddress": "0.0.0.0"
           },
           "name": "AllowAllAzureIps",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ]
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ]
         },
         {
           "type": "databases",
@@ -1105,7 +1182,9 @@
           ],
           "name": "[variables('coreSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').core]"
@@ -1135,13 +1214,15 @@
           ],
           "name": "[variables('masterSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').master]"
           }
         },
-		    {
+        {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
@@ -1165,7 +1246,9 @@
           ],
           "name": "[variables('webSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').web]"
@@ -1195,7 +1278,9 @@
           ],
           "name": "[variables('poolsSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').pools]"
@@ -1225,7 +1310,9 @@
           ],
           "name": "[variables('tasksSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').tasks]"
@@ -1255,7 +1342,9 @@
           ],
           "name": "[variables('formsSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').forms]"
@@ -1285,7 +1374,9 @@
           ],
           "name": "[variables('exmMasterSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').exmmaster]"
@@ -1321,7 +1412,8 @@
           "family": "[parameters('resourceSizes').redisCache.SkuFamily]",
           "capacity": "[parameters('resourceSizes').redisCache.SkuCapacity]"
         },
-        "enableNonSslPort": false
+        "enableNonSslPort": false,
+        "minimalTlsVersion": "[parameters('minTlsVersion')]"
       },
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
@@ -1335,11 +1427,15 @@
       "location": "[parameters('applicationInsightsLocation')]",
       "properties": {
         "ApplicationId": "[variables('appInsightsNameTidy')]",
-        "Application_Type": "web"
+        "Application_Type": "web",
+        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('omsWorkspaceNameTidy'))]"
       },
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('omsWorkspaceNameTidy'))]"
+      ]
     },
     {
       "type": "Microsoft.Insights/Components/CurrentBillingFeatures",
