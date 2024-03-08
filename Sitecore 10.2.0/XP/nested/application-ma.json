@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
-    "appInsightsApiVersion": "2020-02-02-preview",
+    "appInsightsApiVersion": "2020-02-02",
     "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
     "poolsSqlDatabaseNameTidy": "[toLower(trim(parameters('poolsSqlDatabaseName')))]",
     "maSqlDatabaseNameTidy": "[toLower(trim(parameters('maSqlDatabaseName')))]",

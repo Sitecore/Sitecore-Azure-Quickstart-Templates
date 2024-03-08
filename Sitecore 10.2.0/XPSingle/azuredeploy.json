@@ -90,9 +90,8 @@
       "defaultValue": "Standard"
     },
     "sqlDatabaseMaxSize": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "268435456000"
+      "type": "int",
+      "defaultValue": 268435456000
     },
     "sqlBasicDatabaseServiceObjectiveLevel": {
       "type": "string",
