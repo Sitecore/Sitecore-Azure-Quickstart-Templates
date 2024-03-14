@@ -81,49 +81,49 @@
         "Extra Small": {
           "maSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           }
         },
         "Small": {
           "maSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           }
         },
         "Medium": {
           "maSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           }
         },
         "Large": {
           "maSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           }
         },
         "Extra Large": {
           "maSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           }
         },
         "2x Large": {
           "maSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           }
         },
         "3x Large": {
           "maSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           }
         }
@@ -140,11 +140,13 @@
       "type": "Microsoft.Sql/servers/databases",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').maSqlDatabase.ServiceObjectiveLevel]",
+        "tier": "[parameters('resourceSizes').maSqlDatabase.Edition]"
+      },
       "properties": {
-        "edition": "[parameters('resourceSizes').maSqlDatabase.Edition]",
         "collation": "[parameters('sqlDatabaseCollation')]",
-        "maxSizeBytes": "[parameters('resourceSizes').maSqlDatabase.MaxSize]",
-        "requestedServiceObjectiveName": "[parameters('resourceSizes').maSqlDatabase.ServiceObjectiveLevel]"
+        "maxSizeBytes": "[parameters('resourceSizes').maSqlDatabase.MaxSize]"
       },
       "resources": [
         {
@@ -153,9 +155,9 @@
           "dependsOn": [
             "[variables('maSqlDatabaseNameTidy')]"
           ],
-          "apiVersion": "2014-04-01",
+          "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "status": "Enabled"
+            "state": "Enabled"
           }
         }
       ],

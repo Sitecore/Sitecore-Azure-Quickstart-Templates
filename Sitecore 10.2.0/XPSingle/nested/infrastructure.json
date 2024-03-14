@@ -5,7 +5,7 @@
     "webApiVersion": "2018-02-01",
     "serverFarmApiVersion": "2018-02-01",
     "dbApiVersion": "2022-05-01-preview",
-    "applicationInsightsApiVersion": "2020-02-02-preview",
+    "applicationInsightsApiVersion": "2020-02-02",
     "certificateApiVersion": "2014-11-01",
     "omsWorkspaceApiVersion": "2017-03-15-preview",
     "sqlServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
@@ -75,9 +75,8 @@
       "defaultValue": "Standard"
     },
     "sqlDatabaseMaxSize": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "268435456000"
+      "type": "int",
+      "defaultValue": 268435456000
     },
     "sqlBasicDatabaseServiceObjectiveLevel": {
       "type": "string",
@@ -313,11 +312,13 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
+          "sku": {
+            "name": "[parameters('sqlDatabaseServiceObjectiveLevel')]",
+            "tier": "[parameters('sqlDatabaseEdition')]"
+          },
           "properties": {
-            "edition": "[parameters('sqlDatabaseEdition')]",
             "collation": "[parameters('sqlDatabaseCollation')]",
-            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]",
-            "requestedServiceObjectiveName": "[parameters('sqlDatabaseServiceObjectiveLevel')]"
+            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]"
           },
           "resources": [
             {
@@ -326,9 +327,9 @@
               "dependsOn": [
                 "[variables('coreSqlDatabaseNameTidy')]"
               ],
-              "apiVersion": "2014-04-01",
+              "apiVersion": "[variables('dbApiVersion')]",
               "properties": {
-                "status": "Enabled"
+                "state": "Enabled"
               }
             }
           ],
@@ -345,11 +346,13 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
+          "sku": {
+            "name": "[parameters('sqlDatabaseServiceObjectiveLevel')]",
+            "tier": "[parameters('sqlDatabaseEdition')]"
+          },
           "properties": {
-            "edition": "[parameters('sqlDatabaseEdition')]",
             "collation": "[parameters('sqlDatabaseCollation')]",
-            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]",
-            "requestedServiceObjectiveName": "[parameters('sqlDatabaseServiceObjectiveLevel')]"
+            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]"
           },
           "resources": [
             {
@@ -358,9 +361,9 @@
               "dependsOn": [
                 "[variables('masterSqlDatabaseNameTidy')]"
               ],
-              "apiVersion": "2014-04-01",
+              "apiVersion": "[variables('dbApiVersion')]",
               "properties": {
-                "status": "Enabled"
+                "state": "Enabled"
               }
             }
           ],
@@ -377,11 +380,13 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
+          "sku": {
+            "name": "[parameters('sqlDatabaseServiceObjectiveLevel')]",
+            "tier": "[parameters('sqlDatabaseEdition')]"
+          },
           "properties": {
-            "edition": "[parameters('sqlDatabaseEdition')]",
             "collation": "[parameters('sqlDatabaseCollation')]",
-            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]",
-            "requestedServiceObjectiveName": "[parameters('sqlDatabaseServiceObjectiveLevel')]"
+            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]"
           },
           "resources": [
             {
@@ -390,9 +395,9 @@
               "dependsOn": [
                 "[variables('webSqlDatabaseNameTidy')]"
               ],
-              "apiVersion": "2014-04-01",
+              "apiVersion": "[variables('dbApiVersion')]",
               "properties": {
-                "status": "Enabled"
+                "state": "Enabled"
               }
             }
           ],
@@ -409,11 +414,13 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
+          "sku": {
+            "name": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]",
+            "tier": "[parameters('sqlDatabaseEdition')]"
+          },
           "properties": {
-            "edition": "[parameters('sqlDatabaseEdition')]",
             "collation": "[parameters('sqlDatabaseCollation')]",
-            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]",
-            "requestedServiceObjectiveName": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]"
+            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]"
           },
           "resources": [
             {
@@ -422,9 +429,9 @@
               "dependsOn": [
                 "[variables('poolsSqlDatabaseNameTidy')]"
               ],
-              "apiVersion": "2014-04-01",
+              "apiVersion": "[variables('dbApiVersion')]",
               "properties": {
-                "status": "Enabled"
+                "state": "Enabled"
               }
             }
           ],
@@ -441,11 +448,13 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
+          "sku": {
+            "name": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]",
+            "tier": "[parameters('sqlDatabaseEdition')]"
+          },
           "properties": {
-            "edition": "[parameters('sqlDatabaseEdition')]",
             "collation": "[parameters('sqlDatabaseCollation')]",
-            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]",
-            "requestedServiceObjectiveName": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]"
+            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]"
           },
           "resources": [
             {
@@ -454,9 +463,9 @@
               "dependsOn": [
                 "[variables('tasksSqlDatabaseNameTidy')]"
               ],
-              "apiVersion": "2014-04-01",
+              "apiVersion": "[variables('dbApiVersion')]",
               "properties": {
-                "status": "Enabled"
+                "state": "Enabled"
               }
             }
           ],
@@ -473,11 +482,13 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
+          "sku": {
+            "name": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]",
+            "tier": "[parameters('sqlDatabaseEdition')]"
+          },
           "properties": {
-            "edition": "[parameters('sqlDatabaseEdition')]",
             "collation": "[parameters('sqlDatabaseCollation')]",
-            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]",
-            "requestedServiceObjectiveName": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]"
+            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]"
           },
           "resources": [
             {
@@ -486,9 +497,9 @@
               "dependsOn": [
                 "[variables('formsSqlDatabaseNameTidy')]"
               ],
-              "apiVersion": "2014-04-01",
+              "apiVersion": "[variables('dbApiVersion')]",
               "properties": {
-                "status": "Enabled"
+                "state": "Enabled"
               }
             }
           ],
@@ -505,11 +516,13 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
+          "sku": {
+            "name": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]",
+            "tier": "[parameters('sqlDatabaseEdition')]"
+          },
           "properties": {
-            "edition": "[parameters('sqlDatabaseEdition')]",
             "collation": "[parameters('sqlDatabaseCollation')]",
-            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]",
-            "requestedServiceObjectiveName": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]"
+            "maxSizeBytes": "[parameters('sqlDatabaseMaxSize')]"
           },
           "resources": [
             {
@@ -518,9 +531,9 @@
               "dependsOn": [
                 "[variables('exmMasterSqlDatabaseNameTidy')]"
               ],
-              "apiVersion": "2014-04-01",
+              "apiVersion": "[variables('dbApiVersion')]",
               "properties": {
-                "status": "Enabled"
+                "state": "Enabled"
               }
             }
           ],

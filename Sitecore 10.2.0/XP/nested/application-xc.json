@@ -1,10 +1,10 @@
-﻿{
+{
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "resourcesApiVersion": "2018-05-01",
     "webApiVersion": "2018-02-01",
-    "appInsightsApiVersion": "2020-02-02-preview",
+    "appInsightsApiVersion": "2020-02-02",
 
     "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
 
@@ -424,6 +424,9 @@
           },
           "xpPerformanceCountersType": {
             "value": "[parameters('xpPerformanceCountersType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },

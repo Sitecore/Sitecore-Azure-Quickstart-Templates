@@ -101,119 +101,119 @@
         "Extra Small": {
           "processingEngineTasksSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "processingEngineStorageSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "reportingSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           }
         },
         "Small": {
           "processingEngineTasksSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "processingEngineStorageSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "reportingSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S2"
           }
         },
         "Medium": {
           "processingEngineTasksSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "processingEngineStorageSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S2"
           },
           "reportingSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S2"
           }
         },
         "Large": {
           "processingEngineTasksSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "processingEngineStorageSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S2"
           },
           "reportingSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S2"
           }
         },
         "Extra Large": {
           "processingEngineTasksSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "processingEngineStorageSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S3"
           },
           "reportingSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S2"
           }
         },
         "2x Large": {
           "processingEngineTasksSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "processingEngineStorageSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S3"
           },
           "reportingSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S3"
           }
         },
         "3x Large": {
           "processingEngineTasksSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "processingEngineStorageSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S3"
           },
           "reportingSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S3"
           }
         }
@@ -230,11 +230,13 @@
       "name": "[concat(variables('sqlServerNameTidy'), '/', variables('processingEngineTasksSqlDatabaseNameTidy'))]",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').processingEngineTasksSqlDataBase.ServiceObjectiveLevel]",
+        "tier": "[parameters('resourceSizes').processingEngineTasksSqlDataBase.Edition]"
+      },
       "properties": {
-        "edition": "[parameters('resourceSizes').processingEngineTasksSqlDataBase.Edition]",
         "collation": "[parameters('sqlDatabaseCollation')]",
-        "maxSizeBytes": "[parameters('resourceSizes').processingEngineTasksSqlDataBase.MaxSize]",
-        "requestedServiceObjectiveName": "[parameters('resourceSizes').processingEngineTasksSqlDataBase.ServiceObjectiveLevel]"
+        "maxSizeBytes": "[parameters('resourceSizes').processingEngineTasksSqlDataBase.MaxSize]"
       },
       "resources": [
         {
@@ -243,9 +245,9 @@
           "dependsOn": [
             "[variables('processingEngineTasksSqlDatabaseNameTidy')]"
           ],
-          "apiVersion": "2014-04-01",
+          "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "status": "Enabled"
+            "state": "Enabled"
           }
         }
       ],
@@ -259,11 +261,13 @@
       "name": "[concat(variables('sqlServerNameTidy'), '/', variables('processingEngineStorageSqlDatabaseNameTidy'))]",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').processingEngineStorageSqlDataBase.ServiceObjectiveLevel]",
+        "tier": "[parameters('resourceSizes').processingEngineStorageSqlDataBase.Edition]"
+      },
       "properties": {
-        "edition": "[parameters('resourceSizes').processingEngineStorageSqlDataBase.Edition]",
         "collation": "[parameters('sqlDatabaseCollation')]",
-        "maxSizeBytes": "[parameters('resourceSizes').processingEngineStorageSqlDataBase.MaxSize]",
-        "requestedServiceObjectiveName": "[parameters('resourceSizes').processingEngineStorageSqlDataBase.ServiceObjectiveLevel]"
+        "maxSizeBytes": "[parameters('resourceSizes').processingEngineStorageSqlDataBase.MaxSize]"
       },
       "resources": [
         {
@@ -272,9 +276,9 @@
           "dependsOn": [
             "[variables('processingEngineStorageSqlDatabaseNameTidy')]"
           ],
-          "apiVersion": "2014-04-01",
+          "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "status": "Enabled"
+            "state": "Enabled"
           }
         }
       ],
@@ -288,11 +292,13 @@
       "name": "[concat(variables('sqlServerNameTidy'), '/', variables('reportingSqlDatabaseNameTidy'))]",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').reportingSqlDatabase.ServiceObjectiveLevel]",
+        "tier": "[parameters('resourceSizes').reportingSqlDatabase.Edition]"
+      },
       "properties": {
-        "edition": "[parameters('resourceSizes').reportingSqlDatabase.Edition]",
         "collation": "[parameters('sqlDatabaseCollation')]",
-        "maxSizeBytes": "[parameters('resourceSizes').reportingSqlDatabase.MaxSize]",
-        "requestedServiceObjectiveName": "[parameters('resourceSizes').reportingSqlDatabase.ServiceObjectiveLevel]"
+        "maxSizeBytes": "[parameters('resourceSizes').reportingSqlDatabase.MaxSize]"
       },
       "resources": [
         {
@@ -301,9 +307,9 @@
           "dependsOn": [
             "[variables('reportingSqlDatabaseNameTidy')]"
           ],
-          "apiVersion": "2014-04-01",
+          "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "status": "Enabled"
+            "state": "Enabled"
           }
         }
       ],
