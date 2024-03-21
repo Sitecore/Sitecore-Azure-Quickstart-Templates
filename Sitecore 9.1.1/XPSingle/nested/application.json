@@ -1,11 +1,11 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
-    "webApiVersion": "2016-03-01",
+    "webApiVersion": "2018-02-01",
     "searchApiVersion": "2015-08-19",
     "searchRestApiVersion": "2017-11-11",
-    "applicationInsightsApiVersion": "2015-05-01",
+    "applicationInsightsApiVersion": "2020-02-02",
     "sqlServerFqdnTidy": "[trim(toLower(parameters('sqlServerFqdn')))]",
     "coreSqlDatabaseNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
     "securitySqlDatabaseNameTidy": "[toLower(trim(parameters('securitySqlDatabaseName')))]",
@@ -251,12 +251,12 @@
       "type": "bool",
       "defaultValue": false
     },
-    "siWebAppHostName":{
+    "siWebAppHostName": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "[parameters('infrastructure').siWebAppHostName]"
     },
-    "singleWebAppHostName":{
+    "singleWebAppHostName": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "[parameters('infrastructure').singleWebAppHostName]"
@@ -294,7 +294,7 @@
       "minLength": 6,
       "defaultValue": "[toUpper(replace(guid(uniqueString('siClientSecret', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '-',''))]"
     },
-    "setCompatibilityLevelMsDeployPackageUrl":{
+    "setCompatibilityLevelMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
     },
@@ -338,6 +338,10 @@
     "environmentType": {
       "type": "string",
       "defaultValue": "Non-Production"
+    },
+    "minTlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2"
     }
   },
   "resources": [
@@ -352,17 +356,17 @@
           {
             "packageUri": "[parameters('siMsDeployPackageUrl')]",
             "setParameters": {
-                "IIS Web Application Name": "[variables('siWebAppNameTidy')]",
-                "Database Server Name": "[variables('sqlServerFqdnTidy')]",
-                "Core DB Name": "[variables('coreSqlDatabaseNameTidy')]",
-                "Core DB User Name": "[parameters('coreSqlDatabaseUserName')]",
-                "Core DB User Password": "[parameters('coreSqlDatabasePassword')]",
-                "CertificateThumbprint": "[parameters('authCertificateThumbprint')]",
-                "CertificateStoreLocation": "CurrentUser",
-                "PasswordRecoveryUrl": "[concat('https://', parameters('singleWebAppHostName'))]",
-                "License Xml": "[parameters('licenseXml')]",
-                "AllowedCorsOrigins": "[concat('https://', parameters('singleWebAppHostName'))]",
-                "ClientSecret": "[parameters('siClientSecret')]"
+              "IIS Web Application Name": "[variables('siWebAppNameTidy')]",
+              "Database Server Name": "[variables('sqlServerFqdnTidy')]",
+              "Core DB Name": "[variables('coreSqlDatabaseNameTidy')]",
+              "Core DB User Name": "[parameters('coreSqlDatabaseUserName')]",
+              "Core DB User Password": "[parameters('coreSqlDatabasePassword')]",
+              "CertificateThumbprint": "[parameters('authCertificateThumbprint')]",
+              "CertificateStoreLocation": "CurrentUser",
+              "PasswordRecoveryUrl": "[concat('https://', parameters('singleWebAppHostName'))]",
+              "License Xml": "[parameters('licenseXml')]",
+              "AllowedCorsOrigins": "[concat('https://', parameters('singleWebAppHostName'))]",
+              "ClientSecret": "[parameters('siClientSecret')]"
             }
           }
         ]
@@ -373,6 +377,7 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
@@ -392,7 +397,7 @@
           {
             "packageUri": "[parameters('setCompatibilityLevelMsDeployPackageUrl')]",
             "dbType": "SQL",
-            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",            
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
             "setParameters": {
               "Application Path": "[variables('singleWebAppNameTidy')]",
               "Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
@@ -472,9 +477,10 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
-        "WEBSITE_NODE_DEFAULT_VERSION":"[parameters('nodeJsVersion')]",
+        "WEBSITE_NODE_DEFAULT_VERSION": "[parameters('nodeJsVersion')]",
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       },
       "dependsOn": [

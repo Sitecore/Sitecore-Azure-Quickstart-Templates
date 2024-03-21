@@ -1,15 +1,15 @@
 ﻿{
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
 
     "sqlServerFqdnTidy": "[trim(toLower(parameters('sqlServerFqdn')))]",
-    
+
     "coreSqlDatabaseNameTidy": "[trim(toLower(parameters('coreSqlDatabaseName')))]",
     "masterSqlDatabaseNameTidy": "[trim(toLower(parameters('masterSqlDatabaseName')))]",
     "reportingSqlDatabaseNameTidy": "[trim(toLower(parameters('reportingSqlDatabaseName')))]",
-    
+
     "cmWebAppNameTidy": "[trim(toLower(parameters('cmWebAppName')))]",
     "cdWebAppNameTidy": "[trim(toLower(parameters('cdWebAppName')))]",
     "prcWebAppNameTidy": "[trim(toLower(parameters('prcWebAppName')))]",
@@ -19,7 +19,7 @@
     "standard": {
       "type": "secureObject",
       "defaultValue": {
-        "infrastructure": { "sqlServerFqdn":null },
+        "infrastructure": { "sqlServerFqdn": null },
         "deploymentId": null,
         "location": null,
         "sqlServerLogin": null,
@@ -30,7 +30,7 @@
         "cmWebAppName": null,
         "cdWebAppName": null,
         "prcWebAppName": null,
-        "repWebAppName": null        
+        "repWebAppName": null
       }
     },
     "extension": {

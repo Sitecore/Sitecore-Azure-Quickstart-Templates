@@ -1,5 +1,5 @@
 ﻿{
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "resourcesApiVersion": "2018-05-01",
@@ -455,7 +455,7 @@
       "type": "securestring"
     },
 
-    "setCompatibilityLevelMsDeployPackageUrl":{
+    "setCompatibilityLevelMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
@@ -514,6 +514,14 @@
     "aseResourceGroupName": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
+    },
+    "minTlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2"
+    },
+    "omsWorkspaceName": {
+      "type": "string",
+      "defaultValue": "[concat(toLower(parameters('deploymentId')), '-oms')]"
     }
   },
   "resources": [
@@ -532,7 +540,7 @@
         "templateLink": {
           "uri": "[parameters('prerequisites').items[copyIndex()].templateLink]"
         },
-          "parameters": "[parameters('prerequisites').items[copyIndex()].parameters]"
+        "parameters": "[parameters('prerequisites').items[copyIndex()].parameters]"
       }
     },
     {
@@ -640,6 +648,12 @@
           },
           "aseResourceGroupName": {
             "value": "[parameters('aseResourceGroupName')]"
+          },
+          "omsWorkspaceName": {
+            "value": "[parameters('omsWorkspaceName')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -967,6 +981,9 @@
 
           "environmentType": {
             "value": "[parameters('environmentType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -1118,6 +1135,9 @@
 
           "environmentType": {
             "value": "[parameters('environmentType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -1248,6 +1268,9 @@
 
           "environmentType": {
             "value": "[parameters('environmentType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -1275,7 +1298,7 @@
           "location": {
             "value": "[parameters('location')]"
           },
-          
+
           "sitecoreAdminPassword": {
             "value": "[parameters('sitecoreAdminPassword')]"
           },
@@ -1383,6 +1406,9 @@
 
           "environmentType": {
             "value": "[parameters('environmentType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },

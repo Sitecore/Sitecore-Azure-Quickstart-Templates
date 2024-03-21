@@ -8,19 +8,19 @@ This template creates a Sitecore XP Single Environment using a minimal set of Az
 
 Resources provisioned:
 
-  * Azure SQL databases : core, master, web, reporting, pools, tasks, forms, refdata, smm, shard0, shard1, ma
-  * Sitecore roles: Content Delivery, Content Management, Processing, Reporting as a single WebApp instance
-	  * Hosting plans: single hosting plan
-	  * Preconfigured Web Application, based on the provided WebDeploy package
-  * XConnect services: Search, Collection, Reference data, Marketing Automation, Marketing Automation Reporting as a single WebApp instance
-	  * Hosting plans: single hosting plan
-	  * Preconfigured Web Application, based on the provided WebDeploy package
-  * Azure Search Service
-  * (optional) Application Insights for diagnostics and monitoring
+* Azure SQL databases : core, master, web, reporting, pools, tasks, forms, refdata, smm, shard0, shard1, ma
+* Sitecore roles: Content Delivery, Content Management, Processing, Reporting as a single WebApp instance
+  * Hosting plans: single hosting plan
+  * Preconfigured Web Application, based on the provided WebDeploy package
+* XConnect services: Search, Collection, Reference data, Marketing Automation, Marketing Automation Reporting as a single WebApp instance
+  * Hosting plans: single hosting plan
+  * Preconfigured Web Application, based on the provided WebDeploy package
+* Azure Search Service
+* (optional) Application Insights for diagnostics and monitoring
 
 ## Parameters
 
-The **deploymentId** and **licenseXml** parameters in azuredeploy.parameters.json are filled in by the PowerShell script using **Name** and **LicenseXmlPath** parameters respectively.
+The **deploymentId** and **licenseXml** parameters in `azuredeploy.parameters.json` are filled in by the PowerShell script using **Name** and **LicenseXmlPath** parameters respectively.
 
 |Parameter                                  | Description
 |-------------------------------------------|---------------------------------------------------------------------------------------------
@@ -39,9 +39,9 @@ The **deploymentId** and **licenseXml** parameters in azuredeploy.parameters.jso
 > to specify geographical region to deploy Azure Search Service. Default value is the resource
 > group location.
 > * The **applicationInsightsLocation** parameter can be added to the`azuredeploy.parameters.json`
-> to specify geographical region to deploy Application Insights. Default value is **East US**.
+>   to specify geographical region to deploy Application Insights. Default value is **East US**.
 > * The **useApplicationInsights** parameter can be added to the`azuredeploy.parameters.json`
-> to control whether Application Insights will be used for diagnostics and monitoring. Default value is **true**.
+>   to control whether Application Insights will be used for diagnostics and monitoring. Default value is **true**.
 
 ## Deploying with Solr Search
 
