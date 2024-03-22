@@ -1,9 +1,9 @@
-﻿{
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
-    "appInsightsApiVersion": "2015-05-01",
+    "appInsightsApiVersion": "2020-02-02",
 
     "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
 
@@ -21,7 +21,6 @@
 
     "xcSearchIndexNameTidy": "[toLower(trim(parameters('xcSearchIndexName')))]",
     "appInsightsNameTidy": "[toLower(trim(parameters('applicationInsightsName')))]",
-
     "machineLearningServerConnectionStringTidy": "[trim(parameters('machineLearningServerConnectionString'))]",
     "xcSolrConnectionStringTidy": "[trim(parameters('xcSolrConnectionString'))]",
     "xcSolrConnectionStringBaseUri": "[trim(first(split(variables('xcSolrConnectionStringTidy'), ';')))]",
@@ -29,7 +28,7 @@
     "xcSolrConnectionStringParameters": "[replace(variables('xcSolrConnectionStringTidy'), variables('xcSolrConnectionStringBaseUri'), '')]",
     "xcSolrConnectionString": "[uri(variables('xcSolrConnectionStringBaseUriTidy'), concat(variables('xcSearchIndexNameTidy'), variables('xcSolrConnectionStringParameters')))]",
 
-    "azureServiceBusVersion": "2017-04-01",
+    "azureServiceBusVersion": "2022-01-01-preview",
     "azureServiceBusNamespaceNameTidy": "[toLower(trim(parameters('azureServiceBusNamespaceName')))]"
   },
   "parameters": {
@@ -49,7 +48,7 @@
       "type": "string",
       "minLength": 1,
       "defaultValue": "[resourceGroup().location]"
-    },    
+    },
     "sitecoreAdminPassword": {
       "type": "securestring",
       "minLength": 8
@@ -61,6 +60,7 @@
 
     "sqlServerFqdn": {
       "type": "string",
+      "minLength": 1,
       "defaultValue": "[parameters('infrastructure').sqlServerFqdn]"
     },
     "sqlServerLogin": {
@@ -222,12 +222,6 @@
       "minLength": 1
     },
 
-    "xcServerConfigurationEnvironment": {
-      "type": "string",
-      "defaultValue": "Production",
-      "allowedValues": [ "Development", "Production" ]
-    },
-
     "allowInvalidClientCertificates": {
       "type": "bool",
       "defaultValue": false
@@ -238,6 +232,13 @@
       "minLength": 1,
       "defaultValue": "[resourceGroup().id]"
     },
+
+    "xcServerConfigurationEnvironment": {
+      "type": "string",
+      "defaultValue": "Production",
+      "allowedValues": [ "Development", "Production" ]
+    },
+
     "machineLearningServerBlobEndpointCertificatePath": {
       "type": "string",
       "defaultValue": ""
@@ -264,19 +265,22 @@
       "defaultValue": "Non-Production"
     },
 
-    "azureServiceBusNamespaceName" : {
+    "azureServiceBusNamespaceName": {
       "type": "string",
       "minLength": 1
     },
-    "azureServiceBusAccessKeyName" : {
+    "azureServiceBusAccessKeyName": {
       "type": "string",
       "minLength": 1
     },
-    
     "xpPerformanceCountersType": {
       "type": "string",
       "allowedValues": [ "Disable", "ApplicationInsights" ],
       "defaultValue": "Disable"
+    },
+    "minTlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2"
     }
   },
   "resources": [
@@ -349,12 +353,13 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
-        "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
+        "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       },
       "dependsOn": [
-        "[resourceid('Microsoft.Web/sites/extensions', variables('xcSingleWebAppNameTidy'), 'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/extensions', variables('xcSingleWebAppNameTidy'), 'MSDeploy')]"
       ]
     }
   ]

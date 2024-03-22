@@ -1,5 +1,5 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "resourcesApiVersion": "2018-05-01",
@@ -173,6 +173,7 @@
       "type": "securestring",
       "defaultValue": ""
     },
+
     "machineLearningServerConnectionString": {
       "type": "securestring",
       "defaultValue": ""
@@ -215,6 +216,7 @@
       "minLength": 1,
       "defaultValue": "[resourceGroup().id]"
     },
+
     "machineLearningServerBlobEndpointCertificatePath": {
       "type": "string",
       "defaultValue": ""
@@ -241,19 +243,22 @@
       "defaultValue": "Non-Production"
     },
 
-    "azureServiceBusNamespaceName" : {
+    "azureServiceBusNamespaceName": {
       "type": "string",
       "minLength": 1
     },
-    "azureServiceBusAccessKeyName" : {
+    "azureServiceBusAccessKeyName": {
       "type": "string",
       "minLength": 1
     },
-    
     "xpPerformanceCountersType": {
       "type": "string",
       "allowedValues": [ "Disable", "ApplicationInsights" ],
       "defaultValue": "Disable"
+    },
+    "minTlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2"
     }
   },
   "resources": [
@@ -417,14 +422,16 @@
           },
 
           "azureServiceBusNamespaceName": {
-            "value" : "[parameters('azureServiceBusNamespaceName')]"
+            "value": "[parameters('azureServiceBusNamespaceName')]"
           },
           "azureServiceBusAccessKeyName": {
             "value": "[parameters('azureServiceBusAccessKeyName')]"
           },
-          
           "xpPerformanceCountersType": {
             "value": "[parameters('xpPerformanceCountersType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       }
@@ -530,7 +537,6 @@
             "value": "[parameters('processingEngineSqlDatabasePassword')]"
           },
 
-
           "xcSearchIndexName": {
             "value": "[parameters('xcSearchIndexName')]"
           },
@@ -591,14 +597,16 @@
           },
 
           "azureServiceBusNamespaceName": {
-            "value" : "[parameters('azureServiceBusNamespaceName')]"
+            "value": "[parameters('azureServiceBusNamespaceName')]"
           },
           "azureServiceBusAccessKeyName": {
             "value": "[parameters('azureServiceBusAccessKeyName')]"
           },
-          
           "xpPerformanceCountersType": {
             "value": "[parameters('xpPerformanceCountersType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       }
