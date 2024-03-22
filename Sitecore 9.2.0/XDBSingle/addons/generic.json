@@ -1,22 +1,22 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
 
     "sqlServerFqdnTidy": "[trim(toLower(parameters('sqlServerFqdn')))]",
-    
+
     "coreSqlDatabaseNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
     "masterSqlDatabaseNameTidy": "[toLower(trim(parameters('masterSqlDatabaseName')))]",
     "reportingSqlDatabaseNameTidy": "[toLower(trim(parameters('reportingSqlDatabaseName')))]",
-    
+
     "singleWebAppNameTidy": "[trim(toLower(parameters('singleWebAppName')))]"
   },
   "parameters": {
     "standard": {
       "type": "secureObject",
       "defaultValue": {
-        "infrastructure": { "sqlServerFqdn":null },
+        "infrastructure": { "sqlServerFqdn": null },
         "deploymentId": null,
         "location": null,
         "sqlServerLogin": null,
@@ -37,7 +37,7 @@
       "type": "secureObject",
       "defaultValue": "[parameters('standard').infrastructure]"
     },
-    
+
     "deploymentId": {
       "type": "string",
       "defaultValue": "[coalesce(parameters('standard').deploymentId, resourceGroup().name)]"
@@ -90,7 +90,7 @@
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "[parameters('extension').singleMsDeployPackageUrl]"
-    }  
+    }
   },
   "resources": [
     {
