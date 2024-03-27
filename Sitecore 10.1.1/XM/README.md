@@ -4,7 +4,6 @@ Visualize:
 [Infrastructure](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxm%2Fnested%2Finfrastructure.json),
 [Application deployment](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxm%2Fnested%2Fapplication.json)
 
-
 This template creates a Sitecore XM Environment with all resources necessary to run Sitecore.
 
 Resources provisioned:
@@ -17,8 +16,8 @@ Resources provisioned:
   * Azure Search Service
   * (optional) Application Insights for diagnostics and monitoring
 
-
 ## Parameters
+
 The **deploymentId** and **licenseXml** parameters are to be filled in by the PowerShell script.
 
 | Parameter               | Description
@@ -37,9 +36,9 @@ The **deploymentId** and **licenseXml** parameters are to be filled in by the Po
 > to specify geographical region to deploy Azure Search Service. Default value is the resource
 > group location.
 > * The **applicationInsightsLocation** parameter can be added to the`azuredeploy.parameters.json`
-> to specify geographical region to deploy Application Insights. Default value is **East US**.
+>   to specify geographical region to deploy Application Insights. Default value is **East US**.
 > * The **useApplicationInsights** parameter can be added to the`azuredeploy.parameters.json`
-> to control whether Application Insights will be used for diagnostics and monitoring. Default value is **true**.
+>   to control whether Application Insights will be used for diagnostics and monitoring. Default value is **true**.
 
 ## Deploying with Solr Search
 
@@ -49,13 +48,14 @@ The **deploymentId** and **licenseXml** parameters are to be filled in by the Po
 --------------------------------------------|------------------------------------------------
 | solrConnectionString                      | Connection string to existing Solr server.
 
-> **solrConnectionString** parameter is used to identify whether Solr search provider is to be used for the deployment or not. 
+> **solrConnectionString** parameter is used to identify whether Solr search provider is to be used for the deployment or not.
 > The default value is empty which means that Azure Search will be used.
 
 ## Deploying with App Service Environment v2
-> **Note**: Application Service Environment is not provisioned as part of this deployment template. Please reffer to official [documentation](https://docs.microsoft.com/en-us/azure/app-service/environment/intro) for information about ASE deployment and configuration. 
+
+> **Note**: Application Service Environment is not provisioned as part of this deployment template. Please refer to official [documentation](https://docs.microsoft.com/en-us/azure/app-service/environment/intro) for information about ASE deployment and configuration.
 
 | Parameter                                 | Description
 --------------------------------------------|------------------------------------------------
 | aseName                                   | Name of deployed App Service Environment
-| aseResourceGroupName                      | Resource group where App Service Environment is deployed. Provide this value if ASE is hosted in different resouce group
+| aseResourceGroupName                      | Resource group where App Service Environment is deployed. Provide this value if ASE is hosted in different resource group

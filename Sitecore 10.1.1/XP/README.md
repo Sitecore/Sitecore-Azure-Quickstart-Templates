@@ -21,7 +21,7 @@ Resources provisioned:
 
 ## Parameters
 
-The **deploymentId** and **licenseXml** parameters in azuredeploy.parameters.json are filled in by the PowerShell script using **Name** and **LicenseXmlPath** parameters respectively.
+The **deploymentId** and **licenseXml** parameters in `azuredeploy.parameters.json` are filled in by the PowerShell script using **Name** and **LicenseXmlPath** parameters respectively.
 
 |Parameter                                  | Description
 |-------------------------------------------|---------------------------------------------------------------------------------------------
@@ -67,9 +67,10 @@ The **deploymentId** and **licenseXml** parameters in azuredeploy.parameters.jso
 > The default value is empty which means that Azure Search will be used.
 
 ## Deploying with App Service Environment v2
-> **Note**: Application Service Environment is not provisioned as part of this deployment template. Please reffer to official [documentation](https://docs.microsoft.com/en-us/azure/app-service/environment/intro) for information about ASE deployment and configuration. 
+
+> **Note**: Application Service Environment is not provisioned as part of this deployment template. Please refer to official [documentation](https://docs.microsoft.com/en-us/azure/app-service/environment/intro) for information about ASE deployment and configuration. 
 
 | Parameter                                 | Description
 --------------------------------------------|------------------------------------------------
 | aseName                                   | Name of deployed App Service Environment
-| aseResourceGroupName                      | Resource group where App Service Environment is deployed. Provide this value if ASE is hosted in different resouce group
+| aseResourceGroupName                      | Resource group where App Service Environment is deployed. Provide this value if ASE is hosted in different resource group
