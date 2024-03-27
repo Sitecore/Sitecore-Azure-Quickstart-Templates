@@ -1,9 +1,9 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
-    "dbApiVersion": "2014-04-01-preview",
+    "dbApiVersion": "2022-05-01-preview",
 
     "sqlServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
 
@@ -150,27 +150,27 @@
           },
           "refDataSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "shardMapManagerSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "xcShard0SqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "xcShard1SqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "messagingSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           }
         },
@@ -193,27 +193,27 @@
           },
           "refDataSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "shardMapManagerSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "xcShard0SqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "xcShard1SqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "messagingSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           }
         },
@@ -236,27 +236,27 @@
           },
           "refDataSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S2"
           },
           "shardMapManagerSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "xcShard0SqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S2"
           },
           "xcShard1SqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S2"
           },
           "messagingSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           }
         },
@@ -279,27 +279,27 @@
           },
           "refDataSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S3"
           },
           "shardMapManagerSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "xcShard0SqlDatabase": {
             "Edition": "Premium",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "P1"
           },
           "xcShard1SqlDatabase": {
             "Edition": "Premium",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "P1"
           },
           "messagingSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           }
         },
@@ -322,27 +322,27 @@
           },
           "refDataSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S3"
           },
           "shardMapManagerSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "xcShard0SqlDatabase": {
             "Edition": "Premium",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "P2"
           },
           "xcShard1SqlDatabase": {
             "Edition": "Premium",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "P2"
           },
           "messagingSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           }
         }
@@ -431,11 +431,13 @@
       "name": "[concat(variables('sqlServerNameTidy'), '/', variables('refDataSqlDatabaseNameTidy'))]",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').refDataSqlDataBase.ServiceObjectiveLevel]",
+        "tier": "[parameters('resourceSizes').refDataSqlDataBase.Edition]"
+      },
       "properties": {
-        "edition": "[parameters('resourceSizes').refDataSqlDataBase.Edition]",
         "collation": "[parameters('sqlDatabaseCollation')]",
-        "maxSizeBytes": "[parameters('resourceSizes').refDataSqlDataBase.MaxSize]",
-        "requestedServiceObjectiveName": "[parameters('resourceSizes').refDataSqlDataBase.ServiceObjectiveLevel]"
+        "maxSizeBytes": "[parameters('resourceSizes').refDataSqlDataBase.MaxSize]"
       },
       "resources": [
         {
@@ -444,9 +446,9 @@
           "dependsOn": [
             "[variables('refDataSqlDatabaseNameTidy')]"
           ],
-          "apiVersion": "2014-04-01",
+          "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "status": "Enabled"
+            "state": "Enabled"
           }
         }
       ],
@@ -485,11 +487,13 @@
       "name": "[concat(variables('sqlServerNameTidy'),'/',variables('shardMapManagerSqlDatabaseNameTidy'))]",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').shardMapManagerSqlDatabase.ServiceObjectiveLevel]",
+        "tier": "[parameters('resourceSizes').shardMapManagerSqlDatabase.Edition]"
+      },
       "properties": {
-        "edition": "[parameters('resourceSizes').shardMapManagerSqlDatabase.Edition]",
         "collation": "[parameters('sqlDatabaseCollation')]",
-        "maxSizeBytes": "[parameters('resourceSizes').shardMapManagerSqlDatabase.MaxSize]",
-        "requestedServiceObjectiveName": "[parameters('resourceSizes').shardMapManagerSqlDatabase.ServiceObjectiveLevel]"
+        "maxSizeBytes": "[parameters('resourceSizes').shardMapManagerSqlDatabase.MaxSize]"
       },
       "resources": [
         {
@@ -498,9 +502,9 @@
           "dependsOn": [
             "[variables('shardMapManagerSqlDatabaseNameTidy')]"
           ],
-          "apiVersion": "2014-04-01",
+          "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "status": "Enabled"
+            "state": "Enabled"
           }
         }
       ],
@@ -514,11 +518,13 @@
       "name": "[concat(variables('sqlServerNameTidy'),'/',variables('shard0SqlDatabaseNameTidy'))]",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').xcShard0SqlDatabase.ServiceObjectiveLevel]",
+        "tier": "[parameters('resourceSizes').xcShard0SqlDatabase.Edition]"
+      },
       "properties": {
-        "edition": "[parameters('resourceSizes').xcShard0SqlDatabase.Edition]",
         "collation": "[parameters('sqlDatabaseCollation')]",
-        "maxSizeBytes": "[parameters('resourceSizes').xcShard0SqlDatabase.MaxSize]",
-        "requestedServiceObjectiveName": "[parameters('resourceSizes').xcShard0SqlDatabase.ServiceObjectiveLevel]"
+        "maxSizeBytes": "[parameters('resourceSizes').xcShard0SqlDatabase.MaxSize]"
       },
       "resources": [
         {
@@ -527,9 +533,9 @@
           "dependsOn": [
             "[variables('shard0SqlDatabaseNameTidy')]"
           ],
-          "apiVersion": "2014-04-01",
+          "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "status": "Enabled"
+            "state": "Enabled"
           }
         }
       ],
@@ -543,11 +549,13 @@
       "name": "[concat(variables('sqlServerNameTidy'),'/',variables('shard1SqlDatabaseNameTidy'))]",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').xcShard1SqlDatabase.ServiceObjectiveLevel]",
+        "tier": "[parameters('resourceSizes').xcShard1SqlDatabase.Edition]"
+      },
       "properties": {
-        "edition": "[parameters('resourceSizes').xcShard1SqlDatabase.Edition]",
         "collation": "[parameters('sqlDatabaseCollation')]",
-        "maxSizeBytes": "[parameters('resourceSizes').xcShard1SqlDatabase.MaxSize]",
-        "requestedServiceObjectiveName": "[parameters('resourceSizes').xcShard1SqlDatabase.ServiceObjectiveLevel]"
+        "maxSizeBytes": "[parameters('resourceSizes').xcShard1SqlDatabase.MaxSize]"
       },
       "resources": [
         {
@@ -556,9 +564,9 @@
           "dependsOn": [
             "[variables('shard1SqlDatabaseNameTidy')]"
           ],
-          "apiVersion": "2014-04-01",
+          "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "status": "Enabled"
+            "state": "Enabled"
           }
         }
       ],
@@ -572,11 +580,13 @@
       "name": "[concat(variables('sqlServerNameTidy'), '/', variables('messagingSqlDatabaseNameTidy'))]",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').messagingSqlDataBase.ServiceObjectiveLevel]",
+        "tier": "[parameters('resourceSizes').messagingSqlDataBase.Edition]"
+      },
       "properties": {
-        "edition": "[parameters('resourceSizes').messagingSqlDataBase.Edition]",
         "collation": "[parameters('sqlDatabaseCollation')]",
-        "maxSizeBytes": "[parameters('resourceSizes').messagingSqlDataBase.MaxSize]",
-        "requestedServiceObjectiveName": "[parameters('resourceSizes').messagingSqlDataBase.ServiceObjectiveLevel]"
+        "maxSizeBytes": "[parameters('resourceSizes').messagingSqlDataBase.MaxSize]"
       },
       "resources": [
         {
@@ -585,9 +595,9 @@
           "dependsOn": [
             "[variables('messagingSqlDatabaseNameTidy')]"
           ],
-          "apiVersion": "2014-04-01",
+          "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
-            "status": "Enabled"
+            "state": "Enabled"
           }
         }
       ],

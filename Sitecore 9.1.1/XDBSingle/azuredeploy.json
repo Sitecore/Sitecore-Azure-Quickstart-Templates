@@ -1,5 +1,5 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "resourcesApiVersion": "2018-05-01",
@@ -97,9 +97,8 @@
       "defaultValue": "Standard"
     },
     "sqlDatabaseMaxSize": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "268435456000"
+      "type": "int",
+      "defaultValue": 268435456000
     },
     "sqlBasicDatabaseServiceObjectiveLevel": {
       "type": "string",
@@ -429,7 +428,7 @@
       "type": "securestring",
       "minLength": 1
     },
-    "setCompatibilityLevelMsDeployPackageUrl":{
+    "setCompatibilityLevelMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
@@ -466,10 +465,30 @@
       "minLength": 1,
       "defaultValue": "[resourceGroup().id]"
     },
-    
+
     "environmentType": {
       "type": "string",
       "defaultValue": "Non-Production"
+    },
+    "minTlsVersion": {
+      "defaultValue": "1.2",
+      "type": "string"
+    },
+    "omsWorkspaceMetricsRetentionDays": {
+      "type": "int",
+      "defaultValue": 7
+    },
+    "omsCapSizeGb": {
+      "defaultValue": 1,
+      "type": "int"
+    },
+    "omsWorkspaceSku": {
+      "type": "string",
+      "defaultValue": "standalone"
+    },
+    "omsWorkspaceName": {
+      "type": "string",
+      "defaultValue": "[concat(toLower(parameters('deploymentId')), '-oms')]"
     }
   },
   "resources": [
@@ -488,7 +507,7 @@
         "templateLink": {
           "uri": "[parameters('prerequisites').items[copyIndex()].templateLink]"
         },
-        "parameters": "[parameters('prerequisites').items[copyIndex()].parameters]"   
+        "parameters": "[parameters('prerequisites').items[copyIndex()].parameters]"
       }
     },
     {
@@ -611,6 +630,21 @@
           },
           "authCertificatePassword": {
             "value": "[parameters('authCertificatePassword')]"
+          },
+          "omsWorkspaceName": {
+            "value": "[parameters('omsWorkspaceName')]"
+          },
+          "omsWorkspaceSku": {
+            "value": "[parameters('omsWorkspaceSku')]"
+          },
+          "omsCapSizeGb": {
+            "value": "[parameters('omsCapSizeGb')]"
+          },
+          "omsWorkspaceMetricsRetentionDays": {
+            "value": "[parameters('omsWorkspaceMetricsRetentionDays')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -831,9 +865,12 @@
           "passwordSalt": {
             "value": "[parameters('passwordSalt')]"
           },
-          
+
           "environmentType": {
             "value": "[parameters('environmentType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -1013,6 +1050,9 @@
 
           "environmentType": {
             "value": "[parameters('environmentType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },

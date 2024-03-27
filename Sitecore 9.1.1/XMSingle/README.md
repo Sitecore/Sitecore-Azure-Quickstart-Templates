@@ -4,26 +4,25 @@ Visualize:
 [Infrastructure](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxmsingle%2Fnested%2Finfrastructure.json),
 [Application deployment](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSitecore%2Fsitecore-azure-quickstart-templates%2Fmaster%2FSitecore%209.0.0%2Fxmsingle%2Fnested%2Fapplication.json)
 
-
 This template creates a Sitecore XM Single Environment using a minimal set of Azure resources while still ensuring Sitecore will run. It is best practice to use this configuration for development and testing rather than production environments.
 
 Resources provisioned:
 
-  * Azure SQL databases : core, master, web, forms
-  * Sitecore roles: Content Delivery, Content Management as a single WebApp instance
-	  * Hosting plans: single hosting plan
-	  * Preconfigured Web Application, based on the provided WebDeploy package
+* Azure SQL databases : core, master, web, forms
+* Sitecore roles: Content Delivery, Content Management as a single WebApp instance
+  * Hosting plans: single hosting plan
+  * Preconfigured Web Application, based on the provided WebDeploy package
   * Azure Search Service
-  * (optional) Application Insights for diagnostics and monitoring
+* (optional) Application Insights for diagnostics and monitoring
 
 > **Note:**
 > * The **searchServiceLocation** parameter can be added to the `azuredeploy.parameters.json`
 > to specify geographical region to deploy Azure Search Service. Default value is the resource
 > group location.
 > * The **applicationInsightsLocation** parameter can be added to the`azuredeploy.parameters.json`
-> to specify geographical region to deploy Application Insights. Default value is **East US**.
+>   to specify geographical region to deploy Application Insights. Default value is **East US**.
 > * The **useApplicationInsights** parameter can be added to the`azuredeploy.parameters.json`
-> to control whether Application Insights will be used for diagnostics and monitoring. Default value is **true**.
+>   to control whether Application Insights will be used for diagnostics and monitoring. Default value is **true**.
 
 ## Parameters
 The **deploymentId** and **licenseXml** parameters are filled in by the PowerShell script.
