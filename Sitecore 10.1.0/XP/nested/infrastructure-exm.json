@@ -1,5 +1,5 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
@@ -9,11 +9,11 @@
     "exmDdsWebAppNameTidy": "[toLower(trim(parameters('exmDdsWebAppName')))]",
     "useAse": "[not(empty(parameters('aseName')))]",
     "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
-    "hostingPlanProperties":{
-      "exmDdsProperties":{
+    "hostingPlanProperties": {
+      "exmDdsProperties": {
         "name": "[variables('exmDdsHostingPlanNameTidy')]"
       },
-      "exmDdsPropertiesWithASE":{
+      "exmDdsPropertiesWithASE": {
         "name": "[variables('exmDdsHostingPlanNameTidy')]",
         "hostingEnvironmentProfile": {
           "id": "[variables('aseResourceId')]"
@@ -129,11 +129,11 @@
       "type": "object",
       "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
     },
-    "aseName":{
+    "aseName": {
       "type": "string",
       "defaultValue": ""
     },
-    "aseResourceGroupName":{
+    "aseResourceGroupName": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
     }
