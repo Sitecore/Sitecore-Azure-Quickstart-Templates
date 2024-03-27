@@ -1,5 +1,5 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "resourcesApiVersion": "2018-05-01",
@@ -18,8 +18,7 @@
           {
             "name": "empty",
             "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
-            "parameters": {
-            }
+            "parameters": {}
           }
         ]
       }
@@ -31,13 +30,11 @@
           {
             "name": "empty-prerequisite",
             "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
-            "parameters": {
-            }
+            "parameters": {}
           }
         ]
       }
     },
-
     "templateLinkBase": {
       "type": "string",
       "minLength": 1,
@@ -47,7 +44,6 @@
       "type": "securestring",
       "defaultValue": ""
     },
-
     "deploymentId": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
@@ -57,7 +53,6 @@
       "minLength": 1,
       "defaultValue": "[resourceGroup().location]"
     },
-
     "sitecoreAdminPassword": {
       "type": "securestring",
       "minLength": 8
@@ -66,7 +61,6 @@
       "type": "securestring",
       "minLength": 1
     },
-
     "sqlServerName": {
       "type": "string",
       "minLength": 1,
@@ -80,7 +74,6 @@
       "type": "securestring",
       "minLength": 8
     },
-
     "sqlServerVersion": {
       "type": "string",
       "minLength": 1,
@@ -97,9 +90,8 @@
       "defaultValue": "Standard"
     },
     "sqlDatabaseMaxSize": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "268435456000"
+      "type": "int",
+      "defaultValue": 268435456000
     },
     "sqlBasicDatabaseServiceObjectiveLevel": {
       "type": "string",
@@ -111,7 +103,6 @@
       "minLength": 1,
       "defaultValue": "S1"
     },
-
     "coreSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -192,7 +183,6 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-processingenginestorage-db')]"
     },
-
     "coreSqlDatabaseUserName": {
       "type": "string",
       "minLength": 1,
@@ -339,7 +329,6 @@
       "minLength": 1,
       "defaultValue": "xdb"
     },
-
     "solrConnectionString": {
       "type": "securestring",
       "defaultValue": ""
@@ -393,7 +382,10 @@
     },
     "xpPerformanceCountersType": {
       "type": "string",
-      "allowedValues": [ "Disable", "ApplicationInsights" ],
+      "allowedValues": [
+        "Disable",
+        "ApplicationInsights"
+      ],
       "defaultValue": "[if(parameters('storeSitecoreCountersInApplicationInsights'), 'ApplicationInsights', 'Disable')]"
     },
     "applicationInsightsPricePlan": {
@@ -404,13 +396,15 @@
     "applicationInsightsCurrentBillingFeatures": {
       "type": "string",
       "defaultValue": "Basic",
-      "allowedValues": [ "Basic", "Application Insights Enterprise" ]
+      "allowedValues": [
+        "Basic",
+        "Application Insights Enterprise"
+      ]
     },
     "applicationInsightsDataVolumeCap": {
       "type": "string",
       "defaultValue": "0.33"
     },
-
     "xcSingleHostingPlanName": {
       "type": "string",
       "minLength": 1,
@@ -424,7 +418,6 @@
       "type": "int",
       "defaultValue": 1
     },
-
     "singleHostingPlanName": {
       "type": "string",
       "minLength": 1,
@@ -438,7 +431,6 @@
       "type": "int",
       "defaultValue": 1
     },
-
     "siWebAppName": {
       "type": "string",
       "minLength": 1,
@@ -454,7 +446,6 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-xc-single')]"
     },
-
     "siMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
@@ -467,7 +458,7 @@
       "type": "securestring",
       "minLength": 1
     },
-    "setCompatibilityLevelMsDeployPackageUrl":{
+    "setCompatibilityLevelMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
@@ -478,7 +469,6 @@
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('telerik', parameters('passwordSalt'))), uniqueString('telerik', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('telerik', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
-
     "authCertificateName": {
       "type": "string",
       "minLength": 1,
@@ -494,19 +484,19 @@
       "minLength": 1,
       "defaultValue": ""
     },
-
     "siClientSecret": {
       "type": "securestring",
       "minLength": 6,
       "defaultValue": "[toUpper(replace(guid(uniqueString('siClientSecret', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '-',''))]"
     },
-
     "exmEdsProvider": {
       "type": "string",
-      "allowedValues": [ "CustomSMTP", "EmailCloud" ],
+      "allowedValues": [
+        "CustomSMTP",
+        "EmailCloud"
+      ],
       "defaultValue": "CustomSMTP"
     },
-
     "exmCryptographicKey": {
       "type": "securestring",
       "minLength": 64,
@@ -517,34 +507,31 @@
       "minLength": 64,
       "defaultValue": "[toUpper(replace(concat(guid(uniqueString('exmAuthenticationKey', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), guid(uniqueString('exmAuthenticationKey', parameters('sqlServerPassword'), parameters('passwordSalt')))), '-',''))]"
     },
-
     "xcServerConfigurationEnvironment": {
       "type": "string",
       "defaultValue": "Production",
-      "allowedValues": [ "Development", "Production" ]
+      "allowedValues": [
+        "Development",
+        "Production"
+      ]
     },
-
     "allowInvalidClientCertificates": {
       "type": "bool",
       "defaultValue": false
     },
-
     "passwordSalt": {
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "[resourceGroup().id]"
     },
-
     "nodeJsVersion": {
-      "type" : "string",
-      "defaultValue" : "8.11.1"
+      "type": "string",
+      "defaultValue": "8.11.1"
     },
-
     "environmentType": {
       "type": "string",
       "defaultValue": "Non-Production"
     },
-
     "azureServiceBusQueues": {
       "type": "array",
       "defaultValue": [
@@ -568,7 +555,7 @@
     "azureServiceBusTopics": {
       "type": "array",
       "defaultValue": [
-          "sitecore_processing_engine_abstractions_messages_taskstatus__sitecore_processing_engine_abstractions"
+        "sitecore_processing_engine_abstractions_messages_taskstatus__sitecore_processing_engine_abstractions"
       ]
     },
     "azureServiceBusSubscriptions": {
@@ -596,6 +583,26 @@
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-asb')]"
+    },
+    "minTlsVersion": {
+      "defaultValue": "1.2",
+      "type": "string"
+    },
+    "omsWorkspaceMetricsRetentionDays": {
+      "type": "int",
+      "defaultValue": 7
+    },
+    "omsCapSizeGb": {
+      "defaultValue": 1,
+      "type": "int"
+    },
+    "omsWorkspaceSku": {
+      "type": "string",
+      "defaultValue": "standalone"
+    },
+    "omsWorkspaceName": {
+      "type": "string",
+      "defaultValue": "[concat(toLower(parameters('deploymentId')), '-oms')]"
     }
   },
   "resources": [
@@ -633,7 +640,6 @@
           "location": {
             "value": "[parameters('location')]"
           },
-
           "sqlServerName": {
             "value": "[parameters('sqlServerName')]"
           },
@@ -643,7 +649,6 @@
           "sqlServerPassword": {
             "value": "[parameters('sqlServerPassword')]"
           },
-
           "sqlServerVersion": {
             "value": "[parameters('sqlServerVersion')]"
           },
@@ -662,7 +667,6 @@
           "sqlDatabaseServiceObjectiveLevel": {
             "value": "[parameters('sqlDatabaseServiceObjectiveLevel')]"
           },
-
           "coreSqlDatabaseName": {
             "value": "[parameters('coreSqlDatabaseName')]"
           },
@@ -723,7 +727,6 @@
           "applicationInsightsDataVolumeCap": {
             "value": "[parameters('applicationInsightsDataVolumeCap')]"
           },
-
           "singleHostingPlanName": {
             "value": "[parameters('singleHostingPlanName')]"
           },
@@ -733,14 +736,12 @@
           "singleHostingPlanSkuName": {
             "value": "[parameters('singleHostingPlanSkuName')]"
           },
-
           "siWebAppName": {
             "value": "[parameters('siWebAppName')]"
           },
           "singleWebAppName": {
             "value": "[parameters('singleWebAppName')]"
           },
-
           "authCertificateName": {
             "value": "[parameters('authCertificateName')]"
           },
@@ -749,6 +750,21 @@
           },
           "authCertificatePassword": {
             "value": "[parameters('authCertificatePassword')]"
+          },
+          "omsWorkspaceName": {
+            "value": "[parameters('omsWorkspaceName')]"
+          },
+          "omsWorkspaceSku": {
+            "value": "[parameters('omsWorkspaceSku')]"
+          },
+          "omsCapSizeGb": {
+            "value": "[parameters('omsCapSizeGb')]"
+          },
+          "omsWorkspaceMetricsRetentionDays": {
+            "value": "[parameters('omsWorkspaceMetricsRetentionDays')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -795,6 +811,9 @@
           },
           "azureServiceBusNamespaceName": {
             "value": "[parameters('azureServiceBusNamespaceName')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       }
@@ -815,7 +834,6 @@
           "location": {
             "value": "[parameters('location')]"
           },
-
           "sqlServerName": {
             "value": "[parameters('sqlServerName')]"
           },
@@ -831,7 +849,6 @@
           "sqlBasicDatabaseServiceObjectiveLevel": {
             "value": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]"
           },
-
           "shardMapManagerSqlDatabaseName": {
             "value": "[parameters('shardMapManagerSqlDatabaseName')]"
           },
@@ -856,7 +873,6 @@
           "reportingSqlDatabaseName": {
             "value": "[parameters('reportingSqlDatabaseName')]"
           },
-
           "xcSingleHostingPlanName": {
             "value": "[parameters('xcSingleHostingPlanName')]"
           },
@@ -866,7 +882,6 @@
           "xcSingleHostingPlanSkuCapacity": {
             "value": "[parameters('xcSingleHostingPlanSkuCapacity')]"
           },
-
           "xcSingleWebAppName": {
             "value": "[parameters('xcSingleWebAppName')]"
           }
@@ -889,28 +904,24 @@
           "infrastructure": {
             "value": "[reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value]"
           },
-
           "deploymentId": {
             "value": "[parameters('deploymentId')]"
           },
           "location": {
             "value": "[parameters('location')]"
           },
-
           "sitecoreAdminPassword": {
             "value": "[parameters('sitecoreAdminPassword')]"
           },
           "licenseXml": {
             "value": "[parameters('licenseXml')]"
           },
-
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
           },
           "sqlServerPassword": {
             "value": "[parameters('sqlServerPassword')]"
           },
-
           "coreSqlDatabaseName": {
             "value": "[parameters('coreSqlDatabaseName')]"
           },
@@ -1002,7 +1013,6 @@
           "solrConnectionString": {
             "value": "[parameters('solrConnectionString')]"
           },
-
           "useApplicationInsights": {
             "value": "[parameters('useApplicationInsights')]"
           },
@@ -1012,7 +1022,6 @@
           "storeSitecoreCountersInApplicationInsights": {
             "value": "[parameters('storeSitecoreCountersInApplicationInsights')]"
           },
-
           "siWebAppName": {
             "value": "[parameters('siWebAppName')]"
           },
@@ -1022,7 +1031,6 @@
           "xcSingleWebAppName": {
             "value": "[parameters('xcSingleWebAppName')]"
           },
-
           "siMsDeployPackageUrl": {
             "value": "[parameters('siMsDeployPackageUrl')]"
           },
@@ -1042,35 +1050,32 @@
           "exmAuthenticationKey": {
             "value": "[parameters('exmAuthenticationKey')]"
           },
-
           "siClientSecret": {
             "value": "[parameters('siClientSecret')]"
           },
           "telerikEncryptionKey": {
             "value": "[parameters('telerikEncryptionKey')]"
           },
-
           "allowInvalidClientCertificates": {
             "value": "[parameters('allowInvalidClientCertificates')]"
           },
-
           "passwordSalt": {
             "value": "[parameters('passwordSalt')]"
           },
-
           "nodeJsVersion": {
             "value": "[parameters('nodeJsVersion')]"
           },
-
           "environmentType": {
             "value": "[parameters('environmentType')]"
           },
-
           "azureServiceBusNamespaceName": {
-            "value" : "[parameters('azureServiceBusNamespaceName')]"
+            "value": "[parameters('azureServiceBusNamespaceName')]"
           },
           "azureServiceBusAccessKeyName": {
             "value": "[parameters('azureServiceBusManageSharedAccessKeyName')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -1092,32 +1097,27 @@
           "infrastructure": {
             "value": "[reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value]"
           },
-
           "templateLinkAccessToken": {
             "value": "[parameters('templateLinkAccessToken')]"
           },
-
           "deploymentId": {
             "value": "[parameters('deploymentId')]"
           },
           "location": {
             "value": "[parameters('location')]"
           },
-
           "sitecoreAdminPassword": {
             "value": "[parameters('sitecoreAdminPassword')]"
           },
           "licenseXml": {
             "value": "[parameters('licenseXml')]"
           },
-
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
           },
           "sqlServerPassword": {
             "value": "[parameters('sqlServerPassword')]"
           },
-
           "poolsSqlDatabaseName": {
             "value": "[parameters('poolsSqlDatabaseName')]"
           },
@@ -1145,7 +1145,6 @@
           "processingEngineStorageSqlDatabaseName": {
             "value": "[parameters('processingEngineStorageSqlDatabaseName')]"
           },
-
           "poolsSqlDatabaseUserName": {
             "value": "[parameters('poolsSqlDatabaseUserName')]"
           },
@@ -1189,7 +1188,6 @@
           "xcSearchIndexName": {
             "value": "[parameters('xcSearchIndexName')]"
           },
-
           "xcSolrConnectionString": {
             "value": "[parameters('xcSolrConnectionString')]"
           },
@@ -1204,23 +1202,18 @@
           "applicationInsightsName": {
             "value": "[parameters('applicationInsightsName')]"
           },
-
           "xcSingleWebAppName": {
             "value": "[parameters('xcSingleWebAppName')]"
           },
-
           "xcSingleMsDeployPackageUrl": {
             "value": "[parameters('xcSingleMsDeployPackageUrl')]"
           },
-
           "xcServerConfigurationEnvironment": {
             "value": "[parameters('xcServerConfigurationEnvironment')]"
           },
-
           "allowInvalidClientCertificates": {
             "value": "[parameters('allowInvalidClientCertificates')]"
           },
-
           "passwordSalt": {
             "value": "[parameters('passwordSalt')]"
           },
@@ -1244,15 +1237,17 @@
           "environmentType": {
             "value": "[parameters('environmentType')]"
           },
-
           "azureServiceBusNamespaceName": {
-            "value" : "[parameters('azureServiceBusNamespaceName')]"
+            "value": "[parameters('azureServiceBusNamespaceName')]"
           },
           "azureServiceBusAccessKeyName": {
             "value": "[parameters('azureServiceBusManageSharedAccessKeyName')]"
           },
           "xpPerformanceCountersType": {
             "value": "[parameters('xpPerformanceCountersType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -1278,13 +1273,10 @@
           "standard": {
             "value": {
               "infrastructure": "[reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value]",
-
               "deploymentId": "[parameters('deploymentId')]",
               "location": "[parameters('location')]",
-
               "sitecoreAdminPassword": "[parameters('sitecoreAdminPassword')]",
               "licenseXml": "[parameters('licenseXml')]",
-
               "sqlServerName": "[parameters('sqlServerName')]",
               "sqlServerLogin": "[parameters('sqlServerLogin')]",
               "sqlServerPassword": "[parameters('sqlServerPassword')]",
@@ -1294,7 +1286,6 @@
               "sqlDatabaseMaxSize": "[parameters('sqlDatabaseMaxSize')]",
               "sqlBasicDatabaseServiceObjectiveLevel": "[parameters('sqlBasicDatabaseServiceObjectiveLevel')]",
               "sqlDatabaseServiceObjectiveLevel": "[parameters('sqlDatabaseServiceObjectiveLevel')]",
-
               "coreSqlDatabaseName": "[parameters('coreSqlDatabaseName')]",
               "masterSqlDatabaseName": "[parameters('masterSqlDatabaseName')]",
               "webSqlDatabaseName": "[parameters('webSqlDatabaseName')]",
@@ -1310,7 +1301,6 @@
               "maSqlDatabaseName": "[parameters('maSqlDatabaseName')]",
               "processingEngineTasksSqlDatabaseName": "[parameters('processingEngineTasksSqlDatabaseName')]",
               "processingEngineStorageSqlDatabaseName": "[parameters('processingEngineStorageSqlDatabaseName')]",
-
               "coreSqlDatabaseUserName": "[parameters('coreSqlDatabaseUserName')]",
               "coreSqlDatabasePassword": "[parameters('coreSqlDatabasePassword')]",
               "masterSqlDatabaseUserName": "[parameters('masterSqlDatabaseUserName')]",
@@ -1342,7 +1332,6 @@
               "searchServiceReplicaCount": "[parameters('searchServiceReplicaCount')]",
               "searchServicePartitionCount": "[parameters('searchServicePartitionCount')]",
               "xcSearchIndexName": "[parameters('xcSearchIndexName')]",
-
               "solrConnectionString": "[parameters('solrConnectionString')]",
               "xcSolrConnectionString": "[parameters('xcSolrConnectionString')]",
               "machineLearningServerConnectionString": "[parameters('machineLearningServerConnectionString')]",
@@ -1351,17 +1340,12 @@
               "applicationInsightsName": "[parameters('applicationInsightsName')]",
               "applicationInsightsLocation": "[parameters('applicationInsightsLocation')]",
               "storeSitecoreCountersInApplicationInsights": "[parameters('storeSitecoreCountersInApplicationInsights')]",
-
               "xcSingleHostingPlanName": "[parameters('xcSingleHostingPlanName')]",
               "singleHostingPlanName": "[parameters('singleHostingPlanName')]",
-
               "xcSingleWebAppName": "[parameters('xcSingleWebAppName')]",
               "singleWebAppName": "[parameters('singleWebAppName')]",
-
               "passwordSalt": "[parameters('passwordSalt')]",
-
               "xcServerConfigurationEnvironment": "[parameters('xcServerConfigurationEnvironment')]",
-
               "authCertificateBlob": "[parameters('authCertificateBlob')]",
               "authCertificatePassword": "[parameters('authCertificatePassword')]",
 
@@ -1375,7 +1359,9 @@
               "environmentType": "[parameters('environmentType')]"
             }
           },
-          "extension": { "value": "[parameters('modules').items[copyIndex()].parameters]" }
+          "extension": {
+            "value": "[parameters('modules').items[copyIndex()].parameters]"
+          }
         }
       },
       "dependsOn": [
