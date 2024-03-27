@@ -1,15 +1,14 @@
-﻿{
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
     "searchApiVersion": "2015-08-19",
     "searchRestApiVersion": "2017-11-11",
-    "redisApiVersion": "2016-04-01",
-    "appInsightsApiVersion": "2015-05-01",
+    "redisApiVersion": "2020-06-01",
+    "appInsightsApiVersion": "2020-02-02",
 
     "sqlServerFqdnTidy": "[trim(toLower(parameters('sqlServerFqdn')))]",
-
     "coreSqlDatabaseNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
     "securitySqlDatabaseNameTidy": "[toLower(trim(parameters('securitySqlDatabaseName')))]",
     "webSqlDatabaseNameTidy": "[toLower(trim(parameters('webSqlDatabaseName')))]",
@@ -45,7 +44,7 @@
     "searchServiceNameTidy": "[toLower(trim(parameters('searchServiceName')))]",
     "redisCacheNameTidy": "[toLower(trim(parameters('redisCacheName')))]",
 
-    "azureServiceBusVersion": "2017-04-01",
+    "azureServiceBusVersion": "2022-01-01-preview",
     "azureServiceBusNamespaceNameTidy": "[toLower(trim(parameters('azureServiceBusNamespaceName')))]"
   },
   "parameters": {
@@ -64,7 +63,6 @@
         "exmDdsWebAppHostName": null
       }
     },
-
     "deploymentId": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
@@ -74,7 +72,6 @@
       "minLength": 1,
       "defaultValue": "[resourceGroup().location]"
     },
-
     "sitecoreAdminPassword": {
       "type": "securestring",
       "minLength": 8
@@ -100,7 +97,6 @@
       "type": "securestring",
       "minLength": 8
     },
-
     "coreSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -151,7 +147,6 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-exmmaster-db')]"
     },
-
     "coreSqlDatabaseUserName": {
       "type": "string",
       "minLength": 1,
@@ -383,8 +378,7 @@
     "setCompatibilityLevelMsDeployPackageUrl":{
       "type": "securestring",
       "minLength": 1
-    },    
-
+    },
     "securityClientIp": {
       "type": "string",
       "minLength": 1,
@@ -428,7 +422,6 @@
       "type": "bool",
       "defaultValue": false
     },
-
     "passwordSalt": {
       "type": "securestring",
       "minLength": 1,
@@ -455,6 +448,10 @@
     "azureServiceBusAccessKeyName" : {
       "type": "string",
       "minLength": 1
+    },
+    "minTlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2"
     }
   },
   "resources": [
@@ -488,6 +485,7 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
@@ -699,7 +697,7 @@
         ]
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('prcWebAppNameTidy'),'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/extensions', variables('prcWebAppNameTidy'), 'MSDeploy')]"
       ]
     },
     {
@@ -707,6 +705,7 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "WEBSITE_NODE_DEFAULT_VERSION":"[parameters('cdNodeJsVersion')]",
@@ -721,6 +720,7 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "WEBSITE_NODE_DEFAULT_VERSION":"[parameters('cmNodeJsVersion')]",
@@ -735,6 +735,7 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
@@ -748,6 +749,7 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       },
