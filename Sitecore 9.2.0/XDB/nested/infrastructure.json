@@ -1,13 +1,14 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
     "serverFarmApiVersion": "2018-02-01",
-    "dbApiVersion": "2014-04-01-preview",
+    "dbApiVersion": "2022-05-01-preview",
     "searchApiVersion": "2015-08-19",
-    "appInsightsApiVersion": "2015-05-01",
+    "appInsightsApiVersion": "2020-02-02",
     "certificateApiVersion": "2014-11-01",
+    "omsWorkspaceApiVersion": "2017-03-15-preview",
 
     "sqlServerNameTidy": "[toLower(trim(parameters('sqlServerName')))]",
 
@@ -26,6 +27,7 @@
     "appInsightsNameTidy": "[toLower(trim(parameters('applicationInsightsName')))]",
     "applicationInsightsPricePlanTidy": "[toLower(trim(parameters('applicationInsightsPricePlan')))]",
     "authCertificateNameTidy": "[toLower(trim(parameters('authCertificateName')))]",
+    "omsWorkspaceNameTidy": "[toLower(trim(parameters('omsWorkspaceName')))]",
 
     "sitecoreTags": {
       "provider": "b51535c2-ab3e-4a68-95f8-e2e3c9a19299",
@@ -55,13 +57,18 @@
     },
     "sitecoreSKU": {
       "type": "string",
-      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large" ],
+      "allowedValues": [
+        "Extra Small",
+        "Small",
+        "Medium",
+        "Large",
+        "Extra Large"
+      ],
       "defaultValue": "Extra Small",
       "metadata": {
         "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
       }
     },
-
     "sqlServerName": {
       "type": "string",
       "minLength": 1,
@@ -75,7 +82,6 @@
       "type": "securestring",
       "minLength": 8
     },
-
     "sqlServerVersion": {
       "type": "string",
       "minLength": 1,
@@ -86,7 +92,6 @@
       "minLength": 1,
       "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
     },
-
     "coreSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -112,7 +117,7 @@
       "type": "bool",
       "defaultValue": true
     },
-    
+
     "searchServiceName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
@@ -125,7 +130,7 @@
       "type": "int",
       "defaultValue": 1
     },
-    
+
     "useApplicationInsights": {
       "type": "bool",
       "defaultValue": true
@@ -179,7 +184,6 @@
       "type": "securestring",
       "minLength": 1
     },
-
     "skuMap": {
       "type": "secureObject",
       "defaultValue": {
@@ -202,22 +206,22 @@
           },
           "coreSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "masterSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "poolsSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "tasksSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "searchService": {
@@ -229,6 +233,13 @@
             "CurrentBillingFeatures": "Basic",
             "DataVolumeCap": {
               "Cap": 0.33
+            }
+          },
+          "operationalInsightsWorkspace": {
+            "sku": "standalone",
+            "metricsRetentionDays": 7,
+            "workspaceCapping": {
+              "dailyQuotaGb": 1
             }
           }
         },
@@ -251,22 +262,22 @@
           },
           "coreSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "masterSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "poolsSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "tasksSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "searchService": {
@@ -278,6 +289,13 @@
             "CurrentBillingFeatures": "Basic",
             "DataVolumeCap": {
               "Cap": 0.33
+            }
+          },
+          "operationalInsightsWorkspace": {
+            "sku": "standalone",
+            "metricsRetentionDays": 7,
+            "workspaceCapping": {
+              "dailyQuotaGb": 1
             }
           }
         },
@@ -300,22 +318,22 @@
           },
           "coreSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "masterSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "poolsSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "tasksSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "searchService": {
@@ -327,6 +345,13 @@
             "CurrentBillingFeatures": "Basic",
             "DataVolumeCap": {
               "Cap": 0.33
+            }
+          },
+          "operationalInsightsWorkspace": {
+            "sku": "standalone",
+            "metricsRetentionDays": 7,
+            "workspaceCapping": {
+              "dailyQuotaGb": 1
             }
           }
         },
@@ -349,22 +374,22 @@
           },
           "coreSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "masterSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "poolsSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "tasksSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S0"
           },
           "searchService": {
@@ -376,6 +401,13 @@
             "CurrentBillingFeatures": "Application Insights Enterprise",
             "DataVolumeCap": {
               "Cap": 1.8
+            }
+          },
+          "operationalInsightsWorkspace": {
+            "sku": "standalone",
+            "metricsRetentionDays": 7,
+            "workspaceCapping": {
+              "dailyQuotaGb": 2
             }
           }
         },
@@ -398,22 +430,22 @@
           },
           "coreSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "masterSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "poolsSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S2"
           },
           "tasksSqlDatabase": {
             "Edition": "Standard",
-            "MaxSize": "268435456000",
+            "MaxSize": 268435456000,
             "ServiceObjectiveLevel": "S1"
           },
           "searchService": {
@@ -426,6 +458,13 @@
             "DataVolumeCap": {
               "Cap": 1.8
             }
+          },
+          "operationalInsightsWorkspace": {
+            "sku": "standalone",
+            "metricsRetentionDays": 7,
+            "workspaceCapping": {
+              "dailyQuotaGb": 2
+            }
           }
         }
       }
@@ -434,13 +473,21 @@
       "type": "object",
       "defaultValue": "[parameters('skuMap')[parameters('sitecoreSKU')]]"
     },
-    "aseName":{
+    "aseName": {
       "type": "string",
       "defaultValue": ""
     },
-    "aseResourceGroupName":{
+    "aseResourceGroupName": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
+    },
+    "omsWorkspaceName": {
+      "defaultValue": "[concat(parameters('deploymentId'), '-oms')]",
+      "type": "string"
+    },
+    "minTlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2"
     }
   },
   "resources": [
@@ -479,8 +526,8 @@
         "provider": "[variables('sitecoreTags').provider]",
         "logicalName": "[variables('sitecoreTags').rep]"
       },
-      "dependsOn": [ 
-        "[resourceId('Microsoft.Web/serverfarms', variables('prcHostingPlanNameTidy'))]" 
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('prcHostingPlanNameTidy'))]"
       ]
     },
     {
@@ -537,7 +584,8 @@
       "properties": {
         "administratorLogin": "[parameters('sqlServerLogin')]",
         "administratorLoginPassword": "[parameters('sqlServerPassword')]",
-        "version": "[parameters('sqlServerVersion')]"
+        "version": "[parameters('sqlServerVersion')]",
+        "minimalTlsVersion": "[parameters('minTlsVersion')]"
       },
       "name": "[variables('sqlServerNameTidy')]",
       "location": "[parameters('location')]",
@@ -553,16 +601,20 @@
             "startIpAddress": "0.0.0.0"
           },
           "name": "AllowAllAzureIps",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ]
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ]
         },
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
+          "sku": {
+            "name": "[parameters('resourceSizes').coreSqlDatabase.ServiceObjectiveLevel]",
+            "tier": "[parameters('resourceSizes').coreSqlDatabase.Edition]"
+          },
           "properties": {
-            "edition": "[parameters('resourceSizes').coreSqlDatabase.Edition]",
             "collation": "[parameters('sqlDatabaseCollation')]",
-            "maxSizeBytes": "[parameters('resourceSizes').coreSqlDatabase.MaxSize]",
-            "requestedServiceObjectiveName": "[parameters('resourceSizes').coreSqlDatabase.ServiceObjectiveLevel]"
+            "maxSizeBytes": "[parameters('resourceSizes').coreSqlDatabase.MaxSize]"
           },
           "resources": [
             {
@@ -571,15 +623,17 @@
               "dependsOn": [
                 "[variables('coreSqlDatabaseNameTidy')]"
               ],
-              "apiVersion": "2014-04-01",
+              "apiVersion": "[variables('dbApiVersion')]",
               "properties": {
-                "status": "Enabled"
+                "state": "Enabled"
               }
             }
           ],
           "name": "[variables('coreSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').core]"
@@ -588,11 +642,13 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
+          "sku": {
+            "name": "[parameters('resourceSizes').masterSqlDatabase.ServiceObjectiveLevel]",
+            "tier": "[parameters('resourceSizes').masterSqlDatabase.Edition]"
+          },
           "properties": {
-            "edition": "[parameters('resourceSizes').masterSqlDatabase.Edition]",
             "collation": "[parameters('sqlDatabaseCollation')]",
-            "maxSizeBytes": "[parameters('resourceSizes').masterSqlDatabase.MaxSize]",
-            "requestedServiceObjectiveName": "[parameters('resourceSizes').masterSqlDatabase.ServiceObjectiveLevel]"
+            "maxSizeBytes": "[parameters('resourceSizes').masterSqlDatabase.MaxSize]"
           },
           "resources": [
             {
@@ -601,15 +657,17 @@
               "dependsOn": [
                 "[variables('masterSqlDatabaseNameTidy')]"
               ],
-              "apiVersion": "2014-04-01",
+              "apiVersion": "[variables('dbApiVersion')]",
               "properties": {
-                "status": "Enabled"
+                "state": "Enabled"
               }
             }
           ],
           "name": "[variables('masterSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').master]"
@@ -620,11 +678,13 @@
           "name": "[variables('poolsSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
           "apiVersion": "[variables('dbApiVersion')]",
+          "sku": {
+            "name": "[parameters('resourceSizes').poolsSqlDatabase.ServiceObjectiveLevel]",
+            "tier": "[parameters('resourceSizes').poolsSqlDatabase.Edition]"
+          },
           "properties": {
-            "edition": "[parameters('resourceSizes').poolsSqlDatabase.Edition]",
             "collation": "[parameters('sqlDatabaseCollation')]",
-            "maxSizeBytes": "[parameters('resourceSizes').poolsSqlDatabase.MaxSize]",
-            "requestedServiceObjectiveName": "[parameters('resourceSizes').poolsSqlDatabase.ServiceObjectiveLevel]"
+            "maxSizeBytes": "[parameters('resourceSizes').poolsSqlDatabase.MaxSize]"
           },
           "resources": [
             {
@@ -633,13 +693,15 @@
               "dependsOn": [
                 "[variables('poolsSqlDatabaseNameTidy')]"
               ],
-              "apiVersion": "2014-04-01",
+              "apiVersion": "[variables('dbApiVersion')]",
               "properties": {
-                "status": "Enabled"
+                "state": "Enabled"
               }
             }
           ],
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').pools]"
@@ -650,11 +712,13 @@
           "name": "[variables('tasksSqlDatabaseNameTidy')]",
           "location": "[parameters('location')]",
           "apiVersion": "[variables('dbApiVersion')]",
+          "sku": {
+            "name": "[parameters('resourceSizes').tasksSqlDatabase.ServiceObjectiveLevel]",
+            "tier": "[parameters('resourceSizes').tasksSqlDatabase.Edition]"
+          },
           "properties": {
-            "edition": "[parameters('resourceSizes').tasksSqlDatabase.Edition]",
             "collation": "[parameters('sqlDatabaseCollation')]",
-            "maxSizeBytes": "[parameters('resourceSizes').tasksSqlDatabase.MaxSize]",
-            "requestedServiceObjectiveName": "[parameters('resourceSizes').tasksSqlDatabase.ServiceObjectiveLevel]"
+            "maxSizeBytes": "[parameters('resourceSizes').tasksSqlDatabase.MaxSize]"
           },
           "resources": [
             {
@@ -663,13 +727,15 @@
               "dependsOn": [
                 "[variables('tasksSqlDatabaseNameTidy')]"
               ],
-              "apiVersion": "2014-04-01",
+              "apiVersion": "[variables('dbApiVersion')]",
               "properties": {
-                "status": "Enabled"
+                "state": "Enabled"
               }
             }
           ],
-          "dependsOn": [ "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]" ],
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', variables('sqlServerNameTidy'))]"
+          ],
           "tags": {
             "provider": "[variables('sitecoreTags').provider]",
             "logicalName": "[variables('sitecoreTags').tasks]"
@@ -702,11 +768,16 @@
       "location": "[parameters('applicationInsightsLocation')]",
       "properties": {
         "ApplicationId": "[variables('appInsightsNameTidy')]",
-        "Application_Type": "web"
+        "Application_Type": "web",
+        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('omsWorkspaceNameTidy'))]"
+
       },
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('omsWorkspaceNameTidy'))]"
+      ]
     },
     {
       "type": "Microsoft.Insights/Components/CurrentBillingFeatures",
@@ -723,6 +794,25 @@
       "dependsOn": [
         "[resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy'))]"
       ],
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]"
+      }
+    },
+    {
+      "apiVersion": "[variables('omsWorkspaceApiVersion')]",
+      "name": "[variables('omsWorkspaceNameTidy')]",
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "condition": "[parameters('useApplicationInsights')]",
+      "location": "[parameters('applicationInsightsLocation')]",
+      "properties": {
+        "sku": {
+          "name": "[parameters('resourceSizes').operationalInsightsWorkspace.sku]"
+        },
+        "retention": "[parameters('resourceSizes').operationalInsightsWorkspace.metricsRetentionDays]",
+        "workspaceCapping": {
+          "dailyQuotaGb": "[parameters('resourceSizes').operationalInsightsWorkspace.workspaceCapping.dailyQuotaGb]"
+        }
+      },
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
       }

@@ -1,10 +1,10 @@
-﻿{
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "resourcesApiVersion": "2018-05-01",
     "webApiVersion": "2018-02-01",
-    "appInsightsApiVersion": "2015-05-01",
+    "appInsightsApiVersion": "2020-02-02",
 
     "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
 
@@ -22,7 +22,7 @@
 
     "searchProvider": "[if(empty(parameters('xcSolrConnectionString')), 'Azure', 'Solr')]",
 
-    "azureServiceBusVersion": "2017-04-01",
+    "azureServiceBusVersion": "2022-01-01-preview",
     "azureServiceBusNamespaceNameTidy": "[toLower(trim(parameters('azureServiceBusNamespaceName')))]"
   },
   "parameters": {
@@ -107,7 +107,6 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-ma-db')]"
     },
-
     "poolsSqlDatabaseUserName": {
       "type": "string",
       "minLength": 1,
@@ -148,7 +147,6 @@
       "minLength": 8,
       "defaultValue": "[concat(toUpper(uniqueString('xcma', parameters('passwordSalt'))), uniqueString('xcma', parameters('sqlServerPassword'), parameters('passwordSalt')), toUpper(uniqueString('xcma', parameters('sitecoreAdminPassword'), parameters('passwordSalt'))), '4@')]"
     },
-
     "searchServiceName": {
       "type": "string",
       "defaultValue": "[concat(parameters('deploymentId'), '-as')]"
@@ -237,6 +235,10 @@
     "azureServiceBusAccessKeyName" : {
       "type": "string",
       "minLength": 1
+    },
+    "minTlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2"
     }
   },
   "resources": [
@@ -302,7 +304,7 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('xcRefDataWebAppNameTidy'),'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/extensions', variables('xcRefDataWebAppNameTidy'), 'MSDeploy')]"
       ]
     },
     {
@@ -310,6 +312,7 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       },
@@ -322,6 +325,7 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       },
@@ -374,7 +378,6 @@
           "maSqlDatabaseName": {
             "value": "[parameters('maSqlDatabaseName')]"
           },
-
           "poolsSqlDatabaseUserName": {
             "value": "[parameters('poolsSqlDatabaseUserName')]"
           },
@@ -393,7 +396,6 @@
           "xcMaSqlDatabasePassword": {
             "value": "[parameters('xcMaSqlDatabasePassword')]"
           },
-
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
           },
@@ -437,6 +439,9 @@
           },
           "azureServiceBusAccessKeyName": {
             "value": "[parameters('azureServiceBusAccessKeyName')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -489,7 +494,6 @@
           "maSqlDatabaseName": {
             "value": "[parameters('maSqlDatabaseName')]"
           },
-
           "poolsSqlDatabaseUserName": {
             "value": "[parameters('poolsSqlDatabaseUserName')]"
           },
@@ -508,7 +512,6 @@
           "xcMaSqlDatabasePassword": {
             "value": "[parameters('xcMaSqlDatabasePassword')]"
           },
-
           "xcSearchIndexName": {
             "value": "[parameters('xcSearchIndexName')]"
           },
@@ -549,6 +552,9 @@
           },
           "azureServiceBusAccessKeyName": {
             "value": "[parameters('azureServiceBusAccessKeyName')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },

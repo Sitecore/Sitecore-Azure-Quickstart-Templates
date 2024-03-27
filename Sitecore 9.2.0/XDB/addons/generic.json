@@ -1,5 +1,5 @@
-﻿{
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
@@ -48,7 +48,7 @@
       "minLength": 1,
       "defaultValue": "[coalesce(parameters('standard').location, resourceGroup().location)]"
     },
-   
+
     "sqlServerFqdn": {
       "type": "string",
       "minLength": 1,
@@ -64,7 +64,7 @@
       "minLength": 8,
       "defaultValue": "[parameters('standard').sqlServerPassword]"
     },
-   
+
     "masterSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -84,7 +84,7 @@
       "type": "string",
       "defaultValue": "[coalesce(parameters('standard').repWebAppName, concat(parameters('deploymentId'), '-rep'))]"
     },
-    
+
     "prcMsDeployPackageUrl": {
       "type": "securestring",
       "defaultValue": "[parameters('extension').prcMsDeployPackageUrl]"

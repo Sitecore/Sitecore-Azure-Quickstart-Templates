@@ -1,5 +1,5 @@
-﻿{
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "resourcesApiVersion": "2018-05-01",
@@ -19,8 +19,7 @@
           {
             "name": "empty",
             "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
-            "parameters": {
-            }
+            "parameters": {}
           }
         ]
       }
@@ -32,13 +31,11 @@
           {
             "name": "empty-prerequisite",
             "templateLink": "[concat(uri(parameters('templateLinkBase'), 'nested/emptyAddon.json'), parameters('templateLinkAccessToken'))]",
-            "parameters": {
-            }
+            "parameters": {}
           }
         ]
       }
     },
-
     "templateLinkBase": {
       "type": "string",
       "minLength": 1,
@@ -48,7 +45,6 @@
       "type": "securestring",
       "defaultValue": ""
     },
-
     "deploymentId": {
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
@@ -58,7 +54,6 @@
       "minLength": 1,
       "defaultValue": "[resourceGroup().location]"
     },
-
     "sitecoreAdminPassword": {
       "type": "securestring",
       "minLength": 8
@@ -69,7 +64,15 @@
     },
     "sitecoreSKU": {
       "type": "string",
-      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large" ],
+      "allowedValues": [
+        "Extra Small",
+        "Small",
+        "Medium",
+        "Large",
+        "Extra Large",
+        "2x Large",
+        "3x Large"
+      ],
       "defaultValue": "Extra Small",
       "metadata": {
         "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
@@ -79,7 +82,6 @@
       "type": "securestring",
       "minLength": 32
     },
-
     "sqlServerName": {
       "type": "string",
       "minLength": 1,
@@ -93,7 +95,6 @@
       "type": "securestring",
       "minLength": 8
     },
-
     "sqlServerVersion": {
       "type": "string",
       "minLength": 1,
@@ -104,13 +105,7 @@
       "minLength": 1,
       "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
     },
-
     "coreSqlDatabaseName": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-core-db')]"
-    },
-    "securitySqlDatabaseName": {
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-core-db')]"
@@ -119,6 +114,11 @@
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-master-db')]"
+    },
+    "securitySqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-core-db')]"
     },
     "reportingSqlDatabaseName": {
       "type": "string",
@@ -170,7 +170,6 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-processingenginestorage-db')]"
     },
-
     "coreSqlDatabaseUserName": {
       "type": "string",
       "minLength": 1,
@@ -343,7 +342,6 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-ai-pp')]"
     },
-
     "prcHostingPlanName": {
       "type": "string",
       "minLength": 1,
@@ -364,7 +362,6 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-xc-resourceintensive-hp')]"
     },
-
     "prcWebAppName": {
       "type": "string",
       "minLength": 1,
@@ -410,7 +407,6 @@
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-cortex-reporting')]"
     },
-
     "prcMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1
@@ -440,8 +436,7 @@
     "cortexReportingMsDeployPackageUrl": {
       "type": "securestring"
     },
-
-    "setCompatibilityLevelMsDeployPackageUrl":{
+    "setCompatibilityLevelMsDeployPackageUrl": {
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "https://github.com/Sitecore/Sitecore-Azure-Quickstart-Templates/releases/download/v1.5.0/SetCompatibilityLevel.scwdp.zip"
@@ -461,17 +456,18 @@
       "type": "bool",
       "defaultValue": false
     },
-
     "passwordSalt": {
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "[resourceGroup().id]"
     },
-
     "xcServerConfigurationEnvironment": {
       "type": "string",
       "defaultValue": "Production",
-      "allowedValues": [ "Development", "Production" ]
+      "allowedValues": [
+        "Development",
+        "Production"
+      ]
     },
     "authCertificateName": {
       "type": "string",
@@ -488,11 +484,6 @@
       "minLength": 1,
       "defaultValue": ""
     },
-
-    "environmentType": {
-      "type": "string",
-      "defaultValue": "Non-Production"
-    },
     "aseName": {
       "type": "string",
       "defaultValue": ""
@@ -501,7 +492,10 @@
       "type": "string",
       "defaultValue": "[resourceGroup().name]"
     },
-
+    "environmentType": {
+      "type": "string",
+      "defaultValue": "Non-Production"
+    },
     "azureServiceBusQueues": {
       "type": "array",
       "defaultValue": [
@@ -553,6 +547,14 @@
       "type": "string",
       "minLength": 1,
       "defaultValue": "[concat(parameters('deploymentId'), '-asb')]"
+    },
+    "minTlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2"
+    },
+    "omsWorkspaceName": {
+      "type": "string",
+      "defaultValue": "[concat(toLower(parameters('deploymentId')), '-oms')]"
     }
   },
   "resources": [
@@ -571,8 +573,122 @@
         "templateLink": {
           "uri": "[parameters('prerequisites').items[copyIndex()].templateLink]"
         },
-          "parameters": "[parameters('prerequisites').items[copyIndex()].parameters]"
+        "parameters": "[parameters('prerequisites').items[copyIndex()].parameters]"
       }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-infrastructure')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/infrastructure.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "sitecoreSKU": {
+            "value": "[parameters('sitecoreSKU')]"
+          },
+          "sqlServerName": {
+            "value": "[parameters('sqlServerName')]"
+          },
+          "sqlServerLogin": {
+            "value": "[parameters('sqlServerLogin')]"
+          },
+          "sqlServerPassword": {
+            "value": "[parameters('sqlServerPassword')]"
+          },
+          "sqlServerVersion": {
+            "value": "[parameters('sqlServerVersion')]"
+          },
+          "sqlDatabaseCollation": {
+            "value": "[parameters('sqlDatabaseCollation')]"
+          },
+          "coreSqlDatabaseName": {
+            "value": "[parameters('coreSqlDatabaseName')]"
+          },
+          "masterSqlDatabaseName": {
+            "value": "[parameters('masterSqlDatabaseName')]"
+          },
+          "poolsSqlDatabaseName": {
+            "value": "[parameters('poolsSqlDatabaseName')]"
+          },
+          "tasksSqlDatabaseName": {
+            "value": "[parameters('tasksSqlDatabaseName')]"
+          },
+
+          "deployAzureSearch": {
+            "value": "[empty(parameters('xcSolrConnectionString'))]"
+          },
+
+          "searchServiceName": {
+            "value": "[parameters('searchServiceName')]"
+          },
+          "searchServiceLocation": {
+            "value": "[parameters('searchServiceLocation')]"
+          },
+          "searchServiceReplicaCount": {
+            "value": "[parameters('searchServiceReplicaCount')]"
+          },
+
+          "useApplicationInsights": {
+            "value": "[parameters('useApplicationInsights')]"
+          },
+          "applicationInsightsName": {
+            "value": "[parameters('applicationInsightsName')]"
+          },
+          "applicationInsightsLocation": {
+            "value": "[parameters('applicationInsightsLocation')]"
+          },
+          "applicationInsightsPricePlan": {
+            "value": "[parameters('applicationInsightsPricePlan')]"
+          },
+          "prcHostingPlanName": {
+            "value": "[parameters('prcHostingPlanName')]"
+          },
+          "repHostingPlanName": {
+            "value": "[parameters('repHostingPlanName')]"
+          },
+
+          "prcWebAppName": {
+            "value": "[parameters('prcWebAppName')]"
+          },
+          "repWebAppName": {
+            "value": "[parameters('repWebAppName')]"
+          },
+
+          "authCertificateName": {
+            "value": "[parameters('authCertificateName')]"
+          },
+          "authCertificateBlob": {
+            "value": "[parameters('authCertificateBlob')]"
+          },
+          "authCertificatePassword": {
+            "value": "[parameters('authCertificatePassword')]"
+          },
+          "aseName": {
+            "value": "[parameters('aseName')]"
+          },
+          "aseResourceGroupName": {
+            "value": "[parameters('aseResourceGroupName')]"
+          },
+          "omsWorkspaceName": {
+            "value": "[parameters('omsWorkspaceName')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat(parameters('deploymentId'), '-prerequisites')]"
+      ]
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
@@ -613,121 +729,12 @@
           },
           "azureServiceBusNamespaceName": {
             "value": "[parameters('azureServiceBusNamespaceName')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       }
-    },
-    {
-      "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(parameters('deploymentId'), '-infrastructure')]",
-      "type": "Microsoft.Resources/deployments",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/infrastructure.json'), parameters('templateLinkAccessToken'))]"
-        },
-        "parameters": {
-          "deploymentId": {
-            "value": "[parameters('deploymentId')]"
-          },
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "sitecoreSKU": {
-            "value": "[parameters('sitecoreSKU')]"
-          },
-
-          "sqlServerName": {
-            "value": "[parameters('sqlServerName')]"
-          },
-          "sqlServerLogin": {
-            "value": "[parameters('sqlServerLogin')]"
-          },
-          "sqlServerPassword": {
-            "value": "[parameters('sqlServerPassword')]"
-          },
-
-          "sqlServerVersion": {
-            "value": "[parameters('sqlServerVersion')]"
-          },
-          "sqlDatabaseCollation": {
-            "value": "[parameters('sqlDatabaseCollation')]"
-          },
-
-          "coreSqlDatabaseName": {
-            "value": "[parameters('coreSqlDatabaseName')]"
-          },
-          "masterSqlDatabaseName": {
-            "value": "[parameters('masterSqlDatabaseName')]"
-          },
-          "poolsSqlDatabaseName": {
-            "value": "[parameters('poolsSqlDatabaseName')]"
-          },
-          "tasksSqlDatabaseName": {
-            "value": "[parameters('tasksSqlDatabaseName')]"
-          },
-
-          "deployAzureSearch": {
-            "value": "[empty(parameters('xcSolrConnectionString'))]"
-          },
-
-          "searchServiceName": {
-            "value": "[parameters('searchServiceName')]"
-          },
-          "searchServiceLocation": {
-            "value": "[parameters('searchServiceLocation')]"
-          },
-          "searchServiceReplicaCount": {
-            "value": "[parameters('searchServiceReplicaCount')]"
-          },
-
-          "useApplicationInsights": {
-            "value": "[parameters('useApplicationInsights')]"
-          },
-          "applicationInsightsName": {
-            "value": "[parameters('applicationInsightsName')]"
-          },
-          "applicationInsightsLocation": {
-            "value": "[parameters('applicationInsightsLocation')]"
-          },
-          "applicationInsightsPricePlan": {
-            "value": "[parameters('applicationInsightsPricePlan')]"
-          },
-
-          "prcHostingPlanName": {
-            "value": "[parameters('prcHostingPlanName')]"
-          },
-          "repHostingPlanName": {
-            "value": "[parameters('repHostingPlanName')]"
-          },
-
-          "prcWebAppName": {
-            "value": "[parameters('prcWebAppName')]"
-          },
-          "repWebAppName": {
-            "value": "[parameters('repWebAppName')]"
-          },
-          "authCertificateName": {
-            "value": "[parameters('authCertificateName')]"
-          },
-          "authCertificateBlob": {
-            "value": "[parameters('authCertificateBlob')]"
-          },
-          "authCertificatePassword": {
-            "value": "[parameters('authCertificatePassword')]"
-          },
-
-          "aseName": {
-            "value": "[parameters('aseName')]"
-          },
-          "aseResourceGroupName": {
-            "value": "[parameters('aseResourceGroupName')]"
-          }
-        }
-      },
-      "dependsOn": [
-        "[concat(parameters('deploymentId'), '-prerequisites')]"
-      ]
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
@@ -748,15 +755,12 @@
           "sitecoreSKU": {
             "value": "[parameters('sitecoreSKU')]"
           },
-
           "sqlServerName": {
             "value": "[parameters('sqlServerName')]"
           },
-
           "sqlDatabaseCollation": {
             "value": "[parameters('sqlDatabaseCollation')]"
           },
-
           "shardMapManagerSqlDatabaseName": {
             "value": "[parameters('shardMapManagerSqlDatabaseName')]"
           },
@@ -769,14 +773,12 @@
           "refDataSqlDatabaseName": {
             "value": "[parameters('refDataSqlDatabaseName')]"
           },
-
           "xcBasicHostingPlanName": {
             "value": "[parameters('xcBasicHostingPlanName')]"
           },
           "xcResourceIntensiveHostingPlanName": {
             "value": "[parameters('xcResourceIntensiveHostingPlanName')]"
           },
-
           "xcRefDataWebAppName": {
             "value": "[parameters('xcRefDataWebAppName')]"
           },
@@ -786,11 +788,10 @@
           "xcSearchWebAppName": {
             "value": "[parameters('xcSearchWebAppName')]"
           },
-
           "aseName": {
             "value": "[parameters('aseName')]"
           },
-          "aseResourceGroupName":{
+          "aseResourceGroupName": {
             "value": "[parameters('aseResourceGroupName')]"
           }
         }
@@ -818,23 +819,18 @@
           "sitecoreSKU": {
             "value": "[parameters('sitecoreSKU')]"
           },
-
           "sqlServerName": {
             "value": "[parameters('sqlServerName')]"
           },
-
           "sqlDatabaseCollation": {
             "value": "[parameters('sqlDatabaseCollation')]"
           },
-
           "maSqlDatabaseName": {
             "value": "[parameters('maSqlDatabaseName')]"
           },
-
           "xcBasicHostingPlanName": {
             "value": "[parameters('xcBasicHostingPlanName')]"
           },
-
           "maOpsWebAppName": {
             "value": "[parameters('maOpsWebAppName')]"
           },
@@ -866,15 +862,12 @@
           "sitecoreSKU": {
             "value": "[parameters('sitecoreSKU')]"
           },
-
           "sqlServerName": {
             "value": "[parameters('sqlServerName')]"
           },
-
           "sqlDatabaseCollation": {
             "value": "[parameters('sqlDatabaseCollation')]"
           },
-
           "processingEngineTasksSqlDatabaseName": {
             "value": "[parameters('processingEngineTasksSqlDatabaseName')]"
           },
@@ -884,14 +877,12 @@
           "reportingSqlDatabaseName": {
             "value": "[parameters('reportingSqlDatabaseName')]"
           },
-
           "xcBasicHostingPlanName": {
             "value": "[parameters('xcBasicHostingPlanName')]"
           },
           "xcResourceIntensiveHostingPlanName": {
             "value": "[parameters('xcResourceIntensiveHostingPlanName')]"
           },
-
           "cortexProcessingWebAppName": {
             "value": "[parameters('cortexProcessingWebAppName')]"
           },
@@ -924,7 +915,6 @@
           "location": {
             "value": "[parameters('location')]"
           },
-
           "sitecoreAdminPassword": {
             "value": "[parameters('sitecoreAdminPassword')]"
           },
@@ -934,22 +924,20 @@
           "repAuthenticationApiKey": {
             "value": "[parameters('repAuthenticationApiKey')]"
           },
-
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
           },
           "sqlServerPassword": {
             "value": "[parameters('sqlServerPassword')]"
           },
-
           "coreSqlDatabaseName": {
             "value": "[parameters('coreSqlDatabaseName')]"
           },
-          "securitySqlDatabaseName": {
-            "value": "[parameters('securitySqlDatabaseName')]"
-          },
           "masterSqlDatabaseName": {
             "value": "[parameters('masterSqlDatabaseName')]"
+          },
+          "securitySqlDatabaseName": {
+            "value": "[parameters('securitySqlDatabaseName')]"
           },
           "reportingSqlDatabaseName": {
             "value": "[parameters('reportingSqlDatabaseName')]"
@@ -963,7 +951,6 @@
           "refDataSqlDatabaseName": {
             "value": "[parameters('refDataSqlDatabaseName')]"
           },
-
           "coreSqlDatabaseUserName": {
             "value": "[parameters('coreSqlDatabaseUserName')]"
           },
@@ -1016,7 +1003,6 @@
           "storeSitecoreCountersInApplicationInsights": {
             "value": "[parameters('storeSitecoreCountersInApplicationInsights')]"
           },
-
           "prcWebAppName": {
             "value": "[parameters('prcWebAppName')]"
           },
@@ -1026,7 +1012,6 @@
           "xcCollectWebAppName": {
             "value": "[parameters('xcCollectWebAppName')]"
           },
-
           "prcMsDeployPackageUrl": {
             "value": "[parameters('prcMsDeployPackageUrl')]"
           },
@@ -1042,17 +1027,17 @@
           "securityClientIpMask": {
             "value": "[parameters('securityClientIpMask')]"
           },
-
           "allowInvalidClientCertificates": {
             "value": "[parameters('allowInvalidClientCertificates')]"
           },
-
           "passwordSalt": {
             "value": "[parameters('passwordSalt')]"
           },
-
           "environmentType": {
             "value": "[parameters('environmentType')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -1073,32 +1058,27 @@
           "infrastructure": {
             "value": "[reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value]"
           },
-
           "templateLinkAccessToken": {
             "value": "[parameters('templateLinkAccessToken')]"
           },
-
           "deploymentId": {
             "value": "[parameters('deploymentId')]"
           },
           "location": {
             "value": "[parameters('location')]"
           },
-
           "sitecoreAdminPassword": {
             "value": "[parameters('sitecoreAdminPassword')]"
           },
           "licenseXml": {
             "value": "[parameters('licenseXml')]"
           },
-
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
           },
           "sqlServerPassword": {
             "value": "[parameters('sqlServerPassword')]"
           },
-
           "poolsSqlDatabaseName": {
             "value": "[parameters('poolsSqlDatabaseName')]"
           },
@@ -1117,7 +1097,6 @@
           "maSqlDatabaseName": {
             "value": "[parameters('maSqlDatabaseName')]"
           },
-
           "poolsSqlDatabaseUserName": {
             "value": "[parameters('poolsSqlDatabaseUserName')]"
           },
@@ -1142,25 +1121,21 @@
           "xcMaSqlDatabasePassword": {
             "value": "[parameters('xcMaSqlDatabasePassword')]"
           },
-
           "searchServiceName": {
             "value": "[parameters('searchServiceName')]"
           },
           "xcSearchIndexName": {
             "value": "[parameters('xcSearchIndexName')]"
           },
-
           "xcSolrConnectionString": {
             "value": "[parameters('xcSolrConnectionString')]"
           },
-
           "useApplicationInsights": {
             "value": "[parameters('useApplicationInsights')]"
           },
           "applicationInsightsName": {
             "value": "[parameters('applicationInsightsName')]"
           },
-
           "xcRefDataWebAppName": {
             "value": "[parameters('xcRefDataWebAppName')]"
           },
@@ -1170,7 +1145,6 @@
           "xcSearchWebAppName": {
             "value": "[parameters('xcSearchWebAppName')]"
           },
-
           "xcRefDataMsDeployPackageUrl": {
             "value": "[parameters('xcRefDataMsDeployPackageUrl')]"
           },
@@ -1180,28 +1154,26 @@
           "xcSearchMsDeployPackageUrl": {
             "value": "[parameters('xcSearchMsDeployPackageUrl')]"
           },
-
           "allowInvalidClientCertificates": {
             "value": "[parameters('allowInvalidClientCertificates')]"
           },
-
           "passwordSalt": {
             "value": "[parameters('passwordSalt')]"
           },
-
           "xcServerConfigurationEnvironment": {
             "value": "[parameters('xcServerConfigurationEnvironment')]"
           },
-
           "environmentType": {
             "value": "[parameters('environmentType')]"
           },
-
           "azureServiceBusNamespaceName": {
-            "value" : "[parameters('azureServiceBusNamespaceName')]"
+            "value": "[parameters('azureServiceBusNamespaceName')]"
           },
           "azureServiceBusAccessKeyName": {
             "value": "[parameters('azureServiceBusManageSharedAccessKeyName')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -1223,28 +1195,24 @@
           "infrastructure": {
             "value": "[reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value]"
           },
-
           "deploymentId": {
             "value": "[parameters('deploymentId')]"
           },
           "location": {
             "value": "[parameters('location')]"
           },
-
           "sitecoreAdminPassword": {
             "value": "[parameters('sitecoreAdminPassword')]"
           },
           "licenseXml": {
             "value": "[parameters('licenseXml')]"
           },
-
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
           },
           "sqlServerPassword": {
             "value": "[parameters('sqlServerPassword')]"
           },
-
           "poolsSqlDatabaseName": {
             "value": "[parameters('poolsSqlDatabaseName')]"
           },
@@ -1257,7 +1225,6 @@
           "shardMapManagerSqlDatabaseName": {
             "value": "[parameters('shardMapManagerSqlDatabaseName')]"
           },
-
           "poolsSqlDatabaseUserName": {
             "value": "[parameters('poolsSqlDatabaseUserName')]"
           },
@@ -1282,14 +1249,12 @@
           "xcShardMapManagerSqlDatabasePassword": {
             "value": "[parameters('xcShardMapManagerSqlDatabasePassword')]"
           },
-
           "useApplicationInsights": {
             "value": "[parameters('useApplicationInsights')]"
           },
           "applicationInsightsName": {
             "value": "[parameters('applicationInsightsName')]"
           },
-
           "xcRefDataWebAppName": {
             "value": "[parameters('xcRefDataWebAppName')]"
           },
@@ -1302,35 +1267,32 @@
           "maRepWebAppName": {
             "value": "[parameters('maRepWebAppName')]"
           },
-
           "maOpsMsDeployPackageUrl": {
             "value": "[parameters('maOpsMsDeployPackageUrl')]"
           },
           "maRepMsDeployPackageUrl": {
             "value": "[parameters('maRepMsDeployPackageUrl')]"
           },
-
           "allowInvalidClientCertificates": {
             "value": "[parameters('allowInvalidClientCertificates')]"
           },
-
           "passwordSalt": {
             "value": "[parameters('passwordSalt')]"
           },
-
           "xcServerConfigurationEnvironment": {
             "value": "[parameters('xcServerConfigurationEnvironment')]"
           },
-
           "environmentType": {
             "value": "[parameters('environmentType')]"
           },
-
           "azureServiceBusNamespaceName": {
-            "value" : "[parameters('azureServiceBusNamespaceName')]"
+            "value": "[parameters('azureServiceBusNamespaceName')]"
           },
           "azureServiceBusAccessKeyName": {
             "value": "[parameters('azureServiceBusManageSharedAccessKeyName')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -1351,28 +1313,24 @@
           "infrastructure": {
             "value": "[reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value]"
           },
-
           "deploymentId": {
             "value": "[parameters('deploymentId')]"
           },
           "location": {
             "value": "[parameters('location')]"
           },
-
           "sitecoreAdminPassword": {
             "value": "[parameters('sitecoreAdminPassword')]"
           },
           "licenseXml": {
             "value": "[parameters('licenseXml')]"
           },
-
           "sqlServerLogin": {
             "value": "[parameters('sqlServerLogin')]"
           },
           "sqlServerPassword": {
             "value": "[parameters('sqlServerPassword')]"
           },
-
           "processingEngineTasksSqlDatabaseName": {
             "value": "[parameters('processingEngineTasksSqlDatabaseName')]"
           },
@@ -1382,7 +1340,6 @@
           "reportingSqlDatabaseName": {
             "value": "[parameters('reportingSqlDatabaseName')]"
           },
-
           "processingEngineSqlDatabaseUserName": {
             "value": "[parameters('processingEngineSqlDatabaseUserName')]"
           },
@@ -1395,14 +1352,12 @@
           "reportingSqlDatabasePassword": {
             "value": "[parameters('reportingSqlDatabasePassword')]"
           },
-
           "useApplicationInsights": {
             "value": "[parameters('useApplicationInsights')]"
           },
           "applicationInsightsName": {
             "value": "[parameters('applicationInsightsName')]"
           },
-
           "xcCollectWebAppName": {
             "value": "[parameters('xcCollectWebAppName')]"
           },
@@ -1426,15 +1381,12 @@
           "cortexReportingMsDeployPackageUrl": {
             "value": "[parameters('cortexReportingMsDeployPackageUrl')]"
           },
-
           "allowInvalidClientCertificates": {
             "value": "[parameters('allowInvalidClientCertificates')]"
           },
-
           "passwordSalt": {
             "value": "[parameters('passwordSalt')]"
           },
-
           "xcServerConfigurationEnvironment": {
             "value": "[parameters('xcServerConfigurationEnvironment')]"
           },
@@ -1460,10 +1412,13 @@
           },
 
           "azureServiceBusNamespaceName": {
-            "value" : "[parameters('azureServiceBusNamespaceName')]"
+            "value": "[parameters('azureServiceBusNamespaceName')]"
           },
           "azureServiceBusAccessKeyName": {
             "value": "[parameters('azureServiceBusManageSharedAccessKeyName')]"
+          },
+          "minTlsVersion": {
+            "value": "[parameters('minTlsVersion')]"
           }
         }
       },
@@ -1489,22 +1444,17 @@
           "standard": {
             "value": {
               "infrastructure": "[reference(concat(parameters('deploymentId'), '-infrastructure')).outputs.infrastructure.value]",
-
               "deploymentId": "[parameters('deploymentId')]",
               "location": "[parameters('location')]",
-
               "sitecoreAdminPassword": "[parameters('sitecoreAdminPassword')]",
               "licenseXml": "[parameters('licenseXml')]",
               "sitecoreSKU": "[parameters('sitecoreSKU')]",
               "repAuthenticationApiKey": "[parameters('repAuthenticationApiKey')]",
-
               "sqlServerName": "[parameters('sqlServerName')]",
               "sqlServerLogin": "[parameters('sqlServerLogin')]",
               "sqlServerPassword": "[parameters('sqlServerPassword')]",
-
               "sqlServerVersion": "[parameters('sqlServerVersion')]",
               "sqlDatabaseCollation": "[parameters('sqlDatabaseCollation')]",
-
               "coreSqlDatabaseName": "[parameters('coreSqlDatabaseName')]",
               "masterSqlDatabaseName": "[parameters('masterSqlDatabaseName')]",
               "reportingSqlDatabaseName": "[parameters('reportingSqlDatabaseName')]",
@@ -1514,10 +1464,9 @@
               "shard0SqlDatabaseName": "[parameters('shard0SqlDatabaseName')]",
               "shard1SqlDatabaseName": "[parameters('shard1SqlDatabaseName')]",
               "refDataSqlDatabaseName": "[parameters('refDataSqlDatabaseName')]",
-              "maSqlDatabaseName": "[parameters('maSqlDatabaseName')]",
               "processingEngineTasksSqlDatabaseName": "[parameters('processingEngineTasksSqlDatabaseName')]",
               "processingEngineStorageSqlDatabaseName": "[parameters('processingEngineStorageSqlDatabaseName')]",
-
+              "maSqlDatabaseName": "[parameters('maSqlDatabaseName')]",
               "coreSqlDatabaseUserName": "[parameters('coreSqlDatabaseUserName')]",
               "coreSqlDatabasePassword": "[parameters('coreSqlDatabasePassword')]",
               "securitySqlDatabaseUserName": "[parameters('securitySqlDatabaseUserName')]",
@@ -1550,29 +1499,23 @@
               "applicationInsightsName": "[parameters('applicationInsightsName')]",
               "applicationInsightsLocation": "[parameters('applicationInsightsLocation')]",
               "storeSitecoreCountersInApplicationInsights": "[parameters('storeSitecoreCountersInApplicationInsights')]",
-
               "prcHostingPlanName": "[parameters('prcHostingPlanName')]",
               "repHostingPlanName": "[parameters('repHostingPlanName')]",
               "xcBasicHostingPlanName": "[parameters('xcBasicHostingPlanName')]",
               "xcResourceIntensiveHostingPlanName": "[parameters('xcResourceIntensiveHostingPlanName')]",
-
               "prcWebAppName": "[parameters('prcWebAppName')]",
               "repWebAppName": "[parameters('repWebAppName')]",
               "xcRefDataWebAppName": "[parameters('xcRefDataWebAppName')]",
               "xcCollectWebAppName": "[parameters('xcCollectWebAppName')]",
               "xcSearchWebAppName": "[parameters('xcSearchWebAppName')]",
-              "maOpsWebAppName": "[parameters('maOpsWebAppName')]",
-              "maRepWebAppName": "[parameters('maRepWebAppName')]",
               "cortexProcessingWebAppName": "[parameters('cortexProcessingWebAppName')]",
               "cortexReportingWebAppName": "[parameters('cortexReportingWebAppName')]",
-
+              "maOpsWebAppName": "[parameters('maOpsWebAppName')]",
+              "maRepWebAppName": "[parameters('maRepWebAppName')]",
               "securityClientIp": "[parameters('securityClientIp')]",
               "securityClientIpMask": "[parameters('securityClientIpMask')]",
-
               "passwordSalt": "[parameters('passwordSalt')]",
-
               "xcServerConfigurationEnvironment": "[parameters('xcServerConfigurationEnvironment')]",
-
               "authCertificateBlob": "[parameters('authCertificateBlob')]",
               "authCertificatePassword": "[parameters('authCertificatePassword')]",
 
@@ -1586,7 +1529,9 @@
               "environmentType": "[parameters('environmentType')]"
             }
           },
-          "extension": { "value": "[parameters('modules').items[copyIndex()].parameters]" }
+          "extension": {
+            "value": "[parameters('modules').items[copyIndex()].parameters]"
+          }
         }
       },
       "dependsOn": [

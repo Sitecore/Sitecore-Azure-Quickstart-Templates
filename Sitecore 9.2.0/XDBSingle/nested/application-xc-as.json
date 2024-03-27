@@ -1,19 +1,19 @@
-﻿{
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
     "searchApiVersion": "2015-08-19",
-    "appInsightsApiVersion": "2015-05-01",
+    "appInsightsApiVersion": "2020-02-02",
 
     "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
 
     "poolsSqlDatabaseNameTidy": "[toLower(trim(parameters('poolsSqlDatabaseName')))]",
     "refDataSqlDatabaseNameTidy": "[toLower(trim(parameters('refDataSqlDatabaseName')))]",
     "reportingSqlDatabaseNameTidy": "[toLower(trim(parameters('reportingSqlDatabaseName')))]",
-    "shardMapManagerSqlDatabaseNameTidy": "[toLower(trim(parameters('shardMapManagerSqlDatabaseName')))]",
     "shard0SqlDatabaseNameTidy": "[toLower(trim(parameters('shard0SqlDatabaseName')))]",
     "shard1SqlDatabaseNameTidy": "[toLower(trim(parameters('shard1SqlDatabaseName')))]",
+    "shardMapManagerSqlDatabaseNameTidy": "[toLower(trim(parameters('shardMapManagerSqlDatabaseName')))]",
     "maSqlDatabaseNameTidy": "[toLower(trim(parameters('maSqlDatabaseName')))]",
     "processingEngineTasksSqlDatabaseNameTidy": "[toLower(trim(parameters('processingEngineTasksSqlDatabaseName')))]",
     "processingEngineStorageSqlDatabaseNameTidy": "[toLower(trim(parameters('processingEngineStorageSqlDatabaseName')))]",
@@ -25,10 +25,9 @@
     "appInsightsNameTidy": "[toLower(trim(parameters('applicationInsightsName')))]",
     "machineLearningServerConnectionStringTidy": "[trim(parameters('machineLearningServerConnectionString'))]",
 
-    "azureServiceBusVersion": "2017-04-01",
+    "azureServiceBusVersion": "2022-01-01-preview",
     "azureServiceBusNamespaceNameTidy": "[toLower(trim(parameters('azureServiceBusNamespaceName')))]"
   },
-
   "parameters": {
     "infrastructure": {
       "type": "secureObject",
@@ -58,6 +57,7 @@
 
     "sqlServerFqdn": {
       "type": "string",
+      "minLength": 1,
       "defaultValue": "[parameters('infrastructure').sqlServerFqdn]"
     },
     "sqlServerLogin": {
@@ -220,12 +220,6 @@
       "minLength": 1
     },
 
-    "xcServerConfigurationEnvironment": {
-      "type": "string",
-      "defaultValue": "Production",
-      "allowedValues": [ "Development", "Production" ]
-    },
-
     "allowInvalidClientCertificates": {
       "type": "bool",
       "defaultValue": false
@@ -235,6 +229,12 @@
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "[resourceGroup().id]"
+    },
+
+    "xcServerConfigurationEnvironment": {
+      "type": "string",
+      "defaultValue": "Production",
+      "allowedValues": [ "Development", "Production" ]
     },
 
     "machineLearningServerBlobEndpointCertificatePath": {
@@ -263,13 +263,17 @@
       "defaultValue": "Non-Production"
     },
 
-    "azureServiceBusNamespaceName" : {
+    "azureServiceBusNamespaceName": {
       "type": "string",
       "minLength": 1
     },
-    "azureServiceBusAccessKeyName" : {
+    "azureServiceBusAccessKeyName": {
       "type": "string",
       "minLength": 1
+    },
+    "minTlsVersion": {
+      "type": "string",
+      "defaultValue": "1.2"
     }
   },
   "resources": [
@@ -344,6 +348,7 @@
       "type": "Microsoft.Web/sites/config",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
