@@ -1,0 +1,48 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "variables": {
+        "webApiVersion": "2016-08-01",
+        "cdWebAppNameTidy": "[trim(toLower(parameters('cdWebAppName')))]"
+    },
+    "parameters": {
+        "deploymentId": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "cdWebAppName": {
+            "type": "string",
+            "defaultValue": "[concat(parameters('deploymentId'), '-cd')]"
+        },
+        "mediaLinkServerUrl": {
+            "type": "string"
+        },
+        "mediaMaxAge": {
+            "type": "string"
+        },
+        "cdnMsDeployPackageUrl": {
+            "type": "string"
+        }
+    },
+    "resources": [{
+        "apiVersion": "[variables('webApiVersion')]",
+        "name": "[concat(variables('cdWebAppNameTidy'), '/', 'MSDeploy')]",
+        "type": "Microsoft.Web/sites/extensions",
+        "location": "[parameters('location')]",
+        "properties": {
+            "addOnPackages": [{
+                "packageUri": "[parameters('cdnMsDeployPackageUrl')]",
+                "dbType": "None",
+                "connectionString": "",
+                "setParameters": {
+                    "Media_MediaLinkServerUrl": "[parameters('mediaLinkServerUrl')]",
+                    "MediaResponse_MaxAge": "[parameters('mediaMaxAge')]"
+                }
+            }]
+        }
+    }]
+}
