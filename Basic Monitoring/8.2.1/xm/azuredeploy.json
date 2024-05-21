@@ -66,13 +66,21 @@
     "templateLinkAccessToken": {
       "type": "securestring",
       "defaultValue": "[if(contains(parameters('extension'), 'templateLinkAccessToken'), parameters('extension').templateLinkAccessToken, '')]"
+    },
+    "provisionOMSWorkspace": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "setLogAnalyticsAlert": {
+      "type": "bool",
+      "defaultValue": false
     }
   },
   "variables": {
     "resourcesApiVersion": "2016-09-01",
     "tags": {
       "sc-monitoring": "Yes",
-      "sc-monitoring-pkg-version": "2.6.27",
+      "sc-monitoring-pkg-version": "2.8.42",
       "sc-monitoring-sc-version": "8.2.1",
       "sc-monitoring-type": "Basic",
       "sc-monitoring-sc-topology": "xm"
@@ -93,6 +101,9 @@
           "deploymentId": {
             "value": "[parameters('deploymentId')]"
           },
+          "provisionOMSWorkspace": {
+            "value": "[parameters('provisionOMSWorkspace')]"
+          },
           "omsWorkspaceMetricsRetentionDays": {
             "value": "[parameters('omsWorkspaceMetricsRetentionDays')]"
           },
@@ -107,35 +118,6 @@
           },
           "resourceTags": {
             "value": "[variables('tags')]"
-          }
-        }
-      }
-    },
-    {
-      "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(deployment().name,'-application')]",
-      "type": "Microsoft.Resources/deployments",
-      "dependson": [
-        "[concat(deployment().name,'-infrastructure')]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application.json'), parameters('templateLinkAccessToken'))]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "deploymentId": {
-            "value": "[parameters('deploymentId')]"
-          },
-          "infrastructure": {
-            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
-          },
-          "omsWorkspaceAlertRecipients": {
-            "value": "[parameters('omsWorkspaceAlertRecipients')]"
-          },
-          "omsWorkspaceLocation": {
-            "value": "[parameters('omsWorkspaceLocation')]"
           }
         }
       }
@@ -200,7 +182,7 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(deployment().name, '-alertwebserverfarms')]",
+      "name": "[take(concat(deployment().name, '-alertwebserverfarms'), 64)]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -232,7 +214,7 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(deployment().name, '-alertwebsites')]",
+      "name": "[take(concat(deployment().name, '-alertwebsites'), 64)]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -264,7 +246,7 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(deployment().name, '-alertsqlserversdatabases')]",
+      "name": "[take(concat(deployment().name, '-alertsqlserversdatabases'), 64)]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -296,7 +278,7 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(deployment().name, '-alertcacheredis')]",
+      "name": "[take(concat(deployment().name, '-alertcacheredis'), 64)]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -329,7 +311,7 @@
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
       "condition": "[equals(parameters('searchProvider'), 'Azure')]",
-      "name": "[concat(deployment().name, '-alertsearchsearchservices')]",
+      "name": "[take(concat(deployment().name, '-alertsearchsearchservices'), 64)]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -361,7 +343,8 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[concat(deployment().name, '-alertinsightscomponents-activity')]",
+      "condition": "[not(parameters('setLogAnalyticsAlert'))]",
+      "name": "[take(concat(deployment().name, '-alertinsightscomponents-activity'), 64)]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"

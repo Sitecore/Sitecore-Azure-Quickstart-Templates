@@ -76,7 +76,7 @@
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
-            "threshold": "10",
+            "threshold": "50",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "0",
@@ -116,7 +116,7 @@
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
-            "threshold": "10",
+            "threshold": "50",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "0",
@@ -156,7 +156,7 @@
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
-            "threshold": "10",
+            "threshold": "50",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "0",
@@ -196,7 +196,7 @@
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
-            "threshold": "10",
+            "threshold": "50",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "0",
@@ -236,7 +236,7 @@
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
-            "threshold": "10",
+            "threshold": "50",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "0",
@@ -276,7 +276,7 @@
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
-            "threshold": "10",
+            "threshold": "50",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "0",
@@ -316,7 +316,7 @@
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
-            "threshold": "10",
+            "threshold": "50",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "0",
@@ -356,7 +356,7 @@
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
-            "threshold": "10",
+            "threshold": "50",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "0",
@@ -396,7 +396,7 @@
           },
           "trigger": {
             "thresholdOperator": "GreaterThan",
-            "threshold": "10",
+            "threshold": "50",
             "metricTrigger": {
               "thresholdOperator": "GreaterThan",
               "threshold": "0",
