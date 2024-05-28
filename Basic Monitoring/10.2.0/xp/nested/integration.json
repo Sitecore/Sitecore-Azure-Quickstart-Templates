@@ -45,6 +45,21 @@
     },
     {
       "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
+      "name": "[concat(parameters('deploymentId'),'-oms','/Microsoft.Insights/service')]",
+      "type": "Microsoft.OperationalInsights/workspaces/providers/diagnosticSettings",
+      "properties": {
+        "mode": "Incremental",
+        "workspaceId": "[parameters('omsWorkspaceId')]",
+        "logs": [],
+        "metrics": [
+          {
+            "enabled": true
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('diagnosticSettingsApiVersion')]",
       "name": "[concat(parameters('deploymentId'),'-sql/',parameters('deploymentId'),'-core-db','/Microsoft.Insights/service')]",
       "type": "Microsoft.Sql/servers/databases/providers/diagnosticSettings",
       "properties": {

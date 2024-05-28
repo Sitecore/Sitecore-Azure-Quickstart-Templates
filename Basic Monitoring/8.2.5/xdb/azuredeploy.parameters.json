@@ -5,6 +5,9 @@
         "deploymentId": {
             "value": ""
         },
+        "provisionOMSWorkspace": {
+            "value": ""
+        },
         "omsWorkspaceMetricsRetentionDays": {
             "value": ""
         },
@@ -15,6 +18,9 @@
             "value": ""
         },
         "applicationInsightsLocation": {
+            "value": ""
+        },
+        "setLogAnalyticsAlert": {
             "value": ""
         }
     }
