@@ -104,7 +104,7 @@ if ($certificateFilePath) {
 # license file needs to be secure string and adding the params as a hashtable is the only way to do it
 $additionalParams = New-Object -TypeName Hashtable
 
-$params = Get-Content $ArmParametersPath -Raw | ConvertFrom-Json
+$params = (Get-Content $ArmParametersPath -Raw | ConvertFrom-Json).parameters
 
 foreach($p in $params | Get-Member -MemberType *Property)
 {
