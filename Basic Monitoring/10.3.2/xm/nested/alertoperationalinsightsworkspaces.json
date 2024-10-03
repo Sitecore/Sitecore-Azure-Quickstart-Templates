@@ -1,0 +1,90 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "infrastructure": {
+      "type": "secureObject",
+      "defaultValue": {}
+    },
+    "deploymentId": {
+      "type": "string"
+    },
+    "omsWorkspaceName": {
+      "type": "string",
+      "defaultValue": "[parameters('infrastructure').omsWorkspaceName]",
+      "metadata": {
+        "description": "OMS Workspace name."
+      }
+    },
+    "omsWorkspaceLocation": {
+      "type": "string",
+      "defaultValue": "[parameters('infrastructure').omsWorkspaceLocation]",
+      "metadata": {
+        "description": "the Location in which your OMS will be provisioned"
+      }
+    },
+    "omsWorkspaceAlertRecipients": {
+      "type": "string",
+      "metadata": {
+        "Description": "List of recipients for the email alert separated by semicolon"
+      }
+    },
+    "actionGroupName": {
+      "type": "string",
+      "defaultValue": "[parameters('infrastructure').actionGroupName]",
+      "metadata": {
+        "description": "The name of the action group to be associated with the alerts actions"
+      }
+    },
+    "resourceTags": {
+      "type": "object"
+    }
+  },
+  "variables": {
+    "actionGroupResourceId": "[resourceId('Microsoft.Insights/actionGroups',parameters('actionGroupName'))]",
+    "workspaceApiVersion": "2017-04-26-preview",
+    "alertResourcesApiVersion": "2018-04-16"
+  },
+  "resources": [
+    {
+      "name": "[concat('Log Analytics workspace daily cap reached_', parameters('deploymentId'),'-oms')]",
+      "type": "Microsoft.Insights/scheduledqueryrules",
+      "apiVersion": "[variables('alertResourcesApiVersion')]",
+      "location": "[toLower(replace(parameters('omsWorkspaceLocation'), ' ', ''))]",
+      "tags": "[parameters('resourceTags')]",
+      "properties": {
+        "description": "[concat('Log Analytics workspace daily cap reached_', parameters('deploymentId'),'-oms')]",
+        "enabled": "true",
+        "source": {
+          "query": "_LogOperation | where Category =~ \"Ingestion\" | where Detail contains \"OverQuota\" | summarize AggregatedValue = count() by bin(TimeGenerated, 5m)",
+          "dataSourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
+          "queryType": "ResultCount"
+        },
+        "schedule": {
+          "frequencyInMinutes": "5",
+          "timeWindowInMinutes": "5"
+        },
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
+          "severity": "2",
+          "throttlingInMin": "0",
+          "aznsAction": {
+            "actionGroup": [
+              "[variables('actionGroupResourceId')]"
+            ],
+            "emailSubject": "[concat('Log Analytics workspace daily cap reached_', parameters('deploymentId'),'-oms')]"
+          },
+          "trigger": {
+            "thresholdOperator": "GreaterThan",
+            "threshold": "0",
+            "metricTrigger": {
+              "thresholdOperator": "GreaterThan",
+              "threshold": "0",
+              "metricTriggerType": "Total"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
