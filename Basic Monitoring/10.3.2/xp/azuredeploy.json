@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
@@ -85,7 +85,7 @@
     "resourcesApiVersion": "2016-09-01",
     "tags": {
       "sc-monitoring": "Yes",
-      "sc-monitoring-pkg-version": "2.8.43",
+      "sc-monitoring-pkg-version": "2.9.0",
       "sc-monitoring-sc-version": "10.3.2",
       "sc-monitoring-type": "Basic",
       "sc-monitoring-sc-topology": "xp"

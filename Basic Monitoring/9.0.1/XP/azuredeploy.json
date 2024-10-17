@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
@@ -80,7 +80,7 @@
     "resourcesApiVersion": "2016-09-01",
     "tags": {
       "sc-monitoring": "Yes",
-      "sc-monitoring-pkg-version": "2.8.42",
+      "sc-monitoring-pkg-version": "2.9.0",
       "sc-monitoring-sc-version": "9.0.1",
       "sc-monitoring-type": "Basic",
       "sc-monitoring-sc-topology": "xp"
@@ -182,7 +182,7 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[take(concat(deployment().name, '-alertwebserverfarms'), 64)]",
+      "name": "[take(concat(deployment().name, '-alertcacheredis'), 64)]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -190,7 +190,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertwebserverfarms.json'), parameters('templateLinkAccessToken'))]",
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertcacheredis.json'), parameters('templateLinkAccessToken'))]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -214,7 +214,8 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[take(concat(deployment().name, '-alertwebsites'), 64)]",
+      "condition": "[equals(parameters('searchProvider'), 'Azure')]",
+      "name": "[take(concat(deployment().name, '-alertsearchsearchservices'), 64)]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -222,7 +223,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertwebsites.json'), parameters('templateLinkAccessToken'))]",
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertsearchsearchservices.json'), parameters('templateLinkAccessToken'))]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -278,7 +279,7 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "name": "[take(concat(deployment().name, '-alertcacheredis'), 64)]",
+      "name": "[take(concat(deployment().name, '-alertwebserverfarms'), 64)]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -286,7 +287,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertcacheredis.json'), parameters('templateLinkAccessToken'))]",
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertwebserverfarms.json'), parameters('templateLinkAccessToken'))]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -310,8 +311,7 @@
     },
     {
       "apiVersion": "[variables('resourcesApiVersion')]",
-      "condition": "[equals(parameters('searchProvider'), 'Azure')]",
-      "name": "[take(concat(deployment().name, '-alertsearchsearchservices'), 64)]",
+      "name": "[take(concat(deployment().name, '-alertwebsites'), 64)]",
       "type": "Microsoft.Resources/deployments",
       "dependson": [
         "[concat(deployment().name,'-infrastructure')]"
@@ -319,7 +319,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertsearchsearchservices.json'), parameters('templateLinkAccessToken'))]",
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertwebsites.json'), parameters('templateLinkAccessToken'))]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
