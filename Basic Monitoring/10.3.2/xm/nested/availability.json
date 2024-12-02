@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
@@ -83,7 +83,7 @@
       "tags": "[union(createObject(concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName'))), 'Resource'), createObject(concat('hidden-link:', resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cm','-pingWebTest'))), 'Resource'), parameters('resourceTags'))]",
       "properties": {
         "description": "Alert to be triggered when the Web Test fails",
-        "severity": 0,
+        "severity": 1,
         "enabled": true,
         "scopes": [
           "[resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName'))]",
@@ -153,7 +153,7 @@
       "tags": "[union(createObject(concat('hidden-link:', resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName'))), 'Resource'), createObject(concat('hidden-link:', resourceId('microsoft.insights/webtests/', concat(parameters('deploymentId'),'-cd','-pingWebTest'))), 'Resource'), parameters('resourceTags'))]",
       "properties": {
         "description": "Alert to be triggered when the Web Test fails",
-        "severity": 0,
+        "severity": 1,
         "enabled": true,
         "scopes": [
           "[resourceId('microsoft.insights/components/', variables('applicationInsightsResourceName'))]",
