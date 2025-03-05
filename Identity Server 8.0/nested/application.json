@@ -1,0 +1,118 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2018-02-01",
+    "sqlServerTidy": "[trim(toLower(parameters('sqlServer')))]",
+    "cmInstanceUrlTidy": "[toLower(trim(parameters('cmInstanceUrl')))]",
+    "securitySqlDatabaseNameTidy": "[toLower(trim(parameters('securitySqlDatabaseName')))]",
+    "siWebAppNameTidy": "[toLower(trim(parameters('siWebAppName')))]"
+  },
+  "parameters": {
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "licenseXml": {
+      "type": "securestring",
+      "minLength": 1
+    },
+     "sqlDatabasePrefix": {
+      "type": "string",
+      "minLength": 1
+    },
+    "securitySqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('sqlDatabasePrefix'), '-core-db')]"
+    },
+    "securitySqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "securitySqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "siApplicationSuffixName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "siWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-', parameters('siApplicationSuffixName'))]"
+    },
+    "siMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "certificateThumbprint": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "siClientSecret": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "environmentType": {
+      "type": "string",
+      "defaultValue": "Non-Production"
+    },
+    "applicationInsightsConnectionString": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "cmInstanceUrl": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sqlServer": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('siWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "mode": "Incremental",
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('siMsDeployPackageUrl')]",
+            "setParameters": {
+                "IIS Web Application Name": "[variables('siWebAppNameTidy')]",
+                "Security Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerTidy'), ',1433;Initial Catalog=',variables('securitySqlDatabaseNameTidy'),';User Id=', parameters('securitySqlDatabaseUserName'), ';Password=', parameters('securitySqlDatabasePassword'), ';')]",
+                "CertificateThumbprint": "[parameters('certificateThumbprint')]",
+                "CertificateStoreLocation": "CurrentUser",
+                "PasswordRecoveryUrl": "[variables('cmInstanceUrlTidy')]",
+                "Application Insights Connection String": "[parameters('applicationInsightsConnectionString')]",
+                "License Xml": "[parameters('licenseXml')]",
+                "AllowedCorsOrigins": "[variables('cmInstanceUrlTidy')]",
+                "ClientSecret": "[parameters('siClientSecret')]"
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/config', variables('siWebAppNameTidy'),'appsettings')]"
+      ]
+    },
+    {
+      "name": "[concat(variables('siWebAppNameTidy'), '/', 'appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "WEBSITE_DYNAMIC_CACHE": 0,
+        "WEBSITE_LOAD_CERTIFICATES": "[parameters('certificateThumbprint')]",
+        "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
+      }
+    }
+  ]
+}

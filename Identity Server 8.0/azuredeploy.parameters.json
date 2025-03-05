@@ -1,0 +1,42 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2021-09-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentId": {
+      "value": ""
+    },
+    "sqlServer": {
+      "value": ""
+    },
+    "sqlDatabasePrefix": {
+      "value": ""
+    },
+    "securitySqlDatabaseUserName": {
+      "value": ""
+    },
+    "securitySqlDatabasePassword": {
+      "value": ""
+    },
+    "cmInstanceUrl": {
+      "value": ""
+    },
+    "siApplicationSuffixName": {
+      "value": ""
+    },
+    "siClientSecret": {
+      "value": ""
+    },
+    "siMsDeployPackageUrl": {
+      "value": ""
+    },
+    "applicationInsightsConnectionString": {
+      "value": ""
+    },
+    "licenseXml": {
+      "value": ""
+    },
+    "certificateThumbprint":{
+      "value": ""
+    }
+  }
+}

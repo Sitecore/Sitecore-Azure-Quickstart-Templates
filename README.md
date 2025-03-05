@@ -2,7 +2,7 @@
 This repo contains all currently available Azure Resource Manager templates for Sitecore
 
 # Documentation
-You can read all about Sitecore Azure AppService integration and ARM Template deployment at [Sitecore Documentation Site](https://doc.sitecore.com/developers/90/#sitecore_azure)
+You can read all about Sitecore Azure AppService integration and ARM Template deployment at [Sitecore Documentation Site](https://doc.sitecore.com/xp/developers)
 
 # Compatibility
 Choose the compatible templates for your Sitecore version:
@@ -25,6 +25,7 @@ Choose the compatible templates for your Sitecore version:
 | Sitecore 10.1.0  | Sitecore 10.1.0                                                       |
 | Sitecore 10.1.1  | Sitecore 10.1.1, 10.1.2, 10.1.3                                       |
 | Sitecore 10.2.0  | Sitecore 10.2.0, 10.2.1, 10.2.2, 10.3.0, 10.3.1, 10.3.2, 10.4.0       |
+| Identity Server 8.0 | Sitecore Identity Server 8.0 (earlier versions delivered as part of Sitecore) |
 | WFFM 8.2.3       | Web Forms For Marketers 8.2 Update-3, Update-4 and Update-5           |
 | WFFM 9.0.0       | Web Forms For Marketers 9.0				           |
 | AD 1.3.0         | Active Directory 1.3                                                  |

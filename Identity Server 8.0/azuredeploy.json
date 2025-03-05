@@ -1,0 +1,205 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "resourcesApiVersion": "2018-05-01"
+  },
+  "parameters": {
+    "templateLinkBase": {
+      "type": "string",
+      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri,' ','%20'), '.')]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "licenseXml": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "sitecoreSKU": {
+      "type": "string",
+      "allowedValues": [ "Extra Small", "Small", "Medium", "Large", "Extra Large", "2x Large", "3x Large" ],
+      "defaultValue": "Extra Small",
+      "metadata": {
+        "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
+      }
+    },
+    "sqlDatabasePrefix": {
+      "type": "string",
+      "minLength": 1
+    },
+    "securitySqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "securitySqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "securitySqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('sqlDatabasePrefix'), '-core-db')]"
+    },
+    "siApplicationSuffixName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "siHostingPlanName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-', parameters('siApplicationSuffixName'), '-hp')]"
+    },
+    "siWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-', parameters('siApplicationSuffixName'))]"
+    },
+    "siMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "certificateThumbprint": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "siClientSecret": {
+      "type": "securestring",
+      "minLength": 1
+    },
+    "aseName":{
+      "type": "string",
+      "defaultValue": ""
+    },
+    "aseResourceGroupName":{
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "environmentType": {
+      "type": "string",
+      "defaultValue": "Non-Production"
+    },
+    "applicationInsightsConnectionString": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "sqlServer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cmInstanceUrl": {
+      "type": "string",
+      "minLength": 1
+    } 
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-infrastructure')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/infrastructure.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "sitecoreSKU": {
+            "value": "[parameters('sitecoreSKU')]"
+          },
+          "siHostingPlanName": {
+            "value": "[parameters('siHostingPlanName')]"
+          },
+          "siApplicationSuffixName": {
+            "value": "[parameters('siApplicationSuffixName')]"
+          },
+          "siWebAppName": {
+            "value": "[parameters('siWebAppName')]"
+          },
+          "aseName": {
+            "value": "[parameters('aseName')]"
+          },
+          "aseResourceGroupName":{
+            "value": "[parameters('aseResourceGroupName')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-application')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "licenseXml": {
+            "value": "[parameters('licenseXml')]"
+          },
+          "certificateThumbprint": {
+            "value": "[parameters('certificateThumbprint')]"
+          },
+          "sqlDatabasePrefix": {
+            "value": "[parameters('sqlDatabasePrefix')]"
+          },
+          "securitySqlDatabaseName": {
+            "value": "[parameters('securitySqlDatabaseName')]"
+          },
+          "securitySqlDatabaseUserName": {
+            "value": "[parameters('securitySqlDatabaseUserName')]"
+          },
+          "securitySqlDatabasePassword": {
+            "value": "[parameters('securitySqlDatabasePassword')]"
+          },
+          "siApplicationSuffixName": {
+            "value": "[parameters('siApplicationSuffixName')]"
+          },
+          "siWebAppName": {
+            "value": "[parameters('siWebAppName')]"
+          },
+          "siMsDeployPackageUrl": {
+            "value": "[parameters('siMsDeployPackageUrl')]"
+          },
+          "siClientSecret": {
+            "value": "[parameters('siClientSecret')]"
+          },
+          "environmentType": {
+            "value": "[parameters('environmentType')]"
+          },
+          "applicationInsightsConnectionString": {
+            "value": "[parameters('applicationInsightsConnectionString')]"
+          },
+          "cmInstanceUrl": {
+            "value": "[parameters('cmInstanceUrl')]"
+          },
+          "sqlServer": {
+            "value": "[parameters('sqlServer')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-infrastructure'))]"
+      ]
+    }
+  ]
+}
