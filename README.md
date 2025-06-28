@@ -9,22 +9,23 @@ Choose the compatible templates for your Sitecore version:
 
 | Templates Folder | Compatible Product versions                                           |
 |------------------|-----------------------------------------------------------------------|
-| Sitecore 8.2.1   | Sitecore 8.2 Update-1 and Update-2                                    |
-| Sitecore 8.2.3   | Sitecore 8.2 Update-3                                                 |
-| Sitecore 8.2.4   | Sitecore 8.2 Update-4                                                 |
-| Sitecore 8.2.5   | Sitecore 8.2 Update-5 and Update-6                                    |
-| Sitecore 8.2.7   | Sitecore 8.2 Update-7                                                 |
-| Sitecore 9.0.0   | Sitecore 9.0	                                                   |
-| Sitecore 9.0.1   | Sitecore 9.0 Update-1 <br />Please note that these ARM templates link to an additional WDP in order to resolve a potential performance issue on start-up (see KB [article](https://kb.sitecore.net/articles/290593) for more info).                                               	|
-| Sitecore 9.0.2   | Sitecore 9.0 Update-2                                                 |
-| Sitecore 9.1.0   | Sitecore 9.1                                                          |
-| Sitecore 9.1.1   | Sitecore 9.1 Update-1                                                 |
-| Sitecore 9.2.0   | Sitecore 9.2                                                          |
-| Sitecore 9.3.0   | Sitecore 9.3                                                          |
-| Sitecore 10.0.0  | Sitecore 10.0.0, 10.0.1, 10.0.2 and 10.0.3                            |
-| Sitecore 10.1.0  | Sitecore 10.1.0                                                       |
-| Sitecore 10.1.1  | Sitecore 10.1.1, 10.1.2, 10.1.3                                       |
-| Sitecore 10.2.0  | Sitecore 10.2.0, 10.2.1, 10.2.2, 10.3.0, 10.3.1, 10.3.2, 10.4.0       |
+| Sitecore 8.2.1   | Sitecore XP 8.2 Update-1 and Update-2                                    |
+| Sitecore 8.2.3   | Sitecore XP 8.2 Update-3                                                 |
+| Sitecore 8.2.4   | Sitecore XP 8.2 Update-4                                                 |
+| Sitecore 8.2.5   | Sitecore XP 8.2 Update-5 and Update-6                                    |
+| Sitecore 8.2.7   | Sitecore XP 8.2 Update-7                                                 |
+| Sitecore 9.0.0   | Sitecore XP 9.0	                                                   |
+| Sitecore 9.0.1   | Sitecore XP 9.0 Update-1 <br />Please note that these ARM templates link to an additional WDP in order to resolve a potential performance issue on start-up (see KB [article](https://kb.sitecore.net/articles/290593) for more info).                                               	|
+| Sitecore 9.0.2   | Sitecore XP 9.0 Update-2                                                 |
+| Sitecore 9.1.0   | Sitecore XP 9.1                                                          |
+| Sitecore 9.1.1   | Sitecore XP 9.1 Update-1                                                 |
+| Sitecore 9.2.0   | Sitecore XP 9.2                                                          |
+| Sitecore 9.3.0   | Sitecore XP 9.3                                                          |
+| Sitecore 10.0.0  | Sitecore XP 10.0.0, 10.0.1, 10.0.2 and 10.0.3                            |
+| Sitecore 10.1.0  | Sitecore XP 10.1.0                                                       |
+| Sitecore 10.1.1  | Sitecore XP 10.1.1, 10.1.2, 10.1.3                                       |
+| Sitecore 10.2.0  | Sitecore XP 10.2.0, 10.2.1, 10.2.2, 10.3.0, 10.3.1, 10.3.2, 10.4.0       |
+| Sitecore 10.3.3  | Sitecore XP 10.3.3, 10.4.1 and later (requiring App Insights Connection String) |
 | Identity Server 8.0 | Sitecore Identity Server 8.0 (earlier versions delivered as part of Sitecore) |
 | WFFM 8.2.3       | Web Forms For Marketers 8.2 Update-3, Update-4 and Update-5           |
 | WFFM 9.0.0       | Web Forms For Marketers 9.0				           |
