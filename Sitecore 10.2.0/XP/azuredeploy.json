@@ -537,7 +537,7 @@
     },
     "allowInvalidClientCertificates": {
       "type": "bool",
-      "defaultValue": false
+      "defaultValue": true
     },
     "passwordSalt": {
       "type": "securestring",
