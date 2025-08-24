@@ -1392,7 +1392,24 @@
           "applicationInsightsName": {
             "value": "[parameters('applicationInsightsName')]"
           },
-
+          "exmMasterSqlDatabaseName": {
+            "value": "[parameters('exmMasterSqlDatabaseName')]"
+          },
+          "exmMasterSqlDatabaseUserName": {
+            "value": "[parameters('exmMasterSqlDatabaseUserName')]"
+          },
+          "exmMasterSqlDatabasePassword": {
+            "value": "[parameters('exmMasterSqlDatabasePassword')]"
+          },
+          "messagingSqlDatabaseName" : {
+            "value" : "[parameters('messagingSqlDatabaseName')]"
+          },
+          "messagingSqlDatabaseUserName": {
+            "value": "[parameters('messagingSqlDatabaseUserName')]"
+          },
+          "messagingSqlDatabasePassword": {
+            "value": "[parameters('messagingSqlDatabasePassword')]"
+          },
           "cmWebAppName": {
             "value": "[parameters('cmWebAppName')]"
           },
