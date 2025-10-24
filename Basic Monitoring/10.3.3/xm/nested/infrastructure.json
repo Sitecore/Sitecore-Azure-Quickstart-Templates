@@ -1,0 +1,95 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "extension": {
+      "type": "secureObject",
+      "defaultValue": {
+        "alertLocation": null,
+        "alertRecipients": null
+      }
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "alertLocation": {
+      "type": "string",
+      "defaultValue": "[parameters('extension').alertLocation]",
+      "metadata": {
+        "description": "the Location in which your alerts will be provisioned"
+      }
+    },
+    "alertRecipients": {
+      "type": "string",
+      "defaultValue": "[parameters('extension').alertRecipients]",
+      "metadata": {
+        "Description": "List of recipients for the email alert separated by semicolon"
+      }
+    },
+    "templateLinkBase": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri,' ','%20'), '.')]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "resourceTags": {
+      "type": "object"
+    },
+    "deploymentScriptsLocation": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    }
+  },
+  "variables": {
+    "subscription": "[subscription().subscriptionId]",
+    "sitecoreResourceGroup": "[resourceGroup().name]",
+    "omsWorkspaceName": "[concat(toLower(parameters('deploymentId')), '-oms')]",
+    "omsWorkspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces',variables('omsWorkspaceName'))]",
+    "recipientsEmailsArray": "[split(parameters('alertRecipients'),';')]",
+    "resourcesApiVersion": "2016-09-01",
+    "omsWorkspaceApiVersion": "2017-03-15-preview",
+    "omsWorkspaceSku": "standalone",
+    "actionGroupApiVersion": "2018-03-01",
+    "actionGroupName": "[concat(toLower(parameters('deploymentId')), '-AG')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Insights/actionGroups",
+      "apiVersion": "[variables('actionGroupApiVersion')]",
+      "name": "[variables('actionGroupName')]",
+      "tags": "[parameters('resourceTags')]",
+      "location": "global",
+      "properties": {
+        "groupShortName": "ScAlerts",
+        "enabled": true,
+        "smsReceivers": [],
+        "copy": [
+          {
+            "name": "emailReceivers",
+            "count": "[length(variables('recipientsEmailsArray'))]",
+            "input": {
+              "name": "[concat('email',copyIndex('emailReceivers'))]",
+              "emailAddress": "[variables('recipientsEmailsArray')[copyIndex('emailReceivers')]]",
+              "useCommonAlertSchema": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {
+    "infrastructure": {
+      "type": "object",
+      "value": {
+        "omsWorkspaceApiVersion": "[variables('omsWorkspaceApiVersion')]",
+        "omsWorkspaceName": "[variables('omsWorkspaceName')]",
+        "omsWorkspaceId": "[variables('omsWorkspaceId')]",
+        "actionGroupName": "[variables('actionGroupName')]"
+      }
+    }
+  }
+}
