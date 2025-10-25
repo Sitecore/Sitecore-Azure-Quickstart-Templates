@@ -1,0 +1,372 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "extension": {
+      "type": "secureObject",
+      "defaultValue": {
+        "alertRecipients": null,
+        "alertLocation": null,
+        "applicationInsightsLocation": null,
+        "templateLinkAccessToken": ""
+      }
+    },
+    "standard": {
+      "type": "secureObject",
+      "defaultValue": {
+        "deploymentId": null,
+        "searchServiceName": null,
+        "solrConnectionString": null
+      }
+    },
+    "searchProvider": {
+      "type": "string",
+      "defaultValue": "[if(empty(parameters('standard').solrConnectionString),'Azure','Solr')]",
+      "allowedValues": [
+        "Azure",
+        "Solr"
+      ]
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').deploymentId, resourceGroup().name)]"
+    },
+    "searchServiceName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').searchServiceName, concat(parameters('deploymentId'), '-as'))]"
+    },
+    "alertRecipients": {
+      "type": "string",
+      "defaultValue": "[parameters('extension').alertRecipients]",
+      "metadata": {
+        "Description": "List of recipients for the email alert separated by semicolon"
+      }
+    },
+    "alertLocation": {
+      "type": "string",
+      "defaultValue": "[parameters('extension').alertLocation]",
+      "metadata": {
+        "description": "the Location in which your alerts will be provisioned"
+      }
+    },
+    "applicationInsightsLocation": {
+      "type": "string",
+      "defaultValue": "[parameters('extension').applicationInsightsLocation]",
+      "metadata": {
+        "description": "the Location in which your Application Insight exists"
+      }
+    },
+    "templateLinkBase": {
+      "type": "string",
+      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri,' ','%20'), '.')]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": "[if(contains(parameters('extension'), 'templateLinkAccessToken'), parameters('extension').templateLinkAccessToken, '')]"
+    },
+    "setLogAnalyticsAlert": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "deploymentScriptsLocation": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    }
+  },
+  "variables": {
+    "resourcesApiVersion": "2016-09-01",
+    "tags": {
+      "sc-monitoring": "Yes",
+      "sc-monitoring-pkg-version": "2.9.0",
+      "sc-monitoring-sc-version": "10.3.3",
+      "sc-monitoring-type": "Basic",
+      "sc-monitoring-sc-topology": "xm"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name,'-infrastructure')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/infrastructure.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "alertLocation": {
+            "value": "[parameters('alertLocation')]"
+          },
+          "alertRecipients": {
+            "value": "[parameters('alertRecipients')]"
+          },
+          "templateLinkAccessToken": {
+            "value": "[parameters('templateLinkAccessToken')]"
+          },
+          "resourceTags": {
+            "value": "[variables('tags')]"
+          },
+          "deploymentScriptsLocation": {
+            "value": "[parameters('deploymentScriptsLocation')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-integration')]",
+      "type": "Microsoft.Resources/deployments",
+      "dependson": [
+        "[concat(deployment().name,'-infrastructure')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/integration.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "searchProvider": {
+            "value": "[parameters('searchProvider')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(deployment().name, '-availability')]",
+      "type": "Microsoft.Resources/deployments",
+      "dependson": [
+        "[concat(deployment().name,'-infrastructure')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/availability.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "alertRecipients": {
+            "value": "[parameters('alertRecipients')]"
+          },
+          "applicationInsightsLocation": {
+            "value": "[parameters('applicationInsightsLocation')]"
+          },
+          "resourceTags": {
+            "value": "[variables('tags')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[take(concat(deployment().name, '-alertcacheredis'), 64)]",
+      "type": "Microsoft.Resources/deployments",
+      "dependson": [
+        "[concat(deployment().name,'-infrastructure')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertcacheredis.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "alertLocation": {
+            "value": "[parameters('alertLocation')]"
+          },
+          "alertRecipients": {
+            "value": "[parameters('alertRecipients')]"
+          },
+          "resourceTags": {
+            "value": "[variables('tags')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "condition": "[parameters('setLogAnalyticsAlert')]",
+      "name": "[take(concat(deployment().name, '-alertoperationalinsightsworkspaces'), 64)]",
+      "type": "Microsoft.Resources/deployments",
+      "dependson": [
+        "[concat(deployment().name,'-infrastructure')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertoperationalinsightsworkspaces.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "alertLocation": {
+            "value": "[parameters('alertLocation')]"
+          },
+          "alertRecipients": {
+            "value": "[parameters('alertRecipients')]"
+          },
+          "resourceTags": {
+            "value": "[variables('tags')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[take(concat(deployment().name, '-alertsqlserversdatabases'), 64)]",
+      "type": "Microsoft.Resources/deployments",
+      "dependson": [
+        "[concat(deployment().name,'-infrastructure')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertsqlserversdatabases.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "alertLocation": {
+            "value": "[parameters('alertLocation')]"
+          },
+          "alertRecipients": {
+            "value": "[parameters('alertRecipients')]"
+          },
+          "resourceTags": {
+            "value": "[variables('tags')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[take(concat(deployment().name, '-alertwebserverfarms'), 64)]",
+      "type": "Microsoft.Resources/deployments",
+      "dependson": [
+        "[concat(deployment().name,'-infrastructure')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertwebserverfarms.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "alertLocation": {
+            "value": "[parameters('alertLocation')]"
+          },
+          "alertRecipients": {
+            "value": "[parameters('alertRecipients')]"
+          },
+          "resourceTags": {
+            "value": "[variables('tags')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[take(concat(deployment().name, '-alertwebsites'), 64)]",
+      "type": "Microsoft.Resources/deployments",
+      "dependson": [
+        "[concat(deployment().name,'-infrastructure')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertwebsites.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "alertLocation": {
+            "value": "[parameters('alertLocation')]"
+          },
+          "alertRecipients": {
+            "value": "[parameters('alertRecipients')]"
+          },
+          "resourceTags": {
+            "value": "[variables('tags')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "condition": "[not(parameters('setLogAnalyticsAlert'))]",
+      "name": "[take(concat(deployment().name, '-alertinsightscomponents-activity'), 64)]",
+      "type": "Microsoft.Resources/deployments",
+      "dependson": [
+        "[concat(deployment().name,'-infrastructure')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/alertinsightscomponents-activity.json'), parameters('templateLinkAccessToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "infrastructure": {
+            "value": "[reference(concat(deployment().name,'-infrastructure')).outputs.infrastructure.value]"
+          },
+          "alertLocation": {
+            "value": "[parameters('alertLocation')]"
+          },
+          "alertRecipients": {
+            "value": "[parameters('alertRecipients')]"
+          },
+          "resourceTags": {
+            "value": "[variables('tags')]"
+          }
+        }
+      }
+    }
+  ]
+}
