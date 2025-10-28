@@ -316,10 +316,7 @@
             }
           }
         ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/config', variables('xcSingleWebAppNameTidy'),'appsettings')]"
-      ]
+      }
     },
     {
       "name": "[concat(variables('xcSingleWebAppNameTidy'), '/', 'appsettings')]",
@@ -330,7 +327,10 @@
         "WEBSITE_DYNAMIC_CACHE": 0,
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/extensions', variables('xcSingleWebAppNameTidy'),'MSDeploy')]"
+      ]
     }
   ]
 }
