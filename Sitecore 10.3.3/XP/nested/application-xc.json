@@ -265,10 +265,7 @@
             }
           }
         ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/config', variables('xcRefDataWebAppNameTidy'),'appsettings')]"
-      ]
+      }
     },
     {
       "name": "[concat(variables('xcCollectWebAppNameTidy'), '/', 'MSDeploy')]",
@@ -314,7 +311,7 @@
         ]
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/config', variables('xcCollectWebAppNameTidy'), 'appsettings')]"
+        "[resourceId('Microsoft.Web/sites/config', variables('xcRefDataWebAppNameTidy'), 'appsettings')]"
       ]
     },
     {
@@ -431,7 +428,7 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('xcCollectWebAppNameTidy'),'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/config', variables('xcCollectWebAppNameTidy'),'appsettings')]"
       ]
     },
     {
@@ -442,7 +439,10 @@
         "minTlsVersion": "[parameters('minTlsVersion')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/extensions', variables('xcRefDataWebAppNameTidy'),'MSDeploy')]"
+      ]
     },
     {
       "name": "[concat(variables('xcCollectWebAppNameTidy'), '/', 'appsettings')]",
@@ -454,7 +454,7 @@
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('xcRefDataWebAppNameTidy'), 'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/extensions', variables('xcCollectWebAppNameTidy'), 'MSDeploy')]"
       ]
     }
   ]

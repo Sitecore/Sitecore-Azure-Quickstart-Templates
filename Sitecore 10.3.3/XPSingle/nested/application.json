@@ -351,10 +351,7 @@
             }
           }
         ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/config', variables('siWebAppNameTidy'),'appsettings')]"
-      ]
+      }
     },
     {
       "name": "[concat(variables('siWebAppNameTidy'), '/', 'appsettings')]",
@@ -365,7 +362,10 @@
         "WEBSITE_DYNAMIC_CACHE": 0,
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/extensions', variables('siWebAppNameTidy'),'MSDeploy')]"
+      ]
     },
     {
       "name": "[concat(variables('singleWebAppNameTidy'), '/', 'MSDeploy')]",
@@ -445,7 +445,7 @@
         ]
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/config', variables('singleWebAppNameTidy'),'appsettings')]"
+        "[resourceId('Microsoft.Web/sites/config', variables('siWebAppNameTidy'),'appsettings')]"
       ]
     },
     {
@@ -460,7 +460,7 @@
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('siWebAppNameTidy'),'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/extensions', variables('singleWebAppNameTidy'),'MSDeploy')]"
       ]
     }
   ]

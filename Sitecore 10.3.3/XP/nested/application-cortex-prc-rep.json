@@ -200,10 +200,7 @@
             }
           }
         ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/config', variables('cortexReportingWebAppNameTidy'), 'appsettings')]"
-      ]
+      }
     },
     {
       "name": "[concat(variables('cortexReportingWebAppNameTidy'), '/', 'appsettings')]",
@@ -214,7 +211,10 @@
         "WEBSITE_LOAD_CERTIFICATES": "[parameters('authCertificateThumbprint')]",
         "WEBSITE_DYNAMIC_CACHE": 0,
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/extensions', variables('cortexReportingWebAppNameTidy'), 'MSDeploy')]"
+      ]
     },
     {
       "name": "[concat(variables('cortexProcessingWebAppNameTidy'), '/', 'MSDeploy')]",
@@ -255,7 +255,7 @@
         ]
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/config', variables('cortexProcessingWebAppNameTidy'), 'appsettings')]"
+        "[resourceId('Microsoft.Web/sites/config', variables('cortexReportingWebAppNameTidy'), 'appsettings')]"
       ]
     },
     {
@@ -269,7 +269,7 @@
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('cortexReportingWebAppNameTidy'), 'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/extensions', variables('cortexProcessingWebAppNameTidy'), 'MSDeploy')]"
       ]
     }
   ]
