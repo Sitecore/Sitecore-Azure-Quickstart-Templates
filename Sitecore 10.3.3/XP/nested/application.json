@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "variables": {
     "webApiVersion": "2018-02-01",
-    "redisApiVersion": "2020-06-01",
+    "redisApiVersion": "2025-07-01",
     "appInsightsApiVersion": "2020-02-02",
 
     "sqlServerFqdnTidy": "[trim(toLower(parameters('sqlServerFqdn')))]",
@@ -587,7 +587,7 @@
               "XConnect Collection": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('xcCollectWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
               "XDB Reference Data Client": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('xcRefDataWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
               "XDB MA Ops Client": "[concat('https://', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Web/sites', variables('maOpsWebAppNameTidy')), variables('webApiVersion')).hostNames[0])]",
-              "Redis Sessions": "[concat(reference(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).hostName, ':', reference(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).sslPort, ',password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('redisCacheNameTidy')), variables('redisApiVersion')).primaryKey, ',ssl=True,abortConnect=False')]",
+              "Redis Sessions": "[concat(reference(resourceId('Microsoft.Cache/redisEnterprise', variables('redisCacheNameTidy')), variables('redisApiVersion')).hostName, ':10000,password=', listKeys(resourceId('Microsoft.Cache/redisEnterprise/databases', variables('redisCacheNameTidy'), 'default'), variables('redisApiVersion')).primaryKey, ',ssl=True,abortConnect=False')]",
               "Search Provider": "[variables('searchProvider')]",
               "SOLR Connection String": "[parameters('solrConnectionString')]",
               "Application Insights Connection String": "[if(parameters('useApplicationInsights'), reference(resourceId('Microsoft.Insights/Components', variables('appInsightsNameTidy')), variables('appInsightsApiVersion')).ConnectionString, '')]",
