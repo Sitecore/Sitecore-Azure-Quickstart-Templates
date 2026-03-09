@@ -334,6 +334,11 @@
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
       "properties": {
+        "packageUri": "https://github.com/luuksommers/Sitecore-Azure-Quickstart-Templates/tree/CleanWebRoot/Files/Empty.scwdp.zip",
+        "dbType": "None",
+        "setParameters": {
+          "Application Path": "[variables('webAppNameTidy')]"
+        },
         "addOnPackages": [
           {
             "packageUri": "[parameters('setTlsVersionMsDeployPackageUrl')]",
