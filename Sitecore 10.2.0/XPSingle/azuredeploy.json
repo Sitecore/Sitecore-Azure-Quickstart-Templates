@@ -365,7 +365,7 @@
     },
     "xcSingleHostingPlanSkuName": {
       "type": "string",
-      "defaultValue": "S1"
+      "defaultValue": "P0V3"
     },
     "xcSingleHostingPlanSkuCapacity": {
       "type": "int",
@@ -472,8 +472,8 @@
       "defaultValue": "[resourceGroup().id]"
     },
     "nodeJsVersion": {
-      "type": "string",
-      "defaultValue": "8.11.1"
+      "type" : "string",
+      "defaultValue" : "8.11.1"
     },
     "environmentType": {
       "type": "string",

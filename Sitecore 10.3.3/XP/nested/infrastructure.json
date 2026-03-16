@@ -253,7 +253,7 @@
       "defaultValue": {
         "Extra Small": {
           "siHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "siHostingPlanIsolated": {
@@ -277,7 +277,7 @@
             "SkuCapacity": 1
           },
           "prcHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "prcHostingPlanIsolated": {
@@ -340,7 +340,7 @@
         },
         "Small": {
           "siHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "siHostingPlanIsolated": {
@@ -364,7 +364,7 @@
             "SkuCapacity": 2
           },
           "prcHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "prcHostingPlanIsolated": {
@@ -427,7 +427,7 @@
         },
         "Medium": {
           "siHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "siHostingPlanIsolated": {
@@ -451,7 +451,7 @@
             "SkuCapacity": 2
           },
           "prcHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "prcHostingPlanIsolated": {
@@ -514,7 +514,7 @@
         },
         "Large": {
           "siHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "siHostingPlanIsolated": {

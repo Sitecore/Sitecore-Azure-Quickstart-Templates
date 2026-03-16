@@ -253,7 +253,7 @@
       "defaultValue": {
         "Extra Small": {
           "siHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "siHostingPlanIsolated": {
@@ -277,7 +277,7 @@
             "SkuCapacity": 1
           },
           "prcHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "prcHostingPlanIsolated": {
@@ -340,7 +340,7 @@
         },
         "Small": {
           "siHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "siHostingPlanIsolated": {
@@ -364,7 +364,7 @@
             "SkuCapacity": 2
           },
           "prcHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "prcHostingPlanIsolated": {
@@ -427,7 +427,7 @@
         },
         "Medium": {
           "siHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "siHostingPlanIsolated": {
@@ -451,7 +451,7 @@
             "SkuCapacity": 2
           },
           "prcHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "prcHostingPlanIsolated": {
@@ -514,7 +514,7 @@
         },
         "Large": {
           "siHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "siHostingPlanIsolated": {
@@ -1104,7 +1104,7 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
-           "sku": {
+          "sku": {
             "name": "[parameters('resourceSizes').coreSqlDatabase.ServiceObjectiveLevel]",
             "tier": "[parameters('resourceSizes').coreSqlDatabase.Edition]"
           },
@@ -1138,7 +1138,7 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
-           "sku": {
+          "sku": {
             "name": "[parameters('resourceSizes').masterSqlDatabase.ServiceObjectiveLevel]",
             "tier": "[parameters('resourceSizes').masterSqlDatabase.Edition]"
           },
@@ -1172,7 +1172,7 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
-           "sku": {
+          "sku": {
             "name": "[parameters('resourceSizes').webSqlDatabase.ServiceObjectiveLevel]",
             "tier": "[parameters('resourceSizes').webSqlDatabase.Edition]"
           },
@@ -1206,7 +1206,7 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
-           "sku": {
+          "sku": {
             "name": "[parameters('resourceSizes').poolsSqlDatabase.ServiceObjectiveLevel]",
             "tier": "[parameters('resourceSizes').poolsSqlDatabase.Edition]"
           },
@@ -1240,7 +1240,7 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
-           "sku": {
+          "sku": {
             "name": "[parameters('resourceSizes').tasksSqlDatabase.ServiceObjectiveLevel]",
             "tier": "[parameters('resourceSizes').tasksSqlDatabase.Edition]"
           },
@@ -1274,7 +1274,7 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
-           "sku": {
+          "sku": {
             "name": "[parameters('resourceSizes').formsSqlDatabase.ServiceObjectiveLevel]",
             "tier": "[parameters('resourceSizes').formsSqlDatabase.Edition]"
           },
@@ -1308,7 +1308,7 @@
         {
           "type": "databases",
           "apiVersion": "[variables('dbApiVersion')]",
-           "sku": {
+          "sku": {
             "name": "[parameters('resourceSizes').exmMasterSqlDatabase.ServiceObjectiveLevel]",
             "tier": "[parameters('resourceSizes').exmMasterSqlDatabase.Edition]"
           },
