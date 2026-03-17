@@ -5,7 +5,7 @@
     "webApiVersion": "2018-02-01",
     "serverFarmApiVersion": "2018-02-01",
     "dbApiVersion": "2022-05-01-preview",
-    "redisApiVersion": "2020-06-01",
+    "redisApiVersion": "2025-07-01",
     "applicationInsightsApiVersion": "2020-02-02",
     "certificateApiVersion": "2014-11-01",
     "omsWorkspaceApiVersion": "2017-03-15-preview",
@@ -240,9 +240,7 @@
             "ServiceObjectiveLevel": "S0"
           },
           "redisCache": {
-            "SkuName": "Standard",
-            "SkuFamily": "C",
-            "SkuCapacity": 1
+            "SkuName": "Balanced_B1"
           },
           "applicationInsightsPricePlan": {
             "CurrentBillingFeatures": "Basic",
@@ -304,9 +302,7 @@
             "ServiceObjectiveLevel": "S0"
           },
           "redisCache": {
-            "SkuName": "Standard",
-            "SkuFamily": "C",
-            "SkuCapacity": 1
+            "SkuName": "Balanced_B1"
           },
           "applicationInsightsPricePlan": {
             "CurrentBillingFeatures": "Basic",
@@ -368,9 +364,7 @@
             "ServiceObjectiveLevel": "S0"
           },
           "redisCache": {
-            "SkuName": "Standard",
-            "SkuFamily": "C",
-            "SkuCapacity": 1
+            "SkuName": "Balanced_B1"
           },
           "applicationInsightsPricePlan": {
             "CurrentBillingFeatures": "Basic",
@@ -432,9 +426,7 @@
             "ServiceObjectiveLevel": "S1"
           },
           "redisCache": {
-            "SkuName": "Standard",
-            "SkuFamily": "C",
-            "SkuCapacity": 1
+            "SkuName": "Balanced_B1"
           },
           "applicationInsightsPricePlan": {
             "CurrentBillingFeatures": "Basic",
@@ -496,9 +488,7 @@
             "ServiceObjectiveLevel": "S1"
           },
           "redisCache": {
-            "SkuName": "Standard",
-            "SkuFamily": "C",
-            "SkuCapacity": 1
+            "SkuName": "Balanced_B1"
           },
           "applicationInsightsPricePlan": {
             "CurrentBillingFeatures": "Application Insights Enterprise",
@@ -560,9 +550,7 @@
             "ServiceObjectiveLevel": "S2"
           },
           "redisCache": {
-            "SkuName": "Standard",
-            "SkuFamily": "C",
-            "SkuCapacity": 2
+            "SkuName": "Balanced_B3"
           },
           "applicationInsightsPricePlan": {
             "CurrentBillingFeatures": "Application Insights Enterprise",
@@ -624,9 +612,7 @@
             "ServiceObjectiveLevel": "S2"
           },
           "redisCache": {
-            "SkuName": "Standard",
-            "SkuFamily": "C",
-            "SkuCapacity": 3
+            "SkuName": "Balanced_B5"
           },
           "applicationInsightsPricePlan": {
             "CurrentBillingFeatures": "Application Insights Enterprise",
@@ -980,18 +966,35 @@
       }
     },
     {
-      "type": "Microsoft.Cache/Redis",
+      "type": "Microsoft.Cache/redisEnterprise",
       "name": "[variables('redisCacheNameTidy')]",
       "apiVersion": "[variables('redisApiVersion')]",
       "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('resourceSizes').redisCache.SkuName]"
+      },
       "properties": {
-        "sku": {
-          "name": "[parameters('resourceSizes').redisCache.SkuName]",
-          "family": "[parameters('resourceSizes').redisCache.SkuFamily]",
-          "capacity": "[parameters('resourceSizes').redisCache.SkuCapacity]"
-        },
-        "enableNonSslPort": false,
-        "minimumTlsVersion": "[parameters('minTlsVersion')]"
+        "minimumTlsVersion": "[parameters('minTlsVersion')]",
+        "publicNetworkAccess": "Enabled"
+      },
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]"
+      }
+    },
+    {
+      "type": "Microsoft.Cache/redisEnterprise/databases",
+      "name": "[concat(variables('redisCacheNameTidy'), '/default')]",
+      "apiVersion": "[variables('redisApiVersion')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Cache/redisEnterprise', variables('redisCacheNameTidy'))]"
+      ],
+      "properties": {
+        "clientProtocol": "Encrypted",
+        "port": 10000,
+        "clusteringPolicy": "OSSCluster",
+        "evictionPolicy": "NoEviction",
+        "accessKeysAuthentication": "Enabled"
       },
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
