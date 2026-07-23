@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentId": {
+      "value": ""
+    },
+    "location": {
+      "value": ""
+    },
+    "sqlServerLogin": {
+      "value": ""
+    },
+    "sqlServerPassword": {
+      "value": ""
+    },
+    "singleMsDeployPackageUrl": {
+      "value": ""
+    },
+    "sitecoreAdminPassword": {
+      "value": ""
+    },
+    "licenseXml": {
+      "value": ""
+    },
+    "authCertificateBlob": {
+      "value": ""
+    },
+    "authCertificatePassword": {
+      "value": ""
+    },
+    "modules": {
+      "value": {
+        "items": [
+          {
+            "name": "identity-server",
+            "templateLink": "",
+            "parameters": {
+              "siMsDeployPackageUrl": ""
+            }
+          }
+        ]
+      }
+    }
+  }
+}
