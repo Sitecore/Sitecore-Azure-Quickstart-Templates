@@ -1,0 +1,265 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "resourcesApiVersion": "2018-05-01",
+    "cmInstanceUrl": "[if(empty(parameters('cmInstanceUrl')), concat('https://', if(contains(parameters('standard').infrastructure, 'cmWebAppHostName'), parameters('standard').infrastructure.cmWebAppHostName, if(contains(parameters('standard').infrastructure, 'singleWebAppHostName'), parameters('standard').infrastructure.singleWebAppHostName, ''))), parameters('cmInstanceUrl'))]",
+    "exmDdsHost": "[trim(coalesce(union(json('{\"exmDdsWebAppHostName\":\"\"}'), coalesce(union(json('{\"infrastructureExm\":{\"exmDdsWebAppHostName\":\"\"}}'), parameters('standard')).infrastructureExm, json('{}'))).exmDdsWebAppHostName, ''))]",
+    "exmDdsInstanceUrl": "[if(not(empty(parameters('exmDdsInstanceUrl'))), parameters('exmDdsInstanceUrl'), if(not(empty(variables('exmDdsHost'))), concat('https://', variables('exmDdsHost')), ''))]",
+    "isSingle": "[and(contains(parameters('standard'), 'singleHostingPlanName'), not(empty(trim(coalesce(parameters('standard').singleHostingPlanName, '')))))]"  
+  },
+  "parameters": {
+    "standard": {
+      "type": "secureObject",
+      "defaultValue": {
+        "infrastructure": {
+          "sqlServerFqdn": null,
+          "applicationInsightsConnectionString": null,
+          "authCertificateThumbprint": null,
+          "singleWebAppHostName": null,
+          "cmWebAppHostName": null
+        },
+        "infrastructureExm": {
+          "exmDdsWebAppHostName": null
+        },
+        "deploymentId": null,
+        "location": null,
+        "coreSqlDatabaseUserName": null,
+        "coreSqlDatabasePassword": null,
+        "coreSqlDatabaseName": null,
+        "sitecoreSKU": null,
+        "licenseXml": null,
+        "cmWebAppName": null,
+        "singleWebAppName": null,
+        "singleHostingPlanName": null,
+        "environmentType": null,
+        "siClientSecret": null,
+        "siApplicationSuffixName": null
+      }
+    },
+    "extension": {
+      "type": "secureObject",
+      "defaultValue": {
+        "siMsDeployPackageUrl": null,
+        "templateLinkAccessToken": null
+      }
+    },
+    "templateLinkBase": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri,' ','%20'), '.')]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": "[if(contains(parameters('extension'), 'templateLinkAccessToken'), coalesce(parameters('extension').templateLinkAccessToken, ''), '')]"
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').deploymentId, resourceGroup().name)]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').location, resourceGroup().location)]"
+    },
+    "licenseXml": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').licenseXml]"
+    },
+    "sitecoreSKU": {
+      "type": "string",
+      "allowedValues": ["Extra Small", "Small", "Medium", "Large", "Extra Large", "2x Large", "3x Large" ],
+      "defaultValue": "[if(contains(parameters('standard'), 'sitecoreSKU'), coalesce(parameters('standard').sitecoreSKU, 'Extra Small'), 'Extra Small')]",
+      "metadata": {
+        "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
+      }
+    },
+    "sqlDatabasePrefix": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').deploymentId]"
+    },
+    "securitySqlDatabaseUserName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').coreSqlDatabaseUserName]"
+    },
+    "securitySqlDatabasePassword": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').coreSqlDatabasePassword]"
+    },
+    "securitySqlDatabaseName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').coreSqlDatabaseName, concat(parameters('sqlDatabasePrefix'), '-core-db'))]"
+    },
+    "siApplicationSuffixName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[if(contains(parameters('standard'), 'siApplicationSuffixName'), coalesce(parameters('standard').siApplicationSuffixName, ''), '')]"
+    },
+    "siHostingPlanName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('deploymentId'), '-', parameters('siApplicationSuffixName'), '-hp')]"
+    },
+    "siWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-', parameters('siApplicationSuffixName'))]"
+    },
+    "siMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extension').siMsDeployPackageUrl]"
+    },
+    "certificateThumbprint": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').infrastructure.authCertificateThumbprint]"
+    },
+    "siClientSecret": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').siClientSecret]"
+    },
+    "aseName":{
+      "type": "string",
+      "defaultValue": ""
+    },
+    "aseResourceGroupName":{
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "environmentType": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').environmentType, 'Non-Production')]"
+    },
+    "applicationInsightsConnectionString": {
+      "type": "securestring",
+      "defaultValue": "[coalesce(parameters('standard').infrastructure.applicationInsightsConnectionString, '')]"
+    },
+    "sqlServer": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').infrastructure.sqlServerFqdn]"
+    },
+    "cmInstanceUrl": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "exmDdsInstanceUrl": {
+      "type": "string",
+      "defaultValue": ""
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-si-infrastructure')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/infrastructure.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "sitecoreSKU": {
+            "value": "[parameters('sitecoreSKU')]"
+          },
+          "siHostingPlanName": {
+            "value": "[if(variables('isSingle'), coalesce(parameters('standard').singleHostingPlanName, parameters('siHostingPlanName')), parameters('siHostingPlanName'))]"
+          },
+          "siApplicationSuffixName": {
+            "value": "[parameters('siApplicationSuffixName')]"
+          },
+          "siWebAppName": {
+            "value": "[parameters('siWebAppName')]"
+          },
+          "aseName": {
+            "value": "[parameters('aseName')]"
+          },
+          "aseResourceGroupName":{
+            "value": "[parameters('aseResourceGroupName')]"
+          },
+          "isSingle": {
+            "value": "[variables('isSingle')]"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-si-application')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'nested/application.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "licenseXml": {
+            "value": "[parameters('licenseXml')]"
+          },
+          "certificateThumbprint": {
+            "value": "[parameters('certificateThumbprint')]"
+          },
+          "sqlDatabasePrefix": {
+            "value": "[parameters('sqlDatabasePrefix')]"
+          },
+          "securitySqlDatabaseName": {
+            "value": "[parameters('securitySqlDatabaseName')]"
+          },
+          "securitySqlDatabaseUserName": {
+            "value": "[parameters('securitySqlDatabaseUserName')]"
+          },
+          "securitySqlDatabasePassword": {
+            "value": "[parameters('securitySqlDatabasePassword')]"
+          },
+          "siApplicationSuffixName": {
+            "value": "[parameters('siApplicationSuffixName')]"
+          },
+          "siWebAppName": {
+            "value": "[parameters('siWebAppName')]"
+          },
+          "siMsDeployPackageUrl": {
+            "value": "[parameters('siMsDeployPackageUrl')]"
+          },
+          "siClientSecret": {
+            "value": "[parameters('siClientSecret')]"
+          },
+          "environmentType": {
+            "value": "[parameters('environmentType')]"
+          },
+          "applicationInsightsConnectionString": {
+            "value": "[parameters('applicationInsightsConnectionString')]"
+          },
+          "cmInstanceUrl": {
+            "value": "[variables('cmInstanceUrl')]"
+          },
+          "exmDdsInstanceUrl": {
+            "value": "[variables('exmDdsInstanceUrl')]"
+          },
+          "sqlServer": {
+            "value": "[parameters('sqlServer')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', concat(parameters('deploymentId'), '-si-infrastructure'))]"
+      ]
+    }
+  ]
+}

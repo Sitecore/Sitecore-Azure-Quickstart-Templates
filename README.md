@@ -28,6 +28,7 @@ Choose the compatible templates for your Sitecore version:
 | Sitecore 10.3.3  | Sitecore XP 10.3.3, 10.4.1 and later (requiring App Insights Connection String) |
 | Sitecore 10.5.0  | Sitecore XP 10.5.0 and later                                             |
 | Identity Server 8.0 | Sitecore Identity Server 8.0.x versions. Note: versions prior to 8.0 were delivered as part of Sitecore. |
+| Identity Server 9.0 | Sitecore Identity Server 9.0.x versions.                              |
 | WFFM 8.2.3       | Web Forms For Marketers 8.2 Update-3, Update-4 and Update-5           |
 | WFFM 9.0.0       | Web Forms For Marketers 9.0				           |
 | AD 1.3.0         | Active Directory 1.3                                                  |
