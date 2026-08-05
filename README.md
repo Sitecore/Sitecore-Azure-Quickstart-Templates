@@ -87,7 +87,7 @@ $ArmTemplateUrl = "AZUREDEPLOY_JSON_URL"
 $ArmParametersPath = ".\azuredeploy.parameters.json"
 $licenseFilePath = "PATH_TO_LICENSE_XML"
 
-# Specify the certificate file path and password if you want to deploy Sitecore XP or XDB configurations
+# Specify the certificate file path and password
 $certificateFilePath = $null 
 $certificatePassword = $null
 $certificateBlob = $null
@@ -101,30 +101,51 @@ $licenseFileContent = Get-Content -Raw -Encoding UTF8 -Path $licenseFilePath | O
 
 # read the contents of your authentication certificate
 if ($certificateFilePath) {
-  $certificateBlob = [System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes($certificateFilePath))
+    $certificateBlob = [System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes($certificateFilePath))
 }
 
-#region Create Params Object
-# license file needs to be secure string and adding the params as a hashtable is the only way to do it
-$additionalParams = New-Object -TypeName Hashtable
+#region Create Params File
 
-$params = (Get-Content $ArmParametersPath -Raw | ConvertFrom-Json).parameters
+# Generate a copy of the ARM parameters file and inject runtime values from this script.
+function Set-OrAddArmParameterValue {
+    param(
+        [Parameter(Mandatory = $true)]
+        [psobject]$ParametersObject,
+        [Parameter(Mandatory = $true)]
+        [string]$ParameterName,
+        [Parameter(Mandatory = $true)]
+        [AllowNull()]
+        $Value
+    )
 
-foreach($p in $params | Get-Member -MemberType *Property)
-{
-    $additionalParams.Add($p.Name, $params.$($p.Name).value)
+    if ($ParametersObject.PSObject.Properties.Name -contains $ParameterName) {
+        $ParametersObject.$ParameterName.value = $Value
+    }
+    else {
+        $parameterValueObject = [PSCustomObject]@{
+            value = $Value
+        }
+        Add-Member -InputObject $ParametersObject -MemberType NoteProperty -Name $ParameterName -Value $parameterValueObject
+    }
 }
 
-$additionalParams.Set_Item('licenseXml',$licenseFileContent)
-$additionalParams.Set_Item('deploymentId',$Name)
+$GeneratedArmParametersPath = ".\azuredeploy.parameters.generated.{0}.json" -f [System.Guid]::NewGuid().ToString('N').Substring(0, 5)
+$parametersFileObject = Get-Content $ArmParametersPath -Raw | ConvertFrom-Json
 
-# Inject Certificate Blob and Password into the parameters
+Set-OrAddArmParameterValue -ParametersObject $parametersFileObject.parameters -ParameterName 'deploymentId' -Value $Name
+Set-OrAddArmParameterValue -ParametersObject $parametersFileObject.parameters -ParameterName 'licenseXml' -Value $licenseFileContent
+
 if ($certificateBlob) {
-  $additionalParams.Set_Item('authCertificateBlob',$certificateBlob)
+    Set-OrAddArmParameterValue -ParametersObject $parametersFileObject.parameters -ParameterName 'authCertificateBlob' -Value $certificateBlob
 }
 if ($certificatePassword) {
-  $additionalParams.Set_Item('authCertificatePassword',$certificatePassword)
+    Set-OrAddArmParameterValue -ParametersObject $parametersFileObject.parameters -ParameterName 'authCertificatePassword' -Value $certificatePassword
 }
+
+$json = $parametersFileObject | ConvertTo-Json -Depth 100
+# Restore escaped JSON unicode symbols to literal characters for ARM parameter values.
+$json = $json -replace '\\u003c', '<' -replace '\\u003e', '>' -replace '\\u0026', '&'
+Set-Content -Path $GeneratedArmParametersPath -Value $json -Encoding UTF8 -NoNewline
 
 #endregion
 
@@ -140,72 +161,75 @@ $ApplicationPassword = "SERVICE_PRINCIPAL_APPLICATION_PASSWORD"
 
 #endregion
 
-try 
-{
-	
-	#region Validate Resouce Group Name	
+try {
+    #region Validate Resouce Group Name
 
-	Write-Host "Validating Resource Group Name..."
-	if(!($Name -cmatch '^(?!.*--)[a-z0-9]{2}(|([a-z0-9\-]{0,37})[a-z0-9])$'))
-	{
-		Write-Error "Name should only contain lowercase letters, digits or dashes,
-					 dash cannot be used in the first two or final character,
-					 it cannot contain consecutive dashes and is limited between 2 and 40 characters in length!"
-		Break;		
-	}
-		
-	#endregion
-	
-	Write-Host "Setting Azure PowerShell session context..."
+    Write-Host "Validating Resource Group Name..."
+    if (!($Name -cmatch '^(?!.*--)[a-z0-9]{2}(|([a-z0-9\-]{0,37})[a-z0-9])$')) {
+        Write-Error "Name should only contain lowercase letters, digits or dashes,
+                     dash cannot be used in the first two or final character,
+                     it cannot contain consecutive dashes and is limited between 2 and 40 characters in length!"
+        Break;
+    }
 
- 	if($UseServicePrincipal -eq $true)
-	{
-		#region Use Service Principle
-		$secpasswd = ConvertTo-SecureString $ApplicationPassword -AsPlainText -Force
-		$mycreds = New-Object System.Management.Automation.PSCredential ($ApplicationId, $secpasswd)
+    #endregion
+
+    Write-Host "Setting Azure PowerShell session context..."
+
+    if ($UseServicePrincipal -eq $true) {
+        #region Use Service Principle
+
+        $secpasswd = ConvertTo-SecureString $ApplicationPassword -AsPlainText -Force
+        $mycreds = New-Object System.Management.Automation.PSCredential ($ApplicationId, $secpasswd)
         Connect-AzAccount -ServicePrincipal -Tenant $TenantId -Credential $mycreds
-		
+
         Set-AzContext -SubscriptionId $AzureSubscriptionId -TenantId $TenantId
-		#endregion
-	}
-	else
-	{
-		#region Use Manual Login
-		try 
-		{
-			Write-Host "inside try"
+
+        #endregion
+    }
+
+    else {
+        #region Use Manual Login
+
+        try {
+            Write-Host "inside try"
             Set-AzContext -SubscriptionId $AzureSubscriptionId
-		}
-		catch 
-		{
-			Write-Host "inside catch"
+        }
+        catch {
+            Write-Host "inside catch"
             Connect-AzAccount
             Set-AzContext -SubscriptionId $AzureSubscriptionId   
-		}
-		#endregion		
-	}
-	
- 	Write-Host "Check if resource group already exists..."
+        }
+
+        #endregion
+    }
+
+    Write-Host "Check if resource group already exists..."
     $notPresent = Get-AzResourceGroup -Name $Name -ev notPresent -ea 0
-	
-	if (!$notPresent) 
-	{
+
+    if (!$notPresent) {
         New-AzResourceGroup -Name $Name -Location $location
-	}
-	
-	Write-Host "Starting ARM deployment..."        
+    }
+
+    Write-Host "Starting ARM deployment..."
     New-AzResourceGroupDeployment `
-			-Name $Name `
-			-ResourceGroupName $Name `
-			-TemplateUri $ArmTemplateUrl `
-			-TemplateParameterObject $additionalParams `
-			# -DeploymentDebugLogLevel All -Debug -Verbose
-			
-	Write-Host "Deployment Complete."
+        -Name $Name `
+        -ResourceGroupName $Name `
+        -TemplateUri $ArmTemplateUrl `
+        -TemplateParameterFile $GeneratedArmParametersPath `
+        # -DeploymentDebugLogLevel All -Debug -Verbose
+
+    Write-Host "Deployment Complete."
 }
-catch 
-{
-	Write-Error $_.Exception.Message
-	Break 
+
+catch {
+    Write-Error $_.Exception.Message
+    Break 
+}
+
+finally {
+    if (Test-Path -Path $GeneratedArmParametersPath) {
+        Remove-Item -Path $GeneratedArmParametersPath -Force -ErrorAction SilentlyContinue
+    }
 }
 ```

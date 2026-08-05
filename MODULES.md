@@ -56,6 +56,24 @@ All module snippets follow the same syntax:
 
 Parameters that should be passed to the module depend on the actual deployment template. Refer to the documentation of specific module for information on parameter names and expected values.
 
+## Adding Identity Server module
+
+Sitecore Identity Server is deployed as a module via the `modules` parameter. The default `azuredeploy.parameters.json` for each topology includes an `identity-server` entry that must be configured before deployment.
+
+Add or update the following snippet in the `items` property of the `modules` parameter:
+
+``` JSON
+{
+    "name": "identity-server",
+    "templateLink": "<URL of the Identity Server ARM template azuredeploy.json>",
+    "parameters": {
+        "siMsDeployPackageUrl": "<URL to the Identity Server WDP file>"
+    }
+}
+```
+
+The master template passes infrastructure outputs and Sitecore parameters to the module automatically. Sitecore roles receive the Identity Server authority URL from the master template.
+
 ## Example
 
 Here is an example of `modules` parameter with Bootloader and Web Forms for Marketers module definitions for XP Single environment:
