@@ -1,0 +1,137 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "templateLinkBase": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri,' ','%20'), '.')]"
+    },
+    "templateLinkAccessToken": {
+      "type": "securestring",
+      "defaultValue": ""
+    },
+    "azureServiceBusQueues": {
+      "type": "array",
+      "defaultValue": [
+        "error",
+        "Sitecore_EXM_AutomatedMessagesQueue",
+        "Sitecore_EXM_ClearSuppressionListQueue",
+        "Sitecore_EXM_ConfirmSubscriptionMessagesQueue",
+        "Sitecore_EXM_EmailAddressHistoryMessagesQueue",
+        "Sitecore_EXM_EmailOpenedMessagesQueue",
+        "Sitecore_EXM_SentMessagesQueue",
+        "Sitecore_EXM_UpdateListSubscriptionMessagesQueue",
+        "Sitecore_MA_PurgeFromCampaignMessages"
+      ]
+    },
+    "azureServiceBusSkuName": {
+      "type": "string",
+      "defaultValue": "standard"
+    },
+    "azureServiceBusManageSharedAccessKeyName": {
+      "type": "string",
+      "defaultValue": "RootManageSharedAccessKey"
+    },
+    "azureServiceBusSharedAccessKeyName": {
+      "type": "string",
+      "defaultValue": "RootSharedAccessKey"
+    },
+    "azureServiceBusNamespaceName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-asb')]"
+    },
+    "minTlsVersion": {
+      "defaultValue": "1.2",
+      "type": "string"
+    }
+  },
+  "variables": {
+    "azureServiceBusVersion": "2022-01-01-preview",
+    "resourcesApiVersion": "2018-05-01",
+    "azureServiceBusNamespaceNameTidy": "[toLower(trim(parameters('azureServiceBusNamespaceName')))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('azureServiceBusVersion')]",
+      "name": "[variables('azureServiceBusNamespaceNameTidy')]",
+      "type": "Microsoft.ServiceBus/namespaces",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('azureServiceBusSkuName')]"
+      },
+      "properties": {
+        "minimumTlsVersion": "[parameters('minTlsVersion')]"
+      }
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/authorizationRules",
+      "name": "[concat(variables('azureServiceBusNamespaceNameTidy'),'/',parameters('azureServiceBusManageSharedAccessKeyName'))]",
+      "apiVersion": "[variables('azureServiceBusVersion')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "rights": [
+          "Listen",
+          "Manage",
+          "Send"
+        ]
+      },
+      "dependsOn": [
+        "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.ServiceBus/namespaces/authorizationRules",
+      "name": "[concat(variables('azureServiceBusNamespaceNameTidy'),'/', parameters('azureServiceBusSharedAccessKeyName'))]",
+      "apiVersion": "[variables('azureServiceBusVersion')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "rights": [
+          "Listen",
+          "Send"
+        ]
+      },
+      "dependsOn": [
+        "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'),'/authorizationRules/', parameters('azureServiceBusManageSharedAccessKeyName'))]"
+      ]
+    },
+    {
+      "apiVersion": "[variables('resourcesApiVersion')]",
+      "name": "[concat(parameters('deploymentId'), '-asb-queues')]",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(uri(parameters('templateLinkBase'), 'infrastructure-asb-queues.json'), parameters('templateLinkAccessToken'))]"
+        },
+        "parameters": {
+          "deploymentId": {
+            "value": "[parameters('deploymentId')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "azureServiceBusQueues": {
+            "value": "[parameters('azureServiceBusQueues')]"
+          },
+          "azureServiceBusNamespaceName": {
+            "value": "[variables('azureServiceBusNamespaceNameTidy')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[concat('Microsoft.ServiceBus/namespaces/', variables('azureServiceBusNamespaceNameTidy'),'/authorizationRules/', parameters('azureServiceBusSharedAccessKeyName'))]"
+      ]
+    }
+  ]
+}
