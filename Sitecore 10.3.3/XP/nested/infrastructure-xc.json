@@ -140,7 +140,7 @@
       "defaultValue": {
         "Extra Small": {
           "xcBasicHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "xcBasicHostingPlanIsolated": {
@@ -148,7 +148,7 @@
             "SkuCapacity": 1
           },
           "xcResourceIntensiveHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "xcResourceIntensiveHostingPlanIsolated": {
@@ -178,7 +178,7 @@
         },
         "Small": {
           "xcBasicHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "xcBasicHostingPlanIsolated": {
@@ -186,7 +186,7 @@
             "SkuCapacity": 1
           },
           "xcResourceIntensiveHostingPlan": {
-            "SkuName": "S1",
+            "SkuName": "P0V3",
             "SkuCapacity": 1
           },
           "xcResourceIntensiveHostingPlanIsolated": {
