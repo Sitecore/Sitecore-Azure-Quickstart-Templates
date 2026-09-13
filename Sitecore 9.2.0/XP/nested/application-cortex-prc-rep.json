@@ -286,7 +286,7 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/config', variables('cortexProcessingWebAppNameTidy'), 'appsettings')]"
+        "[resourceId('Microsoft.Web/sites/config', variables('cortexReportingWebAppNameTidy'), 'appsettings')]"
       ]
     },
     {
@@ -300,7 +300,7 @@
         "SITECORE_ENVIRONMENT_TYPE": "[parameters('environmentType')]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/extensions', variables('cortexReportingWebAppNameTidy'), 'MSDeploy')]"
+        "[resourceId('Microsoft.Web/sites/extensions', variables('cortexProcessingWebAppNameTidy'), 'MSDeploy')]"
       ]
     }
   ]
