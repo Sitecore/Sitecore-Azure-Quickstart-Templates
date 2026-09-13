@@ -416,7 +416,7 @@
     },
     "applicationInsightsLocation": {
       "type": "string",
-      "defaultValue": "East US"
+      "defaultValue": "[parameters('location')]"
     },
     "storeSitecoreCountersInApplicationInsights": {
       "type": "bool",
