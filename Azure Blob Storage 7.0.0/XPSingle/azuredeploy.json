@@ -27,7 +27,7 @@
                 "hasStorageAccount": false,
                 "accessTier": "Hot",
                 "blobStorageSKU": "Standard_LRS",
-                "blobStorageType": "BlobStorage",
+                "blobStorageType": "StorageV2",
                 "containerName": "blobcontainer",
                 "supportsHttpsTrafficOnly": true,
                 "blobStorageConnectionString": ""
