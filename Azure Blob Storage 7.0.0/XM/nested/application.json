@@ -1,0 +1,90 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "variables": {
+        "webApiVersion": "2018-02-01",
+        "cdWebAppNameTidy": "[trim(toLower(parameters('cdWebAppName')))]",
+        "cmWebAppNameTidy": "[trim(toLower(parameters('cmWebAppName')))]"
+    },
+    "parameters": {
+        "deploymentId": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]"
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "cdWebAppName": {
+            "type": "string",
+            "defaultValue": "[concat(parameters('deploymentId'), '-cd')]"
+        },
+        "cmWebAppName": {
+            "type": "string",
+            "defaultValue": "[concat(parameters('deploymentId'), '-cm')]"
+        },
+        "cmBlobStorageConnectionString": {
+            "type": "string",
+            "minLength": 1
+        },
+        "cdBlobStorageConnectionString": {
+            "type": "string",
+            "minLength": 1
+        },
+        "blobStorageMsDeployPackageUrl": {
+            "type": "string",
+            "minLength": 1
+        },
+        "defaultProvider": {
+            "type": "string",
+            "minLength": 1
+        },
+        "containerName": {
+            "type": "string",
+            "minLength": 1,
+            "defaultValue": "blobcontainer"
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "[variables('webApiVersion')]",
+            "name": "[concat(variables('cmWebAppNameTidy'), '/', 'MSDeploy')]",
+            "type": "Microsoft.Web/sites/extensions",
+            "location": "[parameters('location')]",
+            "properties": {
+                "addOnPackages": [
+                    {
+                        "packageUri": "[parameters('blobStorageMsDeployPackageUrl')]",
+                        "dbType": "None",
+                        "connectionString": "",
+                        "setParameters": {
+                            "AzureStorageConnectionString": "[parameters('cmBlobStorageConnectionString')]",
+                            "DefaultProvider": "[parameters('defaultProvider')]",
+                            "AzureStorageContainerName": "[parameters('containerName')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "[variables('webApiVersion')]",
+            "name": "[concat(variables('cdWebAppNameTidy'), '/', 'MSDeploy')]",
+            "type": "Microsoft.Web/sites/extensions",
+            "location": "[parameters('location')]",
+            "properties": {
+                "addOnPackages": [
+                    {
+                        "packageUri": "[parameters('blobStorageMsDeployPackageUrl')]",
+                        "dbType": "None",
+                        "connectionString": "",
+                        "setParameters": {
+                            "AzureStorageConnectionString": "[parameters('cdBlobStorageConnectionString')]",
+                            "DefaultProvider": "[parameters('defaultProvider')]",
+                            "AzureStorageContainerName": "[parameters('containerName')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
