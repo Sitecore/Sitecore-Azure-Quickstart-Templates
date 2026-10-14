@@ -28,7 +28,7 @@
                 "hasStorageAccount": false,
                 "accessTier": "Hot",
                 "blobStorageSKU": "Standard_LRS",
-                "blobStorageType": "BlobStorage",
+                "blobStorageType": "StorageV2",
                 "containerName": "blobcontainer",
                 "supportsHttpsTrafficOnly": true,
                 "sasTokenExpiry": "2120-12-31T23:59:00Z",

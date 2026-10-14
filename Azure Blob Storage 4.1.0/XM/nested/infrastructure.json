@@ -72,7 +72,7 @@
             "sku": {
                 "name": "[parameters('accountType')]"
             },
-            "kind": "BlobStorage",
+            "kind": "StorageV2",
             "resources": [
                 {
                     "name": "[concat('default/', parameters('containerName'))]",
