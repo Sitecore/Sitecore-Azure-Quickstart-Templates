@@ -6,6 +6,7 @@
     "resourcesApiVersion": "2016-09-01",
     "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
     "coreSqlDatabaseNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
+    "masterSqlDatabaseNameTidy": "[toLower(trim(parameters('masterSqlDatabaseNameTidy')))]",
     "cdWebAppNameTidy": "[toLower(trim(parameters('cdWebAppName')))]",
     "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebAppName')))]"
   },
@@ -113,7 +114,8 @@
             "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
             "setParameters": {
               "Application Path": "[variables('cmWebAppNameTidy')]",
-              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+              "Master Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('masterSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
             }
           },
           {
