@@ -28,7 +28,7 @@
 
         "cdWebAppName": null,
         "cmWebAppName": null,
-        "solrConnectionString": null
+        "solrConnectionString": ""
       }
     },
     "extension": {
@@ -38,7 +38,7 @@
         "cmSxaMsDeployPackageUrl": null,
         "speMsDeployPackageUrl": null,
         "solrSupportSxaMsDeployPackageUrl": null,
-        "templateLinkAccessToken" : null
+        "templateLinkAccessToken" : ""
       }
     },
 
